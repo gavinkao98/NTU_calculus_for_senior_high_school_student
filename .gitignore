@@ -1,0 +1,14 @@
+# LaTeX 暫存檔黑名單
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+#不把每次產生的PDF都上傳到雲端
+*.pdf

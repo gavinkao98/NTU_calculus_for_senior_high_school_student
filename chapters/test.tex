@@ -1,0 +1,172 @@
+\section{The Limit of a Function}
+
+In many situations, we are interested not only in the value of a function at a point, but also in the behavior of the function when the input is close to that point. For example, in studying speed, we often consider the ratio
+\[
+\frac{f(y)-f(x)}{y-x}
+\]
+and ask what happens when \(y\) becomes very close to \(x\). This leads to the concept of the limit of a function.
+
+\begin{definition}
+Suppose that \(f(x)\) is defined for all \(x\) near \(a\), except possibly at \(x=a\). We write
+\[
+\lim_{x\to a} f(x)=L
+\]
+and say that the limit of \(f(x)\) as \(x\) approaches \(a\) is \(L\) if \(f(x)\) can be made arbitrarily close to \(L\) whenever \(x\) is sufficiently close to \(a\), with \(x\ne a\).
+\end{definition}
+
+\begin{remark}
+Another common notation is
+\[
+f(x)\to L \qquad \text{as } x\to a.
+\]
+\end{remark}
+
+\begin{remark}
+When we consider \(\lim_{x\to a} f(x)\), we are concerned with the values of \(f(x)\) for \(x\) near \(a\), not necessarily with the value of \(f(a)\). In particular, \(f(a)\) need not be defined at all.
+\end{remark}
+
+\begin{figure}[ht]
+\centering
+\begin{minipage}{0.31\textwidth}
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+width=\textwidth,
+height=4.8cm,
+axis lines=middle,
+xmin=0,
+xmax=4,
+ymin=0,
+ymax=3.2,
+xtick=\empty,
+ytick=\empty,
+xlabel={\(x\)},
+ylabel={\(y\)},
+samples=100,
+clip=false
+]
+\addplot[thick, domain=0.4:3.6] {1.2 + 0.55*ln(x+0.2)};
+\addplot[dashed] coordinates {(2.5,0) (2.5,3)};
+\addplot[dashed] coordinates {(0,1.8) (4,1.8)};
+\fill (axis cs:2.5,1.8) circle (2pt);
+\node[below] at (axis cs:2.5,0) {\(a\)};
+\node[left] at (axis cs:0,1.8) {\(L\)};
+\end{axis}
+\end{tikzpicture}
+\end{minipage}
+\hfill
+\begin{minipage}{0.31\textwidth}
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+width=\textwidth,
+height=4.8cm,
+axis lines=middle,
+xmin=0,
+xmax=4,
+ymin=0,
+ymax=3.2,
+xtick=\empty,
+ytick=\empty,
+xlabel={\(x\)},
+ylabel={\(y\)},
+samples=100,
+clip=false
+]
+\addplot[thick, domain=0.4:3.6] {1.2 + 0.55*ln(x+0.2)};
+\addplot[dashed] coordinates {(2.5,0) (2.5,3)};
+\addplot[dashed] coordinates {(0,1.8) (4,1.8)};
+\addplot[only marks, mark=*, mark size=2pt] coordinates {(2.5,1.8)};
+\addplot[only marks, mark=*, mark size=2.2pt] coordinates {(2.5,1.1)};
+\node[below] at (axis cs:2.5,0) {\(a\)};
+\node[left] at (axis cs:0,1.8) {\(L\)};
+\end{axis}
+\end{tikzpicture}
+\end{minipage}
+\hfill
+\begin{minipage}{0.31\textwidth}
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+width=\textwidth,
+height=4.8cm,
+axis lines=middle,
+xmin=0,
+xmax=4,
+ymin=0,
+ymax=3.2,
+xtick=\empty,
+ytick=\empty,
+xlabel={\(x\)},
+ylabel={\(y\)},
+samples=100,
+clip=false
+]
+\addplot[thick, domain=0.4:3.6] {1.2 + 0.55*ln(x+0.2)};
+\addplot[dashed] coordinates {(2.5,0) (2.5,3)};
+\addplot[dashed] coordinates {(0,1.8) (4,1.8)};
+\addplot[only marks, mark=o, mark size=2.2pt] coordinates {(2.5,1.8)};
+\node[below] at (axis cs:2.5,0) {\(a\)};
+\node[left] at (axis cs:0,1.8) {\(L\)};
+\end{axis}
+\end{tikzpicture}
+\end{minipage}
+\caption{Three functions with the same limit as \(x\to a\).}
+\label{fig:limit-same-near-a}
+\end{figure}
+
+Figure~\ref{fig:limit-same-near-a} illustrates an important point: three functions may have different values at \(x=a\), or one of them may even be undefined at \(x=a\), but still have the same limit as \(x\to a\).
+
+\begin{example}
+Guess the value of
+\[
+\lim_{x\to 1}\frac{x-1}{x^{2}-1}.
+\]
+\end{example}
+
+\begin{solution}
+Although the expression is not defined at \(x=1\), we can examine its values for \(x\) near \(1\):
+\[
+\begin{array}{c|cccccc}
+x & 0.9 & 0.99 & 0.999 & 1.001 & 1.01 & 1.1 \\ \hline
+\dfrac{x-1}{x^{2}-1} & 0.5263 & 0.5025 & 0.5003 & 0.4998 & 0.4975 & 0.4762
+\end{array}
+\]
+These values suggest that
+\[
+\frac{x-1}{x^{2}-1}
+\]
+gets close to \(\dfrac{1}{2}\) as \(x\) approaches \(1\). Thus we guess that
+\[
+\lim_{x\to 1}\frac{x-1}{x^{2}-1}=\frac{1}{2}.
+\]
+\end{solution}
+
+\begin{example}
+Guess the value of
+\[
+\lim_{t\to 0}\frac{\sqrt{t^{2}+9}-3}{t^{2}}.
+\]
+\end{example}
+
+\begin{solution}
+We evaluate the expression for values of \(t\) close to \(0\):
+\[
+\begin{array}{c|cccc}
+t & -0.1 & -0.01 & 0.01 & 0.1 \\ \hline
+\dfrac{\sqrt{t^{2}+9}-3}{t^{2}} & 0.166620 & 0.166666 & 0.166666 & 0.166620
+\end{array}
+\]
+These values are close to
+\[
+\frac{1}{6}=0.166666\cdots
+\]
+so we guess that
+\[
+\lim_{t\to 0}\frac{\sqrt{t^{2}+9}-3}{t^{2}}=\frac{1}{6}.
+\]
+\end{solution}
+
+The examples above show that the value of a limit can often be guessed by looking at function values near the point of interest. In the following sections, we will develop systematic methods for evaluating limits and study more subtle situations, such as one-sided limits and infinite limits.
+
+
