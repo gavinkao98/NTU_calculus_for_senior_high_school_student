@@ -1259,3 +1259,269 @@ is a vertical asymptote of the graph of \(y=\ln x\).
 \begin{remark}
 A two-sided infinite limit such as \(\displaystyle \lim_{x\to a}f(x)=\infty\) requires the function to approach \(\infty\) from both sides. If the behavior from the left and from the right is different, then the two-sided limit does not exist, even though \(x=a\) may still be a vertical asymptote.
 \end{remark}
+
+\section{Limit Laws and Computational Techniques}
+
+In the previous sections, we used tables and graphs to guess the values of limits. We now introduce algebraic tools for evaluating limits more systematically. The basic idea is that limits behave well with respect to the usual algebraic operations.
+
+\subsection{The limit laws}
+
+\begin{theorem}[Limit laws]
+Suppose that \(c\) is a constant and that
+\[
+\lim_{x\to a}f(x)
+\qquad \text{and} \qquad
+\lim_{x\to a}g(x)
+\]
+both exist. Then:
+\[
+\lim_{x\to a}\bigl(f(x)+g(x)\bigr)
+=
+\lim_{x\to a}f(x)+\lim_{x\to a}g(x),
+\]
+\[
+\lim_{x\to a}\bigl(f(x)-g(x)\bigr)
+=
+\lim_{x\to a}f(x)-\lim_{x\to a}g(x),
+\]
+\[
+\lim_{x\to a}\bigl(c f(x)\bigr)
+=
+c\lim_{x\to a}f(x),
+\]
+\[
+\lim_{x\to a}\bigl(f(x)g(x)\bigr)
+=
+\left(\lim_{x\to a}f(x)\right)\left(\lim_{x\to a}g(x)\right),
+\]
+and
+\[
+\lim_{x\to a}\frac{f(x)}{g(x)}
+=
+\frac{\lim_{x\to a}f(x)}{\lim_{x\to a}g(x)},
+\qquad
+\text{provided that } \lim_{x\to a}g(x)\ne 0.
+\]
+\end{theorem}
+
+\begin{remark}
+These laws can be summarized verbally as follows:
+\begin{enumerate}
+    \item The limit of a sum is the sum of the limits.
+    \item The limit of a difference is the difference of the limits.
+    \item The limit of a constant multiple is the constant times the limit.
+    \item The limit of a product is the product of the limits.
+    \item The limit of a quotient is the quotient of the limits, provided the denominator limit is not \(0\).
+\end{enumerate}
+\end{remark}
+
+\begin{remark}
+These properties will be proved rigorously later. For now, they provide an effective way to evaluate many limits.
+\end{remark}
+
+\subsection{Direct substitution}
+
+The limit laws imply several useful consequences.
+
+\begin{proposition}
+Let \(n\) be a positive integer. Then
+\[
+\lim_{x\to a}x=a
+\qquad \text{and} \qquad
+\lim_{x\to a}x^{n}=a^{n}.
+\]
+Consequently, if \(p(x)\) is a polynomial, then
+\[
+\lim_{x\to a}p(x)=p(a).
+\]
+If \(r(x)\) is a rational function and \(r(a)\) is defined, then
+\[
+\lim_{x\to a}r(x)=r(a).
+\]
+\end{proposition}
+
+So for polynomials and rational functions, the first step is usually direct substitution. If substitution gives a meaningful number, then the limit is found immediately.
+
+\subsection{Algebraic simplification}
+
+Sometimes direct substitution does not work because it leads to an expression such as \(\dfrac{0}{0}\). In that case, we try to simplify the expression first.
+
+\begin{example}
+Evaluate
+\(\displaystyle
+\lim_{x\to 1}\frac{x-1}{x^{2}-1}.
+\)
+\end{example}
+
+\begin{solution}
+Direct substitution gives
+\[
+\frac{1-1}{1^{2}-1}=\frac{0}{0},
+\]
+so we first simplify the expression. Since
+\[
+x^{2}-1=(x-1)(x+1),
+\]
+we have
+\[
+\frac{x-1}{x^{2}-1}
+=
+\frac{x-1}{(x-1)(x+1)}
+=
+\frac{1}{x+1},
+\qquad x\ne 1.
+\]
+Therefore,
+\[
+\lim_{x\to 1}\frac{x-1}{x^{2}-1}
+=
+\lim_{x\to 1}\frac{1}{x+1}
+=
+\frac{1}{2}.
+\]
+\end{solution}
+
+\begin{example}
+Evaluate
+\[
+\lim_{t\to 0}\frac{\sqrt{t^{2}+9}-3}{t^{2}}.
+\]
+\end{example}
+
+\begin{solution}
+Direct substitution again gives the indeterminate form \(\dfrac{0}{0}\). We rationalize the numerator:
+\[
+\frac{\sqrt{t^{2}+9}-3}{t^{2}}
+\cdot
+\frac{\sqrt{t^{2}+9}+3}{\sqrt{t^{2}+9}+3}
+=
+\frac{t^{2}+9-9}{t^{2}\bigl(\sqrt{t^{2}+9}+3\bigr)}.
+\]
+Thus
+\[
+\frac{\sqrt{t^{2}+9}-3}{t^{2}}
+=
+\frac{1}{\sqrt{t^{2}+9}+3},
+\qquad t\ne 0.
+\]
+Now we may take the limit directly:
+\[
+\lim_{t\to 0}\frac{\sqrt{t^{2}+9}-3}{t^{2}}
+=
+\lim_{t\to 0}\frac{1}{\sqrt{t^{2}+9}+3}
+=
+\frac{1}{6}.
+\]
+\end{solution}
+
+\subsection{The absolute value function and the greatest integer function}
+
+Not all limits can be evaluated by direct substitution alone. Sometimes we must use the definition of the function more carefully.
+
+\begin{example}
+Evaluate
+\(\displaystyle
+\lim_{x\to 0}|x|.
+\)
+\end{example}
+
+\begin{solution}
+Recall that
+\[
+|x|=
+\begin{cases}
+x, & x\ge 0,\\[4pt]
+-x, & x<0.
+\end{cases}
+\]
+If \(x\to 0^{+}\), then \(|x|=x\to 0\). If \(x\to 0^{-}\), then \(|x|=-x\to 0\). Therefore,
+\[
+\lim_{x\to 0}|x|=0.
+\]
+\end{solution}
+
+\begin{example}
+The greatest integer function \([x]\) is defined to be the largest integer less than or equal to \(x\). Evaluate
+\[
+\lim_{x\to 3^{+}}[x]
+\qquad \text{and} \qquad
+\lim_{x\to 3^{-}}[x].
+\]
+\end{example}
+
+\begin{solution}
+If \(x\to 3^{+}\), then \(x\) is slightly greater than \(3\), so
+\[
+[x]=3.
+\]
+Hence
+\[
+\lim_{x\to 3^{+}}[x]=3.
+\]
+
+If \(x\to 3^{-}\), then \(x\) is slightly less than \(3\), so
+\[
+[x]=2.
+\]
+Hence
+\[
+\lim_{x\to 3^{-}}[x]=2.
+\]
+
+Since the left-hand and right-hand limits are different, we conclude that
+\(\displaystyle
+\lim_{x\to 3}[x]
+\)
+does not exist.
+\end{solution}
+
+\subsection{The squeeze theorem}
+
+A very useful technique for evaluating limits is to compare a function with two simpler functions.
+
+\begin{theorem}[Squeeze theorem]
+Suppose that
+\[
+g(x)\le f(x)\le h(x)
+\]
+for all \(x\) near \(a\), except possibly at \(x=a\). If
+\[
+\lim_{x\to a}g(x)=L
+\qquad \text{and} \qquad
+\lim_{x\to a}h(x)=L,
+\]
+then
+\[
+\lim_{x\to a}f(x)=L.
+\]
+\end{theorem}
+
+\begin{example}
+Evaluate
+\(\displaystyle
+\lim_{x\to 0}x^{2}\sin\left(\frac{1}{x}\right).
+\)
+\end{example}
+
+\begin{solution}
+Since
+\[
+-1\le \sin\left(\frac{1}{x}\right)\le 1,
+\]
+we may multiply all parts by \(x^{2}\ge 0\) to obtain
+\[
+-x^{2}\le x^{2}\sin\left(\frac{1}{x}\right)\le x^{2}.
+\]
+Now,
+\[
+\lim_{x\to 0}(-x^{2})=0
+\qquad \text{and} \qquad
+\lim_{x\to 0}x^{2}=0.
+\]
+Therefore, by the squeeze theorem,
+\(\displaystyle
+\lim_{x\to 0}x^{2}\sin\left(\frac{1}{x}\right)=0.
+\)
+\end{solution}
+
+The limit laws and the techniques of factoring, rationalization, and squeezing allow us to evaluate many limits. In the next section, we will give the precise definition of a limit.

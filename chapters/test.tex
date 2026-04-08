@@ -1,265 +1,190 @@
-\section{Limit Laws and Computational Techniques}
+\section{The Precise Definition of a Limit}
 
-In the previous sections, we used tables and graphs to guess the values of limits. We now introduce algebraic tools for evaluating limits more systematically. The basic idea is that limits behave well with respect to the usual algebraic operations.
+In the previous sections, we used graphs, tables, and algebraic techniques to study limits. However, expressions such as ``\(x\) is close to \(a\)'' and ``\(f(x)\) is close to \(L\)'' are not precise enough for a rigorous definition. We now give the precise definition of a limit.
 
-\subsection{The limit laws}
-
-\begin{theorem}[Limit laws]
-Suppose that \(c\) is a constant and that
+To motivate this definition, consider the function
 \[
-\lim_{x\to a}f(x)
-\qquad \text{and} \qquad
-\lim_{x\to a}g(x)
-\]
-both exist. Then:
-\[
-\lim_{x\to a}\bigl(f(x)+g(x)\bigr)
-=
-\lim_{x\to a}f(x)+\lim_{x\to a}g(x),
-\]
-\[
-\lim_{x\to a}\bigl(f(x)-g(x)\bigr)
-=
-\lim_{x\to a}f(x)-\lim_{x\to a}g(x),
-\]
-\[
-\lim_{x\to a}\bigl(c f(x)\bigr)
-=
-c\lim_{x\to a}f(x),
-\]
-\[
-\lim_{x\to a}\bigl(f(x)g(x)\bigr)
-=
-\left(\lim_{x\to a}f(x)\right)\left(\lim_{x\to a}g(x)\right),
-\]
-and
-\[
-\lim_{x\to a}\frac{f(x)}{g(x)}
-=
-\frac{\lim_{x\to a}f(x)}{\lim_{x\to a}g(x)},
-\qquad
-\text{provided that } \lim_{x\to a}g(x)\ne 0.
-\]
-\end{theorem}
-
-\begin{remark}
-These laws can be summarized verbally as follows:
-\begin{enumerate}
-    \item The limit of a sum is the sum of the limits.
-    \item The limit of a difference is the difference of the limits.
-    \item The limit of a constant multiple is the constant times the limit.
-    \item The limit of a product is the product of the limits.
-    \item The limit of a quotient is the quotient of the limits, provided the denominator limit is not \(0\).
-\end{enumerate}
-\end{remark}
-
-\begin{remark}
-These properties will be proved rigorously later. For now, they provide an effective way to evaluate many limits.
-\end{remark}
-
-\subsection{Direct substitution}
-
-The limit laws imply several useful consequences.
-
-\begin{proposition}
-Let \(n\) be a positive integer. Then
-\[
-\lim_{x\to a}x=a
-\qquad \text{and} \qquad
-\lim_{x\to a}x^{n}=a^{n}.
-\]
-Consequently, if \(p(x)\) is a polynomial, then
-\[
-\lim_{x\to a}p(x)=p(a).
-\]
-If \(r(x)\) is a rational function and \(r(a)\) is defined, then
-\[
-\lim_{x\to a}r(x)=r(a).
-\]
-\end{proposition}
-
-So for polynomials and rational functions, the first step is usually direct substitution. If substitution gives a meaningful number, then the limit is found immediately.
-
-\subsection{Algebraic simplification}
-
-Sometimes direct substitution does not work because it leads to an expression such as \(\dfrac{0}{0}\). In that case, we try to simplify the expression first.
-
-\begin{example}
-Evaluate
-\[
-\lim_{x\to 1}\frac{x-1}{x^{2}-1}.
-\]
-\end{example}
-
-\begin{solution}
-Direct substitution gives
-\[
-\frac{1-1}{1^{2}-1}=\frac{0}{0},
-\]
-so we first simplify the expression. Since
-\[
-x^{2}-1=(x-1)(x+1),
-\]
-we have
-\[
-\frac{x-1}{x^{2}-1}
-=
-\frac{x-1}{(x-1)(x+1)}
-=
-\frac{1}{x+1},
-\qquad x\ne 1.
-\]
-Therefore,
-\[
-\lim_{x\to 1}\frac{x-1}{x^{2}-1}
-=
-\lim_{x\to 1}\frac{1}{x+1}
-=
-\frac{1}{2}.
-\]
-\end{solution}
-
-\begin{example}
-Evaluate
-\[
-\lim_{t\to 0}\frac{\sqrt{t^{2}+9}-3}{t^{2}}.
-\]
-\end{example}
-
-\begin{solution}
-Direct substitution again gives the indeterminate form \(\dfrac{0}{0}\). We rationalize the numerator:
-\[
-\frac{\sqrt{t^{2}+9}-3}{t^{2}}
-\cdot
-\frac{\sqrt{t^{2}+9}+3}{\sqrt{t^{2}+9}+3}
-=
-\frac{t^{2}+9-9}{t^{2}\bigl(\sqrt{t^{2}+9}+3\bigr)}.
-\]
-Thus
-\[
-\frac{\sqrt{t^{2}+9}-3}{t^{2}}
-=
-\frac{1}{\sqrt{t^{2}+9}+3},
-\qquad t\ne 0.
-\]
-Now we may take the limit directly:
-\[
-\lim_{t\to 0}\frac{\sqrt{t^{2}+9}-3}{t^{2}}
-=
-\lim_{t\to 0}\frac{1}{\sqrt{t^{2}+9}+3}
-=
-\frac{1}{6}.
-\]
-\end{solution}
-
-\subsection{The absolute value function and the greatest integer function}
-
-Not all limits can be evaluated by direct substitution alone. Sometimes we must use the definition of the function more carefully.
-
-\begin{example}
-Evaluate
-\[
-\lim_{x\to 0}|x|.
-\]
-\end{example}
-
-\begin{solution}
-Recall that
-\[
-|x|=
+f(x)=
 \begin{cases}
-x, & x\ge 0,\\[4pt]
--x, & x<0.
+2x-1, & x\ne 3,\\[4pt]
+6, & x=3.
 \end{cases}
 \]
-If \(x\to 0^{+}\), then \(|x|=x\to 0\). If \(x\to 0^{-}\), then \(|x|=-x\to 0\). Therefore,
+When \(x\) is close to \(3\), but \(x\ne 3\), the value of \(f(x)=2x-1\) is close to \(5\). Thus it is natural to expect that
 \[
-\lim_{x\to 0}|x|=0.
+\lim_{x\to 3}f(x)=5.
 \]
-\end{solution}
 
 \begin{example}
-The greatest integer function \([x]\) is defined to be the largest integer less than or equal to \(x\). Evaluate
+For the function
 \[
-\lim_{x\to 3^{+}}[x]
-\qquad \text{and} \qquad
-\lim_{x\to 3^{-}}[x].
+f(x)=
+\begin{cases}
+2x-1, & x\ne 3,\\[4pt]
+6, & x=3,
+\end{cases}
 \]
+how close must \(x\) be to \(3\) in order to guarantee that \(f(x)\) differs from \(5\) by less than \(0.1\)?
 \end{example}
 
 \begin{solution}
-If \(x\to 3^{+}\), then \(x\) is slightly greater than \(3\), so
+We want
 \[
-[x]=3.
+|f(x)-5|<0.1.
 \]
-Hence
+Since \(f(x)=2x-1\) for \(x\ne 3\), we have
 \[
-\lim_{x\to 3^{+}}[x]=3.
+|f(x)-5|
+=
+|(2x-1)-5|
+=
+|2x-6|
+=
+2|x-3|.
 \]
+Therefore, to ensure that
+\[
+|f(x)-5|<0.1,
+\]
+it is enough to require that
+\[
+2|x-3|<0.1.
+\]
+This gives
+\[
+|x-3|<0.05.
+\]
+So if \(x\) is within \(0.05\) of \(3\), but \(x\ne 3\), then \(f(x)\) is within \(0.1\) of \(5\).
 
-If \(x\to 3^{-}\), then \(x\) is slightly less than \(3\), so
+More generally, if we want
 \[
-[x]=2.
+|f(x)-5|<\varepsilon
 \]
-Hence
+for some \(\varepsilon>0\), then it is enough to require that
 \[
-\lim_{x\to 3^{-}}[x]=2.
+2|x-3|<\varepsilon,
 \]
-
-Since the left-hand and right-hand limits are different, we conclude that
+that is,
 \[
-\lim_{x\to 3}[x]
+|x-3|<\frac{\varepsilon}{2}.
 \]
-does not exist.
+Thus for this example we may choose
+\[
+\delta=\frac{\varepsilon}{2}.
+\]
 \end{solution}
 
-\subsection{The squeeze theorem}
+The previous example shows the basic idea. We want to control the distance between \(f(x)\) and the limit \(L\) by controlling the distance between \(x\) and the point \(a\).
 
-A very useful technique for evaluating limits is to compare a function with two simpler functions.
-
-\begin{theorem}[Squeeze theorem]
-Suppose that
+\begin{definition}
+Let \(f\) be a function defined on an open interval containing \(a\), except possibly at \(a\) itself. We say that
 \[
-g(x)\le f(x)\le h(x)
+\lim_{x\to a}f(x)=L
 \]
-for all \(x\) near \(a\), except possibly at \(x=a\). If
+if for every \(\varepsilon>0\) there exists a number \(\delta>0\) such that
 \[
-\lim_{x\to a}g(x)=L
-\qquad \text{and} \qquad
-\lim_{x\to a}h(x)=L,
+|f(x)-L|<\varepsilon
+\qquad \text{whenever} \qquad
+0<|x-a|<\delta.
+\]
+\end{definition}
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=9cm,
+    height=5.8cm,
+    axis lines=middle,
+    xmin=0, xmax=3.7,
+    ymin=0, ymax=14,
+    xtick=\empty,
+    ytick=\empty,
+    xlabel={\(x\)},
+    ylabel={\(y\)},
+    xlabel style={at={(axis description cs:0.98,0.03)},anchor=west},
+    ylabel style={at={(axis description cs:0.06,0.98)},anchor=south},
+    samples=200,
+    clip=false
+]
+    \addplot[thick, domain=0.45:2.92] {pow(2,x)};
+    \addplot[thick, domain=3.08:3.45] {pow(2,x)};
+
+    \addplot[dashed] coordinates {(0,7) (3.7,7)};
+    \addplot[dashed] coordinates {(0,9) (3.7,9)};
+
+    \addplot[dashed] coordinates {(2.5,0) (2.5,14)};
+    \addplot[dashed] coordinates {(3.5,0) (3.5,14)};
+
+    \addplot[
+        only marks,
+        mark=o,
+        mark size=2.8pt,
+        mark options={draw=black, fill=white}
+    ] coordinates {(3,8)};
+
+    \addplot[
+        only marks,
+        mark=*,
+        mark size=2.8pt
+    ] coordinates {(3,12)};
+
+    \node[below] at (axis cs:2.5,0) {\(a-\delta\)};
+    \node[below] at (axis cs:3,0) {\(a\)};
+    \node[below] at (axis cs:3.5,0) {\(a+\delta\)};
+
+    \node[left] at (axis cs:0,7) {\(L-\varepsilon\)};
+    \node[left] at (axis cs:0,8) {\(L\)};
+    \node[left] at (axis cs:0,9) {\(L+\varepsilon\)};
+\end{axis}
+\end{tikzpicture}
+\caption{A geometric interpretation of the precise definition of a limit.}
+\label{fig:precise-limit}
+\end{figure}
+
+Figure~\ref{fig:precise-limit} illustrates the definition. If \(x\) is restricted to lie in the interval
+\[
+(a-\delta,a+\delta),
+\qquad x\ne a,
+\]
+then the corresponding values of \(f(x)\) are forced to lie in the interval
+\[
+(L-\varepsilon,L+\varepsilon).
+\]
+Notice that the value \(f(a)\) itself may be different from \(L\). The limit depends only on the behavior of \(f(x)\) when \(x\) is close to \(a\), not necessarily on the value of the function at \(x=a\).
+
+\begin{remark}
+The condition
+\[
+0<|x-a|<\delta
+\]
+means that \(x\) is within a distance \(\delta\) of \(a\), but \(x\ne a\).
+\end{remark}
+
+\begin{remark}
+The inequality
+\[
+|f(x)-L|<\varepsilon
+\]
+means that \(f(x)\) is within a distance \(\varepsilon\) of \(L\).
+\end{remark}
+
+\begin{remark}
+The statement
+\[
+\lim_{x\to a}f(x)=L
+\]
+must hold for every \(\varepsilon>0\), no matter how small \(\varepsilon\) is.
+\end{remark}
+
+\begin{remark}
+The definition can also be written in interval notation: for every \(\varepsilon>0\), there exists \(\delta>0\) such that if
+\[
+x\in (a-\delta,a+\delta)
+\qquad \text{and} \qquad x\ne a,
 \]
 then
 \[
-\lim_{x\to a}f(x)=L.
+f(x)\in (L-\varepsilon,L+\varepsilon).
 \]
-\end{theorem}
-
-\begin{example}
-Evaluate
-\[
-\lim_{x\to 0}x^{2}\sin\left(\frac{1}{x}\right).
-\]
-\end{example}
-
-\begin{solution}
-Since
-\[
--1\le \sin\left(\frac{1}{x}\right)\le 1,
-\]
-we may multiply all parts by \(x^{2}\ge 0\) to obtain
-\[
--x^{2}\le x^{2}\sin\left(\frac{1}{x}\right)\le x^{2}.
-\]
-Now,
-\[
-\lim_{x\to 0}(-x^{2})=0
-\qquad \text{and} \qquad
-\lim_{x\to 0}x^{2}=0.
-\]
-Therefore, by the squeeze theorem,
-\[
-\lim_{x\to 0}x^{2}\sin\left(\frac{1}{x}\right)=0.
-\]
-\end{solution}
-
-The limit laws and the techniques of factoring, rationalization, and squeezing allow us to evaluate many limits. In the next section, we will give the precise definition of a limit.
+\end{remark}
