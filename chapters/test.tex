@@ -1,172 +1,265 @@
-\section{The Limit of a Function}
+\section{Limit Laws and Computational Techniques}
 
-In many situations, we are interested not only in the value of a function at a point, but also in the behavior of the function when the input is close to that point. For example, in studying speed, we often consider the ratio
-\[
-\frac{f(y)-f(x)}{y-x}
-\]
-and ask what happens when \(y\) becomes very close to \(x\). This leads to the concept of the limit of a function.
+In the previous sections, we used tables and graphs to guess the values of limits. We now introduce algebraic tools for evaluating limits more systematically. The basic idea is that limits behave well with respect to the usual algebraic operations.
 
-\begin{definition}
-Suppose that \(f(x)\) is defined for all \(x\) near \(a\), except possibly at \(x=a\). We write
+\subsection{The limit laws}
+
+\begin{theorem}[Limit laws]
+Suppose that \(c\) is a constant and that
 \[
-\lim_{x\to a} f(x)=L
+\lim_{x\to a}f(x)
+\qquad \text{and} \qquad
+\lim_{x\to a}g(x)
 \]
-and say that the limit of \(f(x)\) as \(x\) approaches \(a\) is \(L\) if \(f(x)\) can be made arbitrarily close to \(L\) whenever \(x\) is sufficiently close to \(a\), with \(x\ne a\).
-\end{definition}
+both exist. Then:
+\[
+\lim_{x\to a}\bigl(f(x)+g(x)\bigr)
+=
+\lim_{x\to a}f(x)+\lim_{x\to a}g(x),
+\]
+\[
+\lim_{x\to a}\bigl(f(x)-g(x)\bigr)
+=
+\lim_{x\to a}f(x)-\lim_{x\to a}g(x),
+\]
+\[
+\lim_{x\to a}\bigl(c f(x)\bigr)
+=
+c\lim_{x\to a}f(x),
+\]
+\[
+\lim_{x\to a}\bigl(f(x)g(x)\bigr)
+=
+\left(\lim_{x\to a}f(x)\right)\left(\lim_{x\to a}g(x)\right),
+\]
+and
+\[
+\lim_{x\to a}\frac{f(x)}{g(x)}
+=
+\frac{\lim_{x\to a}f(x)}{\lim_{x\to a}g(x)},
+\qquad
+\text{provided that } \lim_{x\to a}g(x)\ne 0.
+\]
+\end{theorem}
 
 \begin{remark}
-Another common notation is
-\[
-f(x)\to L \qquad \text{as } x\to a.
-\]
+These laws can be summarized verbally as follows:
+\begin{enumerate}
+    \item The limit of a sum is the sum of the limits.
+    \item The limit of a difference is the difference of the limits.
+    \item The limit of a constant multiple is the constant times the limit.
+    \item The limit of a product is the product of the limits.
+    \item The limit of a quotient is the quotient of the limits, provided the denominator limit is not \(0\).
+\end{enumerate}
 \end{remark}
 
 \begin{remark}
-When we consider \(\lim_{x\to a} f(x)\), we are concerned with the values of \(f(x)\) for \(x\) near \(a\), not necessarily with the value of \(f(a)\). In particular, \(f(a)\) need not be defined at all.
+These properties will be proved rigorously later. For now, they provide an effective way to evaluate many limits.
 \end{remark}
 
-\begin{figure}[ht]
-\centering
-\begin{minipage}{0.31\textwidth}
-\centering
-\begin{tikzpicture}
-\begin{axis}[
-width=\textwidth,
-height=4.8cm,
-axis lines=middle,
-xmin=0,
-xmax=4,
-ymin=0,
-ymax=3.2,
-xtick=\empty,
-ytick=\empty,
-xlabel={\(x\)},
-ylabel={\(y\)},
-samples=100,
-clip=false
-]
-\addplot[thick, domain=0.4:3.6] {1.2 + 0.55*ln(x+0.2)};
-\addplot[dashed] coordinates {(2.5,0) (2.5,3)};
-\addplot[dashed] coordinates {(0,1.8) (4,1.8)};
-\fill (axis cs:2.5,1.8) circle (2pt);
-\node[below] at (axis cs:2.5,0) {\(a\)};
-\node[left] at (axis cs:0,1.8) {\(L\)};
-\end{axis}
-\end{tikzpicture}
-\end{minipage}
-\hfill
-\begin{minipage}{0.31\textwidth}
-\centering
-\begin{tikzpicture}
-\begin{axis}[
-width=\textwidth,
-height=4.8cm,
-axis lines=middle,
-xmin=0,
-xmax=4,
-ymin=0,
-ymax=3.2,
-xtick=\empty,
-ytick=\empty,
-xlabel={\(x\)},
-ylabel={\(y\)},
-samples=100,
-clip=false
-]
-\addplot[thick, domain=0.4:3.6] {1.2 + 0.55*ln(x+0.2)};
-\addplot[dashed] coordinates {(2.5,0) (2.5,3)};
-\addplot[dashed] coordinates {(0,1.8) (4,1.8)};
-\addplot[only marks, mark=*, mark size=2pt] coordinates {(2.5,1.8)};
-\addplot[only marks, mark=*, mark size=2.2pt] coordinates {(2.5,1.1)};
-\node[below] at (axis cs:2.5,0) {\(a\)};
-\node[left] at (axis cs:0,1.8) {\(L\)};
-\end{axis}
-\end{tikzpicture}
-\end{minipage}
-\hfill
-\begin{minipage}{0.31\textwidth}
-\centering
-\begin{tikzpicture}
-\begin{axis}[
-width=\textwidth,
-height=4.8cm,
-axis lines=middle,
-xmin=0,
-xmax=4,
-ymin=0,
-ymax=3.2,
-xtick=\empty,
-ytick=\empty,
-xlabel={\(x\)},
-ylabel={\(y\)},
-samples=100,
-clip=false
-]
-\addplot[thick, domain=0.4:3.6] {1.2 + 0.55*ln(x+0.2)};
-\addplot[dashed] coordinates {(2.5,0) (2.5,3)};
-\addplot[dashed] coordinates {(0,1.8) (4,1.8)};
-\addplot[only marks, mark=o, mark size=2.2pt] coordinates {(2.5,1.8)};
-\node[below] at (axis cs:2.5,0) {\(a\)};
-\node[left] at (axis cs:0,1.8) {\(L\)};
-\end{axis}
-\end{tikzpicture}
-\end{minipage}
-\caption{Three functions with the same limit as \(x\to a\).}
-\label{fig:limit-same-near-a}
-\end{figure}
+\subsection{Direct substitution}
 
-Figure~\ref{fig:limit-same-near-a} illustrates an important point: three functions may have different values at \(x=a\), or one of them may even be undefined at \(x=a\), but still have the same limit as \(x\to a\).
+The limit laws imply several useful consequences.
+
+\begin{proposition}
+Let \(n\) be a positive integer. Then
+\[
+\lim_{x\to a}x=a
+\qquad \text{and} \qquad
+\lim_{x\to a}x^{n}=a^{n}.
+\]
+Consequently, if \(p(x)\) is a polynomial, then
+\[
+\lim_{x\to a}p(x)=p(a).
+\]
+If \(r(x)\) is a rational function and \(r(a)\) is defined, then
+\[
+\lim_{x\to a}r(x)=r(a).
+\]
+\end{proposition}
+
+So for polynomials and rational functions, the first step is usually direct substitution. If substitution gives a meaningful number, then the limit is found immediately.
+
+\subsection{Algebraic simplification}
+
+Sometimes direct substitution does not work because it leads to an expression such as \(\dfrac{0}{0}\). In that case, we try to simplify the expression first.
 
 \begin{example}
-Guess the value of
+Evaluate
 \[
 \lim_{x\to 1}\frac{x-1}{x^{2}-1}.
 \]
 \end{example}
 
 \begin{solution}
-Although the expression is not defined at \(x=1\), we can examine its values for \(x\) near \(1\):
+Direct substitution gives
 \[
-\begin{array}{c|cccccc}
-x & 0.9 & 0.99 & 0.999 & 1.001 & 1.01 & 1.1 \\ \hline
-\dfrac{x-1}{x^{2}-1} & 0.5263 & 0.5025 & 0.5003 & 0.4998 & 0.4975 & 0.4762
-\end{array}
+\frac{1-1}{1^{2}-1}=\frac{0}{0},
 \]
-These values suggest that
+so we first simplify the expression. Since
+\[
+x^{2}-1=(x-1)(x+1),
+\]
+we have
 \[
 \frac{x-1}{x^{2}-1}
+=
+\frac{x-1}{(x-1)(x+1)}
+=
+\frac{1}{x+1},
+\qquad x\ne 1.
 \]
-gets close to \(\dfrac{1}{2}\) as \(x\) approaches \(1\). Thus we guess that
+Therefore,
 \[
-\lim_{x\to 1}\frac{x-1}{x^{2}-1}=\frac{1}{2}.
+\lim_{x\to 1}\frac{x-1}{x^{2}-1}
+=
+\lim_{x\to 1}\frac{1}{x+1}
+=
+\frac{1}{2}.
 \]
 \end{solution}
 
 \begin{example}
-Guess the value of
+Evaluate
 \[
 \lim_{t\to 0}\frac{\sqrt{t^{2}+9}-3}{t^{2}}.
 \]
 \end{example}
 
 \begin{solution}
-We evaluate the expression for values of \(t\) close to \(0\):
+Direct substitution again gives the indeterminate form \(\dfrac{0}{0}\). We rationalize the numerator:
 \[
-\begin{array}{c|cccc}
-t & -0.1 & -0.01 & 0.01 & 0.1 \\ \hline
-\dfrac{\sqrt{t^{2}+9}-3}{t^{2}} & 0.166620 & 0.166666 & 0.166666 & 0.166620
-\end{array}
+\frac{\sqrt{t^{2}+9}-3}{t^{2}}
+\cdot
+\frac{\sqrt{t^{2}+9}+3}{\sqrt{t^{2}+9}+3}
+=
+\frac{t^{2}+9-9}{t^{2}\bigl(\sqrt{t^{2}+9}+3\bigr)}.
 \]
-These values are close to
+Thus
 \[
-\frac{1}{6}=0.166666\cdots
+\frac{\sqrt{t^{2}+9}-3}{t^{2}}
+=
+\frac{1}{\sqrt{t^{2}+9}+3},
+\qquad t\ne 0.
 \]
-so we guess that
+Now we may take the limit directly:
 \[
-\lim_{t\to 0}\frac{\sqrt{t^{2}+9}-3}{t^{2}}=\frac{1}{6}.
+\lim_{t\to 0}\frac{\sqrt{t^{2}+9}-3}{t^{2}}
+=
+\lim_{t\to 0}\frac{1}{\sqrt{t^{2}+9}+3}
+=
+\frac{1}{6}.
 \]
 \end{solution}
 
-The examples above show that the value of a limit can often be guessed by looking at function values near the point of interest. In the following sections, we will develop systematic methods for evaluating limits and study more subtle situations, such as one-sided limits and infinite limits.
+\subsection{The absolute value function and the greatest integer function}
 
+Not all limits can be evaluated by direct substitution alone. Sometimes we must use the definition of the function more carefully.
 
+\begin{example}
+Evaluate
+\[
+\lim_{x\to 0}|x|.
+\]
+\end{example}
+
+\begin{solution}
+Recall that
+\[
+|x|=
+\begin{cases}
+x, & x\ge 0,\\[4pt]
+-x, & x<0.
+\end{cases}
+\]
+If \(x\to 0^{+}\), then \(|x|=x\to 0\). If \(x\to 0^{-}\), then \(|x|=-x\to 0\). Therefore,
+\[
+\lim_{x\to 0}|x|=0.
+\]
+\end{solution}
+
+\begin{example}
+The greatest integer function \([x]\) is defined to be the largest integer less than or equal to \(x\). Evaluate
+\[
+\lim_{x\to 3^{+}}[x]
+\qquad \text{and} \qquad
+\lim_{x\to 3^{-}}[x].
+\]
+\end{example}
+
+\begin{solution}
+If \(x\to 3^{+}\), then \(x\) is slightly greater than \(3\), so
+\[
+[x]=3.
+\]
+Hence
+\[
+\lim_{x\to 3^{+}}[x]=3.
+\]
+
+If \(x\to 3^{-}\), then \(x\) is slightly less than \(3\), so
+\[
+[x]=2.
+\]
+Hence
+\[
+\lim_{x\to 3^{-}}[x]=2.
+\]
+
+Since the left-hand and right-hand limits are different, we conclude that
+\[
+\lim_{x\to 3}[x]
+\]
+does not exist.
+\end{solution}
+
+\subsection{The squeeze theorem}
+
+A very useful technique for evaluating limits is to compare a function with two simpler functions.
+
+\begin{theorem}[Squeeze theorem]
+Suppose that
+\[
+g(x)\le f(x)\le h(x)
+\]
+for all \(x\) near \(a\), except possibly at \(x=a\). If
+\[
+\lim_{x\to a}g(x)=L
+\qquad \text{and} \qquad
+\lim_{x\to a}h(x)=L,
+\]
+then
+\[
+\lim_{x\to a}f(x)=L.
+\]
+\end{theorem}
+
+\begin{example}
+Evaluate
+\[
+\lim_{x\to 0}x^{2}\sin\left(\frac{1}{x}\right).
+\]
+\end{example}
+
+\begin{solution}
+Since
+\[
+-1\le \sin\left(\frac{1}{x}\right)\le 1,
+\]
+we may multiply all parts by \(x^{2}\ge 0\) to obtain
+\[
+-x^{2}\le x^{2}\sin\left(\frac{1}{x}\right)\le x^{2}.
+\]
+Now,
+\[
+\lim_{x\to 0}(-x^{2})=0
+\qquad \text{and} \qquad
+\lim_{x\to 0}x^{2}=0.
+\]
+Therefore, by the squeeze theorem,
+\[
+\lim_{x\to 0}x^{2}\sin\left(\frac{1}{x}\right)=0.
+\]
+\end{solution}
+
+The limit laws and the techniques of factoring, rationalization, and squeezing allow us to evaluate many limits. In the next section, we will give the precise definition of a limit.
