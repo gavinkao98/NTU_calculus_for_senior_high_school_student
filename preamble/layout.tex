@@ -4,6 +4,24 @@
 \setlist[enumerate]{itemsep=0.25em, topsep=0.4em}
 \setlist[itemize]{itemsep=0.25em, topsep=0.4em}
 
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{5}
+\renewcommand{\topfraction}{0.95}
+\renewcommand{\bottomfraction}{0.9}
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\floatpagefraction}{0.85}
+\setlength{\textfloatsep}{10pt plus 2pt minus 4pt}
+\setlength{\floatsep}{10pt plus 2pt minus 2pt}
+\setlength{\intextsep}{10pt plus 2pt minus 2pt}
+
+% Figure placement policy for the textbook:
+% - \stdfigureplacement for ordinary figures that may float naturally.
+% - \corefigureplacement for figures that should stay close to the
+%   surrounding explanation, such as key concept diagrams after a definition.
+\newcommand{\stdfigureplacement}{!tbp}
+\newcommand{\corefigureplacement}{!ht}
+
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[LE]{\nouppercase{\leftmark}}

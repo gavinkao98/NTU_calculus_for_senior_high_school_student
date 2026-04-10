@@ -1,8 +1,12 @@
-\chapter{Inverse Functions and Limits}
+﻿\chapter{Inverse Functions and Limits}
 
 \section{Inverse Functions and One-to-One Functions}
 
 In many situations, a function describes a process that sends an input \(x\) to an output \(y=f(x)\). We are often interested in reversing this process and recovering the original input from the output. This leads to the ideas of one-to-one functions and inverse functions.
+
+\begin{remark}
+Inverse functions appear naturally in applications. For example, if a formula converts temperature from Celsius to Fahrenheit, then the inverse formula converts Fahrenheit back to Celsius. In the same way, many scientific formulas describe a process in one direction, and an inverse function allows us to recover the original quantity.
+\end{remark}
 
 \subsection{One-to-One Functions}
 
@@ -70,22 +74,19 @@ g\left(-\frac12\right)=\left(-\frac12\right)^2=\frac14.
 Thus two different inputs produce the same output, so \(g\) is not one-to-one.
 \end{solution}
 
-The previous example shows that not every function has an inverse. For \(g(x)=x^2\) on \([-1,1]\), the value \(\frac14\) comes from both \(\frac12\) and \(-\frac12\). Therefore there is no unique value that can be assigned to \(g^{-1}\!\left(\frac14\right)\).
+\begin{remark}
+Not every function has an inverse. A function can have an inverse only if each output corresponds to exactly one input; in other words, the function must be one-to-one. For \(g(x)=x^2\) on \([-1,1]\), the value \(\frac14\) comes from both \(\frac12\) and \(-\frac12\). Therefore \(g^{-1}\!\left(\frac14\right)\) is not well defined.
+\end{remark}
 
-\begin{theorem}[Horizontal Line Test]
-A function is one-to-one if and only if no horizontal line intersects its graph more than once.
-\end{theorem}
-
-
-A horizontal line has equation $y=c$, so it represents a fixed output value $c$.
-If the line $y=c$ intersects the graph of $f$ at least two distinct points $(x_1,c)$ and $(x_2,c)$ with $x_1\neq x_2$, then
+\begin{remark}[Horizontal Line Test]
+A function is one-to-one if and only if no horizontal line intersects its graph more than once. A horizontal line has equation \(y=c\), so it represents a fixed output value \(c\). If the line \(y=c\) intersects the graph of \(f\) at two distinct points \((x_1,c)\) and \((x_2,c)\) with \(x_1\ne x_2\), then
 \[
 f(x_1)=c=f(x_2).
 \]
-Thus two different inputs produce the same output, so $f$ is not one-to-one.
-Conversely, if every horizontal line intersects the graph at most once, then no output value corresponds to more than one input, and hence $f$ is one-to-one.
+Thus two different inputs produce the same output, so \(f\) is not one-to-one. Conversely, if every horizontal line intersects the graph at most once, then no output value corresponds to more than one input, and hence \(f\) is one-to-one.
+\end{remark}
 
-\begin{figure}[ht]
+\begin{figure}[\stdfigureplacement]
 \centering
 \begin{minipage}{0.46\textwidth}
 \centering
@@ -151,6 +152,20 @@ f(y)=x.
 \]
 \end{remark}
 
+\begin{theorem}
+A function has an inverse function if and only if it is one-to-one.
+\end{theorem}
+
+\begin{proof}
+Suppose first that \(f\) has an inverse function \(f^{-1}\). If \(f(x_1)=f(x_2)\), then applying \(f^{-1}\) to both sides gives
+\[
+f^{-1}(f(x_1))=f^{-1}(f(x_2)),
+\]
+so \(x_1=x_2\). Hence \(f\) is one-to-one.
+
+Conversely, suppose that \(f\) is one-to-one with domain \(A\) and range \(B\). For each \(y\in B\), there is some \(x\in A\) such that \(f(x)=y\), and the one-to-one property guarantees that this \(x\) is unique. Therefore the correspondence \(y\mapsto x\) defines an inverse function \(f^{-1}:B\to A\).
+\end{proof}
+
 \begin{example}
 Find the inverse of each function. 
 
@@ -193,7 +208,7 @@ f(f^{-1}(x))=x
 \qquad \text{for every } x\in B.
 \]
 
-\begin{figure}[htbp]
+\begin{figure}[\stdfigureplacement]
     \centering
     \begin{tikzpicture}[
         transform shape,
@@ -229,8 +244,6 @@ f(f^{-1}(x))=x
 \end{figure}
 
 \end{proposition}
-
-\newpage
 
 \subsection{Finding the Inverse of a Function}
 
@@ -286,16 +299,24 @@ Thus the inverse is correct.
 \end{solution}
 
  %-----------------------------------------------------
- %反三角函數
+ %??閫??
  %-----------------------------------------------------
 
 \section{Inverse Trigonometric Functions}
 
 The trigonometric functions are not one-to-one on all of \(\mathbb{R}\), so they do not have inverse functions on their full domains. To define inverse trigonometric functions, we restrict the domains of the trigonometric functions so that they become one-to-one.
 
+\begin{remark}
+Inverse trigonometric functions arise whenever we know a ratio and want to recover an angle. This occurs in elementary geometry, surveying, navigation, and physics. For example, if we know the slope of a ramp, then \(\arctan\) can be used to determine its angle of inclination.
+\end{remark}
+
+\begin{remark}
+To define an inverse trigonometric function, we must restrict the domain of the original trigonometric function to an interval on which it is one-to-one. The chosen interval determines the principal values of the inverse function.
+\end{remark}
+
 Consider the sine function on all of \(\mathbb{R}\). As shown in Figure~\ref{fig:sine-not-one-to-one}, a horizontal line can intersect the graph of \(y=\sin x\) more than once. Therefore \(\sin x\) is not one-to-one on \(\mathbb{R}\), and so it does not have an inverse function on its full domain.
 
-\begin{figure}[ht]
+\begin{figure}[\corefigureplacement]
 \centering
 \begin{tikzpicture}
 \begin{axis}[
@@ -341,7 +362,7 @@ To define the inverse sine function, we restrict \(\sin x\) to the interval
 \]
 On this interval, \(\sin x\) is one-to-one, and every value in the range \([-1,1]\) is attained. The restricted branch is shown in Figure~\ref{fig:restricted-sine}.
 
-\begin{figure}[ht]
+\begin{figure}[\corefigureplacement]
 \centering
 \begin{tikzpicture}
 \begin{axis}[
@@ -385,17 +406,19 @@ The domain of \(\arcsin x\) is \([-1,1]\), and its range is
 \[
 \left[-\frac{\pi}{2},\frac{\pi}{2}\right].
 \]
-Also,
-\[
-\arcsin(\sin x)=x,
-\qquad -\frac{\pi}{2}\le x\le \frac{\pi}{2},
-\]
-and
-\[
-\sin(\arcsin x)=x,
-\qquad -1\le x\le 1.
-\]
+The notation \(\sin^{-1}x\) is also used for \(\arcsin x\), but it does not mean \((\sin x)^{-1}=1/\sin x\).
 \end{remark}
+
+\begin{proposition}
+For \(-1\le x\le 1\),
+\[
+\sin(\arcsin x)=x.
+\]
+For \(-\frac{\pi}{2}\le x\le \frac{\pi}{2}\),
+\[
+\arcsin(\sin x)=x.
+\]
+\end{proposition}
 
 \begin{example}
 Evaluate the following expressions.
@@ -437,7 +460,7 @@ Evaluate the following expressions.
     \]
     Since \(\sin\theta>0\), we take \(\theta\) in the first quadrant. A right triangle corresponding to this relation is shown in Figure~\ref{fig:tan-arcsin-triangle}.
 
-    \begin{figure}[ht]
+    \begin{figure}[\stdfigureplacement]
     \centering
     \begin{tikzpicture}[scale=1.1]
     \coordinate (A) at (0,0);
@@ -477,7 +500,7 @@ The cosine function becomes one-to-one when its domain is restricted to
 \]
 The restricted branch is shown in Figure~\ref{fig:restricted-cosine}.
 
-\begin{figure}[ht]
+\begin{figure}[\corefigureplacement]
 \centering
 \begin{tikzpicture}
 \begin{axis}[
@@ -521,17 +544,18 @@ The domain of \(\arccos x\) is \([-1,1]\), and its range is
 \[
 [0,\pi].
 \]
-Also,
-\[
-\arccos(\cos x)=x,
-\qquad 0\le x\le \pi,
-\]
-and
-\[
-\cos(\arccos x)=x,
-\qquad -1\le x\le 1.
-\]
 \end{remark}
+
+\begin{proposition}
+For \(-1\le x\le 1\),
+\[
+\cos(\arccos x)=x.
+\]
+For \(0\le x\le \pi\),
+\[
+\arccos(\cos x)=x.
+\]
+\end{proposition}
 
 \subsection{The inverse tangent function}
 
@@ -541,7 +565,7 @@ The tangent function becomes one-to-one when its domain is restricted to
 \]
 The restricted branch is shown in Figure~\ref{fig:restricted-tangent}.
 
-\begin{figure}[ht]
+\begin{figure}[\corefigureplacement]
 \centering
 \begin{tikzpicture}
 \begin{axis}[
@@ -586,17 +610,18 @@ The domain of \(\arctan x\) is \(\mathbb{R}\), and its range is
 \[
 \left(-\frac{\pi}{2},\frac{\pi}{2}\right).
 \]
-Also,
-\[
-\arctan(\tan x)=x,
-\qquad -\frac{\pi}{2}<x<\frac{\pi}{2},
-\]
-and
-\[
-\tan(\arctan x)=x,
-\qquad x\in\mathbb{R}.
-\]
 \end{remark}
+
+\begin{proposition}
+For \(x\in\mathbb{R}\),
+\[
+\tan(\arctan x)=x.
+\]
+For \(-\frac{\pi}{2}<x<\frac{\pi}{2}\),
+\[
+\arctan(\tan x)=x.
+\]
+\end{proposition}
 
 \begin{example}
 Simplify \(\cos(\arctan x)\).
@@ -641,31 +666,47 @@ Thus
 
 \subsection{The remaining inverse trigonometric functions}
 
-The remaining inverse trigonometric functions are listed below. They are not used as frequently.
+The remaining inverse trigonometric functions are used less frequently, but they are defined in the same spirit.
+
+\begin{definition}
+The \emph{inverse cosecant function}, denoted by \(\arccsc x\), is defined by
 \[
-y=\arccsc x \quad (|x|\ge 1)
+\arccsc x=y
 \quad \Longleftrightarrow \quad
-\csc y=x,
-\qquad
-y\in \left(0,\frac{\pi}{2}\right]\cup\left(\pi,\frac{3\pi}{2}\right]
+\csc y=x
+\quad \text{and} \quad
+y\in \left(0,\frac{\pi}{2}\right]\cup\left(\pi,\frac{3\pi}{2}\right].
 \]
+\end{definition}
+
+\begin{definition}
+The \emph{inverse secant function}, denoted by \(\arcsec x\), is defined by
 \[
-y=\arcsec x \quad (|x|\ge 1)
+\arcsec x=y
 \quad \Longleftrightarrow \quad
-\sec y=x,
-\qquad
-y\in \left[0,\frac{\pi}{2}\right)\cup\left[\pi,\frac{3\pi}{2}\right)
+\sec y=x
+\quad \text{and} \quad
+y\in \left[0,\frac{\pi}{2}\right)\cup\left[\pi,\frac{3\pi}{2}\right).
 \]
+\end{definition}
+
+\begin{definition}
+The \emph{inverse cotangent function}, denoted by \(\arccot x\), is defined by
 \[
-y=\arccot x \quad (x\in\mathbb{R})
+\arccot x=y
 \quad \Longleftrightarrow \quad
-\cot y=x,
-\qquad
-y\in (0,\pi)
+\cot y=x
+\quad \text{and} \quad
+y\in (0,\pi).
 \]
+\end{definition}
 
 \begin{remark}
-For \(\arcsec x\), we also can choose \(y\in \left[0,\frac{\pi}{2}\right)\cup\left(\frac{\pi}{2},\pi\right]\). The reason for the choice \(y\in \left[0,\frac{\pi}{2}\right)\cup\left[\pi,\frac{3\pi}{2}\right)\) is that the differentiation formulas are simpler.
+The domains of \(\arccsc x\) and \(\arcsec x\) are \((-\infty,-1]\cup[1,\infty)\), while the domain of \(\arccot x\) is \(\mathbb{R}\). The principal ranges are the intervals specified in the definitions above.
+\end{remark}
+
+\begin{remark}
+For \(\arcsec x\), we can also choose \(y\in \left[0,\frac{\pi}{2}\right)\cup\left(\frac{\pi}{2},\pi\right]\). The reason for the choice \(y\in \left[0,\frac{\pi}{2}\right)\cup\left[\pi,\frac{3\pi}{2}\right)\) is that the differentiation formulas are simpler.
 \end{remark}
 
 \section{The Limit of a Function}
@@ -698,14 +739,14 @@ and say that the limit of \(f(x)\) as \(x\) approaches \(a\) is \(L\) if \(f(x)\
 When we consider \(\lim_{x\to a} f(x)\), we are concerned with the values of \(f(x)\) for \(x\) near \(a\), not necessarily with the value of \(f(a)\). In particular, \(f(a)\) need not be defined at all.
 \end{remark}
 
-\begin{figure}[ht]
+\begin{figure}[\stdfigureplacement]
 \centering
 
 \def\a{3}
 \def\L{8}
-\def\fy{5} % 第二張圖中，另外指定的 f(a)
+\def\fy{5} % 蝚砌?撘萄?銝哨??血?????f(a)
 
-%==================== 第 1 張 ====================
+%==================== 蝚?1 撘?====================
 \begin{minipage}[t]{0.32\textwidth}
 \centering
 \begin{tikzpicture}
@@ -725,14 +766,14 @@ When we consider \(\lim_{x\to a} f(x)\), we are concerned with the values of \(f
     clip=false
 ]
     \addplot[thick, blue, domain=0.45:3.45] {pow(2,x)};
-    % L 的水平虛線
+    % L ?偌撟唾?蝺?
     \addplot[dashed,red] coordinates {(0,\L) (\a,\L)};
     \node[below] at (axis cs:\a,0) {\(a\)};
     \node[left] at (axis cs:0,\L) {\(L\)};
 \end{axis}
 \end{tikzpicture}
 \end{minipage}\hfill
-%==================== 第 2 張 ====================
+%==================== 蝚?2 撘?====================
 \begin{minipage}[t]{0.32\textwidth}
 \centering
 \begin{tikzpicture}
@@ -751,14 +792,14 @@ When we consider \(\lim_{x\to a} f(x)\), we are concerned with the values of \(f
     samples=200,
     clip=false
 ]
-    % 空心點處留洞
+    % 蝛箏?暺???
     \addplot[thick, blue, domain=0.45:2.95] {pow(2,x)};
     \addplot[thick, blue, domain=3.05:3.45] {pow(2,x)};
 
-    % L 的水平虛線
+    % L ?偌撟唾?蝺?
     \addplot[dashed,red] coordinates {(0,\L) (\a,\L)};
 
-    % 曲線上的空心點 (3,8)
+    % ?脩?銝?蝛箏?暺?(3,8)
     \addplot[
         only marks,
         mark=o,
@@ -766,7 +807,7 @@ When we consider \(\lim_{x\to a} f(x)\), we are concerned with the values of \(f
         mark options={draw=black, fill=white}
     ] coordinates {(\a,\L)};
 
-    % 另外指定的 f(3)
+    % ?血?????f(3)
     \addplot[
         only marks,
         mark=*,
@@ -778,7 +819,7 @@ When we consider \(\lim_{x\to a} f(x)\), we are concerned with the values of \(f
 \end{axis}
 \end{tikzpicture}
 \end{minipage}\hfill
-%==================== 第 3 張 ====================
+%==================== 蝚?3 撘?====================
 \begin{minipage}[t]{0.32\textwidth}
 \centering
 \begin{tikzpicture}
@@ -797,14 +838,14 @@ When we consider \(\lim_{x\to a} f(x)\), we are concerned with the values of \(f
     samples=200,
     clip=false
 ]
-    % 空心點處留洞
+    % 蝛箏?暺???
     \addplot[thick, blue, domain=0.45:2.95] {pow(2,x)};
     \addplot[thick, blue, domain=3.05:3.45] {pow(2,x)};
 
-    % L 的水平虛線
+    % L ?偌撟唾?蝺?
     \addplot[dashed,red] coordinates {(0,\L) (\a,\L)};
 
-    % 空心點
+    % 蝛箏?暺?
     \addplot[
         only marks,
         mark=o,
@@ -904,7 +945,7 @@ Similarly, we write
 and say that the \emph{right-hand limit} of \(f(x)\) as \(x\) approaches \(a\) is \(L\) if \(f(x)\) approaches \(L\) as \(x\) approaches \(a\) through values greater than \(a\).
 \end{definition}
 
-\begin{figure}[ht]
+\begin{figure}[\corefigureplacement]
 \centering
 \begin{tikzpicture}
 \begin{axis}[
@@ -936,7 +977,7 @@ clip=false
 
 Figure~\ref{fig:one-sided-limits} illustrates that the left-hand limit and the right-hand limit at a point need not be the same.
 
-\begin{theorem}
+\begin{proposition}[Criterion for a Two-Sided Limit]
 \[
 \lim_{x\to a}f(x)=L
 \]
@@ -946,7 +987,7 @@ if and only if
 \qquad \text{and} \qquad
 \lim_{x\to a^+}f(x)=L.
 \]
-\end{theorem}
+\end{proposition}
 
 \begin{remark}
 If the left-hand limit and the right-hand limit are different, then the two-sided limit does not exist.
@@ -985,7 +1026,7 @@ Similar definitions apply to one-sided infinite limits:
 \lim_{x\to a^+}f(x)=-\infty.
 \]
 
-\begin{figure}[ht]
+\begin{figure}[\stdfigureplacement]
 \centering
 
 \begin{minipage}{0.23\textwidth}
@@ -1213,7 +1254,7 @@ x=3
 is a vertical asymptote of the curve.
 \end{solution}
 
-\begin{figure}[ht]
+\begin{figure}[\stdfigureplacement]
 \centering
 \begin{tikzpicture}
 \begin{axis}[
@@ -1533,6 +1574,10 @@ From the time of Newton and Leibniz, calculus was remarkably successful in solvi
 
 In the previous sections, we used graphs, tables, and algebraic techniques to study limits. However, informal expressions such as ``\(x\) is close to \(a\)'' and ``\(f(x)\) is close to \(L\)'' are not rigorous enough. The modern resolution to this difficulty is the \(\varepsilon\)-\(\delta\) definition of a limit. Instead of relying on vague language, it describes exactly what it means for \(f(x)\) to be close to \(L\) whenever \(x\) is sufficiently close to \(a\). We now introduce this precise definition.
 
+\begin{remark}
+Historically, calculus was developed by Newton and Leibniz in the seventeenth century and was extraordinarily successful long before its logical foundations were made precise. The \(\varepsilon\)-\(\delta\) definition, developed later in the nineteenth century, gave calculus the level of rigor used in modern mathematics.
+\end{remark}
+
 To motivate the definition, consider the function
 \[
 f(x)=
@@ -1628,7 +1673,7 @@ if for every \(\varepsilon>0\) there exists a number \(\delta>0\) such that
 \]
 \end{definition}
 
-\begin{figure}[ht]
+\begin{figure}[\stdfigureplacement]
 \centering
 \begin{tikzpicture}
 \begin{axis}[
@@ -1739,6 +1784,48 @@ The statement
 \)
 must hold for every \(\varepsilon>0\), no matter how small \(\varepsilon\) is.
 \end{remark}
+
+\begin{proposition}[Uniqueness of Limits]
+If \(\displaystyle \lim_{x\to a} f(x)\) exists, then it is unique.
+\end{proposition}
+
+\begin{proof}
+Suppose that
+\[
+\lim_{x\to a} f(x)=L
+\qquad \text{and} \qquad
+\lim_{x\to a} f(x)=M.
+\]
+If \(L\ne M\), let
+\[
+\varepsilon=\frac{|L-M|}{2}.
+\]
+Then there exist \(\delta_1,\delta_2>0\) such that
+\[
+|f(x)-L|<\varepsilon
+\qquad \text{whenever} \qquad
+0<|x-a|<\delta_1,
+\]
+and
+\[
+|f(x)-M|<\varepsilon
+\qquad \text{whenever} \qquad
+0<|x-a|<\delta_2.
+\]
+If \(0<|x-a|<\min\{\delta_1,\delta_2\}\), then both inequalities hold. By the triangle inequality,
+\[
+|L-M|
+=
+|L-f(x)+f(x)-M|
+\le
+|L-f(x)|+|f(x)-M|
+<
+2\varepsilon
+=
+|L-M|,
+\]
+which is impossible. Therefore \(L=M\).
+\end{proof}
 
 \begin{example}
 Show from the definition that
@@ -1931,3 +2018,4 @@ If \(f\) is defined at every point near \(a\), including \(a\), and if
 \)
 then we say that \(f\) is \emph{continuous at \(a\)}.
 \end{definition}
+
