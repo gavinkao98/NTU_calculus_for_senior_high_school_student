@@ -1,4 +1,4 @@
-# LaTeX 暫存檔黑名單
+# LaTeX build artifacts
 *.aux
 *.bbl
 *.bcf
@@ -10,5 +10,40 @@
 *.run.xml
 *.synctex.gz
 *.toc
-#不把每次產生的PDF都上傳到雲端
+*.nav
+*.snm
+
+# Generated document outputs
 *.pdf
+
+# Generated media pipeline outputs
+/artifacts/
+
+# Local raw voice inputs
+/inputs/voice/*.wav
+/inputs/voice/*.mp3
+/inputs/voice/*.m4a
+/inputs/voice/*.flac
+
+# Python caches
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Local environments and vendored dependencies
+.venv/
+.venv_test/
+.deps/
+.deps_f5/
+
+# Local caches and temp files
+.cache/
+.pip-cache/
+.pip-cache-f5/
+.tmp/
+
+# OS metadata
+Thumbs.db
+Desktop.ini
+.DS_Store

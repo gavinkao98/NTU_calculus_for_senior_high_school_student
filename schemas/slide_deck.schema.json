@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SlideDeck",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "deck_id",
+    "source_file",
+    "source_section",
+    "language",
+    "slides"
+  ],
+  "properties": {
+    "deck_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_file": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_section": {
+      "type": "string",
+      "minLength": 1
+    },
+    "language": {
+      "type": "string",
+      "minLength": 1
+    },
+    "slides": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "slide_number",
+          "slide_id",
+          "source_section",
+          "title",
+          "learning_goal",
+          "slide_type",
+          "bullets",
+          "math_blocks",
+          "tikz_code",
+          "script",
+          "render_hints"
+        ],
+        "properties": {
+          "slide_number": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "slide_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_section": {
+            "type": "string",
+            "minLength": 1
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "learning_goal": {
+            "type": "string",
+            "minLength": 1
+          },
+          "slide_type": {
+            "type": "string",
+            "enum": [
+              "overview",
+              "definition",
+              "example",
+              "figure",
+              "theorem",
+              "recap"
+            ]
+          },
+          "bullets": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "math_blocks": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tikz_code": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "script": {
+            "type": "string",
+            "minLength": 1
+          },
+          "render_hints": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "tikz_scale_mode",
+              "max_width",
+              "max_height_ratio",
+              "allow_frame_breaks"
+            ],
+            "properties": {
+              "tikz_scale_mode": {
+                "type": "string",
+                "enum": [
+                  "none",
+                  "fit_width"
+                ]
+              },
+              "max_width": {
+                "type": "string",
+                "minLength": 1
+              },
+              "max_height_ratio": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 1
+              },
+              "allow_frame_breaks": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

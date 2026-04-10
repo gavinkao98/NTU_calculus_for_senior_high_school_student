@@ -1,8 +1,8 @@
 # Style Guide Note
 
-The authoritative project writing rules are now in [README.md](README.md).
+The authoritative project writing rules are now in [CONTENT_README.md](CONTENT_README.md).
 
-Use `README.md` as the single source of truth for:
+Use `CONTENT_README.md` as the single source of truth for:
 - editorial policy
 - environment classification
 - notation and terminology
