@@ -20,10 +20,15 @@
 /artifacts/*
 !/artifacts/scripts/
 !/artifacts/slides/
+!/artifacts/manim/
 /artifacts/scripts/*
 !/artifacts/scripts/*_final.md
 /artifacts/slides/*
 !/artifacts/slides/*.tex
+/artifacts/manim/*
+!/artifacts/manim/*/
+/artifacts/manim/*/*
+!/artifacts/manim/*/narration.md
 /video_pipeline/output/
 
 # Local raw voice inputs

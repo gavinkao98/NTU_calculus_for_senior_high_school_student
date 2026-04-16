@@ -60,12 +60,16 @@ def render_storyboard_scene(
     ensure_directory(output_path.parent)
     temp_media_dir = ensure_directory(output_path.parent / ".manim_tmp" / output_path.stem)
 
+    # Count enabled scenes so the progress indicator knows the total.
+    total_scenes = sum(1 for s in storyboard.get("scenes", []) if not s.get("disabled", False))
+
     context = {
         "repo_root": REPO_ROOT,
         "storyboard_path": storyboard_path,
         "storyboard": storyboard,
         "theme": storyboard["theme"],
         "video": {**storyboard["video"], **settings},
+        "total_scenes": total_scenes,
     }
     config = {
         "media_dir": str(temp_media_dir),
@@ -236,6 +240,7 @@ def probe_video_duration(path: Path) -> float:
     result = subprocess.run(
         [
             ffmpeg,
+            "-i",
             str(require_path(path.resolve(), "scene video")),
         ],
         capture_output=True,

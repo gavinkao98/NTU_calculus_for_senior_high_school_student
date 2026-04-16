@@ -2,11 +2,7 @@
 
 \section{Inverse Functions and One-to-One Functions}
 
-In many situations, a function describes a process that sends an input \(x\) to an output \(y=f(x)\). We are often interested in reversing this process and recovering the original input from the output. This leads to the ideas of one-to-one functions and inverse functions.
-
-\begin{remark}
-Inverse functions appear naturally in applications. For example, if a formula converts temperature from Celsius to Fahrenheit, then the inverse formula converts Fahrenheit back to Celsius. In the same way, many scientific formulas describe a process in one direction, and an inverse function allows us to recover the original quantity.
-\end{remark}
+In many situations, a function describes a process that sends an input \(x\) to an output \(y=f(x)\). We are often interested in reversing this process and recovering the original input from the output. This leads to the ideas of one-to-one functions and inverse functions. For example, if a formula converts temperature from Celsius to Fahrenheit, then the inverse formula converts Fahrenheit back to Celsius. In the same way, many scientific formulas describe a process in one direction, and an inverse function allows us to recover the original quantity.
 
 \subsection{One-to-One Functions}
 
@@ -74,9 +70,7 @@ g\left(-\frac12\right)=\left(-\frac12\right)^2=\frac14.
 Thus two different inputs produce the same output, so \(g\) is not one-to-one.
 \end{solution}
 
-\begin{remark}
 Not every function has an inverse. A function can have an inverse only if each output corresponds to exactly one input; in other words, the function must be one-to-one. For \(g(x)=x^2\) on \([-1,1]\), the value \(\frac14\) comes from both \(\frac12\) and \(-\frac12\). Therefore \(g^{-1}\!\left(\frac14\right)\) is not well defined.
-\end{remark}
 
 \begin{remark}[Horizontal Line Test]
 A function is one-to-one if and only if no horizontal line intersects its graph more than once. A horizontal line has equation \(y=c\), so it represents a fixed output value \(c\). If the line \(y=c\) intersects the graph of \(f\) at two distinct points \((x_1,c)\) and \((x_2,c)\) with \(x_1\ne x_2\), then
@@ -143,14 +137,12 @@ f(x)=y,
 \]
 \end{definition}
 
-\begin{remark}
 When we focus on the inverse function, it is common to use \(x\) as the independent variable. In that case we may write
 \[
 f^{-1}(x)=y
 \quad \Longleftrightarrow \quad
 f(y)=x.
 \]
-\end{remark}
 
 \begin{theorem}
 A function has an inverse function if and only if it is one-to-one.
@@ -245,25 +237,16 @@ Figure~\ref{fig:inverse-composition} illustrates these two composition identitie
     \label{fig:inverse-composition}
 \end{figure}
 
-\begin{remark}
 If the graph of \(f^{-1}\) is drawn in the same coordinate plane as the graph of \(f\), then the two graphs are reflections of one another across the line \(y=x\). Indeed, the point \((a,b)\) lies on the graph of \(f\) exactly when the point \((b,a)\) lies on the graph of \(f^{-1}\).
-\end{remark}
 
 \subsection{Finding the Inverse of a Function}
 
-When \(f\) is one-to-one, the following procedure is often useful for finding \(f^{-1}\).
-
-\begin{remark}
-To find the inverse of a one-to-one function \(f\), we may proceed as follows:
+When \(f\) is one-to-one, the following procedure is often useful for finding \(f^{-1}\):
 \begin{enumerate}
-    \item Write
-    \(
-    y=f(x).
-    \)
+    \item Write \(y=f(x)\).
     \item Solve this equation for \(x\) in terms of \(y\).
     \item Interchange \(x\) and \(y\). The resulting equation gives \(f^{-1}(x)\).
 \end{enumerate}
-\end{remark}
 
 \begin{example}
 Find the inverse of
@@ -330,15 +313,9 @@ This example shows that a function that is not one-to-one on all of \(\mathbb{R}
 
 \section{Inverse Trigonometric Functions}
 
-The trigonometric functions are not one-to-one on all of \(\mathbb{R}\), so they do not have inverse functions on their full domains. To define inverse trigonometric functions, we restrict the domains of the trigonometric functions so that they become one-to-one.
+The trigonometric functions are not one-to-one on all of \(\mathbb{R}\), so they do not have inverse functions on their full domains. Inverse trigonometric functions arise whenever we know a ratio and want to recover an angle. This occurs in elementary geometry, surveying, navigation, and physics. For example, if we know the slope of a ramp, then \(\arctan\) can be used to determine its angle of inclination.
 
-\begin{remark}
-Inverse trigonometric functions arise whenever we know a ratio and want to recover an angle. This occurs in elementary geometry, surveying, navigation, and physics. For example, if we know the slope of a ramp, then \(\arctan\) can be used to determine its angle of inclination.
-\end{remark}
-
-\begin{remark}
 To define an inverse trigonometric function, we must restrict the domain of the original trigonometric function to an interval on which it is one-to-one. The chosen interval determines the principal values of the inverse function.
-\end{remark}
 
 Consider the sine function on all of \(\mathbb{R}\). As shown in Figure~\ref{fig:sine-not-one-to-one}, a horizontal line can intersect the graph of \(y=\sin x\) more than once. Therefore \(\sin x\) is not one-to-one on \(\mathbb{R}\), and so it does not have an inverse function on its full domain.
 
@@ -427,11 +404,9 @@ The \emph{inverse sine function}, denoted by \(\arcsin x\), is defined by
 \]
 \end{definition}
 
+The domain of \(\arcsin x\) is \([-1,1]\), and its range is \(\left[-\frac{\pi}{2},\frac{\pi}{2}\right]\).
+
 \begin{remark}
-The domain of \(\arcsin x\) is \([-1,1]\), and its range is
-\[
-\left[-\frac{\pi}{2},\frac{\pi}{2}\right].
-\]
 The notation \(\sin^{-1}x\) is also used for \(\arcsin x\), but it does not mean \((\sin x)^{-1}=1/\sin x\).
 \end{remark}
 
@@ -492,12 +467,9 @@ Evaluate the following expressions.
     \qquad
     -\frac{\pi}{2}\le \theta\le \frac{\pi}{2}.
     \]
-    \Needspace{14\baselineskip}
-    Since \(\sin\theta>0\), we take \(\theta\) in the first quadrant. A right triangle corresponding to this relation is shown in Figure~\ref{fig:tan-arcsin-triangle}.
+    Since \(\sin\theta>0\), we take \(\theta\) in the first quadrant. Using the right triangle below, the adjacent side can be read off directly.
 
     \begin{center}
-    \begin{minipage}{0.42\textwidth}
-    \centering
     \begin{tikzpicture}[scale=1.1]
     \coordinate (A) at (0,0);
     \coordinate (B) at (3,0);
@@ -509,9 +481,6 @@ Evaluate the following expressions.
     \node[right] at (3,0.5) {\(1\)};
     \node[above left] at (1.45,0.5) {\(3\)};
     \end{tikzpicture}
-    \captionof{figure}{Reference triangle for \(\tan\left(\arcsin\left(\tfrac{1}{3}\right)\right)\).}
-    \label{fig:tan-arcsin-triangle}
-    \end{minipage}
     \end{center}
 
     By the Pythagorean Theorem, the adjacent side is
@@ -576,12 +545,7 @@ The \emph{inverse cosine function}, denoted by \(\arccos x\), is defined by
 \]
 \end{definition}
 
-\begin{remark}
-The domain of \(\arccos x\) is \([-1,1]\), and its range is
-\[
-[0,\pi].
-\]
-\end{remark}
+The domain of \(\arccos x\) is \([-1,1]\), and its range is \([0,\pi]\).
 
 \begin{proposition}
 For \(-1\le x\le 1\),
@@ -642,12 +606,7 @@ The \emph{inverse tangent function}, denoted by \(\arctan x\), is defined by
 \]
 \end{definition}
 
-\begin{remark}
-The domain of \(\arctan x\) is \(\mathbb{R}\), and its range is
-\[
-\left(-\frac{\pi}{2},\frac{\pi}{2}\right).
-\]
-\end{remark}
+The domain of \(\arctan x\) is \(\mathbb{R}\), and its range is \(\left(-\frac{\pi}{2},\frac{\pi}{2}\right)\).
 
 \begin{proposition}
 For \(x\in\mathbb{R}\),
@@ -679,15 +638,7 @@ We want to find \(\cos y\). Using the identity
 \[
 1+\tan^{2}y=\sec^{2}y,
 \]
-we obtain
-\[
-\sec^{2}y=1+x^{2}.
-\]
-Since
-\[
--\frac{\pi}{2}<y<\frac{\pi}{2},
-\]
-we have \(\cos y>0\), and hence \(\sec y>0\). Therefore,
+we obtain \(\sec^{2}y=1+x^{2}\). Since \(-\frac{\pi}{2}<y<\frac{\pi}{2}\), we have \(\cos y>0\) and hence \(\sec y>0\). Therefore,
 \[
 \sec y=\sqrt{1+x^{2}}.
 \]
@@ -738,9 +689,7 @@ y\in (0,\pi).
 \]
 \end{definition}
 
-\begin{remark}
 The domains of \(\arccsc x\) and \(\arcsec x\) are \((-\infty,-1]\cup[1,\infty)\), while the domain of \(\arccot x\) is \(\mathbb{R}\). The principal ranges are the intervals specified in the definitions above.
-\end{remark}
 
 \begin{remark}
 For \(\arcsec x\), we can also choose \(y\in \left[0,\frac{\pi}{2}\right)\cup\left(\frac{\pi}{2},\pi\right]\). In this text we use \(y\in \left[0,\frac{\pi}{2}\right)\cup\left[\pi,\frac{3\pi}{2}\right)\) because later chapters will use derivatives of inverse trigonometric functions, and with this branch choice the differentiation formulas are simpler. When consulting other sources or software, always check which convention is being used, since different branch choices can lead to different values.
@@ -776,9 +725,7 @@ Suppose that \(f(x)\) is defined for all \(x\) near \(a\), except possibly at \(
 and say that the limit of \(f(x)\) as \(x\) approaches \(a\) is \(L\) if \(f(x)\) can be made arbitrarily close to \(L\) whenever \(x\) is sufficiently close to \(a\) but not equal to \(a\) \((x\ne a)\).
 \end{definition}
 
-\begin{remark}
 When we consider \(\lim_{x\to a} f(x)\), we are concerned with the values of \(f(x)\) for \(x\) near \(a\), not necessarily with the value of \(f(a)\). In particular, \(f(a)\) need not be defined at all.
-\end{remark}
 
 \begin{figure}[H]
 \centering
@@ -919,9 +866,12 @@ Guess the value of
 \begin{solution}
 Although the expression is not defined at \(x=1\), we can examine its values for \(x\) near \(1\):
 \[
-\begin{array}{c|cccccc}
-x & 0.9 & 0.99 & 0.999 & 1.001 & 1.01 & 1.1 \\ \hline
-\tfrac{x-1}{x^{2}-1} & 0.5263 & 0.5025 & 0.5003 & 0.4998 & 0.4975 & 0.4762
+\begin{array}{c cccccc}
+\toprule
+x & 0.9 & 0.99 & 0.999 & 1.001 & 1.01 & 1.1 \\
+\midrule
+\tfrac{x-1}{x^{2}-1} & 0.5263 & 0.5025 & 0.5003 & 0.4998 & 0.4975 & 0.4762 \\
+\bottomrule
 \end{array}
 \]
 These values suggest that
@@ -944,9 +894,12 @@ Guess the value of
 \begin{solution}
 We evaluate the expression for values of \(t\) close to \(0\):
 \[
-\begin{array}{c|cccc}
-t & -0.1 & -0.01 & 0.01 & 0.1 \\ \hline
-\tfrac{\sqrt{t^{2}+9}-3}{t^{2}} & 0.166620 & 0.166666 & 0.166666 & 0.166620
+\begin{array}{c cccc}
+\toprule
+t & -0.1 & -0.01 & 0.01 & 0.1 \\
+\midrule
+\tfrac{\sqrt{t^{2}+9}-3}{t^{2}} & 0.166620 & 0.166666 & 0.166666 & 0.166620 \\
+\bottomrule
 \end{array}
 \]
 These values are close to
@@ -1025,9 +978,7 @@ if and only if
 \]
 \end{proposition}
 
-\begin{remark}
 If the left-hand limit and the right-hand limit are different, then the two-sided limit does not exist.
-\end{remark}
 
 \begin{example}
 Let
@@ -1077,9 +1028,7 @@ Similarly, we write
 if the values of \(f(x)\) can be made arbitrarily large negative by taking \(x\) sufficiently close to \(a\), with \(x\ne a\).
 \end{definition}
 
-\begin{remark}
 The symbols \(\infty\) and \(-\infty\) do not represent real numbers. They indicate that a function grows without bound (positively or negatively) near a specific point.
-\end{remark}
 
 Similar definitions apply to one-sided infinite limits:
 \[
@@ -1167,18 +1116,15 @@ xmax=3.2,
 ymin=-3.0,
 ymax=0.75,
 xtick={2},
-xticklabels={},
+xticklabels={\(a\)},
 ytick=\empty,
 xlabel={\(x\)},
-ylabel={},
+ylabel={\(y\)},
 samples=120,
 clip=false
 ]
 \addplot[red, dashed] coordinates {(2,-3.0) (2,0.0)};
 \addplot[thick, blue, domain=0.25:1.68] {-1/(2-x)};
-
-\node[above left] at (axis cs:0,0) {\(y\)};
-\node[above] at (axis cs:2,0) {\(a\)};
 \end{axis}
 \end{tikzpicture}
 
@@ -1200,18 +1146,15 @@ xmax=3.2,
 ymin=-3.0,
 ymax=0.75,
 xtick={2},
-xticklabels={},
+xticklabels={\(a\)},
 ytick=\empty,
 xlabel={\(x\)},
-ylabel={},
+ylabel={\(y\)},
 samples=120,
 clip=false
 ]
 \addplot[red, dashed] coordinates {(2,-3.0) (2,0.0)};
 \addplot[thick, blue, domain=2.32:3.0] {-1/(x-2)};
-
-\node[above left] at (axis cs:0,0) {\(y\)};
-\node[above] at (axis cs:2,0) {\(a\)};
 \end{axis}
 \end{tikzpicture}
 
@@ -1228,7 +1171,7 @@ clip=false
 \begin{example}
 Consider the function
 \(
-f(x)=\frac{1}{x^2}.
+f(x)=\dfrac{1}{x^2}.
 \)
 Guess the value of
 \[
@@ -1280,9 +1223,7 @@ The vertical line \(x=a\) is called a \emph{vertical asymptote} of the curve \(y
 \]
 \end{definition}
 
-\begin{remark}
 If \(x=a\) is a vertical asymptote, then the function values become arbitrarily large positive or arbitrarily large negative as \(x\) approaches \(a\) from at least one side.
-\end{remark}
 
 \begin{example}
 Evaluate
@@ -1309,51 +1250,25 @@ If \(x\to 0^{+}\), then \(x\) is positive and very close to \(0\), so \(\dfrac{1
 \lim_{x\to 0^+}\frac{1}{x}=\infty.
 \]
 
-Since the left-hand and right-hand limits are different, the two-sided limit
-\[
-\lim_{x\to 0}\frac{1}{x}
-\]
-does not exist. However, at least one one-sided infinite limit occurs, so the line
-\[
-x=0
-\]
-is a vertical asymptote of the graph of \(y=\dfrac{1}{x}\).
+Since the left-hand and right-hand limits are different, the two-sided limit \(\lim_{x\to 0}\dfrac{1}{x}\) does not exist. However, at least one one-sided infinite limit occurs, so the line \(x=0\) is a vertical asymptote of the graph of \(y=\dfrac{1}{x}\).
 \end{solution}
 
 \begin{example}
-Does the curve
-\(
-y=\frac{2x}{x-3}
-\)
-have a vertical asymptote?
+Does the curve \(y=\dfrac{2x}{x-3}\) have a vertical asymptote?
 \end{example}
 
 \begin{solution}
 The denominator is zero when \(x=3\), so \(x=3\) is the only possible vertical asymptote.
 
-If \(x\) is close to \(3\) and \(x>3\), then \(x-3\) is a small positive number and \(2x\) is close to \(6\). Therefore
-\[
-\frac{2x}{x-3}
-\]
-is a large positive number. Hence
+If \(x\) is close to \(3\) and \(x>3\), then \(x-3\) is a small positive number and \(2x\) is close to \(6\). Therefore \(\dfrac{2x}{x-3}\) is a large positive number, and hence
 \[
 \lim_{x\to 3^+}\frac{2x}{x-3}=\infty.
 \]
-
-If \(x\) is close to \(3\) and \(x<3\), then \(x-3\) is a small negative number while \(2x\) is still close to \(6\). Therefore
-\[
-\frac{2x}{x-3}
-\]
-is a large negative number. Hence
+If \(x\) is close to \(3\) and \(x<3\), then \(x-3\) is a small negative number while \(2x\) is still close to \(6\). Therefore \(\dfrac{2x}{x-3}\) is a large negative number, and hence
 \[
 \lim_{x\to 3^-}\frac{2x}{x-3}=-\infty.
 \]
-
-Therefore the line
-\[
-x=3
-\]
-is a vertical asymptote of the curve.
+Therefore the line \(x=3\) is a vertical asymptote of the curve.
 \end{solution}
 
 \begin{figure}[H]
@@ -1451,7 +1366,6 @@ and
 \]
 \end{theorem}
 
-\begin{remark}
 These laws can be summarized verbally as follows:
 \begin{enumerate}
     \item The limit of a sum is the sum of the limits.
@@ -1460,7 +1374,6 @@ These laws can be summarized verbally as follows:
     \item The limit of a product is the product of the limits.
     \item The limit of a quotient is the quotient of the limits, provided the denominator limit is not \(0\).
 \end{enumerate}
-\end{remark}
 
 \begin{remark}
 These properties will be proved rigorously later. For now, they provide an effective way to evaluate many limits.
@@ -1491,7 +1404,7 @@ So for polynomials and rational functions, the first step is usually direct subs
 
 \subsection{Algebraic simplification}
 
-Sometimes direct substitution does not work because it leads to an expression such as \(\dfrac{0}{0}\). In that case, we try to simplify the expression first.
+Sometimes direct substitution does not work because it leads to an expression such as \(\frac{0}{0}\). In that case, we try to simplify the expression first.
 
 \begin{example}
 Evaluate
@@ -1536,7 +1449,7 @@ Evaluate
 \end{example}
 
 \begin{solution}
-Direct substitution again gives the indeterminate form \(\dfrac{0}{0}\). We rationalize the numerator:
+Direct substitution again gives the indeterminate form \(\frac{0}{0}\). We rationalize the numerator:
 \[
 \frac{\sqrt{t^{2}+9}-3}{t^{2}}
 \cdot
@@ -1888,29 +1801,7 @@ then the corresponding values of \(f(x)\) are forced to lie in the interval
 \((L-\varepsilon,L+\varepsilon)\).
 Notice that the value \(f(a)\) itself may be different from \(L\). The limit depends only on the behavior of \(f(x)\) when \(x\) is close to \(a\), not necessarily on the value of the function at \(x=a\).
 
-\begin{remark}
-The condition
-\(
-0<|x-a|<\delta
-\)
-means that \(x\) is within a distance \(\delta\) of \(a\), but \(x\ne a\).
-\end{remark}
-
-\begin{remark}
-The inequality
-\(
-|f(x)-L|<\varepsilon
-\)
-means that \(f(x)\) is within a distance \(\varepsilon\) of \(L\).
-\end{remark}
-
-\begin{remark}
-The statement
-\(
-\lim_{x\to a} f(x)=L
-\)
-must hold for every \(\varepsilon>0\), no matter how small \(\varepsilon\) is.
-\end{remark}
+The condition \( 0<|x-a|<\delta \) means that \(x\) is within a distance \(\delta\) of \(a\), but \(x\ne a\). The inequality \( |f(x)-L|<\varepsilon \) means that \(f(x)\) is within a distance \(\varepsilon\) of \(L\). Moreover, the statement \( \lim_{x\to a} f(x)=L \) must hold for every \(\varepsilon>0\), no matter how small \(\varepsilon\) is.
 
 \begin{proposition}[Uniqueness of Limits]
 If \(\lim_{x\to a} f(x)\) exists, then it is unique.
@@ -1976,23 +1867,11 @@ Now
 =
 4|x-3|.
 \]
-So if we require
-\[
-4|x-3|<\varepsilon,
-\]
-then it is enough to have
-\[
-|x-3|<\frac{\varepsilon}{4}.
-\]
-Hence we may choose
+So if we require \(4|x-3|<\varepsilon\), it is enough to have \(|x-3|<\dfrac{\varepsilon}{4}\). Hence we may choose
 \[
 \delta=\frac{\varepsilon}{4}.
 \]
-Then, whenever
-\[
-0<|x-3|<\delta=\frac{\varepsilon}{4},
-\]
-we have
+Then, whenever \(0<|x-3|<\delta\), we have
 \[
 |(4x-5)-7|
 =
@@ -2030,55 +1909,23 @@ First we simplify:
 =
 |(x-1)(x-4)|.
 \]
-The difficulty is that the factor \(|x-4|\) also depends on \(x\). To control it, we first assume
-\[
-|x-1|<1.
-\]
-Then
-\[
--1<x-1<1,
-\]
-so
-\[
-0<x<2.
-\]
-Therefore,
-\[
--4<x-4<-2,
-\]
-and hence
-\[
-|x-4|<4.
-\]
+The difficulty is that the factor \(|x-4|\) also depends on \(x\). To control it, we first assume \(|x-1|<1\). Then
+\begin{align*}
+|x-1|<1
+&\implies -1<x-1<1 \\
+&\implies 0<x<2 \\
+&\implies -4<x-4<-2 \\
+&\implies |x-4|<4.
+\end{align*}
 Thus, whenever \(|x-1|<1\), we have
 \[
 |(x-1)(x-4)|<4|x-1|.
 \]
-So to guarantee that
-\[
-|(x-1)(x-4)|<\varepsilon,
-\]
-it is enough to require
-\[
-4|x-1|<\varepsilon,
-\]
-that is,
-\[
-|x-1|<\frac{\varepsilon}{4}.
-\]
-Therefore we choose
+So to guarantee that \(|(x-1)(x-4)|<\varepsilon\), it is enough to require \(4|x-1|<\varepsilon\), that is, \(|x-1|<\dfrac{\varepsilon}{4}\). Therefore we choose
 \[
 \delta=\min\left\{1,\frac{\varepsilon}{4}\right\}.
 \]
-Then, whenever
-\[
-0<|x-1|<\delta,
-\]
-we have both \(|x-1|<1\) and \(|x-1|<\dfrac{\varepsilon}{4}\). Hence
-\[
-|x-4|<4
-\]
-and
+Then, whenever \(0<|x-1|<\delta\), we have both \(|x-1|<1\) and \(|x-1|<\dfrac{\varepsilon}{4}\), so \(|x-4|<4\) and
 \[
 |(x^{2}-5x+6)-2|
 =
@@ -2140,9 +1987,9 @@ we may think of \(N\) as \(-100\), \(-1000\), \(-10000\), and so on.
 
 \begin{definition}
 If \(f\) is defined at every point near \(a\), including \(a\), and if
-\(
+\[
 \lim_{x\to a} f(x)=f(a),
-\)
+\]
 then we say that \(f\) is \emph{continuous at \(a\)}.
 \end{definition}
 

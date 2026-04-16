@@ -81,7 +81,31 @@
               "example_walkthrough",
               "graph_focus",
               "procedure_steps",
-              "recap_cards"
+              "recap_cards",
+              "section_transition",
+              "theorem_proof",
+              "comparison"
+            ]
+          },
+          "content_type": {
+            "type": "string",
+            "enum": [
+              "definition",
+              "theorem",
+              "lemma",
+              "proposition",
+              "example",
+              "warning",
+              "procedure",
+              "recap"
+            ]
+          },
+          "scene_exit": {
+            "type": "string",
+            "enum": [
+              "fade",
+              "hold",
+              "none"
             ]
           },
           "title": {
@@ -114,6 +138,25 @@
               "minimum_duration_seconds": {
                 "type": "number",
                 "minimum": 0
+              }
+            }
+          },
+          "reveal_groups": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["elements"],
+              "properties": {
+                "elements": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "pause_after": {
+                  "type": "number",
+                  "minimum": 0
+                }
               }
             }
           },
@@ -172,7 +215,20 @@
                     "math_lines": {
                       "type": "array",
                       "items": {
-                        "type": "string"
+                        "oneOf": [
+                          { "type": "string" },
+                          {
+                            "type": "object",
+                            "required": ["text"],
+                            "properties": {
+                              "text": { "type": "string" },
+                              "animation": {
+                                "type": "string",
+                                "enum": ["write", "fade", "highlight", "transform_from_previous"]
+                              }
+                            }
+                          }
+                        ]
                       }
                     }
                   }
@@ -275,7 +331,20 @@
                     "worked_equations": {
                       "type": "array",
                       "items": {
-                        "type": "string"
+                        "oneOf": [
+                          { "type": "string" },
+                          {
+                            "type": "object",
+                            "required": ["text"],
+                            "properties": {
+                              "text": { "type": "string" },
+                              "animation": {
+                                "type": "string",
+                                "enum": ["write", "fade", "highlight", "transform_from_previous"]
+                              }
+                            }
+                          }
+                        ]
                       }
                     }
                   }
@@ -309,7 +378,129 @@
                     "identities": {
                       "type": "array",
                       "items": {
+                        "oneOf": [
+                          { "type": "string" },
+                          {
+                            "type": "object",
+                            "required": ["text"],
+                            "properties": {
+                              "text": { "type": "string" },
+                              "animation": {
+                                "type": "string",
+                                "enum": ["write", "fade", "highlight", "transform_from_previous"]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "template": {
+                  "const": "section_transition"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "subtitle": {
+                      "type": "string"
+                    },
+                    "upcoming": {
+                      "type": "array",
+                      "items": {
                         "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "template": {
+                  "const": "theorem_proof"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "theorem_statement",
+                    "proof_steps"
+                  ],
+                  "properties": {
+                    "theorem_statement": {
+                      "type": "string"
+                    },
+                    "proof_steps": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "qed": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "template": {
+                  "const": "comparison"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "left",
+                    "right"
+                  ],
+                  "properties": {
+                    "left": {
+                      "type": "object",
+                      "required": ["label", "items"],
+                      "properties": {
+                        "label": { "type": "string" },
+                        "color": { "type": "string" },
+                        "items": {
+                          "type": "array",
+                          "items": { "type": "string" }
+                        },
+                        "math": { "type": "string" }
+                      }
+                    },
+                    "right": {
+                      "type": "object",
+                      "required": ["label", "items"],
+                      "properties": {
+                        "label": { "type": "string" },
+                        "color": { "type": "string" },
+                        "items": {
+                          "type": "array",
+                          "items": { "type": "string" }
+                        },
+                        "math": { "type": "string" }
                       }
                     }
                   }

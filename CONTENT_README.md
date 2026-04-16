@@ -147,30 +147,30 @@ Use `definition` for topics such as:
 
 ### Remark
 
-Use a `remark` for:
-- supplementary explanation
-- teaching notes
-- intuition
-- domain restrictions
-- notation warnings
-- common mistakes
-- short historical notes
-- short application notes
-- comparisons with earlier ideas
+Use a `remark` only for genuine asides, warnings, or supplementary comments that are not part of the main exposition. A remark should feel like a sidebar the student could skip without losing the main thread.
+
+Good uses of `remark` include:
+- notation warnings (e.g., `\sin^{-1} x` does not mean `1/\sin x`)
+- branch-choice conventions that differ between sources (e.g., which principal range is used for `\arcsec x`)
+- identity restrictions that are easy to overlook (e.g., `\arcsin(\sin x)=x` holds only on the principal interval)
+- the horizontal line test as a named geometric criterion
+- short historical notes (2 to 5 sentences)
+- forward references to later chapters (e.g., "continuity will be studied systematically later")
+
+Do NOT use a `remark` for:
+- main-line knowledge that every student must read (write it as prose instead)
+- domain and range statements that follow directly from a definition (state them as a plain sentence after the definition)
+- core conceptual points such as "the limit does not depend on f(a)" or "∞ is not a real number" (these belong in the running text)
+- verbal summaries of theorem statements (place them as prose after the theorem)
+- content that, if skipped, would leave a gap in the student's understanding
 
 A remark is not the main formal result of the section.
 A remark usually does not need a proof.
 
-Good uses of `remark` include:
-- explaining why a condition is necessary
-- explaining principal-value restrictions for inverse trigonometric functions
-- warning that `\sin^{-1} x` does not mean `1/\sin x`
-- clarifying that the existence of a limit does not imply `f(a)` equals the limit
-- presenting the horizontal line test as a geometric teaching criterion when it is not a central theorem of the section
-- giving a short historical or real-world motivation in 2 to 5 sentences
-
-Important rule:
-Do not hide a genuinely important reusable formal result inside a remark.
+Important rules:
+1. Do not hide a genuinely important reusable formal result inside a remark.
+2. If the content is part of the logical flow of the section, it should be prose, not a remark.
+3. When in doubt, prefer prose over remark. A chapter with fewer than 15 remarks is usually healthier than one with 30.
 
 ### Theorem
 
@@ -360,6 +360,19 @@ Examples:
 Do not use `\displaystyle` as the default way to make formulas look important.
 If a formula is important enough to stand out, it usually should be moved to display math instead.
 
+### Inline Fractions: `\frac` vs `\dfrac`
+
+When a fraction appears in inline math, `\frac` produces a smaller, cramped version. If the same fraction also appears nearby in display math, the size jump is visually jarring. Use `\dfrac` in inline math for substantive fractions whose display-size counterpart appears nearby.
+
+Use `\dfrac` for:
+- fractions with expressions in the numerator or denominator, such as `\(\dfrac{1}{x^2}\)`, `\(\dfrac{2x}{x-3}\)`, `\(\dfrac{\varepsilon}{4}\)`
+- fractions in example statements, figure captions, or prose that also appear in adjacent display equations
+
+Keep `\frac` for:
+- simple well-known constants in interval notation, such as `\(\frac{\pi}{2}\)`, `\(\frac{3\pi}{2}\)` — using `\dfrac` inside `\left[...\right]` brackets would make them disproportionately tall
+- symbolic indeterminate-form notation such as `\(\frac{0}{0}\)`
+- any fraction already inside display math (display math renders `\frac` at full size automatically)
+
 ### Formulas in Tables
 
 Inside tables, prefer `\tfrac` or plain-text forms instead of `\dfrac` unless the larger display style is genuinely necessary.
@@ -524,23 +537,19 @@ Good caption models:
 
 ## Figure Placement Policy
 
-Place figures as close as reasonably possible to the paragraph where they are discussed, but do not force placement aggressively unless readability truly requires it.
+In a teaching-oriented document, figures must appear immediately next to the text that discusses them. Allowing figures to float away forces students to flip pages, which disrupts the reading flow.
 
 Current house policy in this repository is:
-- ordinary figures -> `[!tbp]`
-- concept-critical figures -> `[!ht]`
+- all figures -> `[H]` (requires the `float` package)
 
-Interpretation:
-- `[!tbp]` is for ordinary figures that may float naturally
-- `[!ht]` is for figures that should stay close to the surrounding explanation, such as a key concept graph immediately after a definition
+Rationale:
+- Every figure in this textbook is tied to a specific definition, example, or remark. Proximity is always pedagogically important.
+- The `\raggedbottom` setting (in `preamble/layout.tex`) prevents excessive vertical stretching that `[H]` placement can sometimes cause with the `book` class.
 
 Important rules:
-1. Do not default to `[H]`.
-2. Allow normal floating when possible.
-3. Use the core placement only when the teaching flow depends on proximity.
-4. A figure may move to the next page if needed.
-5. Normal page breaks are acceptable.
-6. Only tighten placement if separation damages readability.
+1. Default to `[H]` so that figures stay exactly where the source places them.
+2. If a page break leaves too much white space before an `[H]` figure, adjust the surrounding text or add a manual `\newpage` rather than switching to a floating placement.
+3. Keep figures reasonably sized so that they fit on the same page as the text that introduces them.
 
 ## Size and Layout Policy for Figures
 
@@ -606,7 +615,7 @@ When asked to draft a chapter or section:
 6. decide selectively whether proofs are needed
 7. include exercises only if present in the manuscript
 8. add figures only when they materially improve understanding
-9. use `[!tbp]` or `[!ht]` for figures as appropriate
+9. use `[H]` for all figures (see Figure Placement Policy)
 10. write clean textbook prose
 11. output explicit LaTeX content only
 

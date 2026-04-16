@@ -1,31 +1,7 @@
 deck_id: "ch01_inverse_functions"
 language: "English"
 theme:
-  name: "sandstone"
-  colors:
-    background: "#F7F4EA"
-    surface: "#FFFDF8"
-    primary: "#7C4D2F"
-    secondary: "#22577A"
-    accent: "#2F855A"
-    text: "#24313F"
-    muted_text: "#52606D"
-    math: "#1D4ED8"
-    warning: "#C2410C"
-    grid: "#D9E2EC"
-  typography:
-    title_size: 40
-    body_size: 28
-    small_size: 22
-    math_size: 34
-  layout:
-    top_y: 3.05
-    side_margin: 0.8
-    content_width: 11.4
-  transitions:
-    element_fade: 0.35
-    bullet_lag: 0.2
-    section_pause: 0.45
+  name: "midnight"
 video:
   aspect_ratio: "16:9"
   pixel_width: 1920
@@ -34,109 +10,158 @@ video:
   preview_scale: 0.5
 scenes:
   -
-    scene_id: "why_inverse_functions_matter"
+    scene_id: "opening_hook"
     template: "title_bullets"
-    title: "Why Study Inverse Functions?"
-    voiceover: "We begin with the practical question of when a function can be reversed. If a formula converts one quantity into another, we often want to go back in the opposite direction. A temperature-conversion formula is a simple example: Celsius to Fahrenheit, then Fahrenheit back to Celsius. But reversal only works if an output identifies one original input. That is why the first idea we need is one-to-one behavior."
+    content_type: "definition"
+    scene_exit: "hold"
+    title: "Inverse Functions"
+    voiceover: "Every function is a machine: you feed in a number, it hands you back another. But sometimes we want to run the machine backwards. If a formula converts Celsius into Fahrenheit, there should be another formula that converts Fahrenheit back into Celsius. The question is: when can we actually reverse a function, and when is it impossible? That is the subject of this video."
     timing:
-      lead_in_seconds: 0.15
-      hold_after_seconds: 0.45
-      minimum_duration_seconds: 4.0
+      lead_in_seconds: 0.3
+      hold_after_seconds: 0.8
+      minimum_duration_seconds: 6.0
     data:
       bullets:
-        - "A function can be viewed as a process that sends an input \\(x\\) to an output \\(y=f(x)\\)."
-        - "Some formulas should be reversible, such as converting Celsius to Fahrenheit and back again."
-        - "A reversible rule needs each output to come from exactly one input."
+        - "A function sends an input \\(x\\) to an output \\(y = f(x)\\)."
+        - "Can we always reverse the process and recover \\(x\\) from \\(y\\)?"
+        - "When reversal is possible, the reverse rule is called \\(f^{-1}\\)."
   -
     scene_id: "one_to_one_definition"
     template: "definition_math"
-    title: "Definition of a One-to-One Function"
-    voiceover: "Here is the formal condition. A function is one-to-one when different inputs never collapse to the same output. Equivalently, if two outputs are equal, then the inputs must already be equal. The second statement is often the better proof tool, but both say the same mathematical thing. This is the point where rigor matters: an inverse function can only be defined if every output leads back to one and only one input."
+    content_type: "definition"
+    scene_exit: "hold"
+    title: "One-to-One Functions"
+    voiceover: "The key property is called one-to-one. A function is one-to-one when different inputs always produce different outputs. No two distinct x-values ever land on the same y-value. There is an equivalent way to say this: if you know that f of x one equals f of x two, then you can conclude that x one must equal x two. Both statements capture the same idea, but the second form is often easier to use in a proof."
     timing:
-      lead_in_seconds: 0.15
-      hold_after_seconds: 0.45
-      minimum_duration_seconds: 4.0
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.6
+      minimum_duration_seconds: 5.0
     data:
-      statement: "Different inputs must produce different outputs."
+      statement: "A function \\(f\\) is one-to-one if different inputs always produce different outputs."
       math_lines:
-        - "\\[\nf(x_1)\\ne f(x_2)\n\\qquad \\text{whenever } x_1\\ne x_2.\n\\]"
-        - "\\[\nf(x_1)=f(x_2) \\implies x_1=x_2.\n\\]"
-      supporting_bullets:
-        - "The equivalent implication form is often the easier test in practice."
-        - "This is the key property that allows a function to have an inverse."
+        - "\\[f(x_1) \\ne f(x_2) \\qquad \\text{whenever } x_1 \\ne x_2.\\]"
+        -
+          text: "\\[f(x_1) = f(x_2) \\;\\Longrightarrow\\; x_1 = x_2.\\]"
+          animation: "highlight"
   -
-    scene_id: "student_id_example"
+    scene_id: "real_world_one_to_one"
     template: "example_walkthrough"
-    title: "A Real-World One-to-One Test"
-    voiceover: "This example shows that the definition is about matching, not about algebraic symbols. If each student is matched with a student ID number, the function is one-to-one because each ID belongs to exactly one student. But if each student is matched with a blood type, then many students can share the same output, so the function is not one-to-one. This is the right habit to build early: do not stare at the symbols first. Ask whether one output can be traced back to several different inputs."
+    content_type: "example"
+    scene_exit: "hold"
+    title: "A Concrete Example"
+    voiceover: "Before we look at algebraic functions, consider a simple real-world test. Assign each student in a class their student ID number. Every student gets a unique ID, so if two students are different people, they must have different IDs. That function is one-to-one. Now assign each student their blood type. Alice and Bob can both be Type O. Two different inputs share the same output. That function is not one-to-one. The lesson: ask whether a single output can be traced back to two different inputs."
     timing:
-      lead_in_seconds: 0.15
-      hold_after_seconds: 0.45
-      minimum_duration_seconds: 4.0
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.6
+      minimum_duration_seconds: 6.0
     data:
       steps:
-        - "Student ID numbers are unique, so the function is one-to-one."
-        - "Blood types repeat across students, so that function is not one-to-one."
-        - "The test is always the same: can one output belong to more than one input?"
-      takeaway: "Apply the definition to ordinary processes before moving to algebraic functions."
+        - "Student \\(\\to\\) Student ID: every student gets a unique number."
+        - "Student \\(\\to\\) Blood type: Alice and Bob can both be Type O."
+        - "One-to-one means each output points back to exactly one input."
+      takeaway: "If any output comes from two different inputs, the function is not one-to-one."
       math_lines:
-        - "\\[\nf(\\text{student})=\\text{Student ID number}\n\\]"
-        - "\\[\ng(\\text{student})=\\text{Blood type}.\n\\]"
+        - "\\[f(\\text{student}) = \\text{Student ID} \\quad\\checkmark\\]"
+        - "\\[g(\\text{student}) = \\text{Blood type} \\quad\\times\\]"
   -
-    scene_id: "square_function_inverse_failure"
+    scene_id: "algebraic_one_to_one_test"
     template: "example_walkthrough"
-    title: "Why \\(x^2\\) Can Fail To Be Invertible"
-    voiceover: "Now we move to a standard mathematical example. The identity function on zero to one is one-to-one because every input keeps its own value. In contrast, the square function on minus one to one is not one-to-one: one half and minus one half both give one fourth. That repeated output is not a minor issue. It means the inverse would have to send one fourth back to two different inputs, which is impossible for a function. Not every function has an inverse. A function can have an inverse only if each output corresponds to exactly one input; in other words, the function must be one-to-one. For g of x equals x squared on the interval from minus one to one, the value one fourth comes from both one half and minus one half. Therefore g inverse of one fourth is not well defined."
+    content_type: "example"
+    scene_exit: "hold"
+    title: "Testing with Algebra"
+    voiceover: "Now let us test two mathematical functions. Take f of x equals x on the interval zero to one. If x one is different from x two, then f of x one equals x one is certainly different from f of x two equals x two. So this function is one-to-one. Now consider g of x equals x squared on minus one to one. Here, one half and negative one half are different inputs, but they both square to one fourth. Two inputs, same output. So g is not one-to-one on this interval."
     timing:
-      lead_in_seconds: 0.15
-      hold_after_seconds: 0.45
-      minimum_duration_seconds: 4.0
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.6
+      minimum_duration_seconds: 6.0
     data:
       steps:
-        - "\\(f(x)=x\\) on \\([0,1]\\) is one-to-one, but \\(g(x)=x^2\\) on \\([-1,1]\\) is not."
-        - "The output \\(\\frac14\\) comes from both \\(\\frac12\\) and \\(-\\frac12\\)."
-        - "\\(g^{-1}\\!\\left(\\frac14\\right)\\) is not well defined on the full interval \\([-1,1]\\)."
-      takeaway: "See exactly how repeated outputs prevent an inverse from being well defined."
+        - "\\(f(x) = x\\) on \\([0,1]\\): distinct inputs give distinct outputs."
+        - "\\(g(x) = x^2\\) on \\([-1,1]\\): check \\(x = \\tfrac{1}{2}\\) and \\(x = -\\tfrac{1}{2}\\)."
+        - "Both give \\(g = \\tfrac{1}{4}\\), so \\(g\\) is not one-to-one."
+      takeaway: "A single counterexample is enough to disprove the one-to-one property."
       math_lines:
-        - "\\[\nf(x)=x, \\qquad 0\\le x\\le 1,\n\\]"
-        - "\\[\ng(x)=x^2, \\qquad -1\\le x\\le 1.\n\\]"
-        - "\\[\ng\\left(\\frac12\\right)=\\left(\\frac12\\right)^2=\\frac14\n\\qquad \\text{and} \\qquad\ng\\left(-\\frac12\\right)=\\left(-\\frac12\\right)^2=\\frac14.\n\\]"
+        - "\\[f(x) = x, \\qquad 0 \\le x \\le 1.\\]"
+        - "\\[g\\!\\left(\\tfrac{1}{2}\\right) = \\tfrac{1}{4} = g\\!\\left(-\\tfrac{1}{2}\\right).\\]"
   -
-    scene_id: "horizontal_line_test_rule"
+    scene_id: "why_x_squared_fails"
+    template: "graph_focus"
+    content_type: "warning"
+    scene_exit: "hold"
+    title: "Why $x^2$ Cannot Be Inverted"
+    voiceover: "Let us see this failure on a graph. Here is the parabola y equals x squared on minus one to one. The output one fourth sits at this height. A horizontal line at that level crosses the curve in two places: at x equals one half on the right and x equals minus one half on the left. If we tried to define g inverse of one fourth, we would have to choose between two inputs. A function cannot return two answers. So g inverse of one fourth is simply not well defined."
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.8
+      minimum_duration_seconds: 6.0
+    data:
+      axes:
+        x_range: [-1.5, 1.5, 0.5]
+        y_range: [-0.3, 1.5, 0.5]
+        x_length: 8.0
+        y_length: 5.0
+        include_numbers: true
+        tips: true
+      plots:
+        -
+          kind: "function"
+          expression: "x**2"
+          x_range: [-1.2, 1.2]
+          color: "#4cc9f0"
+          label: "$g(x) = x^2$"
+        -
+          kind: "line"
+          start: [-1.4, 0.25]
+          end: [1.4, 0.25]
+          color: "#ff6b6b"
+          dashed: true
+          label: "$y = 1/4$"
+        -
+          kind: "point"
+          point: [0.5, 0.25]
+          color: "#f9a825"
+        -
+          kind: "point"
+          point: [-0.5, 0.25]
+          color: "#f9a825"
+      annotations:
+        -
+          text: "Two inputs share the same output."
+        -
+          text: "\\(g^{-1}\\!\\left(\\frac{1}{4}\\right)\\) is not well defined."
+  -
+    scene_id: "horizontal_line_test"
     template: "definition_math"
+    content_type: "proposition"
+    scene_exit: "hold"
     title: "The Horizontal Line Test"
-    voiceover: "The horizontal line test is the graph version of the definition. A horizontal line means the output value is fixed at y equals c. If that line meets the graph twice, then the same output c is being produced by two different x-values, so the function cannot be one-to-one. If every horizontal line meets the graph at most once, then every output corresponds to at most one input, which is exactly the condition we need."
+    voiceover: "There is a quick visual rule that captures this idea. Draw any horizontal line y equals c across the graph. That line represents a fixed output value. If it crosses the graph more than once, then two different x-values are producing the same output, so the function is not one-to-one. If every horizontal line hits the graph at most once, then every output comes from a unique input, and the function is one-to-one. This is called the horizontal line test."
     timing:
-      lead_in_seconds: 0.15
-      hold_after_seconds: 0.45
-      minimum_duration_seconds: 4.0
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.6
+      minimum_duration_seconds: 5.0
     data:
-      statement: "A horizontal line represents a fixed output value \\(y=c\\)."
+      statement: "A function is one-to-one if and only if every horizontal line meets its graph at most once."
       math_lines:
-        - "\\[\nf(x_1)=c=f(x_2).\n\\]"
+        - "\\[y = c \\;\\;\\text{hits the graph twice} \\;\\Longrightarrow\\; f(x_1) = c = f(x_2).\\]"
       supporting_bullets:
-        - "If the graph is hit twice, then two inputs share the same output."
-        - "So a function is one-to-one exactly when every horizontal line meets the graph at most once."
+        - "One intersection or zero: the function is one-to-one."
+        - "Two or more intersections: not one-to-one."
   -
     scene_id: "horizontal_line_test_figure"
     template: "graph_focus"
     hook: "tools.manim_templates.hooks.horizontal_line_test_comparison"
-    title: "Horizontal Line Test: Visual Check"
-    voiceover: "This figure lets us read the test directly. On the left, the horizontal line intersects only once, so the graph is still consistent with a one-to-one function. On the right, the horizontal line meets the parabola twice, which tells us immediately that one output value is coming from two inputs. That visual failure is exactly why an inverse cannot be defined on the entire interval."
+    scene_exit: "hold"
+    title: "Horizontal Line Test in Action"
+    voiceover: "On the left is a straight line: every horizontal level crosses it exactly once. That graph passes the horizontal line test. On the right is a parabola. A horizontal line at the right height crosses it twice, once on each side of the axis of symmetry. That graph fails the test. Whenever you see a graph, this sweep is the fastest way to check whether an inverse can exist."
     timing:
-      lead_in_seconds: 0.15
-      hold_after_seconds: 0.45
-      minimum_duration_seconds: 4.0
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.8
+      minimum_duration_seconds: 5.0
     data:
       axes:
-        x_range:
-          - -3
-          - 3
-          - 1
-        y_range:
-          - -1
-          - 4
-          - 1
+        x_range: [-3, 3, 1]
+        y_range: [-1, 4, 1]
         x_length: 6.2
         y_length: 4.2
         include_numbers: false
@@ -144,162 +169,288 @@ scenes:
       plots:
         -
           kind: "line"
-          start:
-            - -1.5
-            - -1.5
-          end:
-            - 1.3
-            - 1.3
-          color: "#22577A"
-          label: "one hit"
+          start: [-1.5, -1.5]
+          end: [1.3, 1.3]
+          color: "#4cc9f0"
         -
           kind: "line"
-          start:
-            - -2.1
-            - 1.0
-          end:
-            - 1.3
-            - 1.0
-          color: "#C2410C"
+          start: [-2.1, 1.0]
+          end: [1.3, 1.0]
+          color: "#ff6b6b"
           dashed: true
-          label: "y=c"
         -
           kind: "function"
           expression: "1.15 * x**2"
-          x_range:
-            - -1.35
-            - 1.35
-          color: "#22577A"
+          x_range: [-1.35, 1.35]
+          color: "#4cc9f0"
         -
           kind: "line"
-          start:
-            - -1.85
-            - 1.25
-          end:
-            - 1.85
-            - 1.25
-          color: "#C2410C"
+          start: [-1.85, 1.25]
+          end: [1.85, 1.25]
+          color: "#ff6b6b"
           dashed: true
         -
           kind: "point"
-          point:
-            - -1.04
-            - 1.25
-          color: "#2F855A"
+          point: [-1.04, 1.25]
+          color: "#f9a825"
         -
           kind: "point"
-          point:
-            - 1.04
-            - 1.25
-          color: "#2F855A"
+          point: [1.04, 1.25]
+          color: "#f9a825"
       annotations:
         -
-          text: "Left panel: one horizontal hit still behaves like a one-to-one graph."
+          text: "Passes: one intersection."
         -
-          text: "Right panel: the same horizontal level hits twice, so one output comes from two inputs."
-      source_figure_tex: "\\centering\n\\begin{minipage}{0.46\\textwidth}\n\\centering\n\\begin{tikzpicture}[scale=0.9]\n\\draw[->] (-2.3,0) -- (2.1,0) node[right] {$x$};\n\\draw[->] (0,-2.1) -- (0,2.2) node[above] {$y$};\n\\draw[blue, thick] (-1.5,-1.5) -- (1.3,1.3);\n\\draw[red, dashed] (-2.1,1) -- (1.3,1);\n\\fill (1,1) circle (2pt);\n\\node[blue] at (1.4,1.55) {$f(x)$};\n\\node[below right] at (0.85,1) {$(x_1,c)$};\n\\node[red, right] at (1.35,1) {$y=c$};\n\\end{tikzpicture}\n\n\\vspace{0.4em}\nOne-to-one function\\\\\nIntersects at most once.\n\\end{minipage}\n\\hfill\n\\begin{minipage}{0.46\\textwidth}\n\\centering\n\\begin{tikzpicture}[scale=0.9]\n\\draw[->] (-2.3,0) -- (2.1,0) node[right] {$x$};\n\\draw[->] (0,-2.1) -- (0,2.2) node[above] {$y$};\n\\draw[blue, thick, domain=-1.35:1.35, samples=100] plot (\\x,{1.15*\\x*\\x});\n\\draw[red, dashed] (-1.85,1.25) -- (1.85,1.25);\n\\fill (-1.04,1.25) circle (2pt);\n\\fill (1.04,1.25) circle (2pt);\n\\node[blue] at (1.5,2.15) {$f(x)$};\n\\node[above left] at (-1.2,1.25) {$(x_1,c)$};\n\\node[above right] at (1.2,1.25) {$(x_2,c)$};\n\\node[red, right] at (1.9,1.25) {$y=c$};\n\\end{tikzpicture}\n\n\\vspace{0.4em}\nNot one-to-one\\\\\nIntersects more than once.\n\\end{minipage}"
+          text: "Fails: two intersections."
   -
-    scene_id: "inverse_function_definition"
-    template: "definition_math"
-    title: "Definition of an Inverse Function"
-    voiceover: "Once a function is one-to-one, we can define its inverse. If the original function sends x to y, then the inverse sends y back to x. That is why the domain and range switch roles. The outputs of the original function become the allowed inputs of the inverse. Sometimes the notation is rewritten with x as the input variable for the inverse, but that is only a relabeling. The mathematical content is still that the inverse reverses the original correspondence."
+    scene_id: "transition_to_inverses"
+    template: "section_transition"
+    scene_exit: "hold"
+    title: "Defining the Inverse"
+    voiceover: "Now that we know what one-to-one means, we can define the inverse function itself."
     timing:
-      lead_in_seconds: 0.15
-      hold_after_seconds: 0.45
-      minimum_duration_seconds: 4.0
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.4
+      minimum_duration_seconds: 3.0
     data:
-      statement: "If \\(f\\) sends \\(x\\) to \\(y\\), then \\(f^{-1}\\) sends \\(y\\) back to \\(x\\)."
-      math_lines:
-        - "\\[\nf^{-1}(y)=x\n\\quad \\Longleftrightarrow \\quad\nf(x)=y,\n\\qquad y\\in B.\n\\]"
-        - "\\[\nf^{-1}(x)=y\n\\quad \\Longleftrightarrow \\quad\nf(y)=x.\n\\]"
-      supporting_bullets:
-        - "The domain and range switch roles when we pass to the inverse."
-        - "Using \\(x\\) as the input variable for \\(f^{-1}\\) is only a notation change, not a new idea."
+      subtitle: "From one-to-one to invertible"
+      upcoming:
+        - "The formal definition of an inverse"
+        - "The existence theorem"
+        - "Composition identities"
   -
-    scene_id: "inverse_existence_theorem"
+    scene_id: "inverse_definition"
     template: "definition_math"
+    content_type: "definition"
+    scene_exit: "hold"
+    title: "The Inverse Function"
+    voiceover: "Here is the definition. Suppose f is one-to-one with domain A and range B. Its inverse, written f inverse, has domain B and range A, and it is defined by the rule: f inverse of y equals x if and only if f of x equals y. In other words, the inverse simply reverses the direction of the original function. The outputs of f become the inputs of f inverse, and the inputs of f become the outputs of f inverse."
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.6
+      minimum_duration_seconds: 5.0
+    data:
+      statement: "If \\(f\\) is one-to-one with domain \\(A\\) and range \\(B\\), its inverse \\(f^{-1}\\) reverses the correspondence."
+      math_lines:
+        -
+          text: "\\[f^{-1}(y) = x \\quad\\Longleftrightarrow\\quad f(x) = y, \\qquad y \\in B.\\]"
+          animation: "write"
+      supporting_bullets:
+        - "Domain of \\(f^{-1}\\) = range of \\(f\\)."
+        - "Range of \\(f^{-1}\\) = domain of \\(f\\)."
+  -
+    scene_id: "existence_theorem"
+    template: "theorem_proof"
+    content_type: "theorem"
+    scene_exit: "hold"
     title: "When Does an Inverse Exist?"
-    voiceover: "This theorem gives the complete criterion: a function has an inverse if and only if it is one-to-one. So the property we studied earlier is not just helpful; it is exactly the right condition. The examples show how the theorem turns into computation. The identity function stays unchanged under inversion, and for x cubed we solve y equals x cubed for x, then interchange x and y to get the cube root function."
+    voiceover: "The central theorem is clean: a function has an inverse if and only if it is one-to-one. The forward direction is straightforward. If f has an inverse, and f of x one equals f of x two, then applying f inverse to both sides gives x one equals x two. So f must be one-to-one. For the converse, if f is one-to-one, then for each output y in the range, there is exactly one x that maps to it. That unique correspondence defines f inverse."
     timing:
-      lead_in_seconds: 0.15
-      hold_after_seconds: 0.45
-      minimum_duration_seconds: 4.0
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.6
+      minimum_duration_seconds: 7.0
     data:
-      statement: "A function has an inverse function if and only if it is one-to-one."
+      theorem_statement: "A function has an inverse function if and only if it is one-to-one."
+      proof_steps:
+        - "If \\(f\\) has an inverse and \\(f(x_1) = f(x_2)\\), apply \\(f^{-1}\\):"
+        - "\\(f^{-1}(f(x_1)) = f^{-1}(f(x_2)) \\;\\Rightarrow\\; x_1 = x_2.\\)"
+        - "Conversely, if \\(f\\) is one-to-one, each \\(y \\in B\\) comes from a unique \\(x\\)."
+        - "The map \\(y \\mapsto x\\) defines \\(f^{-1}\\).  \\(\\square\\)"
+  -
+    scene_id: "composition_identities"
+    template: "definition_math"
+    content_type: "proposition"
+    scene_exit: "hold"
+    title: "The Cancellation Equations"
+    voiceover: "The inverse literally undoes the original function. This gives us two composition identities that are worth memorizing. First: f inverse of f of x equals x for every x in the domain of f. You apply f, then undo it with f inverse, and you land back where you started. Second: f of f inverse of x equals x for every x in the range of f. You apply f inverse, then apply f, and again you return to the starting point. These two identities also serve as a verification tool: if you find a candidate for f inverse, check that both compositions give x."
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.6
+      minimum_duration_seconds: 6.0
+    data:
+      statement: "An inverse undoes the original function in both directions."
       math_lines:
-        - "\\[\n    f^{-1}(x)=x.\n    \\]"
-        - "\\[\n    g^{-1}(x)=\\sqrt[3]{x}.\n    \\]"
-      supporting_bullets:
-        - "Being one-to-one is both necessary and sufficient."
-        - "Quick checks: \\(f(x)=x\\) and \\(g(x)=x^3\\) are both invertible."
+        -
+          text: "\\[f^{-1}(\\,f(x)\\,) = x \\qquad \\text{for every } x \\in A.\\]"
+          animation: "write"
+        -
+          text: "\\[f(\\,f^{-1}(x)\\,) = x \\qquad \\text{for every } x \\in B.\\]"
+          animation: "highlight"
   -
     scene_id: "finding_inverse_procedure"
     template: "procedure_steps"
-    title: "Three Steps For Finding An Inverse"
-    voiceover: "Once we know an inverse exists, there is a standard algebraic procedure for finding it. First write y equals f of x. Next solve that equation for x in terms of y. Then interchange x and y. That final relabeling is not cosmetic; it rewrites the answer with the inverse viewed as a new function of x."
+    content_type: "procedure"
+    scene_exit: "hold"
+    title: "How to Find an Inverse"
+    voiceover: "When you know a function is one-to-one, finding its inverse is a mechanical procedure. Step one: write y equals f of x. Step two: solve that equation for x in terms of y. This is usually the hardest step, because it depends on the algebra of f. Step three: interchange x and y. That last swap is not just cosmetic. It rewrites the inverse as a function of x, which is the standard convention."
     timing:
-      lead_in_seconds: 0.15
-      hold_after_seconds: 0.45
-      minimum_duration_seconds: 4.0
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.6
+      minimum_duration_seconds: 5.0
     data:
       steps:
-        - "Write \\(y=f(x)\\)."
-        - "Solve this equation for \\(x\\) in terms of \\(y\\)."
-        - "Interchange \\(x\\) and \\(y\\) to obtain \\(f^{-1}(x)\\)."
+        - "Write \\(y = f(x)\\)."
+        - "Solve for \\(x\\) in terms of \\(y\\)."
+        - "Interchange \\(x\\) and \\(y\\) to get \\(f^{-1}(x)\\)."
       worked_equations:
-        - "\\[\ny=f(x).\n\\]"
-        - "\\[\nx=\\text{solve in terms of } y.\n\\]"
-        - "\\[\nf^{-1}(x)\\text{ appears after swapping }x\\text{ and }y.\n\\]"
+        - "\\[y = f(x) \\;\\longrightarrow\\; x = \\cdots \\;\\longrightarrow\\; f^{-1}(x) = \\cdots\\]"
   -
-    scene_id: "shifted_cubic_example"
+    scene_id: "example_cubic"
     template: "example_walkthrough"
-    title: "Example: Finding The Inverse Of \\(x^3+2\\)"
-    voiceover: "Here the procedure works cleanly. We start with y equals x cubed plus two, solve for x, and then interchange the variables. That gives the inverse function x minus two under a cube root. Because x cubed is already one-to-one on all real numbers, we do not need any domain restriction first."
+    content_type: "example"
+    scene_exit: "hold"
+    title: "Worked Example: $f(x) = x^3 + 2$"
+    voiceover: "Let us apply the procedure to f of x equals x cubed plus two. Step one: write y equals x cubed plus two. Step two: subtract two, giving x cubed equals y minus two. Then take the cube root: x equals the cube root of y minus two. Step three: interchange x and y. So f inverse of x equals the cube root of x minus two. Finally, let us verify. Compute f of f inverse of x: plug the cube root of x minus two into x cubed plus two. The cube and the cube root cancel, giving x minus two plus two, which is x. The cancellation equation checks out."
     timing:
-      lead_in_seconds: 0.15
-      hold_after_seconds: 0.45
-      minimum_duration_seconds: 4.0
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.6
+      minimum_duration_seconds: 7.0
     data:
       steps:
-        - "Start with \\(y=x^3+2\\) and solve for \\(x\\)."
-        - "After isolating \\(x\\), interchange the variables."
-        - "A composition check confirms the answer."
-      takeaway: "Apply the three-step procedure to a function that is already one-to-one."
+        - "Write \\(y = x^3 + 2\\)."
+        - "Solve: \\(x^3 = y - 2\\), so \\(x = \\sqrt[3]{\\,y - 2\\,}\\)."
+        - "Swap: \\(f^{-1}(x) = \\sqrt[3]{\\,x - 2\\,}\\)."
+        - "Verify: \\(f(f^{-1}(x)) = (\\sqrt[3]{x-2})^3 + 2 = x\\). \\(\\checkmark\\)"
+      takeaway: "Always verify the cancellation equation after finding the inverse."
       math_lines:
-        - "\\[\ny=x^3+2.\n\\]"
-        - "\\[\nx=\\sqrt[3]{\\,y-2\\,}.\n\\]"
-        - "\\[\nf^{-1}(x)=\\sqrt[3]{\\,x-2\\,}.\n\\]"
+        - "\\[y = x^3 + 2\\]"
+        - "\\[x = \\sqrt[3]{\\,y - 2\\,}\\]"
+        -
+          text: "\\[f^{-1}(x) = \\sqrt[3]{\\,x - 2\\,}\\]"
+          animation: "highlight"
   -
-    scene_id: "restricted_parabola_example"
-    template: "example_walkthrough"
-    title: "Example: Restricting The Domain Of \\(x^2\\)"
-    voiceover: "This example shows why domain restriction matters. On all of the real numbers, x squared is not one-to-one. But once we restrict the domain to x greater than or equal to zero, every output comes from exactly one input. That is why the inverse becomes the nonnegative square root rather than plus or minus square root."
+    scene_id: "cubic_graph_reflection"
+    template: "graph_focus"
+    content_type: "example"
+    scene_exit: "hold"
+    title: "Graphs of $f$ and $f^{-1}$"
+    voiceover: "Here is a beautiful geometric fact. The graph of f of x equals x cubed plus two is this S-shaped curve shifted up by two. The graph of its inverse, the cube root of x minus two, is the mirror image reflected across the line y equals x. Every point a, b on the graph of f corresponds to the point b, a on the graph of f inverse. The dashed line y equals x is the mirror. This reflection property holds for every invertible function and its inverse."
     timing:
-      lead_in_seconds: 0.15
-      hold_after_seconds: 0.45
-      minimum_duration_seconds: 4.0
+      lead_in_seconds: 0.2
+      hold_after_seconds: 1.0
+      minimum_duration_seconds: 6.0
+    data:
+      axes:
+        x_range: [-3, 5, 1]
+        y_range: [-3, 5, 1]
+        x_length: 8.0
+        y_length: 6.0
+        include_numbers: true
+        tips: true
+      plots:
+        -
+          kind: "function"
+          expression: "x**3 + 2"
+          x_range: [-1.7, 1.45]
+          color: "#4cc9f0"
+          label: "$f(x) = x^3 + 2$"
+          label_side: "up"
+          label_x: -0.8
+        -
+          kind: "function"
+          expression: "cbrt(x - 2)"
+          x_range: [-1.1, 5.0]
+          color: "#f9a825"
+          label: "$f^{-1}(x)$"
+          label_side: "down"
+          label_x: 4.0
+        -
+          kind: "line"
+          start: [-2.5, -2.5]
+          end: [4.5, 4.5]
+          color: "#c8c8d8"
+          dashed: true
+          label: "$y = x$"
+      annotations:
+        -
+          text: "The point \\((a, b)\\) on \\(f\\) becomes \\((b, a)\\) on \\(f^{-1}\\)."
+  -
+    scene_id: "domain_restriction_idea"
+    template: "example_walkthrough"
+    content_type: "example"
+    scene_exit: "hold"
+    title: "Restricting the Domain of $x^2$"
+    voiceover: "Earlier we saw that x squared on minus one to one is not one-to-one. But what if we restrict the domain? On the interval x greater than or equal to zero, the parabola is strictly increasing: larger inputs always give larger outputs. So x squared on this restricted domain is one-to-one. We can now find its inverse. Write y equals x squared with x at least zero. Solve: x equals the square root of y, choosing the nonnegative root because the original domain requires x at least zero. Interchange x and y: f inverse of x equals the square root of x."
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.6
+      minimum_duration_seconds: 6.0
     data:
       steps:
-        - "On \\([0,\\infty)\\), the function \\(f(x)=x^2\\) becomes one-to-one."
-        - "We choose the nonnegative square root because the original domain requires \\(x\\ge 0\\)."
-        - "Restricting the domain can make an inverse possible."
-      takeaway: "See how a domain restriction can create an inverse for a function that was not invertible before."
+        - "On \\([-1,1]\\), \\(x^2\\) is not one-to-one. But on \\([0, \\infty)\\) it is."
+        - "Write \\(y = x^2\\), \\(x \\ge 0\\). Solve: \\(x = \\sqrt{y}\\)."
+        - "Swap: \\(f^{-1}(x) = \\sqrt{x}\\), \\(x \\ge 0\\)."
+      takeaway: "A function that fails the one-to-one test globally may still be invertible after restricting its domain."
       math_lines:
-        - "\\[\ny=x^2,\n\\qquad x\\ge 0.\n\\]"
-        - "\\[\nx=\\sqrt{y}.\n\\]"
-        - "\\[\nf^{-1}(x)=\\sqrt{x},\n\\qquad x\\ge 0.\n\\]"
+        - "\\[f(x) = x^2, \\quad x \\ge 0\\]"
+        -
+          text: "\\[f^{-1}(x) = \\sqrt{x}, \\quad x \\ge 0\\]"
+          animation: "highlight"
   -
-    scene_id: "composition_identities_figure"
+    scene_id: "restricted_parabola_graph"
+    template: "graph_focus"
+    content_type: "example"
+    scene_exit: "hold"
+    title: "$x^2$ and $\\sqrt{x}$ as Reflections"
+    voiceover: "On the restricted domain, the graph of x squared is the right half of the parabola. Its inverse, the square root function, is the reflection across y equals x. Notice how the two curves are symmetric about the dashed diagonal. This is the same reflection principle we saw with the cubic, and it works for any invertible function. The key insight is that domain restriction turned a non-invertible function into an invertible one."
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 1.0
+      minimum_duration_seconds: 5.0
+    data:
+      axes:
+        x_range: [-0.5, 4.5, 1]
+        y_range: [-0.5, 4.5, 1]
+        x_length: 7.0
+        y_length: 6.0
+        include_numbers: true
+        tips: true
+      plots:
+        -
+          kind: "function"
+          expression: "x**2"
+          x_range: [0, 2.05]
+          color: "#4cc9f0"
+          label: "$f(x) = x^2$"
+          label_side: "left"
+          label_x: 1.6
+        -
+          kind: "function"
+          expression: "x**0.5"
+          x_range: [0, 4.2]
+          color: "#f9a825"
+          label: "$f^{-1}(x) = \\sqrt{x}$"
+          label_side: "up"
+          label_x: 2.0
+        -
+          kind: "line"
+          start: [-0.3, -0.3]
+          end: [4.2, 4.2]
+          color: "#c8c8d8"
+          dashed: true
+          label: "$y = x$"
+      annotations:
+        -
+          text: "Domain restriction makes \\(x^2\\) invertible."
+  -
+    scene_id: "recap"
     template: "recap_cards"
-    title: "Checking An Inverse By Composition"
-    voiceover: "To finish the section, we record the identities that certify an inverse. If you apply a function and then its inverse, you must return to the starting point. If you apply the inverse first and then the function, you must also return to the starting point, provided you begin in the correct set. These are the formulas you should check whenever you want to confirm that a proposed inverse is correct."
+    content_type: "recap"
+    scene_exit: "hold"
+    title: "Key Takeaways"
+    voiceover: "Let us summarize what we have learned. A function is one-to-one when no two inputs share the same output. The horizontal line test is a quick visual check for this property. A function has an inverse if and only if it is one-to-one. To find the inverse, write y equals f of x, solve for x, then swap x and y. The cancellation equations let you verify your answer. And the graph of f inverse is the reflection of f across the line y equals x. If a function is not one-to-one on its full domain, restricting the domain can make it invertible."
     timing:
-      lead_in_seconds: 0.15
-      hold_after_seconds: 0.45
-      minimum_duration_seconds: 4.0
+      lead_in_seconds: 0.2
+      hold_after_seconds: 1.0
+      minimum_duration_seconds: 6.0
     data:
       points:
-        - "\\(f^{-1}(f(x))=x\\) for every \\(x\\in A\\)."
-        - "\\(f(f^{-1}(x))=x\\) for every \\(x\\in B\\)."
-        - "These identities are the standard verification step after solving for an inverse."
-      identities: []
+        - "One-to-one: different inputs \\(\\Rightarrow\\) different outputs."
+        - "Horizontal line test: at most one intersection per horizontal line."
+        - "Inverse exists \\(\\Longleftrightarrow\\) the function is one-to-one."
+        - "Finding \\(f^{-1}\\): write \\(y=f(x)\\), solve for \\(x\\), swap."
+        - "Verify: \\(f^{-1}(f(x))=x\\) and \\(f(f^{-1}(x))=x\\)."
+        - "Graph of \\(f^{-1}\\) = reflection of \\(f\\) across \\(y=x\\)."
+      identities:
+        - "\\[f^{-1}(f(x)) = x\\]"
+        - "\\[f(f^{-1}(x)) = x\\]"

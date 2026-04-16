@@ -23,7 +23,7 @@ Use the dedicated guides instead of treating this file as the full rulebook:
 - `tools/`: media-generation scripts
 - `schemas/`: JSON schema files for generated deck data
 - `inputs/`: reusable raw inputs such as source voice recordings, section media plans, and Manim storyboards
-- `artifacts/`: mostly generated slides, narration, audio, and video outputs; the tracked exceptions are `artifacts/scripts/*_final.md` and `artifacts/slides/*.tex`
+- `artifacts/`: mostly generated slides, narration, audio, and video outputs; the tracked exceptions are `artifacts/scripts/*_final.md`, `artifacts/slides/*.tex`, and `artifacts/manim/*/narration.md`
 
 Voice-reference note:
 - keep new voice reference inputs under `inputs/voice/` as `.wav` files
@@ -39,8 +39,9 @@ Manim-storyboard note:
 - keep storyboard files under `inputs/manim_storyboards/`
 - use `tools/seed_manim_storyboard.py` to draft a storyboard from an existing deck JSON, then edit the YAML directly
 - the storyboard owns Manim `voiceover` text and can optionally bridge back into the existing TTS scripts
-- `render_manim_lesson.py --with-audio` writes bridge files to `artifacts/scripts/<deck_id>_final.md` and `artifacts/manim/<deck_id>/tts_deck.json`
-- for the Manim path, treat the storyboard as the source of truth and treat the generated bridge script as a derived file
+- `render_manim_lesson.py --with-audio` writes bridge files to `artifacts/manim/<deck_id>/narration.md` and `artifacts/manim/<deck_id>/tts_deck.json`
+- you can edit `narration.md` for proofreading, then run `sync_narration_back.py` to push changes back to the YAML
+- for the Manim path, the storyboard is the source of truth; `narration.md` is a readable editing surface that syncs back
 
 ## Preamble Map
 
@@ -104,16 +105,16 @@ Narration ownership rule:
 
 - slide/PDF path: `*_draft.md` is regenerated and disposable
 - slide/PDF path: `*_final.md` is user-owned, should be edited directly, and is the narration source read by the slide-based TTS tools
-- Manim path: each scene's `voiceover` in `inputs/manim_storyboards/*.yml` is user-owned and should be edited directly
-- Manim path: `artifacts/scripts/*_final.md` is regenerated from the storyboard as a TTS bridge file and should not be edited by hand
-- if you want to add a joke or a more conversational line for a Manim lesson, put it in the storyboard `voiceover`; for the slide/PDF path, put it in `*_final.md`
+- Manim path: each scene's `voiceover` in `inputs/manim_storyboards/*.yml` is the source of truth
+- Manim path: `artifacts/manim/<deck_id>/narration.md` is a readable narration file you can edit directly, then sync back with `sync_narration_back.py`
+- if you want to add a joke or a more conversational line for a Manim lesson, edit `narration.md` or the storyboard `voiceover`; for the slide/PDF path, put it in `*_final.md`
 
 Version-control rule:
 
 - commit `artifacts/scripts/*_final.md` when you want narration edits in project history
 - commit `artifacts/slides/*.tex` when you want the generated Beamer source in project history
 - commit `inputs/manim_storyboards/*.yml` when you want Manim animation and narration edits in project history
-- if a Manim deck uses the TTS bridge, the generated `artifacts/scripts/*_final.md` can be committed as a derived snapshot, but the storyboard remains canonical
+- commit `artifacts/manim/*/narration.md` when you want the Manim narration in project history (the storyboard remains canonical)
 - do not commit `*_draft.md`, slide PDFs, or LaTeX build artifacts under `artifacts/`
 
 For the actual commands and file paths, use:

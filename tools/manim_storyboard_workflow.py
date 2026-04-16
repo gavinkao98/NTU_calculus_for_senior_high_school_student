@@ -10,6 +10,7 @@ from typing import Any
 from media_paths import (
     DEFAULT_DECK_ID,
     deck_json_path,
+    manim_narration_path,
     manim_render_manifest_path,
     manim_storyboard_path,
     manim_tts_deck_path,
@@ -26,6 +27,9 @@ TEMPLATE_NAMES = {
     "graph_focus",
     "procedure_steps",
     "recap_cards",
+    "section_transition",
+    "theorem_proof",
+    "comparison",
 }
 SLIDE_TYPE_TO_TEMPLATE = {
     "motivation": "title_bullets",
@@ -37,36 +41,70 @@ SLIDE_TYPE_TO_TEMPLATE = {
     "figure": "graph_focus",
     "procedure": "procedure_steps",
     "recap": "recap_cards",
+    "transition": "section_transition",
+    "proof": "theorem_proof",
+    "comparison": "comparison",
+}
+# Map templates to default content_type when not explicitly specified.
+TEMPLATE_TO_CONTENT_TYPE = {
+    "definition_math": "definition",
+    "example_walkthrough": "example",
+    "graph_focus": "example",
+    "procedure_steps": "procedure",
+    "recap_cards": "recap",
+    "title_bullets": "definition",
+    "section_transition": "definition",
+    "theorem_proof": "theorem",
+    "comparison": "example",
 }
 DEFAULT_THEME = {
-    "name": "sandstone",
+    "name": "midnight",
     "colors": {
-        "background": "#F7F4EA",
-        "surface": "#FFFDF8",
-        "primary": "#7C4D2F",
-        "secondary": "#22577A",
-        "accent": "#2F855A",
-        "text": "#24313F",
-        "muted_text": "#52606D",
-        "math": "#1D4ED8",
-        "warning": "#C2410C",
-        "grid": "#D9E2EC",
+        "background": "#0b0c10",
+        "surface": "#1a1a2e",
+        "primary": "#e8e8f0",
+        "secondary": "#4cc9f0",
+        "accent": "#f9a825",
+        "text": "#c8c8d8",
+        "muted_text": "#6e6e82",
+        "math": "#7df9ff",
+        "warning": "#ff6b6b",
+        "grid": "#2a2a3e",
+        "highlight": "#f9a825",
+        "divider": "#2a2a3e",
+        "success": "#06d6a0",
     },
     "typography": {
-        "title_size": 40,
-        "body_size": 28,
-        "small_size": 22,
-        "math_size": 34,
+        "title_size": 44,
+        "body_size": 30,
+        "small_size": 24,
+        "math_size": 38,
+        "section_label_size": 20,
+        "math_display_size": 42,
+        "caption_size": 22,
     },
     "layout": {
         "top_y": 3.05,
-        "side_margin": 0.8,
-        "content_width": 11.4,
+        "side_margin": 1.2,
+        "content_width": 10.6,
     },
     "transitions": {
-        "element_fade": 0.35,
-        "bullet_lag": 0.2,
-        "section_pause": 0.45,
+        "element_fade": 0.4,
+        "bullet_lag": 0.22,
+        "section_pause": 0.6,
+        "write_speed": 0.8,
+        "reveal_pause": 0.4,
+        "exit_fade": 0.5,
+    },
+    "content_type_colors": {
+        "definition": "secondary",
+        "theorem": "accent",
+        "lemma": "accent",
+        "proposition": "secondary",
+        "example": "highlight",
+        "warning": "warning",
+        "procedure": "secondary",
+        "recap": "accent",
     },
 }
 DEFAULT_VIDEO = {
@@ -137,16 +175,41 @@ def normalize_storyboard(storyboard: Any, source_path: Path | None = None) -> di
                 f"Allowed values: {sorted(TEMPLATE_NAMES)}"
             )
 
+        # Infer content_type from template if not explicitly set.
+        content_type = raw_scene.get("content_type")
+        if content_type is not None:
+            content_type = require_text(content_type, f"{label}.scenes[{index}].content_type")
+        else:
+            content_type = TEMPLATE_TO_CONTENT_TYPE.get(template, "definition")
+
+        scene_exit_val = raw_scene.get("scene_exit")
+        if scene_exit_val is not None:
+            scene_exit_val = require_text(scene_exit_val, f"{label}.scenes[{index}].scene_exit")
+            if scene_exit_val not in {"fade", "hold", "none"}:
+                raise ValueError(f"{label}.scenes[{index}].scene_exit must be fade, hold, or none.")
+        else:
+            scene_exit_val = "fade"
+
         normalized_scene = {
             "scene_number": index,
             "scene_id": scene_id,
             "template": template,
+            "content_type": content_type,
+            "scene_exit": scene_exit_val,
             "title": require_text(raw_scene.get("title"), f"{label}.scenes[{index}].title"),
             "voiceover": require_text(raw_scene.get("voiceover"), f"{label}.scenes[{index}].voiceover"),
             "data": normalize_scene_data(template, raw_scene.get("data"), f"{label}.scenes[{index}].data"),
             "timing": normalize_timing(raw_scene.get("timing"), f"{label}.scenes[{index}].timing"),
             "disabled": require_optional_bool(raw_scene.get("disabled"), f"{label}.scenes[{index}].disabled", False),
         }
+
+        # Optional reveal_groups for progressive reveal.
+        reveal_groups = raw_scene.get("reveal_groups")
+        if reveal_groups is not None:
+            normalized_scene["reveal_groups"] = normalize_reveal_groups(
+                reveal_groups, f"{label}.scenes[{index}].reveal_groups"
+            )
+
         hook = raw_scene.get("hook")
         if hook is not None:
             normalized_scene["hook"] = require_text(hook, f"{label}.scenes[{index}].hook")
@@ -164,13 +227,15 @@ def normalize_theme(value: Any, label: str) -> dict[str, Any]:
     for color_name, color_value in colors.items():
         require_text(color_value, f"{label}.colors.{color_name}")
     typography = require_mapping(theme.get("typography"), f"{label}.typography")
-    for size_name in ("title_size", "body_size", "small_size", "math_size"):
+    for size_name in ("title_size", "body_size", "small_size", "math_size",
+                       "section_label_size", "math_display_size", "caption_size"):
         require_number(typography.get(size_name), f"{label}.typography.{size_name}")
     layout = require_mapping(theme.get("layout"), f"{label}.layout")
     for layout_name in ("top_y", "side_margin", "content_width"):
         require_number(layout.get(layout_name), f"{label}.layout.{layout_name}")
     transitions = require_mapping(theme.get("transitions"), f"{label}.transitions")
-    for name in ("element_fade", "bullet_lag", "section_pause"):
+    for name in ("element_fade", "bullet_lag", "section_pause",
+                  "write_speed", "reveal_pause", "exit_fade"):
         require_number(transitions.get(name), f"{label}.transitions.{name}")
     return theme
 
@@ -203,15 +268,14 @@ def normalize_scene_data(template: str, value: Any, label: str) -> dict[str, Any
         return data
     if template == "definition_math":
         data["statement"] = require_text(data.get("statement"), f"{label}.statement")
-        data["math_lines"] = require_string_list(data.get("math_lines"), f"{label}.math_lines")
+        data["math_lines"] = normalize_math_lines(data.get("math_lines"), f"{label}.math_lines")
         if "supporting_bullets" in data:
             data["supporting_bullets"] = require_string_list(data.get("supporting_bullets"), f"{label}.supporting_bullets")
         return data
     if template == "example_walkthrough":
         data["steps"] = require_string_list(data.get("steps"), f"{label}.steps")
         data["takeaway"] = require_text(data.get("takeaway"), f"{label}.takeaway")
-        if "math_lines" in data:
-            data["math_lines"] = require_string_list(data.get("math_lines"), f"{label}.math_lines")
+        data["math_lines"] = normalize_math_lines_optional(data.get("math_lines"), f"{label}.math_lines")
         return data
     if template == "graph_focus":
         data["axes"] = normalize_axes(data.get("axes"), f"{label}.axes")
@@ -222,11 +286,33 @@ def normalize_scene_data(template: str, value: Any, label: str) -> dict[str, Any
         return data
     if template == "procedure_steps":
         data["steps"] = require_string_list(data.get("steps"), f"{label}.steps")
-        data["worked_equations"] = require_string_list(data.get("worked_equations"), f"{label}.worked_equations")
+        data["worked_equations"] = normalize_math_lines(data.get("worked_equations"), f"{label}.worked_equations")
         return data
     if template == "recap_cards":
         data["points"] = require_string_list(data.get("points"), f"{label}.points")
-        data["identities"] = require_string_list(data.get("identities"), f"{label}.identities")
+        data["identities"] = normalize_math_lines_optional(data.get("identities"), f"{label}.identities")
+        return data
+    if template == "section_transition":
+        if "subtitle" in data:
+            data["subtitle"] = require_text(data.get("subtitle"), f"{label}.subtitle")
+        if "upcoming" in data:
+            data["upcoming"] = require_string_list(data.get("upcoming"), f"{label}.upcoming")
+        return data
+    if template == "theorem_proof":
+        data["theorem_statement"] = require_text(data.get("theorem_statement"), f"{label}.theorem_statement")
+        data["proof_steps"] = require_string_list(data.get("proof_steps"), f"{label}.proof_steps")
+        data["qed"] = require_optional_bool(data.get("qed"), f"{label}.qed", True)
+        return data
+    if template == "comparison":
+        for side in ("left", "right"):
+            side_data = require_mapping(data.get(side), f"{label}.{side}")
+            side_data["label"] = require_text(side_data.get("label"), f"{label}.{side}.label")
+            if "color" in side_data:
+                side_data["color"] = require_text(side_data.get("color"), f"{label}.{side}.color")
+            side_data["items"] = require_string_list(side_data.get("items"), f"{label}.{side}.items")
+            if "math" in side_data:
+                side_data["math"] = require_text(side_data.get("math"), f"{label}.{side}.math")
+            data[side] = side_data
         return data
     raise ValueError(f"Unsupported template '{template}'.")
 
@@ -274,6 +360,13 @@ def normalize_plots(value: Any, label: str) -> list[dict[str, Any]]:
             item["label"] = require_text(item.get("label"), f"{entry_label}.label")
         if "dashed" in item:
             item["dashed"] = require_optional_bool(item.get("dashed"), f"{entry_label}.dashed", False)
+        if "label_side" in item:
+            side = require_text(item.get("label_side"), f"{entry_label}.label_side")
+            if side not in {"up", "down", "left", "right"}:
+                raise ValueError(f"{entry_label}.label_side must be up, down, left, or right.")
+            item["label_side"] = side
+        if "label_x" in item:
+            item["label_x"] = require_number(item.get("label_x"), f"{entry_label}.label_x")
         normalized.append(item)
     return normalized
 
@@ -297,6 +390,59 @@ def normalize_annotations(value: Any, label: str) -> list[dict[str, Any]]:
             item["side"] = side
         normalized.append(item)
     return normalized
+
+
+def normalize_reveal_groups(value: Any, label: str) -> list[dict[str, Any]]:
+    """Validate and normalise a ``reveal_groups`` list."""
+    if not isinstance(value, list):
+        raise ValueError(f"{label} must be an array.")
+    normalized: list[dict[str, Any]] = []
+    for index, group in enumerate(value):
+        entry_label = f"{label}[{index}]"
+        item = require_mapping(group, entry_label)
+        elements = item.get("elements", [])
+        if not isinstance(elements, list) or not all(isinstance(e, str) for e in elements):
+            raise ValueError(f"{entry_label}.elements must be an array of strings.")
+        pause = item.get("pause_after", 0.3)
+        if not isinstance(pause, (int, float)):
+            raise ValueError(f"{entry_label}.pause_after must be a number.")
+        normalized.append({"elements": elements, "pause_after": float(pause)})
+    return normalized
+
+
+def normalize_math_lines(value: Any, label: str) -> list[dict[str, Any]]:
+    """Normalise math_lines to the extended format.
+
+    Accepts both plain strings and dicts with ``text`` / ``animation`` keys.
+    Plain strings are coerced to ``{"text": str, "animation": "write"}``.
+    """
+    if not isinstance(value, list) or not value:
+        raise ValueError(f"{label} must be a non-empty array.")
+    normalized: list[dict[str, Any]] = []
+    for index, entry in enumerate(value):
+        entry_label = f"{label}[{index}]"
+        if isinstance(entry, str):
+            if not entry.strip():
+                raise ValueError(f"{entry_label} must be a non-empty string.")
+            normalized.append({"text": entry.strip(), "animation": "write"})
+        elif isinstance(entry, dict):
+            text = require_text(entry.get("text"), f"{entry_label}.text")
+            animation = entry.get("animation", "write")
+            if animation not in {"write", "fade", "highlight", "transform_from_previous"}:
+                raise ValueError(
+                    f"{entry_label}.animation must be one of: write, fade, highlight, transform_from_previous."
+                )
+            normalized.append({"text": text, "animation": animation})
+        else:
+            raise ValueError(f"{entry_label} must be a string or mapping.")
+    return normalized
+
+
+def normalize_math_lines_optional(value: Any, label: str) -> list[dict[str, Any]]:
+    """Like ``normalize_math_lines`` but returns [] if value is missing/empty."""
+    if value is None or (isinstance(value, list) and len(value) == 0):
+        return []
+    return normalize_math_lines(value, label)
 
 
 def deep_merge(base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
@@ -505,6 +651,12 @@ def strip_runtime_fields(storyboard: dict[str, Any]) -> dict[str, Any]:
             "timing": scene["timing"],
             "data": scene["data"],
         }
+        if scene.get("content_type"):
+            item["content_type"] = scene["content_type"]
+        if scene.get("scene_exit") and scene["scene_exit"] != "fade":
+            item["scene_exit"] = scene["scene_exit"]
+        if scene.get("reveal_groups"):
+            item["reveal_groups"] = scene["reveal_groups"]
         if scene.get("disabled"):
             item["disabled"] = True
         if scene.get("hook"):
@@ -558,8 +710,11 @@ def render_storyboard_script_markdown(storyboard: dict[str, Any], storyboard_pat
         f"Source file: `{storyboard_path.relative_to(REPO_ROOT)}`",
         f"Deck ID: `{storyboard['deck_id']}`",
         "",
-        "This file is regenerated from the Manim storyboard. Edit the storyboard instead of editing this file.",
-        "The narration is derived from each scene's `voiceover` field and is exported only to bridge into the existing TTS tools.",
+        "You may edit the narration text below each **Narration:** heading.",
+        "Do NOT change the Slide ID lines — they are used to match edits back to the correct scene.",
+        "After editing, run `python tools/sync_narration_back.py --deck-id "
+        + storyboard["deck_id"]
+        + "` to write changes back to the storyboard YAML.",
         "",
     ]
     for scene in enabled_scenes(storyboard):
@@ -586,7 +741,7 @@ def export_storyboard_bridge_files(
     script_path: Path | None = None,
     deck_path: Path | None = None,
 ) -> dict[str, Path]:
-    resolved_script_path = (script_path or final_script_path(REPO_ROOT, storyboard["deck_id"])).resolve()
+    resolved_script_path = (script_path or manim_narration_path(REPO_ROOT, storyboard["deck_id"])).resolve()
     resolved_deck_path = (deck_path or manim_tts_deck_path(REPO_ROOT, storyboard["deck_id"])).resolve()
     ensure_directory(resolved_script_path.parent)
     ensure_directory(resolved_deck_path.parent)
@@ -613,12 +768,16 @@ def strip_runtime_scene(scene: dict[str, Any]) -> dict[str, Any]:
     cleaned = {
         "scene_id": scene["scene_id"],
         "template": scene["template"],
+        "content_type": scene.get("content_type", "definition"),
+        "scene_exit": scene.get("scene_exit", "fade"),
         "title": scene["title"],
         "voiceover": scene["voiceover"],
         "data": scene["data"],
         "timing": scene["timing"],
         "disabled": scene.get("disabled", False),
     }
+    if scene.get("reveal_groups"):
+        cleaned["reveal_groups"] = scene["reveal_groups"]
     if scene.get("hook"):
         cleaned["hook"] = scene["hook"]
     return cleaned
@@ -697,7 +856,7 @@ def default_bridge_paths(deck_id: str) -> dict[str, Path]:
         "storyboard_path": manim_storyboard_path(REPO_ROOT, deck_id).resolve(),
         "deck_json_path": deck_json_path(REPO_ROOT, deck_id).resolve(),
         "bridge_deck_path": manim_tts_deck_path(REPO_ROOT, deck_id).resolve(),
-        "bridge_script_path": final_script_path(REPO_ROOT, deck_id).resolve(),
+        "bridge_script_path": manim_narration_path(REPO_ROOT, deck_id).resolve(),
     }
 
 

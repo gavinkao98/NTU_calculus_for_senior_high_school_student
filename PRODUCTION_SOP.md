@@ -1,0 +1,250 @@
+# Production SOP: Manim Teaching Video
+
+Standard operating procedure for producing a calculus teaching video from LaTeX source to finished MP4.
+
+Related docs: [`MANIM_README.md`](MANIM_README.md), [`CONTENT_README.md`](CONTENT_README.md)
+
+---
+
+## Phase 0 — Environment Check (one-time)
+
+```powershell
+python -c "import manim; print(manim.__version__)"          # >= 0.20.1
+ffmpeg -version                                               # any recent version
+python -c "import torch; print(torch.cuda.is_available())"   # True preferred (GPU TTS)
+```
+
+Optional (TTS only):
+
+```powershell
+python -c "import sys; sys.path.insert(0,'.deps'); from TTS.api import TTS; print('Coqui OK')"
+python -c "import sys; sys.path.insert(0,'.deps_f5'); import f5_tts; print('F5 OK')"
+```
+
+---
+
+## Phase 1 — Seed the Storyboard
+
+Prerequisite: a deck JSON exists at `artifacts/slide_spec/<DECK_ID>.json`.
+
+```powershell
+python .\tools\seed_manim_storyboard.py --deck-id <DECK_ID>
+```
+
+Output: `inputs/manim_storyboards/<DECK_ID>.yml`
+
+Open the YAML and verify: `deck_id`, `language`, scene count, template assignments.
+
+---
+
+## Phase 2 — Edit the Storyboard
+
+The storyboard YAML is the **single source of truth**. Edit per scene:
+
+| Field | Purpose | Written for |
+|-------|---------|-------------|
+| `voiceover` | Spoken narration | The ear (plain English, no raw LaTeX) |
+| `data` | Visual content (bullets, math_lines, steps, axes, plots) | The eye (LaTeX math) |
+| `template` | One of the 9 templates (see below) | Animation style |
+| `content_type` | Accent colour: definition=cyan, theorem=gold, example=highlight, warning=coral | Visual meaning |
+| `timing` | `lead_in_seconds`, `hold_after_seconds`, `minimum_duration_seconds` | Pacing |
+| `hook` | Custom animation override (rare) | Special scenes only |
+| `disabled` | `true` to skip a scene temporarily | Iteration |
+
+**Rules:**
+- One teaching idea per scene
+- One spoken paragraph per `voiceover`
+- `voiceover` and `data` complement each other, never duplicate
+
+### Template Selection Guide
+
+| Template | Use when... | Required data |
+|----------|-------------|---------------|
+| `title_bullets` | Opening or overview | `bullets` |
+| `definition_math` | Formal definition or proposition | `statement`, `math_lines` |
+| `example_walkthrough` | Worked example with steps | `steps`, `takeaway`, `math_lines` (opt) |
+| `graph_focus` | Showing a graph/plot | `axes`, `plots`, `annotations` |
+| `procedure_steps` | Step-by-step algorithm | `steps`, `worked_equations` |
+| `recap_cards` | End-of-section summary | `points`, `identities` |
+| `section_transition` | Topic change interlude | `subtitle` (opt), `upcoming` (opt) |
+| `theorem_proof` | Theorem + proof | `theorem_statement`, `proof_steps` |
+| `comparison` | Side-by-side concepts | `left`, `right` (each: `label`, `items`, `math`) |
+
+---
+
+## Phase 3 — Preview Individual Scenes
+
+Iterate on one scene at a time at preview quality:
+
+```powershell
+python .\tools\preview_manim_scene.py --deck-id <DECK_ID> --scene-id <SCENE_ID>
+```
+
+Watch the output at `artifacts/manim/<DECK_ID>/scenes/NN_<SCENE_ID>.mp4`.
+
+Validate without rendering:
+
+```powershell
+python .\tools\preview_manim_scene.py --deck-id <DECK_ID> --scene-id <SCENE_ID> --dry-run
+```
+
+Force re-render after code changes:
+
+```powershell
+python .\tools\preview_manim_scene.py --deck-id <DECK_ID> --scene-id <SCENE_ID> --force
+```
+
+Repeat until every scene looks right.
+
+---
+
+## Phase 4 — Full Preview Render
+
+Validate the complete lesson:
+
+```powershell
+python .\tools\render_manim_lesson.py --deck-id <DECK_ID> --quality preview --dry-run
+```
+
+Render and concatenate all scenes:
+
+```powershell
+python .\tools\render_manim_lesson.py --deck-id <DECK_ID> --quality preview
+```
+
+Watch `artifacts/video/<DECK_ID>_manim.mp4`. Check:
+- [ ] All scenes present in correct order
+- [ ] LaTeX renders without errors
+- [ ] Midnight Canvas aesthetic intact
+- [ ] Transitions smooth
+
+---
+
+## Phase 5 — Generate TTS Audio
+
+### 5a. Export bridge files
+
+```powershell
+python .\tools\render_manim_lesson.py --deck-id <DECK_ID> --quality preview --with-audio
+```
+
+This creates:
+- `artifacts/manim/<DECK_ID>/tts_deck.json`
+- `artifacts/manim/<DECK_ID>/narration.md`
+
+It will fail with an error showing the exact TTS commands to run. This is expected.
+
+### 5b. Run TTS
+
+**Coqui XTTS (clone mode)** — best quality, requires `artifacts/voice/reference_30s.wav`:
+
+```powershell
+python .\tools\synthesize_section_audio.py `
+  --deck-json artifacts\manim\<DECK_ID>\tts_deck.json `
+  --script-file artifacts\manim\<DECK_ID>\narration.md `
+  --output-dir artifacts\audio\<DECK_ID>_manim `
+  --manifest artifacts\audio\<DECK_ID>_manim\manifest.json `
+  --coqui-tos-agreed
+```
+
+**Coqui Jenny (builtin mode)** — no reference WAV needed:
+
+```powershell
+python .\tools\synthesize_section_audio.py `
+  --deck-json artifacts\manim\<DECK_ID>\tts_deck.json `
+  --script-file artifacts\manim\<DECK_ID>\narration.md `
+  --output-dir artifacts\audio\<DECK_ID>_manim `
+  --manifest artifacts\audio\<DECK_ID>_manim\manifest.json `
+  --model-name "tts_models/en/jenny/jenny" `
+  --voice-mode builtin
+```
+
+**F5-TTS (example mode)** — alternative, no reference WAV:
+
+```powershell
+python .\tools\synthesize_section_audio_f5.py `
+  --deck-json artifacts\manim\<DECK_ID>\tts_deck.json `
+  --script-file artifacts\manim\<DECK_ID>\narration.md `
+  --output-dir artifacts\audio\<DECK_ID>_manim `
+  --manifest artifacts\audio\<DECK_ID>_manim\manifest.json `
+  --reference-mode example
+```
+
+Output: `artifacts/audio/<DECK_ID>_manim/01_<scene_id>.wav` through `NN_<scene_id>.wav`
+
+### 5c. Listen and verify
+
+Play individual WAV files. If a scene sounds wrong, adjust `voiceover` in the YAML, re-export bridge files (repeat 5a), and re-run TTS for that scene with `--max-slides N`.
+
+---
+
+## Phase 6 — Final Render with Audio
+
+```powershell
+python .\tools\render_manim_lesson.py --deck-id <DECK_ID> --quality final --with-audio
+```
+
+This:
+1. Re-renders all scenes at 1920x1080, 30fps (caches scenes that haven't changed)
+2. Muxes each scene video + WAV (applies lead-in, hold-after, padding)
+3. Concatenates into `artifacts/video/<DECK_ID>_manim.mp4`
+
+---
+
+## Phase 7 — Quality Check
+
+```powershell
+ffprobe -v quiet -print_format json -show_format -show_streams artifacts\video\<DECK_ID>_manim.mp4
+```
+
+Checklist:
+- [ ] Resolution: 1920x1080
+- [ ] Frame rate: 30fps
+- [ ] Audio stream present
+- [ ] All scenes play with synchronized narration
+- [ ] No audio cut-off or drift
+- [ ] Lead-in silence feels natural
+- [ ] Total duration reasonable for content
+- [ ] Midnight Canvas style consistent
+
+---
+
+## Quick Reference
+
+```
+inputs/manim_storyboards/<DECK_ID>.yml     <- source of truth (edit this)
+artifacts/manim/<DECK_ID>/scenes/          <- cached scene MP4s
+artifacts/manim/<DECK_ID>/segments/        <- muxed scene+audio MP4s
+artifacts/manim/<DECK_ID>/tts_deck.json    <- TTS bridge deck
+artifacts/manim/<DECK_ID>/narration.md     <- Manim narration (proofread here, sync back to YAML)
+artifacts/audio/<DECK_ID>_manim/           <- scene WAV files
+artifacts/video/<DECK_ID>_manim.mp4        <- final output
+```
+
+---
+
+## Troubleshooting
+
+| Problem | Fix |
+|---------|-----|
+| `ModuleNotFoundError: manim` | `pip install manim` |
+| `FFmpeg is not available` | Install ffmpeg or `pip install imageio-ffmpeg` |
+| `Missing voice reference WAV` | Provide `artifacts/voice/reference_30s.wav` or use `--voice-mode builtin` / `--reference-mode example` |
+| `XTTS v2 requires explicit agreement` | Add `--coqui-tos-agreed` |
+| Scene not re-rendering after edits | Use `--force` (fingerprint may have matched) |
+| `Hook could not be resolved` | Check the `hook` field points to an existing function in `tools/manim_templates/hooks.py` |
+| Audio too fast / robotic | Adjust `--speed` (default 1.03), `--max-chars-per-chunk` (default 220), `--inter-chunk-pause-ms` (default 120) |
+| Video-audio sync drift | Increase `minimum_duration_seconds` in scene timing |
+| MiKTeX download prompts | Run `miktex-console` and update packages |
+
+---
+
+## Timing Adjustment Tips
+
+The mux step computes: `target_duration = max(video_duration, lead_in + audio_duration + hold_after, minimum_duration)`
+
+- If audio is longer than video: video's last frame is cloned (frozen)
+- If video is longer than audio: silence pads the audio
+- To lengthen a scene: increase `minimum_duration_seconds` or add more animation steps in `data`
+- To add breathing room: increase `hold_after_seconds`
+- Default timing: `lead_in=0.15s`, `hold_after=0.45s`, `minimum_duration=4.0s`

@@ -51,6 +51,10 @@ def manim_render_manifest_path(repo_root: Path, deck_id: str) -> Path:
     return manim_artifact_dir(repo_root, deck_id) / "render_manifest.json"
 
 
+def manim_narration_path(repo_root: Path, deck_id: str) -> Path:
+    return manim_artifact_dir(repo_root, deck_id) / "narration.md"
+
+
 def manim_tts_deck_path(repo_root: Path, deck_id: str) -> Path:
     return manim_artifact_dir(repo_root, deck_id) / "tts_deck.json"
 

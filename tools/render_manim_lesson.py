@@ -94,8 +94,8 @@ def main() -> int:
             storyboard["deck_id"],
             scenes,
             audio_dir,
-            bridge_files.get("deck_path", bridge_files["bridge_deck_path"]),
-            bridge_files.get("script_path", bridge_files["bridge_script_path"]),
+            bridge_files.get("deck_path") or bridge_files["bridge_deck_path"],
+            bridge_files.get("script_path") or bridge_files["bridge_script_path"],
         )
         segment_paths = [
             manim_segment_output_path(REPO_ROOT, storyboard["deck_id"], scene["scene_number"], scene["scene_id"]).resolve()

@@ -14,4 +14,11 @@ class StoryboardTemplateScene(Scene):
     def construct(self) -> None:
         if self.scene_spec is None or self.render_context is None:
             raise RuntimeError("StoryboardTemplateScene was not configured with a scene specification.")
+
+        # Run the template renderer (and any hook).
         render_scene_template(self, self.scene_spec, self.render_context)
+
+        # Scene exit animation.
+        exit_style = self.scene_spec.get("scene_exit", "fade")
+        from .animations import scene_exit
+        scene_exit(self, exit_style, theme=self.render_context.get("theme"))

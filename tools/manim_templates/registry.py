@@ -16,6 +16,9 @@ TEMPLATE_REGISTRY: dict[str, TemplateRenderer] = {
     "graph_focus": templates.render_graph_focus,
     "procedure_steps": templates.render_procedure_steps,
     "recap_cards": templates.render_recap_cards,
+    "section_transition": templates.render_section_transition,
+    "theorem_proof": templates.render_theorem_proof,
+    "comparison": templates.render_comparison,
 }
 
 
