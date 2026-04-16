@@ -17,7 +17,13 @@
 *.pdf
 
 # Generated media pipeline outputs
-/artifacts/
+/artifacts/*
+!/artifacts/scripts/
+!/artifacts/slides/
+/artifacts/scripts/*
+!/artifacts/scripts/*_final.md
+/artifacts/slides/*
+!/artifacts/slides/*.tex
 /video_pipeline/output/
 
 # Local raw voice inputs
