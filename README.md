@@ -5,14 +5,20 @@ This repository has two separate working tracks:
 - textbook content authoring
 - slide, narration, and video generation
 
-Use the dedicated guides instead of treating this file as the full rulebook:
+Use the dedicated guides instead of treating this file as the full rulebook.
 
-- [`CHECKLIST.md`](CHECKLIST.md): one-page operational checklist for the media workflow
+Operational checklists (shortest path to a finished artifact):
+
+- [`SLIDES_CHECKLIST.md`](SLIDES_CHECKLIST.md): slide/PDF pipeline checklist
+- [`MANIM_CHECKLIST.md`](MANIM_CHECKLIST.md): Manim animation pipeline checklist
+
+Full references:
+
 - [`CONTENT_README.md`](CONTENT_README.md): authoritative textbook writing and editorial rules
-- [`MANIM_README.md`](MANIM_README.md): storyboard-driven Manim workflow
 - [`SLIDES_README.md`](SLIDES_README.md): slide-generation workflow and plan rules
-- [`SCRIPT_README.md`](SCRIPT_README.md): narration draft/final workflow
-- [`VIDEO_README.md`](VIDEO_README.md): audio synthesis and MP4 rendering
+- [`SCRIPT_README.md`](SCRIPT_README.md): narration draft/final workflow (slide/PDF path)
+- [`VIDEO_README.md`](VIDEO_README.md): audio synthesis and MP4 rendering (slide/PDF path)
+- [`MANIM_README.md`](MANIM_README.md): storyboard-driven Manim workflow
 
 ## Repository Layout
 
@@ -64,13 +70,10 @@ If you are writing or revising textbook content:
 - start with [`CONTENT_README.md`](CONTENT_README.md)
 - then work in the relevant file under `chapters/`
 
-If you are generating media:
-- use [`CHECKLIST.md`](CHECKLIST.md) when you want the shortest end-to-end operational path
-- use [`MANIM_README.md`](MANIM_README.md) when you want the storyboard-driven Manim path
-- start with [`SLIDES_README.md`](SLIDES_README.md)
-- then use [`SCRIPT_README.md`](SCRIPT_README.md) when editing narration
-- then use [`VIDEO_README.md`](VIDEO_README.md) for audio and MP4 rendering
-- then use the scripts under `tools/`
+If you are generating media, first decide which pipeline:
+
+- slide/PDF path → start with [`SLIDES_CHECKLIST.md`](SLIDES_CHECKLIST.md) for the end-to-end steps; drill into [`SLIDES_README.md`](SLIDES_README.md), [`SCRIPT_README.md`](SCRIPT_README.md), and [`VIDEO_README.md`](VIDEO_README.md) when you need details; scripts live under `tools/`
+- Manim animation path → start with [`MANIM_CHECKLIST.md`](MANIM_CHECKLIST.md) for the phase-by-phase steps; use [`MANIM_README.md`](MANIM_README.md) for the full reference
 
 ## Current Scope
 
@@ -101,13 +104,16 @@ The Manim path now exists in parallel:
 5. synthesize one WAV per scene into `artifacts/audio/<deck_id>_manim/`
 6. rerun `render_manim_lesson.py --with-audio` to mux scene audio into `artifacts/video/<deck_id>_manim.mp4`
 
-Narration ownership rule:
+Narration ownership rule — the two pipelines use different source-of-truth models, summarized side-by-side below:
 
-- slide/PDF path: `*_draft.md` is regenerated and disposable
-- slide/PDF path: `*_final.md` is user-owned, should be edited directly, and is the narration source read by the slide-based TTS tools
-- Manim path: each scene's `voiceover` in `inputs/manim_storyboards/*.yml` is the source of truth
-- Manim path: `artifacts/manim/<deck_id>/narration.md` is a readable narration file you can edit directly, then sync back with `sync_narration_back.py`
-- if you want to add a joke or a more conversational line for a Manim lesson, edit `narration.md` or the storyboard `voiceover`; for the slide/PDF path, put it in `*_final.md`
+| Aspect | Slide/PDF path | Manim animation path |
+|---|---|---|
+| Source of truth | `artifacts/scripts/<deck_id>_final.md` | `voiceover` field per scene in `inputs/manim_storyboards/<deck_id>.yml` |
+| Regenerated & disposable | `artifacts/scripts/<deck_id>_draft.md` | n/a — no draft/final split |
+| Editable mirror | n/a — edit the final file in place | `artifacts/manim/<deck_id>/narration.md` |
+| TTS reads from | `*_final.md` | bridge files (`tts_deck.json` + `narration.md`) exported from the storyboard |
+| Sync mechanism | none needed — edit in place | `tools/sync_narration_back.py` pushes `narration.md` edits back into the YAML |
+| Where to put a joke or aside | the relevant `Narration:` block in `*_final.md` | the scene's `voiceover` in the YAML, or in `narration.md` followed by a sync-back |
 
 Version-control rule:
 

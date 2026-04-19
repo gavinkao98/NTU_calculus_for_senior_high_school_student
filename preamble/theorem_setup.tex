@@ -6,33 +6,94 @@
 \newcommand{\reserveblockspace}[2]{%
   \AddToHook{env/#1/before}{\Needspace{#2}}%
 }
-\newcommand{\declareformalblock}[2]{%
-  \newtheorem{#1}{#2}[chapter]%
-  \reserveblockspace{#1}{\formalblockneedspace}%
-}
-\newcommand{\declareworkedblock}[2]{%
-  \newtheorem{#1}{#2}[chapter]%
-  \reserveblockspace{#1}{\workedblockneedspace}%
-}
-\newcommand{\declaresupportingblock}[2]{%
-  \newtheorem{#1}{#2}[chapter]%
-  \reserveblockspace{#1}{\supportingblockneedspace}%
-}
+
+% ---------------------------------------------------------------------------
+% Shared counter group for formal statements.
+% Per CONTENT_README.md (Numbering Policy), the environments
+%   definition, theorem, proposition, lemma, corollary
+% share a single chapter-scoped counter and increment in order of appearance.
+%
+% We implement this with aliascnt rather than amsthm's [theorem] optional
+% argument. The [theorem] shortcut works for the printed number, but it
+% also makes amsthm tag every label with counter name "theorem", which in
+% turn makes cleveref print every formal-statement reference as "Theorem"
+% regardless of the environment actually used. aliascnt gives each
+% environment its own counter name that steps the shared master counter,
+% preserving distinct cleveref types.
+% ---------------------------------------------------------------------------
 
 \theoremstyle{plain}
-\declareformalblock{theorem}{Theorem}
-\declareformalblock{lemma}{Lemma}
-\declareformalblock{proposition}{Proposition}
-\declareformalblock{corollary}{Corollary}
+\newtheorem{theorem}{Theorem}[chapter]
+
+\newaliascnt{proposition}{theorem}
+\newtheorem{proposition}[proposition]{Proposition}
+\aliascntresetthe{proposition}
+
+\newaliascnt{lemma}{theorem}
+\newtheorem{lemma}[lemma]{Lemma}
+\aliascntresetthe{lemma}
+
+\newaliascnt{corollary}{theorem}
+\newtheorem{corollary}[corollary]{Corollary}
+\aliascntresetthe{corollary}
 
 \theoremstyle{definition}
-\declareformalblock{definition}{Definition}
-\declareworkedblock{example}{Example}
-\declareworkedblock{exercise}{Exercise}
+\newaliascnt{definition}{theorem}
+\newtheorem{definition}[definition]{Definition}
+\aliascntresetthe{definition}
+
+% Worked blocks keep their own chapter-scoped counters.
+\newtheorem{example}{Example}[chapter]
+\newtheorem{exercise}{Exercise}[chapter]
 
 \theoremstyle{remark}
-\declaresupportingblock{remark}{Remark}
+\newtheorem{remark}{Remark}[chapter]
 
-\newenvironment{solution}{\begin{proof}[Solution]}{\end{proof}}
+\reserveblockspace{theorem}{\formalblockneedspace}
+\reserveblockspace{proposition}{\formalblockneedspace}
+\reserveblockspace{lemma}{\formalblockneedspace}
+\reserveblockspace{corollary}{\formalblockneedspace}
+\reserveblockspace{definition}{\formalblockneedspace}
+\reserveblockspace{example}{\workedblockneedspace}
+\reserveblockspace{exercise}{\workedblockneedspace}
+\reserveblockspace{remark}{\supportingblockneedspace}
+
+% ---------------------------------------------------------------------------
+% Solution environment.
+% Visually distinct from proof, per CONTENT_README.md (Example, Solution, and
+% Proof Policy, rule 11): bold "Solution." label, upright body text, and a
+% filled QED box at the end (proof uses italic "Proof." with an open box).
+% Optional argument overrides the label, e.g. \begin{solution}[Alternative solution].
+% ---------------------------------------------------------------------------
+\newenvironment{solution}[1][Solution]{%
+  \par\needspace{\workedblockneedspace}%
+  \pushQED{\qed}%
+  \renewcommand{\qedsymbol}{\ensuremath{\blacksquare}}%
+  \medskip\noindent\textbf{#1.}\enspace\ignorespaces
+}{%
+  \popQED\par\medskip
+}
 
 \reserveblockspace{proof}{\proofblockneedspace}
+
+% ---------------------------------------------------------------------------
+% cleveref name bindings.
+% With aliascnt, each formal-statement environment has its own counter name
+% that cleveref sees, so these \crefname declarations actually take effect.
+% ---------------------------------------------------------------------------
+\crefname{theorem}{Theorem}{Theorems}
+\Crefname{theorem}{Theorem}{Theorems}
+\crefname{proposition}{Proposition}{Propositions}
+\Crefname{proposition}{Proposition}{Propositions}
+\crefname{lemma}{Lemma}{Lemmas}
+\Crefname{lemma}{Lemma}{Lemmas}
+\crefname{corollary}{Corollary}{Corollaries}
+\Crefname{corollary}{Corollary}{Corollaries}
+\crefname{definition}{Definition}{Definitions}
+\Crefname{definition}{Definition}{Definitions}
+\crefname{example}{Example}{Examples}
+\Crefname{example}{Example}{Examples}
+\crefname{exercise}{Exercise}{Exercises}
+\Crefname{exercise}{Exercise}{Exercises}
+\crefname{remark}{Remark}{Remarks}
+\Crefname{remark}{Remark}{Remarks}

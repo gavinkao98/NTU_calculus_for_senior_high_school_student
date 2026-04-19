@@ -10,6 +10,9 @@
 *.run.xml
 *.synctex.gz
 *.toc
+*.idx
+*.ind
+*.ilg
 *.nav
 *.snm
 

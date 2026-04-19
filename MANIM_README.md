@@ -449,6 +449,6 @@ Once a chapter's LaTeX content is finalised, the path to a teaching video is:
 4. **Audio** — synthesise voiceover audio via the TTS bridge (Coqui or F5)
 5. **Render** — `render_manim_lesson.py --with-audio` produces the final lesson MP4
 
-See [`PRODUCTION_SOP.md`](PRODUCTION_SOP.md) for the full step-by-step checklist.
+See [`MANIM_CHECKLIST.md`](MANIM_CHECKLIST.md) for the full step-by-step checklist.
 
 The seeding script (`seed_manim_storyboard.py`) still exists for bootstrapping a first draft from an existing deck JSON, but the recommended workflow is to design the storyboard independently to take full advantage of Manim's animation capabilities.

@@ -1,8 +1,8 @@
-# Production SOP: Manim Teaching Video
+# Manim Workflow Checklist
 
-Standard operating procedure for producing a calculus teaching video from LaTeX source to finished MP4.
+The phase-by-phase operational checklist for producing a calculus teaching video through the **Manim animation pipeline** (LaTeX source → storyboard → rendered MP4). For the static slide/PDF path, use [`SLIDES_CHECKLIST.md`](SLIDES_CHECKLIST.md) instead.
 
-Related docs: [`MANIM_README.md`](MANIM_README.md), [`CONTENT_README.md`](CONTENT_README.md)
+Related docs: [`MANIM_README.md`](MANIM_README.md) (full reference), [`CONTENT_README.md`](CONTENT_README.md) (lecture-note authoring rules).
 
 ---
 

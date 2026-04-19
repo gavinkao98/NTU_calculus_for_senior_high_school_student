@@ -1,15 +1,15 @@
-# Workflow Checklist
+# Slides Workflow Checklist
 
-This is the shortest operational checklist for the slide/PDF media pipeline.
+This is the shortest operational checklist for the **slide/PDF media pipeline**. For the Manim animation path, use [`MANIM_CHECKLIST.md`](MANIM_CHECKLIST.md) instead.
 
 Use the full guides when you need details:
 
-- [`MANIM_README.md`](MANIM_README.md)
-- [`SLIDES_README.md`](SLIDES_README.md)
-- [`SCRIPT_README.md`](SCRIPT_README.md)
-- [`VIDEO_README.md`](VIDEO_README.md)
+- [`SLIDES_README.md`](SLIDES_README.md): slide generation
+- [`SCRIPT_README.md`](SCRIPT_README.md): narration draft/final workflow
+- [`VIDEO_README.md`](VIDEO_README.md): audio synthesis and MP4 rendering
+- [`MANIM_README.md`](MANIM_README.md): the alternative storyboard-driven path
 
-If you are using the storyboard-driven Manim path instead of the slide/PDF path, use [`MANIM_README.md`](MANIM_README.md) as the primary guide. In that path, the narration source of truth is each scene's `voiceover` field in `inputs/manim_storyboards/*.yml`, not `artifacts/scripts/*_final.md`.
+If you are using the storyboard-driven Manim path instead of the slide/PDF path, use [`MANIM_CHECKLIST.md`](MANIM_CHECKLIST.md) for the operational steps and [`MANIM_README.md`](MANIM_README.md) for the full reference. In that path, the narration source of truth is each scene's `voiceover` field in `inputs/manim_storyboards/*.yml`, not `artifacts/scripts/*_final.md`.
 
 ## 1. Finalize The Lecture Notes
 
