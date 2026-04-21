@@ -1,0 +1,37 @@
+\documentclass[a4paper,12pt]{book}
+
+\input{preamble/packages}
+\input{preamble/layout}
+
+\newwrite\smokepos
+\immediate\openout\smokepos=\jobname.pos
+\newcommand{\recordparagraphstart}[1]{%
+  \leavevmode
+  \pdfsavepos
+  \write\smokepos{#1=\the\pdflastxpos}%
+}
+
+\begin{document}
+
+\chapter*{Preamble Smoke Test}
+
+\noindent\recordparagraphstart{baseline} baseline paragraph for the indentation
+control.\par
+
+\recordparagraphstart{indented} indented control paragraph for comparison.\par
+
+\begin{aligneddisplay}
+a &= b + c \\
+d &= e + f
+\end{aligneddisplay}
+\recordparagraphstart{aligned} continuation prose for the aligneddisplay smoke
+test.\par
+
+\begin{conditiondisplay}
+f(x) &= x^2, & x &\ge 0 \\
+f(x) &= -x, & x &< 0
+\end{conditiondisplay}
+\recordparagraphstart{condition} continuation prose for the conditiondisplay
+smoke test.\par
+
+\end{document}

@@ -15,6 +15,8 @@
 *.ilg
 *.nav
 *.snm
+*.pos
+*-SAVE-ERROR
 
 # Generated document outputs
 *.pdf
@@ -69,6 +71,10 @@ htmlcov/
 *.tmp
 *.bak
 *.orig
+# Ad-hoc PDF-page previews (pdftoppm, pdf2image, etc.)
+tmp_*.png
+tmp_*.jpg
+tmp_*.pdf
 
 # Editor and IDE metadata
 .vscode/

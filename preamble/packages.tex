@@ -1,11 +1,12 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage{lmodern}
 \usepackage{amsmath}
-\usepackage{amssymb}
 \usepackage{amsthm}
 \usepackage{aliascnt}
 \usepackage{mathtools}
+\usepackage{newtxtext}
+\usepackage{newtxmath}
+\usepackage{microtype}
 \usepackage{graphicx}
 \usepackage{capt-of}
 \usepackage{float}
@@ -16,17 +17,21 @@
 \usepackage{tikz}
 \usepackage{xcolor}
 \usepackage{enumitem}
-\usepackage[a4paper,margin=2.8cm]{geometry}
+\usepackage[a4paper,margin=3.3cm]{geometry}
 \usepackage{fancyhdr}
 \usepackage{titlesec}
 \usepackage{tocloft}
 \usepackage{subfiles}
-\usepackage[hidelinks]{hyperref}
+\usepackage[hidelinks,unicode]{hyperref}
+\urlstyle{same}
 \usepackage[nameinlink,noabbrev]{cleveref}
 \usepackage{imakeidx}
 \usetikzlibrary{arrows.meta,bending}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
 \usepackage{booktabs}
-\usepackage{physics}
 
+% House notation keeps these inverse trig names explicit even without physics.
+\DeclareMathOperator{\arccsc}{arccsc}
+\DeclareMathOperator{\arcsec}{arcsec}
+\DeclareMathOperator{\arccot}{arccot}

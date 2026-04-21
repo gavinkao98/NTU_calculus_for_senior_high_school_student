@@ -1,4 +1,4 @@
-\documentclass[a4paper,12pt,twoside]{book}
+\documentclass[a4paper,12pt,oneside]{book}
 
 \input{preamble/packages}
 \input{preamble/layout}
@@ -7,24 +7,41 @@
 \input{preamble/bibliography}
 
 \makeindex[columns=2,title=Index,intoc]
+\newif\ifprintbibliography
+\printbibliographyfalse
+\newif\ifincludescratchchapter
+\includescratchchapterfalse
 
 \title{Calculus}
 \author{NTU MATH}
 \date{\today}
+\hypersetup{
+  pdftitle={Calculus},
+  pdfauthor={NTU MATH},
+  bookmarksopen=true,
+  bookmarksnumbered=true
+}
 
 \begin{document}
 
 \frontmatter
+\begingroup
+\hypersetup{pageanchor=false}
 \maketitle
+\endgroup
 \tableofcontents
 
 \mainmatter
 
 \include{chapters/ch01_foundations}
-\include{chapters/test}
+\ifincludescratchchapter
+  \include{chapters/_scratch}
+\fi
 
 \backmatter
-%\printbibliography
+\ifprintbibliography
+  \printbibliography
+\fi
 \printindex
 
 \end{document}

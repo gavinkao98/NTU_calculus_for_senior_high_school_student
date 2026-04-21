@@ -1,4 +1,5 @@
 \raggedbottom
+\linespread{1.05}
 \setlength{\parindent}{1.5em}
 \setlength{\parskip}{0pt}
 \setlength{\headheight}{15pt}
@@ -27,12 +28,11 @@
 % are rolled back and continuation prose is spuriously indented by 1.5em.
 %
 % \newdisplayenv is the house helper for defining display-math-wrapping
-% environments. It uses etoolbox's \AfterEndEnvironment to install
-% \@afterheading *after* \end{env} completes (after the implicit \endgroup),
-% which reinstalls an \everypar that eats the indent box of the next
-% paragraph in the outer scope. This is the same mechanism the noindentafter
-% package uses and is also how LaTeX's own sectioning commands suppress the
-% post-heading indent, so it is battle-tested across engines and releases.
+% environments. It uses etoolbox's \AfterEndEnvironment to install \@doendpe
+% *after* \end{env} completes (after the implicit \endgroup), which reinstalls
+% LaTeX's own "eat the next paragraph indent box" hook in the outer scope.
+% This is the kernel-level no-indent mechanism list/item and display code
+% ultimately rely on, so it is more direct than piggybacking on heading logic.
 %
 % Every new environment that wraps \[...\] should be declared with
 % \newdisplayenv rather than \newenvironment, so this fix applies globally
@@ -40,7 +40,7 @@
 \makeatletter
 \newcommand{\newdisplayenv}[3]{%
   \newenvironment{#1}{\[#2}{#3\]}%
-  \AfterEndEnvironment{#1}{\@afterheading}%
+  \AfterEndEnvironment{#1}{\@doendpe}%
 }
 \makeatother
 
@@ -117,9 +117,9 @@
 
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[LE]{\nouppercase{\small\leftmark}}
-\fancyhead[RO]{\nouppercase{\small\rightmark}}
-\fancyfoot[LE,RO]{\thepage}
+\fancyhead[L]{\nouppercase{\small\leftmark}}
+\fancyhead[R]{\nouppercase{\small\rightmark}}
+\fancyfoot[R]{\thepage}
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0pt}
 

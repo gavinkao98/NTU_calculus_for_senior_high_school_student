@@ -179,6 +179,7 @@ Let \(f\) be a one-to-one function with domain \(A\) and range \(B\). Then
 \begin{figure}[H]
     \centering
     \begin{tikzpicture}[
+        scale=0.95,
         transform shape,
         >=Stealth,
         every node/.style={font=\small},
@@ -293,14 +294,12 @@ samples=300,
 clip=false
 ]
 \addplot[thick, blue, domain=-6.8:6.8] {sin(deg(x))};
-\addplot[dashed, red] coordinates {(-6.8,0.5) (6.8,0.5)};
-\addplot[only marks, mark=*, mark size=2pt] coordinates {
-(0.523598776,0.5)    % pi/6
-(2.617993878,0.5)    % 5pi/6
-(6.806783967,0.5)    % 13pi/6
-(-3.665191429,0.5)   % -7pi/6
-(-5.759586531,0.5)   % -11pi/6
-};
+\draw[red, dashed] (axis cs:-6.8,0.5) -- (axis cs:6.8,0.5);
+\fill (axis cs:0.523598776,0.5) circle[radius=1.1pt];    % pi/6
+\fill (axis cs:2.617993878,0.5) circle[radius=1.1pt];    % 5pi/6
+\fill (axis cs:6.806783967,0.5) circle[radius=1.1pt];    % 13pi/6
+\fill (axis cs:-3.665191429,0.5) circle[radius=1.1pt];   % -7pi/6
+\fill (axis cs:-5.759586531,0.5) circle[radius=1.1pt];   % -11pi/6
 \node at (axis cs:3.3,0.95) {\(\sin x\)};
 \node[right] at (axis cs:7.15,0.5) {\(y=c\)};
 \end{axis}
