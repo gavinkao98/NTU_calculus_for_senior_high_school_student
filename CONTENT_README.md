@@ -1,1104 +1,943 @@
-# Calculus Textbook Project: Master Writing Guide
+# Calculus Handout: Master Typesetting Guide
 
-**Version 2.0.11** -- removes the hard dependency on a permanent `frontmatter/notation.tex` page now that the active book build does not ship that page, and instead restores the simpler rule: if supplementary exercises later use a dagger convention, explain it once before first use. Also records the explicit `\qedhere` requirement when a `solution` ends with displayed math. Earlier structural, numbering, exercise, and formula-display policies are retained.
+**Version 3.0** — a from-scratch rewrite replacing versions 1.x and 2.x. The previous document had grown by accretion through per-chapter reviews and no longer reflected a single coherent editorial model. This version is organized around a specific product definition: a single-sided A4 English handout for high-school students preparing to self-study college calculus, paired with companion videos, written in Stewart / Rogawski register. Rules that used to sit in multiple places are now consolidated; rules that turned out to be too restrictive for the target register have been loosened; new environments and policies needed to support the register have been added. The Changelog (§16) summarises the concrete differences from v2.x.
 
-This file is the authoritative writing context for future chapter drafting and revision in this project.
-It consolidates:
-- the original AI writing brief
-- the updated environment-classification rules
-- the figure and placement rules tested in Chapter 1
-- the editorial decisions already used in the current manuscript
+---
 
-The goal is that later chapters can follow this file directly.
+## 1. Purpose and Audience
 
-## How To Read This Document
+This project produces a **calculus handout** for high-school students who want to prepare for or self-study college calculus.
 
-Most rules in this document are followed by a **Rationale** line. The rules are the normative layer (what to do); the rationale is the interpretive layer (why the rule exists, so contributors facing an edge case can reason from purpose rather than strict text). When a rule and its rationale appear to conflict in a new situation, treat it as a signal to revise the rule rather than to invent a silent exception.
+- **Format**: single-sided A4 PDF, printed and distributed as a handout (not bound into a book). Layout is set at 12 pt Times with 3.3 cm symmetric margins; see [`README.md`](README.md) for the preamble-level justification.
+- **Audience**: motivated high-school students. They have strong precalculus, some exposure to mathematical reasoning, and enough maturity to stop at a confusing passage and try to work it out themselves, but they are not yet at an undergraduate-math-major level.
+- **Companion medium**: video lessons that reinforce the handout.
+- **Reader relationship to the text**: **the handout is self-sufficient**. A student who never watches the video should still be able to read the handout end-to-end and absorb the material. The video is reinforcement, not the primary channel. This is the single most important positioning decision and drives most of the rules that follow.
 
-For the repository overview, see [`README.md`](README.md).
-For the storyboard-driven Manim workflow, see [`MANIM_README.md`](MANIM_README.md).
-For the slide/PDF audio and video workflow, see [`VIDEO_README.md`](VIDEO_README.md).
+Every rule in this document serves one of three goals:
 
-## Project Purpose
+1. **Clarity over compactness.** A self-study reader must not get stuck. If a rule forces a thicker book but a clearer reading experience, the rule is right.
+2. **Consistency across multiple authors.** The book draws on manuscripts from several instructors; the rules exist so that a reader moving from Chapter 3 to Chapter 7 does not feel the change in voice.
+3. **Lookup-friendliness.** Self-study readers flip back. Index entries, per-type counters, labeled formal statements, and a chapter-end Summary all support this.
 
-This project creates a unified calculus textbook in LaTeX from manuscripts written by multiple instructors.
+---
 
-The goal is not to preserve manuscript layout or note-taking style.
-The goal is to preserve and standardize:
-- mathematical meaning
-- logical structure
-- pedagogical intent
+## 2. How to Read These Rules
 
-The final book should read like a coherent textbook written in one voice.
+### Conformance keywords
 
-## Content Layout
+This document uses three levels of obligation:
 
-- `main.tex`: document structure only
-- `preamble/`: packages, layout, theorem setup, numbering, bibliography
-- `preamble/packages.tex`: shared package loading
-- `preamble/layout.tex`: global spacing, float, header/footer, and chapter-title layout
-- `preamble/theorem_setup.tex`: theorem-like environments, `solution`, stronger pagination protection for formal result blocks, and lighter flow rules for examples, solutions, and proofs
-- `preamble/numbering.tex`: numbering rules such as equation numbering
-- `preamble/bibliography.tex`: bibliography backend and source registration
-- `chapters/`: one file per chapter
-- `refs/`: bibliography database
+- **MUST** — the rule is binding. Violations are defects.
+- **SHOULD** — the rule is the default. Deviations are acceptable when the rationale shifts in a specific case, but the author must be able to explain the deviation to a reviewer.
+- **MAY** — the option is permitted. Absence of usage is not a defect.
 
-For chapter-writing tasks, work primarily in the relevant file inside `chapters/`.
+A rule without a keyword is equivalent to SHOULD.
 
-## Core Source Priority
+### Rationale
 
-1. The professor manuscripts are the primary source.
-2. Stewart, *Calculus: Early Transcendentals*, is the secondary reference.
-3. Stewart may be used to fill gaps, smooth exposition, supply standard phrasing, or confirm standard organization.
-4. If the manuscript and Stewart differ, prefer the manuscript unless there is a clear mathematical error.
-5. Do not invent new mathematical content casually unless it is supported by the manuscript or by standard textbook treatment.
+Most rules are followed by a **Rationale** paragraph that explains why the rule exists. Rules are the normative layer ("what to do"); rationales are the interpretive layer ("why this rule and not its opposite"). When a new situation falls outside the literal text of a rule, the Rationale is the primary guide for resolving the edge case — extrapolate from purpose, not from mechanical application.
 
-## Output Mode for Chapter Writing
+### Relationship to other files
 
-When asked to draft or revise a chapter or section:
+- [`README.md`](README.md) — repository layout, preamble structure, build instructions.
+- [`MANIM_README.md`](MANIM_README.md), [`STORYBOARD_AUTHORING.md`](STORYBOARD_AUTHORING.md), etc. — media pipeline rules (separate concern).
+- [`chapters/_chapter_template.tex`](chapters/_chapter_template.tex) — starter skeleton for new chapters, encoding the rules in this file.
 
-1. Output LaTeX content only.
-2. Do not generate `\documentclass`, package lists, preamble code, bibliography setup, or formatting code unless explicitly asked.
-3. Do not generate full project files unless explicitly asked.
-4. When writing a chapter or section, produce only the content body that belongs in the chapter file.
-5. Focus on mathematical content and pedagogy, not template engineering.
+When repository layout or preamble decisions change, `README.md` is authoritative. When writing or typesetting rules change, **this file** is authoritative.
 
-## General Editorial Principle
+---
 
-Treat each manuscript as a content source, not a layout source.
+## 3. Register and Voice
 
-Do not preserve:
-- handwritten page layout
-- note-style fragmentation
-- board-style arrows
-- decorative color usage
-- margin comments
-- decorative boxes
-- informal blackboard shorthand
+### Target register
 
-Convert manuscript material into formal textbook exposition.
+The handout is written in the register of **Stewart / Rogawski**: accessible to self-study high-school readers, warm without being chatty, rigorous about mathematics without being cold to the reader.
 
-## Document Structure
+For calibration:
 
-Use this hierarchy for numbered, table-of-contents-bearing headings:
-- `chapter`
-- `section`
-- `subsection`
+- **Too formal**: Spivak, Apostol, Rudin. Short declarative sentences, "we" only, intuition lives outside formal environments, historical and applied notes are rare. A motivated undergraduate can read these; a high-school student self-studying often cannot.
+- **Too informal**: some lecture-note PDFs, pop-math books. Incomplete sentences, heavy slang, ad-hoc structure.
+- **Target**: Stewart. Full sentences with explicit connectives, intuition woven through prose and occasionally into definition environments, motivation paragraphs at chapter and section openings, generous worked examples, frequent figures.
 
-A fourth level is permitted in the form of `\paragraph{...}` (unnumbered, not entered in the table of contents) when a subsection contains three or more short logical units that each deserve a visual heading but do not justify a numbered subsection. Do not use `\subsubsection`.
+Register is **not** an excuse for informal mathematics. Definitions are still precise; proofs are still complete; limit laws are still limit laws. The loosening is in the prose surrounding the mathematics, not in the mathematics itself.
 
-Rationale: limiting numbered depth to three levels keeps the table of contents readable and discourages over-fragmentation. `\paragraph` gives a lightweight way to structure small units without inflating the ToC, which is especially useful for sections such as "Computational Techniques" where five short techniques share a common theme but do not each deserve a numbered subsection.
+### Pronoun policy
 
-A section title must not duplicate substantial portions of its parent chapter title. If the chapter title lists the themes the chapter will cover, each section's title should name one of those themes, not repeat the full list. For example, a chapter titled "Inverse Functions and One-to-One Functions" should have a section titled "Inverse Functions" (or "One-to-One Functions"), not another "Inverse Functions and One-to-One Functions."
+The primary pronoun is **"we"**, including the reader in the argument. This is the Stewart / Apostol tradition.
 
-Rationale: a section title that echoes the chapter title carries no information for the reader and makes the table of contents look like it is stuttering. Section titles earn their place in the ToC by naming the specific theme they develop.
+**"You"** is permitted in two specific contexts:
 
-### Heading capitalization
+1. **Gentle reminders or verifications**, turning briefly to the reader: *"You should verify that $f^{-1}(f(x)) = x$ in this example."*
+2. **Forward references** that address the reader's future work: *"You will use this idea again when we study derivatives in Chapter 3."*
 
-- `\chapter{...}` and `\section{...}` titles use Title Case (e.g., "Inverse Functions and One-to-One Functions", "The Limit of a Function").
-- `\subsection{...}` and `\paragraph{...}` titles use sentence case (e.g., "Computing limits algebraically", "Restricted sine and arcsine").
-- Proper nouns remain capitalized regardless of case style (e.g., "Newton's method", "Stewart's notation").
-- Subsection titles should name the unifying theme of their content, not merely enumerate the objects treated within. Prefer "Limits of piecewise-defined functions" over "The absolute value function and the greatest integer function"; prefer "Restricted sine and arcsine" over "sin, arcsin, and their graphs."
+**"I" / "the author"** — never. This is a multi-author text; first-person singular does not apply.
 
-Rationale: the contrast signals hierarchy visually. Title-cased sections function as named landmarks a reader looks up in the ToC; sentence-cased subsections read as continuations of the running argument. Consistency here makes the ToC feel typeset rather than improvised. Naming the theme rather than the ingredients makes subsection titles useful in the ToC: the reader learns what the subsection is about, not which specific functions happen to be the examples.
+Imperative mood is standard for setup and observation: *"Let $f$ be a one-to-one function."*, *"Consider the behavior near $x = 0$."*, *"Observe that both sides vanish at $x = 0$."*
 
-Within a section, prefer the following pedagogical order:
-1. short introduction or motivation
-2. definitions
-3. properties, propositions, and theorems
-4. proofs when needed
-5. examples with solutions
-6. exercises (inline or end-of-section; see Exercise Policy)
+### Signposting phrases
 
-If the manuscript is disorganized, reorganize it into this structure.
+The following phrases are encouraged and help the self-study reader track the argument. They are not MUST — overusing any single phrase is worse than leaving a transition implicit — but a draft with zero signposts almost always feels too tight for the target register.
 
-## Chapter Opening and Closing Norms
+- *Notice that...* / *Observe that...* — drawing attention to a feature just demonstrated.
+- *Let us now...* — announcing a new step.
+- *In other words...* — paraphrasing a just-given formalism in plainer language.
+- *To see why this matters...* — leading into a motivation paragraph.
+- *We are ready to state...* — transitioning from setup to a formal statement.
+- *Before we proceed...* — pausing for an aside or reminder.
 
-Every chapter must open with an overview of one to two paragraphs, placed immediately after the `\chapter{...}` line and before the first `\section{...}`. The overview should:
-- identify the mathematical territory the chapter covers
-- name the connection to earlier chapters
-- preview the central results the reader should look forward to
+Avoid fillers (*basically*, *actually*, *essentially* used as hedges), over-familiarity (*you guys*, *super easy*), and blackboard shorthand (*iff*, *w.r.t.*, *s.t.* in running prose — expand these out).
 
-The overview is prose, not a definition, theorem, or remark. It does not itself introduce new notation.
+### Intuition before formalism
 
-Chapters may end with an optional short summary under `\section*{Summary}`. If included, the summary is at most one page, does not appear in the numbered section sequence, and may list key definitions and theorems without reproducing full statements. Do not use a summary to introduce new results.
+A formal statement (definition, theorem, proposition, corollary) **SHOULD** be preceded by one or two paragraphs of prose that explain why the concept is worth introducing and what it should mean intuitively.
 
-Rationale: a fixed opening template gives multi-author contributions a common rhythm and makes later review easier. Chapter-opening motivation is one of the most visible style markers in a textbook, and unifying it has outsized impact on perceived voice.
+A `definition` body **MAY** end with one sentence of the form *"Informally, this means..."* giving a vernacular restatement. The informal sentence **MUST NOT** introduce examples, figures, or new notation — if the restatement needs those, promote it to a separate remark or prose paragraph following the definition.
 
-## Authoring Template
+Rationale: Stewart register plus self-sufficient handout means the reader cannot rely on a teacher to "translate" the formal statement in real time. The handout itself must do that translation, usually twice — once in motivation prose before the formal statement and once (when syntactically heavy formalism warrants it, e.g., $\varepsilon$-$\delta$) as an inline gloss inside the definition.
 
-When starting a new chapter file, use [`chapters/_chapter_template.tex`](chapters/_chapter_template.tex) as the drafting skeleton. Copy it to the new chapter file and replace the placeholders with real content.
+### Style do / don't
 
-The template encodes the house defaults for:
-- the chapter-opening overview paragraphs
-- the standard section and subsection rhythm
-- `workedexample` + `example` + `solution` pairing
-- compact formula placement in example prompts and solutions
-- reusable short-formula templates for stacked displays, formula-plus-condition layouts, paired comparisons, formal displayed equivalences, and equivalence-with-condition statements
-- the end-of-section exercise TODO marker
+**Prefer:**
+- concise mathematical prose, complete sentences, direct statements, clear transitions;
+- guided worked examples (see §5);
+- explicit logical connectives (*therefore*, *because*, *in other words*);
+- motivation paragraphs before heavy formalism.
 
-Do not `\include` the template file directly in the book. It is a starting point and checklist, not a compiled chapter.
+**Avoid:**
+- lecture-note fragmentation;
+- casual spoken fillers or slang;
+- unexplained logical jumps;
+- multi-sentence "meta" commentary about what the chapter is doing (trust the structure and the bullet list in the chapter opening to do that job);
+- inline abbreviations like *iff*, *w.r.t.*, *s.t.* in prose — write them out.
 
-## Approved Environment Set
-
-Use only the following standard environments unless explicitly instructed otherwise:
-- `definition`
-- `theorem`
-- `lemma`
-- `proposition`
-- `corollary`
-- `example`
-- `remark`
-- `exercise`
-- `solution`
-- `proof`
+### Voice reference sample
 
-Interpret manuscript labels by mathematical role, not surface wording.
+The following passage exemplifies the target voice. When in doubt about register, compare your draft against this sample.
 
-Examples:
-- Def / Definition -> `definition`
-- Property -> `proposition`
-- Thm -> `theorem`
-- Note -> `remark`
-- Homework / Practice -> `exercise`
-- Worked calculation -> `example` followed by `solution`
+> Not every function can be reversed. If two different inputs produce the same output, we cannot recover the input from the output uniquely. To build a rigorous version of this idea, we first need a name for the functions that avoid this problem.
+>
+> **Definition.** A function $f$ with domain $A$ is *one-to-one* if $f(x_1) \ne f(x_2)$ whenever $x_1 \ne x_2$. *Informally, a function is one-to-one when different inputs always give different outputs.*
+>
+> Notice how this condition rules out exactly the problem described above. If two different inputs $x_1$ and $x_2$ gave the same output, there would be no way to decide which one was "the" input corresponding to that output, and the reverse direction would be ambiguous.
+>
+> To check whether a specific function is one-to-one, we can use a graphical test that you have likely seen before in precalculus...
 
-## Environment Classification Rules
+Key features of this voice:
 
-### Definition
+- A motivation paragraph precedes the definition ("Not every function can be reversed...").
+- Intuition appears inside the definition body (the italicised *"Informally, ..."* sentence).
+- Prose after the definition unpacks the condition (*"Notice how this condition rules out..."*).
+- Explicit bridges (*Notice how*, *To check...*) guide the reader through each transition.
+- "We" is the default; "you" appears as a gentle forward-reference ("you have likely seen...").
 
-Use a `definition` only when introducing a new mathematical concept or term for the first time.
+---
 
-A definition answers:
-"What does this mean?"
+## 4. Document Structure
 
-Definitions should be:
-- precise
-- formal
-- concise
+### Heading hierarchy
 
-Do not mix examples, long explanation, historical comments, or intuition into a definition.
+Use four levels:
 
-Use `definition` for topics such as:
-- limit
-- left-hand limit
-- right-hand limit
-- continuity
-- differentiability
-- derivative
-- integrability
-- one-to-one function
-- inverse function
-- inverse trigonometric functions
-- local maximum / minimum
-- absolute maximum / minimum
+1. `\chapter{...}` — Title Case.
+2. `\section{...}` — Title Case.
+3. `\subsection{...}` — sentence case.
+4. `\paragraph{...}` — sentence case, unnumbered, not in the table of contents.
 
-Do not introduce a `\begin{definition}` for a term that the current chapter will neither use nor develop. A formal, numbered definition makes a promise to the reader that the term is now available for reuse in the text that follows. If a term needs to be previewed because it will be studied in a later chapter, write it as forward-looking prose (optionally with an index entry), not as a numbered formal statement.
+**MUST NOT** use `\subsubsection`. When a subsection needs to be split into more than about four subtopics, either break it into two subsections (preferred) or use `\paragraph{...}` headings for each subtopic.
 
-Rationale: numbered definitions are load-bearing references. Using one for a term the chapter never invokes again dilutes the signal that "this environment flags something you will be expected to recall," and clutters the cross-reference graph. Forward-looking prose preserves the preview without making the false promise.
+Rationale: limiting numbered depth to three levels keeps the table of contents readable. `\paragraph` provides a lightweight fourth tier for short parallel subtopics without inflating the ToC.
 
-### Remark
+### Heading capitalisation
 
-Use a `remark` only for genuine asides, warnings, or supplementary comments that are not part of the main exposition. A remark should feel like a sidebar the student could skip without losing the main thread.
+- `\chapter{...}` and `\section{...}`: **Title Case** (e.g., *Inverse Functions and Limits*, *The Precise Definition of a Limit*).
+- `\subsection{...}` and `\paragraph{...}`: **sentence case** (e.g., *Computing limits algebraically*, *Restricted sine and arcsine*).
+- Proper nouns stay capitalised regardless of case style (e.g., *Newton's method*, *Stewart's notation*).
 
-Good uses of `remark` include:
-- notation warnings (e.g., `\sin^{-1} x` does not mean `1/\sin x`)
-- branch-choice conventions that differ between sources (e.g., which principal range is used for `\arcsec x`)
-- identity restrictions that are easy to overlook (e.g., `\arcsin(\sin x)=x` holds only on the principal interval)
-- the horizontal line test as a named geometric criterion
-- short historical notes (2 to 5 sentences)
-- forward references to later chapters (e.g., "continuity will be studied systematically later")
-
-Do NOT use a `remark` for:
-- main-line knowledge that every student must read (write it as prose instead)
-- domain and range statements that follow directly from a definition (state them as a plain sentence after the definition)
-- core conceptual points such as "the limit does not depend on f(a)" or "∞ is not a real number" (these belong in the running text)
-- verbal summaries of theorem statements (place them as prose after the theorem)
-- content that, if skipped, would leave a gap in the student's understanding
+Rationale: the capitalisation contrast signals hierarchy visually. Title-cased sections read as named landmarks that a student looks up in the ToC; sentence-cased subsections read as continuations of the running argument.
 
-A remark is not the main formal result of the section.
-A remark usually does not need a proof.
+### Section title content
 
-Important rules:
-1. Do not hide a genuinely important reusable formal result inside a remark.
-2. If the content is part of the logical flow of the section, it should be prose, not a remark.
-3. When in doubt, prefer prose over remark. A chapter with fewer than 15 remarks is usually healthier than one with 30.
-
-### Theorem
-
-Use a `theorem` only for the main and important results of a section or chapter.
-
-A theorem should be a result students are expected to remember and reuse later.
-Do not label too many results as theorems.
+A section title **MUST NOT** substantially repeat the chapter title. Name the specific theme a section develops, not the chapter's overall topic.
 
-Typical `theorem` topics:
-- core limit laws
-- squeeze theorem
-- intermediate value theorem
-- extreme value theorem
-- mean value theorem
-- fundamental theorem of calculus
-- major derivative and integral rules
-- a function has an inverse if and only if it is one-to-one, when this is the main result of the section
+*Example.* A chapter titled *Inverse Functions and One-to-One Functions* should have sections such as *Inverse Functions* and *One-to-One Functions*, not another *Inverse Functions and One-to-One Functions*.
 
-### Proposition
+A subsection title **SHOULD** name the unifying theme of its content, not merely enumerate the objects inside. Prefer *Limits of piecewise-defined functions* over *The absolute value function and the greatest integer function*.
 
-Use a `proposition` for a formal mathematical result that is worth stating but is not the main result of the section.
+### Chapter opening
 
-A proposition is appropriate for:
-- formal supporting facts
-- technical results
-- basic consequences of definitions
-- algebraic properties of inverse functions
-- secondary but reusable results
+Every chapter **MUST** open with the following two elements, in order, placed immediately after `\chapter{...}` and before the first `\section{...}`:
 
-Typical `proposition` topics:
-- `f^{-1}(f(x)) = x` and `f(f^{-1}(y)) = y`
-- uniqueness of limits
-- the criterion for a two-sided limit from one-sided limits
-- standard identities for inverse trigonometric functions
+1. **An overview** of 1-2 paragraphs of prose, which:
+   - names the mathematical territory the chapter covers;
+   - connects the chapter to earlier chapters (if any);
+   - previews the central results the reader will see.
+2. **A learning-outcomes bullet list** headed *"By the end of this chapter, you will be able to:"* (or equivalent), containing 3-5 concrete outcomes and occupying at most half a page.
 
-### Lemma and Corollary
+The overview is prose, not a definition, theorem, or remark. It **MUST NOT** introduce new notation or state formal results.
 
-Use a `lemma` only when an intermediate result is genuinely needed for a later proof.
-Use a `corollary` only when a result follows immediately from a theorem or proposition and naming the consequence improves pedagogy.
+The bullet list uses verbs that describe what the reader will be able to *do* (*solve*, *compute*, *recognise*, *prove*), not what the chapter will "cover" or "discuss".
 
-Do not add lemmas or corollaries mechanically.
+*Example.*
 
-## Practical Decision Rule
+```latex
+\chapter{Inverse Functions and Limits}
 
-Before choosing an environment, ask:
+This chapter develops two themes that together form the starting point of calculus.
+The first is ... (1-2 paragraphs of prose)
 
-- Am I introducing a new term or concept?
-  Use `definition`.
+\paragraph{By the end of this chapter, you will be able to:}
+\begin{itemize}
+    \item determine when a function has an inverse, and construct the inverse when it exists;
+    \item work with the inverse trigonometric functions and their principal ranges;
+    \item estimate limits from tables and graphs, and compute them using the limit laws;
+    \item state and apply the precise $\varepsilon$-$\delta$ definition of a limit.
+\end{itemize}
 
-- Am I giving explanation, intuition, warning, notation guidance, or short historical/application context?
-  Use `remark`.
+\section{Inverse Functions}
+...
+```
 
-- Is this the main formal result of the section?
-  Use `theorem`.
+Rationale: self-study readers open a chapter asking *"what am I going to learn here?"* The bullet list answers that question in five seconds. The overview answers *"how does this fit with what I already know?"* in half a minute. Both must be present.
 
-- Is this a formal result, but not the main result of the section?
-  Use `proposition`.
+### Section opening
 
-## Example, Solution, and Proof Policy
+Every section **SHOULD** open with 1-2 paragraphs of motivation, intuition, or applied context before the first formal environment.
 
-This rule is mandatory.
+Exception: a short section whose content is purely computational (e.g., *Direct substitution*, *Algebraic simplification of limits*) **MAY** start with a single connecting sentence that links it to the preceding section, skipping the motivation paragraph.
 
-1. Use `solution` for worked examples.
-2. Use `proof` only for genuine proofs of mathematical statements.
-3. Do not label ordinary worked examples as `proof`.
-4. A theorem, proposition, lemma, or corollary may be followed by a `proof`.
-5. Not every theorem-like statement requires a proof.
-6. Include a proof only when at least one of the following holds:
-   - the manuscript contains a proof
-   - the proof is logically important for the chapter
-   - the proof is pedagogically important for student understanding
-7. If a theorem or proposition appears without a proof in the manuscript, it may remain without a proof unless a proof is clearly needed.
-8. Do not add proofs to every theorem-like statement automatically.
-9. An `example` should be followed by a `solution` if a worked-out answer is included.
-10. When an `example` is paired with a `solution`, wrap the pair in a `workedexample` environment. This is a semantic grouping: `workedexample` reserves enough page space for the whole pair so that a short example cannot be stranded at a page bottom while its solution is pushed to the next page. `example` without a `solution` (rare) does not need the wrapper.
-11. Each `workedexample` must contain exactly one `example` followed by one `solution`. Do not nest `workedexample` environments, and do not bundle multiple example-solution pairs into a single wrapper.
-12. `exercise` environments should normally appear without solutions unless the user explicitly asks for a solutions version.
-13. The `solution` environment has its own visual style distinct from `proof`: a bold "Solution." label (not italic), upright body text, and a trailing QED box. Do not implement `solution` as an alias for `proof`.
-14. In a `solution`, keep `Solution.` inline when the body begins with prose. If the first real content is a block such as `enumerate`, `itemize`, or display math, start the body on the next line with `\solutionbreak` instead of forcing every solution to use the same opening layout.
-15. Do not place `\footnote`, `\marginpar`, or manual `\hypertarget` commands inside a `workedexample`. Its body is measured in a box before final placement, so page-anchored material may not relocate correctly.
-16. If the final line of a `solution` is display math, place `\qedhere` on that last displayed line so the closing box stays attached to the mathematics instead of drifting onto a separate line.
+Rationale: self-study readers need a reason to care before they invest reading effort. A section that starts with *"Definition 1.1."* on its first line asks the reader to take the reward on faith.
 
-In short:
-- theorem-like statements -> `proof` when warranted
-- worked examples -> `solution`, visually distinct from `proof`
+### Chapter closing
 
-Rationale: students scan textbook pages for cues that tell them "this is how to work a problem" versus "this is how to justify a theorem." If `solution` and `proof` look identical, that affordance is lost. The visual distinction is cheap to set once in the template and high-value for every subsequent reader.
+Every chapter **MUST** close with a `\section*{Summary}` block, half a page to one page long, containing three parts in order:
 
-Maintainer note: `workedexample` depends on a one-shot capture of its body. Do not replace it with a wrapper that re-expands the example/solution body, or counters and pagination assumptions will drift out of sync.
+1. **Key definitions** — a bulleted list of definition terms introduced in the chapter, in order of appearance, each as a single line referencing the definition by name (no restatement of the full formal body).
+2. **Key theorems, propositions, and corollaries** — a bulleted list of named formal results with a one-sentence plain-English restatement each.
+3. **Key formulas and identities** — the 3-8 most important formulas the reader should memorise, presented compactly.
 
-## Example Selection Policy
+The Summary does not introduce new content. It does not appear in the numbered section sequence (note `\section*`). It **SHOULD** appear before any end-of-section exercise TODO marker for the last section (see §14).
 
-1. Preserve professor-manuscript examples unless the user explicitly asks for cuts or restructuring.
-2. Do not delete, merge, or substantially rewrite a manuscript example unless there is a clear editorial reason and the user has asked for that level of intervention.
-3. Additional examples may be added when they materially improve student understanding.
-4. Good reasons to add an example include:
-   - illustrating a central theorem
-   - covering a standard case missing from the manuscript
-   - reinforcing a common source of confusion
-   - giving a slightly more challenging example after a basic one
-5. Added examples should be concise, pedagogically purposeful, and consistent with the level of the section.
-6. Do not add filler examples simply to make a section look more complete.
+Rationale: this is the reader's permanent reference page. A student who read the chapter a month ago and wants to review it should be able to re-absorb the skeleton in under five minutes using only the Summary.
 
-## Exercise Policy
+### Chapter-level toggles
 
-This project distinguishes two kinds of exercises: inline exercises and end-of-section exercises.
+`main.tex` carries two top-level toggles worth knowing about:
 
-### Inline exercises
+- `\ifprintbibliography` — controls whether the bibliography is emitted in the final PDF.
+- `\ifincludescratchchapter` — controls whether `chapters/_scratch.tex` is included (default: off, so work-in-progress content does not accidentally ship).
 
-Inline exercises are short problems placed within a section, near the relevant definition or example. They are drawn exclusively from the professor manuscript.
+Do not modify these from inside chapter files.
 
-1. Include inline exercises only if they are present in the professor manuscript.
-2. Do not invent new inline exercises.
-3. Do not delete, merge, split, reorder, rewrite, simplify, or expand manuscript inline exercises unless the user explicitly asks for editorial adjustment.
-4. Do not convert inline exercises into examples unless the source clearly provides guided exposition.
-5. Use the `exercise` environment for all inline exercises.
+---
 
-### End-of-section exercises
+## 5. Environment Set
 
-End-of-section exercises are collected problem sets at the end of each section, under a `\subsection*{Exercises}` heading (or `\paragraph{Exercises.}` for short sets).
+The project uses exactly **12 environments**. New chapter content **MUST** use one of these; new environments **MUST NOT** be introduced without updating this document.
 
-1. End-of-section problem sets may combine manuscript problems with supplementary problems written for the textbook.
-2. Manuscript problems appear first in the set; supplementary problems follow.
-3. Supplementary problems must be clearly marked. Use a `\paragraph{Supplementary.}` heading within the exercise set, or prefix each supplementary problem with a dagger (`$^\dagger$`) and explain the convention once before its first use in the book.
-4. Use the `exercise` environment for both manuscript and supplementary problems; the distinction is carried by placement and marking, not by a different environment.
-5. End-of-section exercises normally appear without solutions unless the user explicitly asks for a solutions version.
-6. Do not add supplementary problems to fill space. Every supplementary problem must target a specific skill or case not covered by manuscript problems.
+### The 12 environments
 
-This is the target policy. Chapters that do not yet have end-of-section exercises must carry a placeholder comment at each section end in the form `% TODO: add \subsection*{Exercises} block with end-of-section problems for Section <N.M>.` The TODO marker makes the gap visible in the source and must be replaced with real exercise content before the chapter is considered complete. A chapter without either the final `\subsection*{Exercises}` block or the TODO placeholder is out of compliance.
+**Formal statements** (each has its own counter, chapter-scoped; see §6):
 
-Rationale: the manuscript is the primary source, but a calculus textbook without any end-of-section problems is not usable as a primary text. The two-tier structure preserves manuscript authority (inline material is untouchable) while letting the editor produce a publishable book with practice material that manuscripts often lack. Explicit TODO placeholders keep the rule authoritative without pretending every chapter is already finished, and make the remaining work auditable.
+| Environment | Role |
+|---|---|
+| `definition` | Introduces a new mathematical term. |
+| `theorem` | Main / important formal result. |
+| `proposition` | Formal result that is useful but not a section's headline result. |
+| `corollary` | Immediate consequence of a nearby theorem or proposition, worth naming for pedagogy. |
 
-## Numbering Policy
+**Worked material**:
 
-This project uses chapter-based numbering with a single shared counter for all formal statements.
+| Environment | Role |
+|---|---|
+| `example` | Example prompt. Always wrapped in `workedexample`, always paired with `solution`. |
+| `solution` | Worked solution to an `example`. |
+| `proof` | Proof of a theorem, proposition, or corollary. |
+| `exercise` | Problem statement intended for student practice (full design deferred; see §14). |
 
-### Shared counter group
+**Aside and scaffolding** (each has its own counter):
 
-The following environments share one counter, incremented in order of appearance within a chapter:
-- `definition`
-- `theorem`
-- `proposition`
-- `lemma`
-- `corollary`
+| Environment | Role |
+|---|---|
+| `remark` | Genuine aside, notation comment, historical note, forward reference. |
+| `caution` | Warning about a common error or notation trap. Visually distinct (see §8, §10). |
+| `strategy` | Problem-solving strategy or method box. |
 
-Desired style (actual numbering will depend on the order in which they appear):
-- Definition 1.1
-- Theorem 1.2
-- Proposition 1.3
-- Definition 1.4
-- Theorem 1.5
+**Semantic wrapper** (no counter, no output of its own):
 
-The number reflects a statement's position in the running sequence of formal statements, not its position among statements of the same type.
+| Environment | Role |
+|---|---|
+| `workedexample` | Wraps exactly one `example` + one `solution` as a single pagination unit. |
 
-### Separate counters
+### Translating manuscript labels
 
-The following environments each have their own counter, reset at the start of every chapter:
-- `example` — Example 1.1, Example 1.2, ...
-- `exercise` — Exercise 1.1, Exercise 1.2, ...
-- `remark` — Remark 1.1, Remark 1.2, ...
-- `figure` — Figure 1.1, Figure 1.2, ...
-- `equation` — (1.1), (1.2), ... (see Equation Numbering Policy)
+Source manuscripts use varied labels. Translate by mathematical role, not surface wording:
+
+| Manuscript label | Target environment |
+|---|---|
+| Def / Definition | `definition` |
+| Property / Thm / Theorem | `theorem` or `proposition` (by role) |
+| Note / 註記 | `remark` |
+| Warning / ⚠ / 注意 | `caution` |
+| Method / Procedure / 解題技巧 | `strategy` |
+| Homework / Practice | `exercise` |
+| Worked calculation | `example` + `solution`, wrapped in `workedexample` |
+
+### Deliberately excluded
+
+The project does **not** use:
+
+- `lemma` — for the HS audience, the cognitive cost of distinguishing lemma from theorem outweighs the benefit. Results that would be lemmas in a graduate-level book are either absorbed into proofs or promoted to `proposition`.
+- `subsubsection` — see §4.
+- Any `boxed`, `tip`, or `note` environment — the roles are covered by `remark`, `caution`, or `strategy`.
+
+### Rules per environment
+
+#### `definition`
+
+Use only when introducing a new mathematical term for the first time.
+
+Definitions **MUST** be precise, formal, and concise.
+
+A definition body **MAY** end with one sentence of the form *"Informally, this means..."* giving a vernacular restatement. The informal sentence **MUST NOT** introduce examples, figures, or new notation.
+
+**MUST NOT** open a `definition` for a term that the chapter will not use or develop again. Forward-looking previews of terms to be defined later go in prose, optionally with an `\index{...}` entry, not in a formal environment.
+
+Rationale: a formal definition is a promise that the term is now available for reuse. Using `definition` for terms the chapter never invokes again dilutes that promise and clutters the cross-reference graph.
+
+#### `theorem`
+
+Reserved for main / important results that students are expected to remember and reuse.
+
+Named theorems (Mean Value Theorem, Intermediate Value Theorem, Rolle's Theorem, Fundamental Theorem of Calculus, Squeeze Theorem, and so on) **MUST**:
+
+1. use `\begin{theorem}[Name]` with Name in Title Case and spelled out in full (`[Mean Value Theorem]`, not `[MVT]`);
+2. carry an `\index{Name}` entry inside or immediately after the theorem body.
+
+Rationale: named theorems are the most common lookup target after definitions. The combination of a descriptive title and a matching index entry is the reader's primary path into the book.
+
+#### `proposition`
+
+Formal result that is useful and often reusable, but not a section's headline result. Typical uses: algebraic properties of inverse functions, composition identities for inverse trigonometric functions, uniqueness of limits, the two-sided-limit criterion from one-sided limits.
+
+#### `corollary`
+
+Immediate consequence of a theorem or proposition, named because the consequence is worth calling out for pedagogy. Typical uses: the increasing-function test as a corollary of the Mean Value Theorem; existence of $n$-th roots as a corollary of the Intermediate Value Theorem.
+
+Do not add corollaries mechanically.
+
+#### `example` and `solution`
+
+Every `example` **MUST** be paired with exactly one `solution`, and both **MUST** be wrapped in a single `workedexample` environment.
+
+The `solution` environment is visually distinct from `proof`: a bold "Solution." label (not italic), upright body text, trailing QED box.
+
+- Keep "Solution." inline when the solution body begins with prose.
+- If the first real content of the solution is a block (`enumerate`, `itemize`, display math), place `\solutionbreak` at the start of the body so the "Solution." label stands on its own line.
+- If the last line of the solution body is display math, place `\qedhere` on that line so the closing QED box stays attached to the formula.
+
+#### `proof`
+
+Use only for genuine proofs of mathematical statements. Do not label worked calculations as `proof`.
+
+A theorem, proposition, or corollary **MAY** appear without a proof. Include a proof when at least one of the following holds:
+
+- the manuscript contains one;
+- the proof is logically important for the chapter;
+- the proof is pedagogically important for student understanding.
+
+Do not add proofs mechanically.
+
+#### `exercise`
+
+Used inside `\subsection*{Exercises}` blocks at section end. Full exercise-system design (difficulty markers, hints, answer appendix, inline self-check variants) is **deferred** until the book's main content is complete; see §14.
+
+While content is being drafted, every section end **MUST** carry a placeholder:
+
+```latex
+% TODO: add \subsection*{Exercises} block with end-of-section problems for Section N.M.
+```
+
+#### `remark`
+
+Genuine aside, notation comment, warning about a subtle restriction (when the warning is prose-shaped rather than trap-shaped; see `caution` for trap-shaped warnings), short historical note (2-5 sentences), or forward reference to a later chapter.
+
+Per-chapter soft target: roughly **2-3 remarks per section** (so 12-18 per chapter of 6 sections). Below that range usually means the chapter is very dense; above that range usually means some remarks should have been prose or promoted to a stronger environment.
+
+A `remark` **MUST NOT** carry main-line knowledge that every student must read. If the content is part of the logical flow of the section, write it as prose.
+
+Short historical or applied motivation notes (2-5 sentences) at chapter or section openings, or immediately before a key concept, are a good use of `remark` and directly support the target register.
+
+#### `caution`
+
+Warning about a common error, notation trap, or easy-to-miss restriction. Visually distinct from `remark` (left red accent bar plus "Caution." label; see §10).
+
+Typical uses:
+
+- Notation trap: *"$\sin^{-1} x$ denotes the inverse sine; it does not mean the reciprocal $1/\sin x$."*
+- Domain restriction easy to forget: *"The identity $\arcsin(\sin x) = x$ holds only when $x \in [-\pi/2, \pi/2]$."*
+- Sign-error or branch-choice pitfall in a computation.
+
+A `caution` is typically 1-3 sentences. If it is longer, it is probably a `remark` in disguise.
+
+#### `strategy`
+
+Explicit problem-solving strategy or method box. This is the highest-leverage self-study aid the project supplies; use it whenever a section's worked examples would otherwise leave the reader asking *"in general, how do I approach a problem of this type?"*
+
+Typical uses:
+
+- *"Strategy for computing limits: (1) Try direct substitution. (2) If the result is an indeterminate form such as $0/0$, simplify by factoring or rationalising. (3) If neither works, try the squeeze theorem or rewrite using a known limit."*
+- *"Strategy for finding an inverse: (1) Verify the function is one-to-one (optionally by the horizontal line test). (2) Solve $y = f(x)$ for $x$. (3) Swap $x$ and $y$."*
+
+A `strategy` is typically a short numbered list, occasionally a paragraph.
+
+Rationale: Stewart-style problem-solving strategy boxes are one of the features that self-study readers most clearly benefit from. The environment makes strategies discoverable by scanning rather than requiring the reader to re-read the worked examples and reverse-engineer the pattern.
+
+#### `workedexample`
+
+Semantic wrapper that measures the combined `example` + `solution` body (capped at 16 baselines) and reserves that much vertical space, so a short example cannot be stranded at a page bottom while its solution slides onto the next page.
+
+**MUST** contain exactly one `example` followed by one `solution`. No nesting; no bundling multiple example-solution pairs into a single wrapper.
+
+**MUST NOT** contain `\footnote`, `\marginpar`, or manual `\hypertarget` inside a `workedexample` body: the body is measured in a box before final placement, so page-anchored material may not relocate correctly.
+
+Maintainer note: `workedexample` depends on a one-shot capture of its body. Do not replace it with a wrapper that re-expands the example/solution body, or the counter and pagination assumptions will drift out of sync.
+
+---
+
+## 6. Numbering and Cross-References
+
+### Counters
+
+Each formal-statement environment has its **own counter**, chapter-scoped:
+
+- `definition` → Definition 1.1, 1.2, 1.3, ...
+- `theorem` → Theorem 1.1, 1.2, ...
+- `proposition` → Proposition 1.1, 1.2, ...
+- `corollary` → Corollary 1.1, 1.2, ...
+
+Aside environments also have their own chapter-scoped counters:
+
+- `example` → Example 1.1, 1.2, ...
+- `exercise` → Exercise 1.1, 1.2, ...
+- `remark` → Remark 1.1, 1.2, ...
+- `caution` → Caution 1.1, 1.2, ...
+- `strategy` → Strategy 1.1, 1.2, ...
+
+Figures, tables, and numbered equations also reset per chapter: Figure 1.1, (1.1).
+
+Rationale: high-school self-study readers flip back and ask *"where was Definition 1.3?"*, expecting "Definition 1.3" to be the **third definition** in Chapter 1. A shared counter (used in earlier versions of this project) would break that expectation — "Definition 1.3" might be preceded by intervening theorems and propositions, making the number less informative for lookup. Per-env counters match the reader's mental model.
+
+Implementation note: `preamble/theorem_setup.tex` declares each environment with its own `\newtheorem{...}{Label}[chapter]`. The previous `aliascnt`-based shared-counter pattern is removed in v3.0.
 
 ### Manual numbering
 
-Do not manually number environments or figures. Let the project template handle numbering.
+**MUST NOT** number environments, figures, equations, or section headings by hand. Let the project templates handle numbering.
 
-Rationale: a shared counter for formal statements lets the reader infer position from the number alone — "Theorem 1.5 is just after Definition 1.4" is immediately obvious, whereas with separate counters they could be pages apart. Examples, exercises, remarks, and figures keep their own counters because they are browsed as indexed collections: a student looking for "Example 1.3" wants the third worked example, not the third item of mixed type.
+### Equation numbering
 
-Implementation note: `preamble/theorem_setup.tex` implements the shared counter group with the `aliascnt` package rather than amsthm's `[theorem]` optional argument. The pattern for each non-master environment is:
+Number a display equation **if and only if** at least one of the following holds:
 
-```latex
-\newaliascnt{proposition}{theorem}
-\newtheorem{proposition}[proposition]{Proposition}
-\aliascntresetthe{proposition}
-```
+- the equation is referenced later in the same chapter via `\eqref{...}` or `\cref{...}`;
+- the equation is referenced from a later chapter;
+- the equation is the formal statement of a theorem, proposition, or corollary.
 
-This keeps the counter-name that amsthm records distinct for each environment (so `cleveref` resolves `\cref{prop:...}` as "Proposition", `\cref{def:...}` as "Definition", and so on) while the step still happens on the master `theorem` counter, which is chapter-scoped. The plain `\newtheorem{foo}[theorem]{Foo}` shortcut is not used because amsthm tags every label from it with counter name `theorem`, which would make `cleveref` print every formal-statement reference as "Theorem" regardless of the environment actually used.
+Otherwise use unnumbered display math `\[...\]` or unnumbered `align*` / `gather*`.
 
-If you add a new formal-statement environment in the future, follow the three-line aliascnt pattern above and add the matching `\crefname` / `\Crefname` declarations near the bottom of the file.
+Rationale: an equation number is a promise that the equation will be named later. Numbers that no one references clutter the page and weaken the signal value of the numbers that do matter.
 
-## Equation Numbering Policy
+### Labels and cross-references
 
-Number a display equation if and only if at least one of the following holds:
-- the equation is referenced later in the same chapter via `\eqref{...}` or `\cref{...}`
-- the equation is referenced in a later chapter
-- the equation is the formal statement of a theorem, proposition, lemma, or corollary
+All cross-references **MUST** use `cleveref`:
 
-Otherwise, use unnumbered display math `\[...\]` or unnumbered `align*` / `gather*`.
+- `\cref{label}` for in-prose references (the package inserts the prefix: *Figure*, *Theorem*, *Section*, etc.);
+- `\Cref{label}` when the reference begins a sentence;
+- `\eqref{label}` for equation references (inserts the parentheses).
 
-Rules:
-1. Equations inside a `definition` body are unnumbered unless referenced elsewhere.
-2. Equations inside `example` and `solution` bodies are unnumbered unless referenced later.
-3. Chains of equality in a worked computation use unnumbered `align*` or stacked `\[...\]` blocks.
-4. Do not number every display equation by default. A number is a promise that the equation will be named later.
+**MUST NOT** write `Figure~\ref{...}`, `Theorem~\ref{...}`, or any other manual prefix.
 
-Rationale: over-numbered equations clutter the page and dilute the signal value of a number. When `(1.17)` appears unreferenced, the reader spends a moment confirming the chapter does not depend on it. Reserving numbers for genuine anchor points makes the numbers themselves informative.
+**Label format**: `type:short-description` with hyphens between words. The `type` prefix is drawn from:
 
-## Cross-Reference Policy
+`def`, `thm`, `prop`, `cor`, `ex`, `sol`, `exer`, `rem`, `caut`, `strat`, `fig`, `eq`, `sec`, `subsec`.
 
-The project uses the `cleveref` package to generate cross-reference prefixes automatically.
+- Good: `fig:horizontal-line-test`, `thm:squeeze`, `def:limit-precise`, `caut:sin-inverse-vs-reciprocal`.
+- Bad: `fig1`, `eq2`, `thm-important`, `horizontal_line`.
 
-Rules:
-1. Use `\cref{label}` for all in-prose references. The package inserts the correct prefix (Figure, Theorem, Definition, Section, etc.).
-2. Use `\Cref{label}` only when the reference starts a sentence and must be capitalized.
-3. Do not write `Figure~\ref{...}`, `Theorem~\ref{...}`, `Section~\ref{...}`, or any other manual prefix. Let `cleveref` control the prefix.
-4. `\eqref{label}` remains preferred for equation references because it inserts the parentheses automatically.
-5. Label format: `type:short-description`, where `type` is one of `fig`, `thm`, `def`, `prop`, `lem`, `cor`, `eq`, `sec`, `subsec`, `ex`, `exer`, `rem`.
-   - Good: `fig:horizontal-line-test`, `thm:squeeze`, `def:limit`, `eq:fundamental-theorem`.
-   - Bad: `fig1`, `eq2`, `thm-important`, `horizontal_line`.
-6. Labels use hyphens for word separation, not underscores or camelCase.
+Labels on `caution` and `strategy` are **optional**; add them only when the entry is genuinely expected to be cross-referenced.
 
-Rationale: mixing `\cref` and manual `\ref` produces inconsistent spacing and capitalization across the book. Centralizing on `\cref` also means a later decision to change "Theorem" to "Thm." in running text can be done in one package configuration, not 300 files.
+Rationale: mixing `\cref` and manual `\ref` produces inconsistent spacing and capitalisation. Centralising on `\cref` also means a later decision to abbreviate *Theorem* as *Thm.* in running text is a single package configuration change, not a find-replace across two hundred files.
 
 ### Paired definitions at different precision levels
 
-Some concepts — most notably "limit" — receive both an informal introduction and a later precise (epsilon-delta) restatement. When a concept is defined twice at different precision levels:
+When a concept receives both an informal and a precise (e.g., $\varepsilon$-$\delta$) definition:
 
-1. Use distinct label keys that indicate the precision level, such as `def:limit-informal` and `def:limit-precise`.
-2. The second definition should explicitly cross-reference the first: "This formalizes the informal notion introduced in \cref{def:limit-informal}."
-3. The first definition should forward-reference the second: "A precise formulation is given in \cref{def:limit-precise}."
-4. Both definitions share the formal-statement counter group (see Numbering Policy) and count as two separate `definition` environments.
+1. **MUST** use distinct label keys that indicate the precision level, such as `def:limit-informal` and `def:limit-precise`.
+2. The precise definition **MUST** explicitly cross-reference the informal one, e.g., *"This formalises the informal notion introduced in \cref{def:limit-informal}."*
+3. The informal definition **MUST** forward-reference the precise one, e.g., *"A precise formulation is given in \cref{def:limit-precise}."*
+4. Both count as separate `definition` environments and each increments the `definition` counter.
 
-Rationale: students returning to look up "limit" should find both versions and understand the relationship between them immediately. Silent duplication without cross-linkage is a common source of confusion in multi-author calculus texts.
+Rationale: students returning to look up *limit* should find both versions and immediately see the relationship between them. Silent duplication without cross-linking is a common source of confusion in multi-author calculus texts.
 
-## Notation Policy
+---
 
-Notation must remain consistent across all chapters.
+## 7. Formula Display
 
-Use standard notation such as:
-- `\arcsin x`, `\arccos x`, `\arctan x`
-- `\sin`, `\cos`, `\tan`, `\ln`, `\exp`
-- `e^x`
-- `f'(x)` for general derivative notation
-- `\dfrac{d}{dx}` when an explicit derivative operator is needed
-- `\lim_{x \to a} f(x) = L`
-- `\lim_{x \to a^-}`, `\lim_{x \to a^+}`
-- `\mathbb{R}`
-- interval notation such as `(a,b)`, `[a,b]`, `[a,b)`, and so on
+The project uses **five** formula display modes. All other variants (manual `align`, `gather`, `eqnarray`, ad-hoc vertical spacing with `\\` and `\vspace`) are forbidden in chapter source unless declared under the Exception Protocol.
 
-Do not switch notation style from chapter to chapter without a strong reason.
+### The five modes
 
-When a manuscript adopts a less-common but mathematically legitimate convention, such as a principal range for an inverse trigonometric function, preserve it unless there is a strong reason to change it.
-If the convention may surprise students, add a brief `remark` noting a common alternative and clarifying the choice made in this text.
+1. **Inline math** `\(...\)` — formulas that read as part of a sentence.
+2. **Display math** `\[...\]` — formulas that are the visual focus of a paragraph.
+3. **`aligneddisplay`** — stacked aligned chain (a sequence of related equations sharing an `=` anchor).
+4. **`conditiondisplay`** — formula followed by a domain / range / branch condition as a trailing column.
+5. **`\pairdisplay{A}{B}`** — exactly two short comparable formulas displayed side-by-side (auto-stacks if either side is too wide).
 
-## Formula Display Policy
+The equivalence helpers `\iffstackeddisplay` and `\iffwithconditions` from earlier versions are **removed** in v3.0. Use ordinary display math with `\Longleftrightarrow` plus an inline or prose condition instead.
 
-Use three levels of formula presentation consistently throughout the book.
+### When to use each
 
-### Inline Math
+**Inline math** for:
 
-Use inline math `\(...\)` for formulas that are short and behave as part of a sentence.
+- single symbols, short expressions, short intervals;
+- short conclusions in prose (*"...and hence $f'(0) = 0$."*);
+- short target expressions in example prompts that fit comfortably in the sentence.
 
-Typical uses:
-- single symbols and variables
-- function names and short expressions
-- short intervals
-- short limits
-- short derivative notation
-- short conclusions inside `example` and `solution` prose
-- short comma-separated target expressions in example prompts
+**Display math** for:
 
-Examples:
-- `\(f\) is continuous at \(a\)`
-- `\(\lim_{x\to a} f(x)=L\)`
-- `\(f'(x)\)`
+- the central formula in a definition, theorem, proposition, or corollary;
+- multi-step calculations the reader should scan vertically;
+- formulas using `cases`, `aligned`, or comparable tall structures;
+- formulas that are the visual focus of a paragraph rather than part of the sentence flow.
 
-### Display Math
+**`aligneddisplay`** when two or more formulas form a list, progression, hypothesis set, or chain of equalities sharing a vertical anchor.
 
-Use display math `\[...\]` when the formula is the visual focus of the sentence or when readability benefits from separation.
+**`conditiondisplay`** when a formula carries a trailing domain, range, or branch condition that benefits from a dedicated column rather than being crammed into the formula or tossed into prose.
 
-Typical uses:
-- the main formula in a definition
-- theorem and proposition statements
-- multi-step calculations
-- long fractions
-- identities to be emphasized
-- long or visually central expressions in example prompts such as "Evaluate" or "Show that"
-- piecewise definitions
+**`\pairdisplay`** only when exactly two short formulas are being compared left-to-right (not top-to-bottom). If either side grows past roughly `0.45\linewidth`, the template stacks them automatically; do not rely on the stacking fallback to rescue long content.
 
-If the reader should stop and look carefully at the formula, prefer display math.
+Rationale: five modes is the point where semantic distinction stops helping authors and starts imposing decision cost. Earlier versions had seven modes; the two removed in v3.0 (`\iffstackeddisplay`, `\iffwithconditions`) addressed use cases that ordinary display math with `\Longleftrightarrow` plus an inline condition handles cleanly.
 
-### Worked Examples and Solutions
+### Display block cohesion
 
-In `example` and `solution` environments, prefer a compact sentence-first layout.
+Within one local math unit (a single derivation, a single theorem statement, a single solution step), authors **SHOULD** use one display grammar consistently.
 
-Keep `Solution.` inline when the body begins with ordinary prose. If the first real content is a block such as `enumerate`, `itemize`, or display math, place `\solutionbreak` at the start of the solution body so the label stands on its own line.
+This rule is SHOULD, not MUST: mixing grammars when a *genuinely new idea* follows a derivation — for example an `aligneddisplay` chain followed by a final inline conclusion — is natural and acceptable. What the rule forbids is the jumble of one centred display, one `aligneddisplay`, one prose-embedded formula, and one `conditiondisplay` all doing algebraic work in the same three-sentence span.
 
-If the solution ends with displayed mathematics, place `\qedhere` on the last displayed line.
+Concrete guidance:
 
-Use inline math for:
-- short target expressions in an example prompt when they fit comfortably in the sentence
-- short final conclusions after words such as "Hence," "Therefore," or "So"
-- brief declarations such as `\(x=0\)` or `\(\lim_{x\to a}f(x)=L\)`
+- If several formulas are peers in one derivation, group them in a single `aligneddisplay`; do not scatter them across separate `\[...\]` blocks.
+- If a short follow-up formula reads naturally after prose, keep it inline.
+- Do not attach a condition like *"provided that $x \ne 1$"* as an extra alignment column when the condition applies to only one of the aligned rows; move it into prose before or after the display block.
 
-Use display math there only when:
-- the prompt centers on a long or structurally dense expression
-- the solution contains a multi-step derivation, simplification, or alignment the reader should scan vertically
-- the formula uses `cases`, `aligned`, `align*`, or a comparable display structure
-- the formula is the visual focus of the paragraph rather than part of the sentence flow
+### Inline fractions: `\frac` vs `\dfrac`
 
-Avoid splitting a sentence around a short formula just to center it.
+Default to `\frac` in inline math. Use `\dfrac` only when the inline fraction becomes genuinely hard to read at reduced size, or when matching a nearby display formula materially helps.
 
-Prefer:
+Reserve `\dfrac` for:
 
-```latex
-If \(x\to 0^{-}\), then ... Hence \(\lim_{x\to 0^-}\frac{1}{x}=-\infty\).
-```
+- fractions with substantial numerator or denominator structure: $\dfrac{f(x+h) - f(x)}{h}$;
+- fractions tracking a specific $\varepsilon$-$\delta$ bound: $\dfrac{\varepsilon}{4}$, when the fraction itself is the object of discussion;
+- inline fractions visually paired with an adjacent display equation using the same expression.
 
-Avoid:
+Keep `\frac` for running-prose fractions ($\frac{1}{x}$, $\frac{1}{x^2}$, $\frac{\pi}{2}$).
 
-```latex
-If \(x\to 0^{-}\), then ... Hence
-\[
-\lim_{x\to 0^-}\frac{1}{x}=-\infty.
-\]
-```
+In tables, prefer `\tfrac` or plain-text forms to keep rows compact.
 
-### Paired Display Strategy
+All `\frac` inside display math renders at full size automatically; `\dfrac` inside display math is redundant.
 
-When exactly two short formulas form a comparison, use the shared `\pairdisplay{...}{...}` template from `preamble/layout.tex`.
+### Inline `\displaystyle`
 
-Use `\pairdisplay` for:
-- left-hand versus right-hand limits
-- two inverse-composition identities
-- paired squeeze-theorem hypotheses or boundary limits
-- two short endpoint computations when the comparison itself is the point
+Use `\(\displaystyle ...\)` **sparingly**, only when both of the following hold:
 
-`\pairdisplay` is intentionally guarded: if either side grows past roughly `0.45\linewidth`, the template stacks the formulas automatically. Do not treat that fallback as a license to feed long statements into the macro; if the content is not genuinely short, choose a vertical layout directly in the source.
-
-### Display Block Cohesion
-
-Within one local mathematical unit, choose one display grammar and stay with it.
-
-Use this rule to avoid the common visual failure mode where one centered display, one aligned block, and one prose-style condition all compete for different horizontal anchors inside the same theorem or solution.
-
-Follow these constraints:
-- if several formulas are peers in one law list, derivation, or verification, group them in one `aligneddisplay` instead of scattering them across separate `\[...\]` blocks
-- if a short follow-up formula reads naturally after prose, keep it inline instead of placing it in its own centered display
-- do not mix an `aligneddisplay` with a separate centered display for the same immediate algebraic move unless the second display is genuinely a new idea
-- do not attach a note such as `provided that ...` as an extra alignment column unless every row in that display has the same structural slot; if the condition applies only to one formula, move it into prose before or after the display
-- do not use `aligneddisplay` merely to line up unrelated factual statements; if two short facts are being compared rather than algebraically aligned, prefer `\pairdisplay{...}{...}` or ordinary display math
-
-Use `aligneddisplay` instead when:
-- there are more than two items
-- the two formulas form a list, progression, hypothesis set, or special-case/general-case pair rather than a true side-by-side comparison
-- the formulas should be scanned in order from top to bottom
-- the content is short but not meaningfully comparative
-- either side carries a long branch or range condition
-- either side contains a `cases` block or another tall structure
-
-Use `conditiondisplay` instead when:
-- a formula is followed by a domain, range, interval, or branch condition
-- you need explicit control of the gap between the main formula and its trailing condition
-- the pattern would otherwise require a third alignment column inside `aligneddisplay`
-
-Use `\iffwithconditions{...}{...}{...}` instead when:
-- one main statement is equivalent to a formula plus a branch, range, domain, or similar restriction
-- the brace is meant to signal one grouped condition set or conjunctive restriction rather than two equal-status stacked lines
-
-Use `\iffstackeddisplay{...}{...}{...}` instead when:
-- one main formal statement is equivalent to two stacked conditions
-- the right-hand side is not a branch restriction but a pair of equal-status criteria
-- a standalone text line reading `if and only if` would otherwise float awkwardly between two displays
-
-In displayed formal equivalences, prefer `\Longleftrightarrow` to a separate text line saying `if and only if`.
-
-Do not force a side-by-side layout just to save vertical space. If either side starts to feel cramped, stack the formulas.
-
-### Inline Math with `\displaystyle`
-
-Use `\(\displaystyle ...\)` only sparingly.
-
-This is appropriate only when:
 - the formula must remain inside the sentence, and
-- it contains a large fraction, integral, sum, or limit that becomes hard to read in ordinary inline style.
+- it contains a large fraction, integral, sum, or limit that becomes hard to read at inline size.
 
-Examples:
-- `the difference quotient \(\displaystyle \frac{f(x+h)-f(x)}{h}\)`
-- `the definite integral \(\displaystyle \int_a^b f(x)\,dx\)`
+*Example permitted*: *"the difference quotient $\displaystyle \frac{f(x+h) - f(x)}{h}$"*.
 
-Do not use `\displaystyle` as the default way to make formulas look important.
-If a formula is important enough to stand out, it usually should be moved to display math instead.
+Do not use `\displaystyle` as a default way to make formulas look "important". If a formula is important enough to stand out, move it to display math.
 
-### Inline Fractions: `\frac` vs `\dfrac`
+### Delimiter sizing
 
-When a fraction appears in inline math, prefer `\frac` by default. Use `\dfrac` only when the smaller inline form becomes genuinely hard to read or when matching a nearby display formula materially helps the reader track the same expression.
+- Use `\left...\right` when the enclosed expression contains tall objects (full-size fractions, nested radicals, large operators).
+- Use fixed-size delimiters for short expressions: prefer `(x+1)` over `\left(x+1\right)`.
+- For interval notation with displayed fractions, `\left[-\tfrac{\pi}{2}, \tfrac{\pi}{2}\right]` is appropriate because `\tfrac` keeps the fraction at reduced height.
 
-Use `\dfrac` for:
-- fractions with substantial structure in the numerator or denominator, such as `\(\dfrac{f(x+h)-f(x)}{h}\)` or `\(\dfrac{2x^2-3x+1}{x-1}\)`
-- inline fractions that are being visually tracked against an adjacent display equation
-- occasional epsilon-delta bounds such as `\(\dfrac{\varepsilon}{4}\)` when the fraction itself is the object being discussed
+### House rule cheatsheet
 
-Keep `\frac` for:
-- short running-prose fractions such as `\(\frac{1}{x}\)`, `\(\frac{1}{x^2}\)`, and `\(\frac{2x}{x-3}\)` when they are not the visual focus
-- simple well-known constants in interval notation, such as `\(\frac{\pi}{2}\)` and `\(\frac{3\pi}{2}\)`; using `\dfrac` inside `\left[...\right]` brackets would make them disproportionately tall
-- symbolic indeterminate-form notation such as `\(\frac{0}{0}\)`
-- any fraction already inside display math (display math renders `\frac` at full size automatically)
+| Situation | Helper |
+|---|---|
+| short formula inside a sentence | inline math |
+| main formula or visually central expression | display math |
+| chain of aligned equations | `aligneddisplay` |
+| formula with trailing domain/range/branch condition | `conditiondisplay` |
+| exactly two short comparable formulas, side by side | `\pairdisplay{...}{...}` |
+| formal equivalence of two statements | display math with `\Longleftrightarrow` |
+| inline formula with a large operator, sentence must not break | `\(\displaystyle ...\)` |
 
-### Formulas in Tables
+---
 
-Inside tables, prefer `\tfrac` or plain-text forms instead of `\dfrac` unless the larger display style is genuinely necessary.
-This helps keep table rows compact and visually even.
-
-### House Rule for Formula Choice
-
-- short formula inside a sentence -> inline math
-- main formula or visually central expression -> display math
-- formula plus a trailing domain/range/branch condition -> `conditiondisplay`
-- exactly two short comparable formulas -> `\pairdisplay{...}{...}`
-- two or more short formulas that should read as a list -> `aligneddisplay`
-- one main statement equivalent to two stacked conditions -> `\iffstackeddisplay{...}{...}{...}`
-- equivalence plus a branch/range condition -> `\iffwithconditions{...}{...}{...}`
-- inline formula with large operators only when the sentence must remain unbroken -> inline math with `\displaystyle`
-
-Avoid scattering large `\displaystyle` expressions through prose when ordinary inline or display math would be clearer.
-
-## Terminology Policy
-
-Choose one standard term and use it consistently.
-
-Examples:
-- one-to-one
-- inverse function
-- inverse sine / arcsine
-- squeeze theorem
-- increasing / decreasing
-- limit
-- derivative
-- tangent line
-
-If the manuscript uses multiple synonymous expressions, normalize them.
-
-## Writing Style
-
-The book should read like a formal undergraduate textbook that is still accessible to strong high school students.
-
-Prefer:
-- concise mathematical prose
-- complete sentences
-- direct statements
-- clear transitions
-- standard proof flow
-- guided examples
-
-Avoid:
-- lecture-note fragments
-- casual spoken fillers
-- blackboard shorthand
-- overly chatty language
-- unexplained jumps in logic
-
-Useful transitions include:
-- Therefore,
-- Hence,
-- Thus,
-- By definition,
-- It follows that,
-- From this identity,
-- Applying the previous theorem,
-
-### Voice and Person
-
-Use the first-person plural "we" for instructional prose. Examples:
-- "We now introduce the precise definition."
-- "We want to find \(\cos y\)."
-- "Applying the previous theorem, we obtain..."
-
-Do not use "you" or "the reader" as the subject of instructional prose. Do not use "I" or "the author" at any point in the main text.
-
-Imperative mood is also acceptable and is standard for setting up examples and proofs:
-- "Let \(f\) be a one-to-one function."
-- "Observe that both sides vanish at \(x=0\)."
-- "Consider the function \(g(x)=x^2\)."
-
-Rationale: "we" carries the student along with the argument without putting them on the spot; "you" turns exposition into instruction-giving; "I" is inappropriate in a multi-author text. Imperative mood is neutral and traditional for mathematical setup sentences.
-
-### Voice Reference
-
-The following passage (adapted from the Chapter 1 opening) exemplifies the target voice. When in doubt about tone, consistency, or register, compare a draft against this sample.
-
-> A function can have an inverse only when each output comes from exactly one input. This motivates the following definition.
->
-> **Definition.** Let \(f\) be a function with domain \(A\). We say that \(f\) is *one-to-one* if \(f(x_1)\ne f(x_2)\) whenever \(x_1\ne x_2\).
->
-> Not every function has an inverse. A function can have an inverse only if each output corresponds to exactly one input; in other words, the function must be one-to-one. For \(g(x)=x^2\) on \([-1,1]\), the value \(\tfrac14\) comes from both \(\tfrac12\) and \(-\tfrac12\). Therefore \(g^{-1}(\tfrac14)\) is not well defined.
-
-Key features of this voice:
-- short declarative sentences
-- explicit logical connectives ("therefore", "in other words", "because")
-- motivation precedes formalism by at most one or two sentences
-- the first mathematical object the student meets is often a concrete example, not an abstract formulation
-- `\emph{...}` marks the newly introduced term inside the definition
-
-Rationale: multi-author projects drift in tone even with clear rules. A fixed reference paragraph lets contributors calibrate against a concrete sample rather than interpreting abstract guidelines.
-
-## Pedagogical Style
-
-Assume the text is teaching students, not merely recording mathematics.
-
-Therefore:
-1. Definitions should be stated clearly.
-2. Examples should be instructive, not merely computational.
-3. Solutions should explain the key step or idea, not just present algebraic manipulation.
-4. Proofs should be readable and logically complete when included.
-5. Exercises should be grammatically complete and appropriately placed.
-
-## Short Historical and Application Notes
-
-Short historical or applied motivation is encouraged when it genuinely helps students understand why a topic matters.
-
-Use such notes sparingly.
-
-Best locations:
-- chapter openings
-- section openings
-- immediately before an important new concept
-
-Recommended length:
-- usually 2 to 5 sentences
-
-Good uses:
-- motivating inverse functions with real conversion formulas
-- motivating inverse trigonometric functions with angle recovery from ratios
-- giving a brief note on Newton, Leibniz, and the later rigorization of limits
-
-Do not let history or applications overwhelm the mathematics.
-
-## Typography Policy
-
-Consistent micro-typography matters for a textbook-grade document.
+## 8. Typography
 
 ### Dashes
 
-- Hyphen (`-`): for hyphenated words such as "one-to-one", "left-hand", "real-valued".
-- En dash (`--`): for numerical and page ranges, such as "pages 12--15", "the interval 3--5".
-- Em dash (`---`): for parenthetical interruptions in prose. Use sparingly; a comma or a pair of parentheses is usually better.
+- Hyphen (`-`): hyphenated words such as *one-to-one*, *left-hand*, *real-valued*.
+- En dash (`--`): numerical and page ranges such as *pages 12--15*.
+- Em dash (`---`): parenthetical interruptions in prose. Use sparingly; a comma or a pair of parentheses is usually better.
 
 ### Ellipses
 
-Use `\dots` (context-aware) rather than hard-coding `\ldots` or three literal periods.
+Use `\dots` (context-aware). Do not hard-code `\ldots` or three literal periods.
 
-Examples:
-- In text: `the sequence \(a_1, a_2, \dots, a_n\)`
-- In display math with operators: `\(a_1 + a_2 + \dots + a_n\)` — LaTeX selects `\cdots` automatically.
-
-### Math spacing
-
-- Binary relations and operators: no explicit spacing (`\ne`, `\le`, `\ge`, `+`, `-`). LaTeX inserts the correct spacing.
-- Differentials in integrals: thin space before the differential, such as `\int_a^b f(x)\,dx`.
-- Function application: no space (`f(g(x))`, not `f( g(x) )`).
-- Use `\,`, `\;`, or `\quad` only when symbol alignment or readability actually requires it.
-
-### Delimiters
-
-- Use `\left...\right` when the enclosed expression contains tall objects (fractions at full size, nested radicals, large operators).
-- Use fixed-size delimiters for short expressions: prefer `(x+1)` over `\left(x+1\right)`.
-- For interval notation with small displayed fractions, `\left[-\tfrac{\pi}{2}, \tfrac{\pi}{2}\right]` is appropriate because `\tfrac` keeps the fraction at reduced height.
+- In text: *the sequence $a_1, a_2, \dots, a_n$*.
+- In display with operators: *$a_1 + a_2 + \dots + a_n$* — LaTeX chooses `\cdots` automatically.
 
 ### Quotation marks
 
-- Double quotation marks in prose: `` ``...'' `` (double backtick open, double apostrophe close).
-- Single quotation marks: `` `...' ``.
-- Do not use straight ASCII quotes (`"..."`) in chapter files.
+- Double quotes in prose: `` ``...'' `` (double backtick open, double apostrophe close).
+- Single quotes: `` `...' ``.
+- **MUST NOT** use straight ASCII `"..."` in chapter files. This is enforced by `tools/style_lint.py`.
 
 ### Emphasis
 
-- Emphasize newly introduced terms with `\emph{...}` inside the `definition` body.
-- Do not use `\textbf{...}` or `\textit{...}` in running text for emphasis.
-- Reserve bold for environment labels and theorem statements, which the template already handles.
-- Do not emphasize the same term twice.
+`\emph{...}` is the single permitted emphasis mechanism in running prose.
 
-Rationale: micro-typography is invisible when consistent and distracting when inconsistent. Locking these details at the rule level means contributors do not have to think about them, and an automated checker can eventually verify compliance.
+- `\emph{term}` **MUST** mark the introduction of a new term inside a `definition` body.
+- `\emph{term}` **MAY** mark the first occurrence of a term in motivation prose that precedes the formal definition. Use at most once per term.
+- **MUST NOT** use `\textbf{...}` or `\textit{...}` in running prose for emphasis. Bold is reserved for environment labels and theorem headings, which the template handles automatically.
+- **MUST NOT** emphasise the same term twice.
 
-## Figure Policy
+Rationale: a single emphasis mechanism means the reader learns one visual cue. Multiple emphasis mechanisms in running prose dilute the signal and force authors into style choices that should be pre-decided.
 
-Figures are used for teaching, not decoration.
+### Visual label of new environments
 
-Add a figure only when it genuinely improves understanding, especially for:
-- function graphs
-- geometric interpretations
-- domain and range illustrations
-- one-to-one and inverse-function diagrams
-- horizontal line test or vertical line test illustrations
-- limit behavior
-- one-sided limits
-- asymptotes
-- tangent lines
-- inverse trigonometric triangles
-- other strongly visual concepts
+The `caution` and `strategy` environments use a **left-side coloured accent bar plus a text label**, no icons.
 
-Do not add decorative or unnecessary figures.
+- `caution` — red (`\colorcaution` from `preamble/colors.tex`) accent bar, "Caution." label.
+- `strategy` — blue (`\colorprimary`) accent bar, "Strategy." label.
 
-In worked examples, a figure must not pre-label the quantity that the example's own derivation is about to produce. If the example asks the reader to compute a side length, angle, or coordinate, label that quantity with a variable (or leave it unlabelled) in the accompanying figure; let the prose derive its value. Pre-filling the answer on the diagram turns the example into a picture to be copied rather than a calculation to be followed.
+Rationale: Unicode icons (`⚠`, `🔑`) create font-compatibility issues under `newtxtext` + `pdflatex` and are not worth the added complexity for a text-first handout. A coloured accent bar is visually sufficient to distinguish the environment and matches the colour convention in §10.
 
-Rationale: figures in a textbook are part of the pedagogy, not just illustration. A diagram that already shows "`3`" next to the side the student is supposed to solve for removes the reason to read the solution. Using a variable (for example, `a`) in the figure and computing `a = 3` in the text keeps the figure and the prose doing complementary jobs.
+### Math spacing
 
-## Figure Tool Choice
+- Binary relations and operators: rely on LaTeX's built-in spacing (`\ne`, `\le`, `\ge`, `+`, `-`).
+- Differentials in integrals: thin space before the differential (`\int_a^b f(x)\,dx`).
+- Function application: no space (`f(g(x))`, not `f( g(x) )`).
+- Use `\,`, `\;`, or `\quad` only when alignment or readability genuinely requires it.
 
-Use:
-- `pgfplots` for coordinate graphs, plotted functions, asymptotes, and analytic behavior
-- `TikZ` for conceptual diagrams, mapping diagrams, intervals, arrows, and geometric sketches
+---
 
-In general:
-- function graph -> `pgfplots`
-- teaching diagram -> `TikZ`
+## 9. Notation
 
-## Figure Style
+Notation **MUST** remain consistent across all chapters. Use the following standard forms unless a specific manuscript convention is being preserved (in which case a `caution` or `remark` **SHOULD** note the convention choice).
 
-All figures should be:
-- clean
-- simple
-- mathematically clear
-- textbook-like
+| Concept | Preferred notation |
+|---|---|
+| Inverse trigonometric functions | `\arcsin x`, `\arccos x`, `\arctan x`, `\arccsc x`, `\arcsec x`, `\arccot x` |
+| Logarithms and exponentials | `\ln` (natural log), `\exp` or `e^x` |
+| Trigonometric functions | `\sin`, `\cos`, `\tan`, etc. (all via `\operatorname`-style macros, not italicised letters) |
+| Derivative | `f'(x)` for the general derivative; `\dfrac{d}{dx}` for an explicit differential operator |
+| Two-sided limit | `\lim_{x\to a} f(x) = L` |
+| One-sided limits | `\lim_{x\to a^-}`, `\lim_{x\to a^+}` |
+| Infinite limits | `\lim_{x\to a} f(x) = \infty`, `\lim_{x\to a} f(x) = -\infty` |
+| Real line | `\mathbb{R}` |
+| Interval notation | `(a,b)`, `[a,b]`, `[a,b)`, `(a,b]`; for unbounded endpoints, `(-\infty, a)`, `[a, \infty)` |
 
-Avoid:
-- excessive color
-- decorative shading
-- artistic effects
-- cluttered labels
-- handwritten styling
+Do not switch notation style from chapter to chapter without a strong reason. If a manuscript adopts a less-common but mathematically legitimate convention (for example, a non-standard principal range for an inverse trigonometric function), preserve it, and add a `caution` noting a common alternative at first use.
 
-Use color only when it clearly distinguishes mathematical roles, and keep the figure readable in grayscale as much as possible.
+The use of `\sin^{-1}` for the inverse sine is **not** the house notation. If it must be mentioned (e.g., because a reader might encounter it elsewhere), introduce it in a `caution` that disambiguates it from the reciprocal $1/\sin x$.
 
-## Caption Policy
+Rationale: notation drift is one of the most visible inconsistencies in multi-author textbooks. Fixing a small canonical list at the rule level eliminates a whole class of editorial decisions and makes the index far cleaner.
 
-Every figure should have a short, clear caption.
+---
 
-Rules:
-1. Use sentence case.
-2. Keep captions concise and mathematical.
-3. End captions with a period.
-4. Describe the mathematical purpose of the figure.
-5. Avoid vague captions such as "Graph" or "Diagram."
+## 10. Figures and Colour
 
-Good caption models:
-- Geometric interpretation of the horizontal line test.
-- One-to-one function and its inverse.
-- The sine function on `\mathbb{R}` is not one-to-one.
+### When to use a figure
 
-## Figure Labels and References
+Figures are pedagogy, not decoration. Add a figure only when it genuinely helps.
 
-1. Every important figure should have a label.
-2. Use descriptive labels following the `type:description` format specified in the Cross-Reference Policy:
-   - `fig:horizontal-line-test`
-   - `fig:inverse-composition`
-   - `fig:restricted-sine`
-3. Refer to figures with `\cref{fig:...}` (or `\Cref{fig:...}` at the start of a sentence). Do not use `Figure~\ref{fig:...}` manually; `cleveref` inserts the "Figure" prefix for you.
-4. Avoid vague phrases such as "the figure below."
+**SHOULD** add a figure at or near:
 
-Rationale: see Cross-Reference Policy. Figures are cross-referenced more than any other environment, so the uniform-prefix rule matters most here.
+- every important definition, especially geometric or graphical concepts;
+- every important theorem with a visualisable statement;
+- approximately every 2-3 examples in a computational section.
 
-## Figure Placement Policy
+Do not add decorative figures. Do not add a figure whose purpose is to fill a half-empty page.
 
-In a teaching-oriented document, figures must appear immediately next to the text that discusses them. Allowing figures to float away forces students to flip pages, which disrupts the reading flow.
+Rationale: self-study readers depend heavily on visual intuition. A chapter with one figure per five pages is too sparse for high-school readers; Stewart-density (close to one figure per page on visually rich topics) is the right neighbourhood.
 
-Current house policy in this repository is:
-- all figures -> `[H]` (requires the `float` package)
+### Tool choice
 
-Rationale:
-- Every figure in this textbook is tied to a specific definition, example, or remark. Proximity is always pedagogically important.
-- The `\raggedbottom` setting (in `preamble/layout.tex`) prevents excessive vertical stretching that `[H]` placement can sometimes cause with the `book` class.
+- **`pgfplots`** — coordinate graphs, plotted functions, asymptotes, analytic behaviour.
+- **`TikZ`** — conceptual diagrams, mapping diagrams, intervals, arrows, geometric sketches.
 
-Important rules:
-1. Default to `[H]` so that figures stay exactly where the source places them.
-2. If a page break leaves too much white space before an `[H]` figure, first try to adjust the surrounding text (rewording, trimming, or reordering a nearby paragraph). If prose adjustment does not resolve the problem and the figure is the primary concern of the page, either a manual `\newpage` or a fallback to `[htbp]` is permitted as a **documented exception** (see Exception Protocol).
-3. Keep figures reasonably sized so that they fit on the same page as the text that introduces them.
+### Multi-panel comparison figures
 
-Rationale: `[H]` is pedagogically preferred because it pins the figure where the prose references it, but LaTeX cannot always honor `[H]` without producing ugly white space. Treating placement fallback as a documented exception, rather than a silent choice, keeps the default behavior enforceable while admitting that no policy fits every page.
-
-## Size and Layout Policy for Figures
-
-1. Figures should be large enough to read comfortably.
-2. Do not make figures unnecessarily wide or tall.
-3. Side-by-side figures are appropriate only when comparison is pedagogically important.
-4. If labels become cramped, stack figures vertically instead.
-5. Multi-part figures should be used only when the comparison itself is part of the lesson.
-
-## Professor Manuscript Priority for Figures
-
-1. If the manuscript already contains a figure idea, preserve its mathematical purpose.
-2. Redraw figures in a clean textbook style.
-3. Do not preserve handwritten visual style.
-4. Do not invent unnecessary figures to fill space.
-
-## Index Policy
-
-The book has a back-of-book index.
-
-Mandatory `\index{...}` entries:
-- every term introduced by a `definition` environment (the primary term and any synonyms used elsewhere)
-- every named theorem ("Squeeze theorem", "Intermediate value theorem", "Mean value theorem", "Fundamental theorem of calculus", etc.)
-- every notation the book defines (for example `\arcsin`, `\lim`, `\int`)
-
-Optional `\index{...}` entries:
-- important examples ("greatest integer function", "\(1/x\) near 0")
-- proper names of mathematicians when first mentioned in a historical note
+When two or three related images belong together (e.g., restricted sine / cosine / tangent branches; left-hand / right-hand / two-sided limit graphs), arrange them as a single `figure` environment with side-by-side `minipage` panels.
 
 Rules:
-1. Place the `\index{...}` command at the first occurrence of the term, not at every later mention.
-2. Use sentence-case keys: `\index{one-to-one function}`, not `\index{One-to-One Function}`.
-3. Use subentries via `!` for grouped concepts: `\index{limit!one-sided}`, `\index{limit!infinite}`.
-4. Do not index a term that appears only inside the index entry of another term.
-5. For notation, use `\index{sort-key@$\text{symbol}$}` so the index sorts under the spelled-out key but displays the glyph. Examples:
-   - `\index{limit@$\lim$}`
-   - `\index{arcsine@$\arcsin$}`
-   - `\index{integral@$\int$}`
-   The portion before `@` is the sort key; the portion after is what appears in the printed index.
 
-Rationale: a searchable index is one of the few durable affordances a printed textbook offers. A chapter without index entries forces the index to be reconstructed from scratch at the end of the project, and the reconstruction is never as good as entries placed while the material is fresh.
+- Horizontal layout of 2 or 3 panels. More than 3 is too cramped; stack vertically in that case.
+- A single shared caption describing what the comparison illustrates.
+- A small in-panel label under each panel naming that panel (e.g., *Restricted sine*, *Restricted cosine*).
 
-### Build chain
+### Callouts and annotations
 
-The index must be compiled as part of the document build, not left as dead `\index{...}` calls in the source.
+Figures **MAY** include arrows with short text labels ("callouts") pointing to specific features (*"Here the function is not defined."*, *"Inflection point."*, *"Asymptote."*).
 
-1. `preamble/packages.tex` loads `imakeidx` (after `hyperref` and `cleveref`, to integrate page-link behavior correctly).
-2. `main.tex` declares the index in the preamble with `\makeindex[columns=2,title=Index,intoc]`; this opens the `.idx` stream, reserves two-column layout, labels the printed index `Index`, and adds the index to the table of contents.
-3. `main.tex` emits the index in the back matter with `\printindex`, placed after any bibliography and before `\end{document}`.
-4. Compilation requires three passes with an `makeindex` invocation between the first and second pass:
-   - `pdflatex main`
-   - `makeindex main`
-   - `pdflatex main`
-   - `pdflatex main` (final pass resolves page numbers in cross-references)
-5. `latexmk -pdf main` is acceptable as a shortcut; it runs the passes above automatically.
+Callout text **SHOULD** be a complete sentence or a complete noun phrase; sentences end with a period, noun phrases do not.
 
-Rationale: a rule requiring index entries is only as strong as the build that consumes them. Fixing the build chain at the preamble level, once, guarantees that every `\index{...}` added in a chapter file becomes a real index line without the author having to think about the pipeline.
+Rationale: self-study readers absorb information from annotated figures significantly faster than from unannotated ones. Stewart-style callouts are the single highest-leverage visual element for the target register.
 
-## LaTeX Source Policy
+### Colour convention
 
-All generated LaTeX should be explicit, conservative, and easy to read.
+The project uses a three-colour palette, defined once in `preamble/colors.tex` and referenced by macro throughout:
 
-Rules:
-1. Use standard LaTeX environments explicitly.
-2. Do not invent custom macros in chapter files.
-3. Do not use shorthand theorem wrappers.
-4. Do not redefine standard commands in chapter files.
-5. Do not use single-letter macros in generated chapter content.
-6. Do not hide structure behind custom wrappers.
-7. Do not insert manual `\newpage`, `\pagebreak`, or `\clearpage` in chapter files just to keep theorem-like blocks, remarks, examples, solutions, or proofs together.
-8. The template already handles that pagination in `preamble/theorem_setup.tex`, with stronger protection for formal result blocks and lighter flow for examples, solutions, and proofs; if a split still looks bad, fix the template or the local content structure deliberately instead of adding ad hoc page breaks.
-9. Narrow exception: a manual `\newpage` is permitted to resolve a specific figure-placement or block-split issue that the template cannot handle, but only when documented under the Exception Protocol.
-10. For recurring short-formula layouts, use the shared helpers from `preamble/layout.tex` (`aligneddisplay`, `conditiondisplay`, `\pairdisplay`, `\iffstackeddisplay`, and `\iffwithconditions`) instead of ad hoc spacing patterns.
-11. Choose those helpers by semantics, not by visual improvisation: one local math unit should normally use one display grammar, and conditions that apply to only one formula should stay in prose instead of becoming stray alignment columns.
-12. When declaring a new environment that wraps `\[...\]` (or any display-math construct), use the `\newdisplayenv{name}{begin}{end}` helper from `preamble/layout.tex`, never plain `\newenvironment`. The helper attaches `\@doendpe` via `\AfterEndEnvironment` so the kernel no-indent hook (a rewritten `\everypar` that eats the first paragraph's indent box) is installed in the outer scope after the environment's implicit group closes. Without this outer-scope reinstall, amsmath's own no-indent hook survives only its display group, not a second outer group, and continuation prose is spuriously indented by `\parindent`. `aligneddisplay` and `conditiondisplay` are already declared via `\newdisplayenv`; any future display-math wrapper must follow the same pattern.
+| Colour | Macro | Role | Typical use |
+|---|---|---|---|
+| Blue | `\colorprimary` | primary / main object | the principal function, the main curve, the focus of the figure; also `strategy` accent bar |
+| Red | `\colorcaution` | warning / asymptote | asymptotes, dashed reference lines, visual warnings; `caution` accent bar |
+| Gray | `\colorauxiliary` | auxiliary / structural | axis elements, guide lines, reference constructions |
 
-Preferred style:
+Working-draft hex values: blue `#1f4e79`, red `#c0392b`, gray `#7f7f7f`. Exact values may be tuned at implementation time; the semantic assignment above is fixed.
+
+Additional colours **MUST** be introduced via Exception Protocol (see §13) and documented at the chapter level.
+
+Figures **SHOULD** remain readable in grayscale as far as possible — colour is semantic, not decorative.
+
+### Placement
+
+- Default to `[H]` (requires the `float` package) so figures stay exactly where the source places them.
+- If `[H]` would produce excessive white space on a page, first try to adjust the surrounding prose (reword, trim, or reorder a nearby paragraph).
+- If prose adjustment does not resolve the problem, fallback to `[htbp]` or a manual `\newpage` is permitted as a **documented exception** under the Exception Protocol.
+- Keep figures sized so that they fit on the same page as the prose that introduces them.
+
+Rationale: for a teaching-oriented handout, proximity of figure to prose is pedagogically important. `[H]` pins the figure in place; `\raggedbottom` (enabled globally in `preamble/layout.tex`) absorbs the extra vertical space. When this trade-off fails locally, an exception is fine, but it must be recorded.
+
+### Captions
+
+- Sentence case.
+- Concise and mathematical.
+- End with a period.
+- Describe the figure's mathematical purpose, not just its contents.
+
+Good: *Geometric interpretation of the horizontal line test.*, *The sine function on $\mathbb{R}$ is not one-to-one.*
+
+Bad: *Graph.*, *Diagram of sine function.*
+
+### Worked-example figures must not reveal the answer
+
+If an `example` asks the reader to compute a side length, angle, or coordinate, the accompanying figure **MUST NOT** show the computed value in its labels. Label the unknown with a variable ($a$, $\theta$) and let the prose derive the value.
+
+Rationale: a diagram that already shows "$3$" next to the side the student is asked to find turns the example into a picture to be copied rather than a calculation to be worked.
+
+### Manuscript priority
+
+If the manuscript already contains a figure idea, preserve its mathematical purpose. Redraw in the clean textbook style specified above; do not preserve handwritten or blackboard styling.
+
+---
+
+## 11. Index Policy
+
+The book has a back-of-book index compiled by `imakeidx`. Build wiring (three-pass compile, automatic under `latexmk -pdf main.tex`) is documented in [`README.md`](README.md).
+
+### Mandatory entries
+
+An `\index{...}` entry **MUST** appear at the first occurrence of:
+
+1. **Every term introduced by a `definition`** — the primary term and any synonyms used elsewhere.
+2. **Every named theorem** — *Squeeze Theorem*, *Intermediate Value Theorem*, *Mean Value Theorem*, *Fundamental Theorem of Calculus*, and so on.
+3. **Every notation the book introduces** — `\arcsin`, `\lim`, `\int`, etc., using the sort-key-plus-display form: `\index{arcsine@$\arcsin$}`, `\index{limit@$\lim$}`, `\index{integral@$\int$}`.
+4. **Every key example** the book expects readers to remember by name — the $1/x$-near-$0$ example, the $x^{2}\sin(1/x)$ squeeze example, and so on. Format: `\index{1/x near 0@$1/x$ near $0$}`, `\index{x^2 sin(1/x) example@$x^{2}\sin(1/x)$ example}`.
+5. **Every notation trap** that could confuse readers — *sine inverse vs reciprocal*, *absolute value vs interval brackets*, etc. Format: `\index{sine inverse vs reciprocal@$\sin^{-1}$ vs $1/\sin$}`.
+6. **Every applied setting introduced for the first time** — *instantaneous velocity*, *tangent line*, *rate of change*, *slope*, *area under a curve*. These entries let the self-study reader locate where a real-world concept was first connected to the mathematics.
+
+### Optional entries
+
+- Named mathematicians when first mentioned in a historical note.
+- Additional example keywords beyond (4).
+
+### Rules
+
+1. Place `\index{...}` at the **first occurrence** of the term, not at every later mention.
+2. Use **sentence-case** keys: `\index{one-to-one function}`, not `\index{One-to-One Function}`.
+3. Use **sub-entries** via `!`: `\index{limit!one-sided}`, `\index{limit!infinite}`, `\index{asymptote!vertical}`.
+4. For notation, always use the sort-key-plus-display form `key@$\text{symbol}$` so the index sorts alphabetically by spelled-out key while displaying the glyph.
+
+Rationale: the index is a self-study reader's primary navigation tool when returning to the book after a gap. A sparse index forces the reader to skim chapters looking for where a concept was introduced; a dense, well-cross-linked index turns every later concept into a two-second lookup. The cost of adding an index entry while writing is tiny; the cost of reconstructing the index later is substantial, and the reconstruction is never as accurate.
+
+---
+
+## 12. Source Hygiene and CI
+
+### What chapter files MAY contain
+
+- `\chapter{...}`, `\section{...}`, `\subsection{...}`, `\paragraph{...}` structure.
+- The 12 approved environments from §5.
+- The 5 approved formula-display helpers from §7.
+- `\index{...}`, `\label{...}`, `\cref{...}`, `\eqref{...}`.
+- Prose, including `\emph{...}` per §8.
+
+### What chapter files MUST NOT contain
+
+- Custom macro definitions (`\newcommand`, `\renewcommand`, `\def`, `\newenvironment`, `\providecommand`).
+- Manual page breaks (`\newpage`, `\pagebreak`, `\clearpage`).
+- Manual cross-reference prefixes (`Figure~\ref{...}`, `Theorem~\ref{...}`, etc.).
+- ASCII straight quotes (`"..."`).
+- `\textbf{...}` or `\textit{...}` for emphasis in running prose.
+- `\footnote{...}`, `\marginpar{...}`, or manual `\hypertarget{...}{...}` inside a `workedexample` body.
+
+Rationale for the no-custom-macro rule: this is a multi-author project. Per-chapter macros produce notational inconsistency (the same concept written different ways in different chapters) and make individual chapters harder to read cold (every reader must first scan a macro block). The shared helpers in `preamble/` already cover recurring cases; if a new case arises, the right response is to add the helper to the preamble (and document it here), not to define it per-chapter.
+
+### Preamble responsibility
+
+New environments, new display helpers, and new colour definitions belong in `preamble/`. When declaring a new environment that wraps `\[...\]` (or any display-math construct), use the `\newdisplayenv{name}{begin}{end}` helper from `preamble/layout.tex`, never plain `\newenvironment`. The helper attaches `\@doendpe` via `\AfterEndEnvironment` so continuation prose after the environment is not spuriously indented.
+
+### CI checks
+
+The continuous-integration pipeline ([`.github/workflows/latex-checks.yml`](.github/workflows/latex-checks.yml)) runs three checks on every push and pull request:
+
+1. **`tools/style_lint.py`** — regex-based linter that enforces, at minimum:
+   - no manual cross-reference prefixes;
+   - no `\newpage` / `\pagebreak` / `\clearpage` in chapter or `main.tex` source;
+   - no ASCII `"..."` quotes;
+   - no `\textbf{...}` or `\textit{...}` in chapter prose;
+   - every `\begin{definition}` body contains at least one `\index{...}`;
+   - every `\begin{theorem}[Name]` has a matching `\index{Name}` nearby;
+   - every chapter file opens with `\chapter{...}` followed by an overview paragraph and a learning-outcomes bullet list.
+2. **`tools/run_preamble_smoketest.py`** — compiles `preamble_smoketest.tex` and verifies that continuation prose after `aligneddisplay` / `conditiondisplay` is not spuriously indented.
+3. **`latexmk -pdf -interaction=nonstopmode -halt-on-error -file-line-error main.tex`** — full build, catching structural errors, missing references, and malformed source.
+
+All three checks **MUST** pass on the feature branch before a chapter is considered ready for review.
+
+---
+
+## 13. Exception Protocol
+
+Individual chapters will occasionally need to deviate from a rule in this document. When that happens, the deviation **MUST** be recorded, not hidden.
+
+### Declaring an exception
+
+Place a comment at the top of the chapter file, immediately after `\chapter{...}`, in the form:
 
 ```latex
-\begin{definition}
-...
-\end{definition}
-
-\begin{theorem}
-...
-\end{theorem}
-
-\begin{proof}
-...
-\end{proof}
-
-\begin{workedexample}
-\begin{example}
-...
-\end{example}
-
-\begin{solution}
-...
-\end{solution}
-\end{workedexample}
+% Exception: uses [htbp] placement for Figure 3.9 to avoid a full blank page.
+% Rule: Figure Placement (§10, default [H]).
+% Reason: the four-panel figure is taller than the typical [H] budget,
+%         and forcing it produces a near-blank page.
 ```
 
-## Exception Protocol
+### Escalation
 
-Individual chapters may occasionally need to deviate from a rule in this document. When that happens, the deviation must be recorded, not hidden.
+If an exception recurs across chapters (three or more instances of the same deviation), raise it for rule revision rather than compounding local exceptions. Rule revision is done by:
 
-1. Document the exception in a comment at the top of the chapter file, immediately after the `\chapter{...}` command:
+1. proposing the change in a pull request that modifies this file and bumps the version number;
+2. discussing the change with the project owner;
+3. documenting the revision in the Changelog (§16).
 
-   ```latex
-   % Exception: uses [htbp] placement for Figure 1.9 to avoid a full blank page.
-   % Rule: Figure Placement Policy rule 1 (default [H]).
-   % Reason: the four-panel figure is taller than the typical [H] budget,
-   %         and forcing it produces a near-blank page.
-   ```
+### Silent deviations
 
-2. If an exception recurs across chapters, raise it for rule revision rather than compounding local exceptions.
-3. Do not silently deviate. A chapter without an exception comment is presumed to follow all rules in this document.
-4. When a rule is revised because of repeated exceptions, bump the document version at the top of this file and note the change briefly in a `## Changelog` section (add one if not yet present).
+A chapter without an exception comment is presumed to follow every rule in this document. Silent deviations are defects.
 
-Rationale: rules evolve. An explicit exception record turns deviations from noise into data, so the rule book can adapt based on where the rules actually fail in practice. It also protects the consistency claim: rule adherence is verifiable only if exceptions are declared.
+Rationale: rules evolve. An explicit exception record turns a deviation from noise into data, so the rulebook can be revised based on where rules actually fail in practice. The consistency claim ("the book follows its own rules") is verifiable only if exceptions are declared.
 
-## Operational Workflow for Future Requests
+---
 
-When asked to draft a chapter or section:
-1. identify the mathematical content in the manuscript
-2. reorganize if needed
-3. standardize notation and terminology
-4. classify environments by mathematical role
-5. preserve manuscript examples and add only targeted supplementary examples when they materially help
-6. decide selectively whether proofs are needed
-7. include inline exercises only if present in the manuscript; add an end-of-section problem set per Exercise Policy, marking any supplementary problems explicitly
-8. add figures only when they materially improve understanding
-9. default to `[H]` for figure placement; when `[H]` produces an unsatisfactory page, fall back to `[htbp]` (or a manual `\newpage`) and record the deviation under the Exception Protocol
-10. write clean textbook prose
-11. output explicit LaTeX content only
+## 14. Exercises — Deferred Design
 
-## Consistency Check Before Final Output
+Full exercise-system design (environment variants, difficulty markers, hints, answer appendix, inline self-check variants) is **deferred** until the book's main content is complete. Designing the exercise system against real content will produce better choices than designing it in advance against hypothetical content.
 
-Before accepting chapter content, verify that:
+### Current obligation during content drafting
 
-Structure and voice:
-- the prose is textbook-style
-- the chapter opens with a one-to-two-paragraph overview (Chapter Opening Norm)
-- section titles use Title Case; subsection titles use sentence case
-- the hierarchy stays within chapter / section / subsection; any fourth-level heading uses `\paragraph`
-- first-person plural "we" is used for instructional prose
-- the writing matches the Voice Reference sample
+Every section end **MUST** carry a placeholder comment of the form:
 
-Notation and terminology:
-- notation is consistent with the Notation Policy
-- terminology is consistent (one term per concept)
-- `\emph{...}` is used for newly introduced terms, not `\textbf` or `\textit`
+```latex
+% TODO: add \subsection*{Exercises} block with end-of-section problems for Section N.M.
+```
 
-Environments:
-- definitions are used only for new concepts
-- remarks are used for explanation, warning, intuition, or short historical/application context
-- no remark contains main-line knowledge a student must read
-- theorems are reserved for major results
-- propositions are used for formal but secondary results
-- examples use `solution`, not `proof`
-- `solution` is visually distinct from `proof`
-- manuscript examples are preserved unless the user asked for editorial replacement
-- any added examples have a clear pedagogical purpose
-- proofs are used only for genuine proofs, and only when warranted
-- if a `solution` ends with displayed math, `\qedhere` is placed on the last displayed line
+The placeholder makes the missing exercise block visible in source and auditable by CI. A section without either a real `\subsection*{Exercises}` block or the TODO placeholder is out of compliance.
 
-Numbering and references:
-- formal-statement numbering is shared across definition/theorem/proposition/lemma/corollary
-- concepts defined twice at different precision levels cross-reference each other
-- display equations are numbered only if referenced or stated as a formal result
-- cross-references use `\cref` (or `\Cref` at sentence start), never `Figure~\ref`
-- label keys follow the `type:short-description` format
+### When exercise design opens
 
-Exercises:
-- inline exercises appear only if present in the manuscript
-- end-of-section supplementary problems are marked explicitly
+When a solid majority of chapters have complete main content (definitions, theorems, examples, prose), the exercise system will be designed in a dedicated round, following the same Q/A consultation structure that produced this document.
 
-Figures:
-- figures are included only when genuinely helpful
-- figure captions are concise, in sentence case, and end with a period
-- figure placement uses `[H]` by default; exceptions are documented
+---
 
-Typography and index:
-- dashes, ellipses, math spacing, and delimiters follow the Typography Policy
-- quotation marks use TeX-style (`` `` '' ``) not ASCII (`"`)
-- index entries are placed at the first occurrence of every defined term and every named theorem
+## 15. Consistency Check Before Final Output
 
-Source hygiene:
-- no custom macros were introduced into chapter files
-- any deviation from the rules is documented under the Exception Protocol
+Before committing a chapter or declaring it ready for review, verify:
 
-## One-Sentence House Rule
+**Positioning and register**
+- [ ] The chapter reads as self-sufficient — a student with no access to the companion video could work through it.
+- [ ] Pronouns follow §3: "we" as default; "you" only for gentle reminders or forward references.
+- [ ] Intuition paragraphs precede formal environments; the *"Informally, ..."* gloss is used where helpful.
 
-Write each chapter as clean, explicit, textbook-style LaTeX content based primarily on the professor manuscript and secondarily on Stewart, using consistent notation and terminology, careful environment classification, shared counters for formal statements, `solution` reserved for worked examples and visually distinct from `proof`, `proof` reserved for genuine proofs when needed, inline exercises drawn only from the manuscript, end-of-section exercises marked clearly when supplementary, figures added only when they genuinely help student understanding and referenced via `\cref`, index entries placed at first occurrence, and every deviation from the rules documented explicitly.
+**Structure**
+- [ ] Chapter opens with a 1-2 paragraph overview and a *"By the end of this chapter, you will be able to:"* bullet list (3-5 items).
+- [ ] Each section opens with 1-2 paragraphs of motivation, or a single connecting sentence for a purely computational section.
+- [ ] Chapter closes with `\section*{Summary}` containing the three required blocks (definitions, theorems, formulas).
+- [ ] Section titles use Title Case; subsection titles use sentence case.
+- [ ] No `\subsubsection`.
 
-## Changelog
+**Environments**
+- [ ] Every `definition` introduces a term the chapter actually uses.
+- [ ] Every named theorem uses `\begin{theorem}[Name]` and has an `\index{Name}` entry.
+- [ ] `example` + `solution` pairs are wrapped in `workedexample`.
+- [ ] `remark` is aside material, not main-line knowledge.
+- [ ] `caution` is used for notation traps and easy-to-miss restrictions; `strategy` is used for method boxes.
+- [ ] No `lemma` (removed from the environment set in v3.0).
 
-- **v2.0.11** -- removed the now-stale requirement that the book build always include `frontmatter/notation.tex`. Exercise Policy rule 3 again uses the semantic requirement ("explain the dagger convention once before first use") instead of naming a file that the active build does not currently ship. Also recorded the `\qedhere` requirement for solutions whose final line is displayed math.
-- **v2.0.10** -- named `frontmatter/notation.tex` as the canonical home for book-wide conventions and tightened Exercise Policy rule 3 (supplementary-dagger convention) to point at that file instead of the vague "the front matter." Added a short Front Matter Page subsection under Chapter Opening and Closing Norms describing the file's contract: `\chapter*` with `\addcontentsline`, at most one page, no new formal definitions, extended rather than re-explained per chapter. No other rules changed. Concurrent preamble-side infrastructure work (font family swap to `newtxtext + newtxmath`, `margin=3.3cm`, `\linespread{1.05}`, switch from `twoside` to `oneside` to match single-sided A4 printing, and the CI-backed `style_lint.py` + `run_preamble_smoketest.py` checks) is documented in `README.md` rather than here, since those decisions are repository build state rather than writing rules.
-- **v2.0.9** -- fixed an unwanted `\parindent` on continuation prose after `aligneddisplay` and `conditiondisplay`: a plain `\newenvironment` wrapping `\[...\]` introduces an extra group, and amsmath's internal no-indent hook survives amsmath's own display group but not the user env's outer group. Introduced the `\newdisplayenv{name}{begin}{end}` helper in `preamble/layout.tex` that attaches `\@doendpe` via etoolbox's `\AfterEndEnvironment`, reinstalling the kernel no-indent hook in the outer scope. Codified this as LaTeX Source Policy rule 12 so every future display-math-wrapping environment inherits the fix by default instead of relying on per-site patches.
-- **v2.0.8** -- added a dedicated displayed-equivalence template for the common pattern "main statement iff two stacked criteria" and codified `\Longleftrightarrow` as the house style inside formal display math instead of a separate text line reading `if and only if`. Also added rule 15 under Example, Solution, and Proof Policy prohibiting `\footnote`, `\marginpar`, and manual `\hypertarget` inside `workedexample` (its body is measured in a box before final placement), tightened Display Block Cohesion to forbid using `aligneddisplay` merely to line up unrelated factual statements, and documented the `workedexample` one-shot-capture invariant as a maintainer note.
-- **v2.0.7** -- refined the shared formula-display layer by adding a dedicated `conditiondisplay` pattern, guarding `\pairdisplay{...}{...}` against overwide side-by-side content, and tightening the rule for when a short pair is a true comparison versus just a vertical list in disguise. Also documented the expanded helper set in the source-policy section.
-- **v2.0.6** -- added the shared `\pairdisplay{...}{...}` template for exactly two short comparable formulas and wrote down the decision rule for when to compare left-to-right versus stack top-to-bottom. Also updated the authoring template and source-policy wording so later chapters reuse the same pattern instead of ad hoc spacing.
-- **v2.0.5** -- added a reusable chapter drafting skeleton at `chapters/_chapter_template.tex` and tightened the Formula Display Policy for worked material. The rules now distinguish short inline targets and short inline conclusions from genuinely display-worthy formulas, and the inline-fraction guidance now treats `\frac` as the default with `\dfrac` reserved for selectively larger inline fractions.
-- **v2.0.4** -- closed two rule-vs-manuscript gaps exposed by the Chapter 1 review. Added a Build chain subsection under Index Policy describing the `imakeidx` wiring (`\usepackage{imakeidx}`, `\makeindex[columns=2,title=Index,intoc]`, `\printindex`) and the three-pass compile chain, so the index rule is backed by real build infrastructure. Added an explicit TODO-placeholder convention and rationale to End-of-section exercises, and introduced a Known Open Items subsection under Consistency Check to track rules that are authoritative for style but not yet fully realized in every chapter. No existing rules weakened.
-- **v2.0.3** -- codified four rules that emerged from the Chapter 1 structural review: section titles must not duplicate the parent chapter title (Document Structure); subsection titles should name the unifying theme rather than enumerate ingredients (Heading capitalization); figures in worked examples must not pre-label the quantity the derivation is about to produce (Figure Policy); and `\begin{definition}` must not be used for terms the chapter will neither use nor develop (Environment Classification Rules -- Definition).
-- **v2.0.2** -- rewrote the Numbering Policy implementation note to describe the `aliascnt` pattern actually used in `preamble/theorem_setup.tex`; fixed the Index Policy notation example to include an explicit sort key.
-- **v2.0.1** -- reconciled stale Operational Workflow items (exercise rule and figure-placement rule) with the revised Exercise Policy and Figure Placement Policy. No rule changes.
-- **v2.0** -- introduced rationale framework, shared counters for formal statements, `\paragraph`-level fourth tier, Chapter Opening and Closing Norms, two-tier Exercise Policy, Equation Numbering Policy, Cross-Reference Policy, Voice and Person subsection with Voice Reference, Typography Policy, Index Policy, Exception Protocol, Heading Capitalization rule, Paired Definitions rule, and extended Consistency Check. Resolved conflict between Figure Placement and LaTeX Source rules.
-- **v1.0** -- initial version.
+**Formula display**
+- [ ] Each display situation uses exactly one of the five approved modes.
+- [ ] Display block cohesion is maintained within each local math unit.
+- [ ] `\qedhere` appears on the last display line of any `solution` that ends in display math.
+- [ ] Equation numbers appear only when the equation is referenced later or is a formal statement.
+
+**Typography**
+- [ ] No `\textbf{...}` or `\textit{...}` in prose.
+- [ ] `\emph{...}` is used for new terms (once each), and only in the contexts allowed in §8.
+- [ ] TeX-style quotes `` ``...'' ``; no ASCII straight quotes.
+- [ ] Dashes and ellipses follow §8.
+
+**Notation**
+- [ ] Symbols and macros follow the canonical list in §9.
+- [ ] Any manuscript-specific convention preserved is flagged by a `caution` or `remark` on first use.
+
+**Figures**
+- [ ] Figure density is adequate — roughly one figure at each important definition / theorem, and every 2-3 examples in computational sections.
+- [ ] Captions are sentence case, end with a period, and describe mathematical purpose.
+- [ ] Colour palette stays within blue / red / gray (or an exception is declared).
+- [ ] `[H]` placement, or a declared exception.
+- [ ] Worked-example figures do not reveal the quantity the example asks the reader to compute.
+
+**Index**
+- [ ] Every defined term, named theorem, notation, key example, notation trap, and first-mention applied setting has an `\index{...}` at its first occurrence.
+
+**Cross-references**
+- [ ] All in-prose references use `\cref` / `\Cref`; no manual prefixes.
+- [ ] Equation references use `\eqref`.
+- [ ] Label format is `type:short-desc` with hyphens.
+
+**Source hygiene**
+- [ ] No custom macros in the chapter file.
+- [ ] No manual page breaks.
+- [ ] Exception comment at chapter top if any rule in this document is deviated from.
+
+**Exercises**
+- [ ] Every section end has either a real `\subsection*{Exercises}` block or a TODO placeholder.
+
+**CI**
+- [ ] `python tools/style_lint.py` passes.
+- [ ] `python tools/run_preamble_smoketest.py` passes.
+- [ ] `latexmk -pdf` builds without errors.
+
+---
+
+## 16. Changelog
+
+- **v3.0** — from-scratch rewrite. Target register shifted from Spivak / Apostol (shared formal-statement counter, austere pronouns, strict definition purity, sparing figures and remarks) to Stewart / Rogawski (per-type counters, "you" permitted in specific contexts, *"Informally, ..."* gloss allowed inside `definition`, denser figures and more generous remarks). New environments `caution` and `strategy` added to support notation-trap warnings and problem-solving strategy boxes; `lemma` dropped. Display-helper set reduced from 7 to 5 (removed `\iffstackeddisplay` and `\iffwithconditions`). Display Block Cohesion downgraded from MUST to SHOULD. Index policy expanded to cover key examples, notation traps, and first-mention applied settings. Chapter opening gains a mandatory learning-outcomes bullet list; chapter closing gains a mandatory `\section*{Summary}` block. `\emph{...}` permitted in motivation prose for the first mention of a term. Exercise-system design deferred until main content is complete. CI checks expanded to cover the new rules. Notation policy consolidated into its own section (§9). The voice reference sample is rewritten in Stewart tone.
+
+  v3.0 is the positioning-level rewrite. Concrete preamble and template implementation work (per-env counters via individual `\newtheorem`, new `caution`/`strategy` environments, `preamble/colors.tex`, expanded `style_lint.py` rules, updated `_chapter_template.tex`) follows in a separate implementation pass and is not part of this document's version bump.
+
+- **v2.x** — earlier versions (v2.0 through v2.0.11) accreted rule additions through per-chapter review; the resulting document was organised by date of addition rather than by topic. Notable decisions from v2.x preserved verbatim in v3.0 include: cleveref-only cross-references, `[H]` default figure placement with Exception Protocol, shared formula-display helpers `aligneddisplay` / `conditiondisplay` / `\pairdisplay`, chapter-scoped counters, paired-definition cross-reference rule, `workedexample` wrapper semantics, `\qedhere` on final display line of `solution`, and the three-layer CI (style lint + preamble smoketest + latexmk).
+
+- **v1.0** — initial version.
