@@ -1,8 +1,17 @@
 ﻿\chapter{Inverse Functions and Limits}
 
-This chapter develops two themes that together form the starting point of calculus. The first is the idea of reversing a function: when a process sends each input to a distinct output, we can ask how to recover the input from the output. This leads to the notions of one-to-one functions and inverse functions, and in particular to the inverse trigonometric functions, which appear throughout geometry, physics, and later differentiation formulas.
+This chapter develops two themes that together form the starting point of calculus. The first is the idea of reversing a function. When a process sends each input to a distinct output, we can ask how to recover the input from the output. This leads to the notions of one-to-one functions and inverse functions, and in particular to the inverse trigonometric functions, which appear throughout geometry, physics, and later differentiation formulas.
 
-The second theme is the limit of a function. Many quantities of interest in calculus, such as the instantaneous rate of change of a moving object, cannot be read off from a single value of a function; they are determined by the behavior of the function near a point. We first study limits informally by inspecting tables and graphs, extend the idea to one-sided and infinite limits together with their geometric counterpart---vertical asymptotes---and then develop algebraic techniques for computing limits. The chapter closes with the \(\varepsilon\)-\(\delta\) definition, which places all of the preceding discussion on a rigorous foundation and prepares the way for derivatives and integrals in the chapters that follow.
+The second theme is the limit of a function. Many quantities of interest in calculus---the instantaneous rate of change of a moving object, the slope of a curve at a point, the behavior of a function near a hole in its graph---cannot be read off from a single value of the function. They are determined by the behavior of the function \emph{near} a point, not \emph{at} the point. We will first study limits informally by looking at tables and graphs, then extend the idea to one-sided limits, infinite limits, and their geometric counterpart, vertical asymptotes. After developing algebraic techniques for computing limits, we close the chapter with the precise \(\varepsilon\)-\(\delta\) definition, which places all of the preceding discussion on a rigorous foundation and prepares the way for derivatives and integrals in the chapters that follow.
+
+\paragraph{By the end of this chapter, you will be able to:}
+\begin{itemize}
+    \item decide whether a given function is one-to-one, and construct its inverse when it exists;
+    \item work with the inverse trigonometric functions \(\arcsin\), \(\arccos\), \(\arctan\), and their companions, together with their principal ranges;
+    \item estimate the limit of a function from tables, graphs, and algebraic simplification, including one-sided and infinite limits;
+    \item compute limits using the limit laws, the squeeze theorem, and standard techniques such as factoring and rationalization;
+    \item state and apply the precise \(\varepsilon\)-\(\delta\) definition of a limit, and use it to verify a given limit rigorously.
+\end{itemize}
 
 \section{Inverse Functions}
 
@@ -22,6 +31,7 @@ Equivalently, \(f\) is one-to-one if
 \[
 f(x_1)=f(x_2) \implies x_1=x_2.
 \]
+\emph{Informally, a function is one-to-one when different inputs always produce different outputs.}
 \end{definition}
 
 \begin{workedexample}
@@ -126,7 +136,9 @@ Suppose that \(f\) is a one-to-one function. If \(f\) maps \(x\) to \(y\), then 
 
 \begin{definition}
 Let \(f\) be a one-to-one function with domain \(A\) and range \(B\). Then the \emph{inverse function}\index{inverse function}\index{inverse function@$f^{-1}$} of \(f\), denoted by \(f^{-1}\), has domain \(B\) and range \(A\), and is defined by
-\iffwithconditions{f^{-1}(y)=x}{f(x)=y,}{y\in B.}
+\[
+f^{-1}(y)=x \quad \Longleftrightarrow \quad f(x)=y \ \text{and}\ y\in B.
+\]
 \end{definition}
 
 When we focus on the inverse function, it is common to use \(x\) as the independent variable. In that case we may write
@@ -214,12 +226,15 @@ If the graph of \(f^{-1}\) is drawn in the same coordinate plane as the graph of
 
 \subsection{Finding the inverse of a function}
 
-When \(f\) is one-to-one, the following procedure is often useful for finding \(f^{-1}\):
+When \(f\) is one-to-one, the inverse can almost always be constructed by a short three-step procedure.
+
+\begin{strategy}[Finding the inverse of a one-to-one function]
 \begin{enumerate}
     \item Write \(y=f(x)\).
     \item Solve this equation for \(x\) in terms of \(y\).
-    \item Interchange \(x\) and \(y\). The resulting equation gives \(f^{-1}(x)\).
+    \item Interchange \(x\) and \(y\). The resulting equation gives \(y=f^{-1}(x)\).
 \end{enumerate}
+\end{strategy}
 
 \begin{workedexample}
 \begin{example}
@@ -346,14 +361,16 @@ clip=false
 
 \begin{definition}
 The \emph{inverse sine function}\index{inverse sine function}\index{arcsine@$\arcsin$}, denoted by \(\arcsin x\), is defined by
-\iffwithconditions{\arcsin x=y}{\sin y=x,}{-\frac{\pi}{2}\le y\le \frac{\pi}{2}.}
+\[
+\arcsin x=y \quad \Longleftrightarrow \quad \sin y=x \ \text{and}\ -\tfrac{\pi}{2}\le y\le \tfrac{\pi}{2}.
+\]
 \end{definition}
 
 The domain of \(\arcsin x\) is \([-1,1]\), and its range is \(\left[-\frac{\pi}{2},\frac{\pi}{2}\right]\).
 
-\begin{remark}
-The notation \(\sin^{-1}x\) is also used for \(\arcsin x\), but it does not mean \((\sin x)^{-1}=1/\sin x\).
-\end{remark}
+\begin{caution}\index{sine inverse vs reciprocal@$\sin^{-1}$ vs $1/\sin$}
+The notation \(\sin^{-1}x\) is also used for \(\arcsin x\). It does \emph{not} mean the reciprocal \((\sin x)^{-1}=1/\sin x\). Whenever a source uses \(\sin^{-1}\), check from context which is meant.
+\end{caution}
 
 The composition identities for \(\arcsin\) take the following form.
 
@@ -364,13 +381,13 @@ The composition identities for \(\arcsin\) take the following form.
 \end{conditiondisplay}
 \end{proposition}
 
-\begin{remark}
+\begin{caution}\index{arcsin of sin@$\arcsin(\sin x)$ outside principal interval}
 The identity \(\arcsin(\sin x)=x\) holds only when \(x\) lies in the principal interval \(\left[-\frac{\pi}{2},\frac{\pi}{2}\right]\). For example,
 \[
-\arcsin(\sin \pi)=\arcsin(0)=0\ne \pi.
+\arcsin(\sin \pi)=\arcsin(0)=0\ne \pi,
 \]
-This is because \(\arcsin x\) always returns a value in \(\left[-\frac{\pi}{2},\frac{\pi}{2}\right]\).
-\end{remark}
+because \(\arcsin x\) always returns a value in \(\left[-\frac{\pi}{2},\frac{\pi}{2}\right]\).
+\end{caution}
 
 \begin{workedexample}
 \begin{example}
@@ -453,7 +470,9 @@ clip=false
 
 \begin{definition}
 The \emph{inverse cosine function}\index{inverse cosine function}\index{arccosine@$\arccos$}, denoted by \(\arccos x\), is defined by
-\iffwithconditions{\arccos x=y}{\cos y=x,}{0\le y\le \pi.}
+\[
+\arccos x=y \quad \Longleftrightarrow \quad \cos y=x \ \text{and}\ 0\le y\le \pi.
+\]
 \end{definition}
 
 The domain of \(\arccos x\) is \([-1,1]\), and its range is \([0,\pi]\).
@@ -506,7 +525,9 @@ clip=false
 
 \begin{definition}
 The \emph{inverse tangent function}\index{inverse tangent function}\index{arctangent@$\arctan$}, denoted by \(\arctan x\), is defined by
-\iffwithconditions{\arctan x=y}{\tan y=x,}{-\frac{\pi}{2}<y<\frac{\pi}{2}.}
+\[
+\arctan x=y \quad \Longleftrightarrow \quad \tan y=x \ \text{and}\ -\tfrac{\pi}{2}<y<\tfrac{\pi}{2}.
+\]
 \end{definition}
 
 The domain of \(\arctan x\) is \(\mathbb{R}\), and its range is \(\left(-\frac{\pi}{2},\frac{\pi}{2}\right)\).
@@ -543,17 +564,23 @@ The remaining inverse trigonometric functions are used less frequently, but they
 
 \begin{definition}
 The \emph{inverse cosecant function}\index{inverse cosecant function}\index{arccosecant@$\arccsc$}, denoted by \(\arccsc x\), is defined by
-\iffwithconditions{\arccsc x=y}{\csc y=x,}{y\in \left(0,\frac{\pi}{2}\right]\cup\left(\pi,\frac{3\pi}{2}\right].}
+\[
+\arccsc x=y \quad \Longleftrightarrow \quad \csc y=x \ \text{and}\ y\in \left(0,\tfrac{\pi}{2}\right]\cup\left(\pi,\tfrac{3\pi}{2}\right].
+\]
 \end{definition}
 
 \begin{definition}
 The \emph{inverse secant function}\index{inverse secant function}\index{arcsecant@$\arcsec$}, denoted by \(\arcsec x\), is defined by
-\iffwithconditions{\arcsec x=y}{\sec y=x,}{y\in \left[0,\frac{\pi}{2}\right)\cup\left[\pi,\frac{3\pi}{2}\right).}
+\[
+\arcsec x=y \quad \Longleftrightarrow \quad \sec y=x \ \text{and}\ y\in \left[0,\tfrac{\pi}{2}\right)\cup\left[\pi,\tfrac{3\pi}{2}\right).
+\]
 \end{definition}
 
 \begin{definition}
 The \emph{inverse cotangent function}\index{inverse cotangent function}\index{arccotangent@$\arccot$}, denoted by \(\arccot x\), is defined by
-\iffwithconditions{\arccot x=y}{\cot y=x,}{y\in (0,\pi).}
+\[
+\arccot x=y \quad \Longleftrightarrow \quad \cot y=x \ \text{and}\ y\in (0,\pi).
+\]
 \end{definition}
 
 The domains of \(\arccsc x\) and \(\arcsec x\) are \((-\infty,-1]\cup[1,\infty)\), while the domain of \(\arccot x\) is \(\mathbb{R}\). The principal ranges are the intervals specified in the definitions above.
@@ -572,7 +599,7 @@ For \(\arccsc x\), another common choice is \(y\in \left[-\frac{\pi}{2},0\right)
 
 In many situations, we are interested not only in the value of a function at a point, but also in the behavior of the function when the input is close to that point. One important example comes from the study of motion.
 
-Suppose that \(s(t)\) denotes the position of an object at time \(t\). Then the average velocity of the object from time \(t\) to time \(t+h\) is
+Suppose that \(s(t)\) denotes the position of an object at time \(t\). Then the \emph{average velocity}\index{average velocity} of the object from time \(t\) to time \(t+h\) is
 \[
 \frac{s(t+h)-s(t)}{h}.
 \]
@@ -582,9 +609,9 @@ More generally, for a function \(f\), the ratio
 \qquad \text{or} \qquad
 \frac{f(x+h)-f(x)}{h}
 \]
-measures the average rate of change of the function over an interval.
+measures the \emph{average rate of change}\index{rate of change!average} of the function over an interval.
 
-However, in many applications we do not want the average rate of change over an interval; we want the rate of change at a single instant. For example, in mechanics we distinguish between average velocity and instantaneous velocity. The average velocity describes the motion over a time interval, whereas the instantaneous velocity describes how fast the object is moving at one particular moment. To understand this instantaneous behavior, we let the second point move closer and closer to the first point. In other words, we study what happens when the input is very close to the point of interest. This leads naturally to the concept of the limit of a function.
+However, in many applications we do not want the average rate of change over an interval; we want the \emph{instantaneous rate of change}\index{rate of change!instantaneous}\index{instantaneous velocity} at a single moment. For example, in mechanics we distinguish between average velocity and instantaneous velocity. The average velocity describes the motion over a time interval, whereas the instantaneous velocity describes how fast the object is moving at one particular moment. To understand this instantaneous behavior, we let the second point move closer and closer to the first point. In other words, we study what happens when the input is very close to the point of interest. This leads naturally to the concept of the limit of a function.
 
 \begin{definition}\label{def:limit-informal}
 Suppose that \(f(x)\) is defined for all \(x\) near \(a\), except possibly at \(x=a\). We write
@@ -787,6 +814,8 @@ In the previous section, we introduced the idea of the limit of a function. Some
 
 \subsection{One-sided limits}
 
+Near a point \(a\), a function can behave differently depending on which side \(x\) approaches from. A piecewise-defined function may switch formulas at \(a\); the graph may have a jump. In such cases we need to talk about the limit from the left and the limit from the right separately.
+
 \begin{definition}
 We write
 \[
@@ -834,7 +863,9 @@ clip=false
 \Cref{fig:one-sided-limits} illustrates that the left-hand limit and the right-hand limit at a point need not be the same. The filled dot indicates the actual value \(f(a)\), which is different from both one-sided limits.
 
 \begin{proposition}[Criterion for a Two-Sided Limit]
-\iffstackeddisplay{\lim_{x\to a}f(x)=L}{\lim_{x\to a^-}f(x)=L,}{\lim_{x\to a^+}f(x)=L.}
+\[
+\lim_{x\to a}f(x)=L \quad \Longleftrightarrow \quad \lim_{x\to a^-}f(x)=L \ \text{and}\ \lim_{x\to a^+}f(x)=L.
+\]
 \end{proposition}
 
 If the left-hand limit and the right-hand limit are different, then the two-sided limit does not exist.
@@ -1069,7 +1100,7 @@ The vertical line \(x=a\) is called a \emph{vertical asymptote}\index{vertical a
 If \(x=a\) is a vertical asymptote, then the function values become arbitrarily large positive or arbitrarily large negative as \(x\) approaches \(a\) from at least one side.
 
 \begin{workedexample}
-\begin{example}
+\begin{example}\index{1/x near 0@$1/x$ near $0$}
 Evaluate \(\lim_{x\to 0^-}\frac{1}{x}\) and \(\lim_{x\to 0^+}\frac{1}{x}\), determine whether \(\lim_{x\to 0}\frac{1}{x}\) exists, and decide whether \(x=0\) is a vertical asymptote of the graph of \(y=\frac{1}{x}\).
 \end{example}
 
@@ -1311,7 +1342,7 @@ then
 \end{theorem}
 
 \begin{workedexample}
-\begin{example}
+\begin{example}\index{x squared sin(1/x) example@$x^{2}\sin(1/x)$ example}
 Evaluate
 \[
 \lim_{x\to 0}x^{2}\sin\left(\frac{1}{x}\right).
@@ -1367,7 +1398,19 @@ Therefore, by the squeeze theorem,
 \end{solution}
 \end{workedexample}
 
-The limit laws and the techniques of factoring, rationalization, and squeezing allow us to evaluate many limits. In the next section, we will give the precise definition of a limit.
+The limit laws and the techniques of factoring, rationalization, and squeezing cover most of the limits that appear at this level. Before moving on, it is worth recording the workflow in one place.
+
+\begin{strategy}[Computing a limit \(\lim_{x\to a} f(x)\)]
+\begin{enumerate}
+    \item \emph{Try direct substitution first.} If \(f(a)\) is defined and the expression is continuous at \(a\), then the limit equals \(f(a)\).
+    \item \emph{If substitution gives an indeterminate form} such as \(\tfrac{0}{0}\), simplify algebraically: factor, cancel common factors, rationalize numerator or denominator, or combine fractions.
+    \item \emph{For a piecewise-defined function}, evaluate the one-sided limits separately using the branch that applies on each side, and check whether they agree.
+    \item \emph{If the expression is trapped between two simpler ones} whose limits are known and equal, apply the squeeze theorem.
+    \item \emph{If the values of the function grow without bound} as \(x\to a\), the limit is \(\infty\) or \(-\infty\) and the line \(x=a\) is a vertical asymptote.
+\end{enumerate}
+\end{strategy}
+
+In the next section, we will give the precise definition of a limit.
 
 % TODO: add \subsection*{Exercises} block with end-of-section problems for Section 1.5.
 
@@ -1436,6 +1479,7 @@ if for every \(\varepsilon>0\) there exists a number \(\delta>0\) such that
 \qquad \text{whenever} \qquad
 0<|x-a|<\delta.
 \]
+\emph{Informally, no matter how small a tolerance \(\varepsilon\) we demand for \(f(x)\) to be within of \(L\), there is always some distance \(\delta\) from \(a\) such that every \(x\) within that distance (and not equal to \(a\)) forces \(f(x)\) to land inside the tolerance.}
 \end{definition}
 
 This is the rigorous counterpart of the informal \cref{def:limit-informal}: ``\(f(x)\) is arbitrarily close to \(L\)'' becomes ``\(|f(x)-L|<\varepsilon\) for every \(\varepsilon>0\),'' and ``\(x\) is sufficiently close to \(a\), but \(x\ne a\)'' becomes ``\(0<|x-a|<\delta\) for a suitably chosen \(\delta\).''
@@ -1560,6 +1604,16 @@ If \(0<|x-a|<\min\{\delta_1,\delta_2\}\), then both inequalities hold. By the tr
 which is impossible. Therefore \(L=M\).
 \end{proof}
 
+\begin{strategy}[Verifying a limit from the \(\varepsilon\)-\(\delta\) definition]
+To show that \(\lim_{x\to a}f(x)=L\):
+\begin{enumerate}
+    \item Start with a generic \(\varepsilon>0\). Our task is to find a \(\delta>0\) (which may depend on \(\varepsilon\)) that makes the definition work.
+    \item Work with the quantity \(|f(x)-L|\) and simplify or bound it by an expression that involves \(|x-a|\).
+    \item Choose \(\delta\) in terms of \(\varepsilon\) so that the bound above is less than \(\varepsilon\) whenever \(|x-a|<\delta\). When the simplification produces an auxiliary factor that depends on \(x\), first restrict \(x\) to a small neighborhood (say \(|x-a|<1\)) to bound that factor, and then take \(\delta\) to be the minimum of \(1\) and the \(\varepsilon\)-based bound.
+    \item Verify the definition: show that if \(0<|x-a|<\delta\), then \(|f(x)-L|<\varepsilon\).
+\end{enumerate}
+\end{strategy}
+
 \begin{workedexample}
 \begin{example}
 Show from the definition that \(\lim_{x\to 3} (4x-5)=7\).
@@ -1679,4 +1733,38 @@ The \(\varepsilon\)-\(\delta\) formulation also allows us to give a precise mean
 then \(f\) is said to be \emph{continuous at \(a\)}\index{continuous function}\index{continuity}. We mention this term here only because it is expressed directly in terms of limits; a systematic study of continuity, together with its main properties and theorems, belongs to a later chapter.
 
 % TODO: add \subsection*{Exercises} block with end-of-section problems for Section 1.6.
+
+\section*{Summary}
+
+\paragraph{Key definitions.}
+\begin{itemize}
+    \item \emph{One-to-one function} --- different inputs always produce different outputs.
+    \item \emph{Inverse function} \(f^{-1}\) --- reverses the action of a one-to-one function \(f\).
+    \item \emph{Inverse trigonometric functions} \(\arcsin\), \(\arccos\), \(\arctan\), \(\arccsc\), \(\arcsec\), \(\arccot\) --- defined by restricting each trigonometric function to a principal interval on which it is one-to-one.
+    \item \emph{Limit} \(\lim_{x\to a}f(x)=L\) --- the values of \(f\) are arbitrarily close to \(L\) when \(x\) is sufficiently close to but not equal to \(a\) (informal); for every \(\varepsilon>0\) there exists \(\delta>0\) such that \(|f(x)-L|<\varepsilon\) whenever \(0<|x-a|<\delta\) (precise).
+    \item \emph{One-sided limits} \(\lim_{x\to a^-}f(x)\) and \(\lim_{x\to a^+}f(x)\) --- restrict the approach to values less than or greater than \(a\), respectively.
+    \item \emph{Infinite limits} \(\lim_{x\to a}f(x)=\pm\infty\) --- the values of \(f\) grow without bound as \(x\) approaches \(a\).
+    \item \emph{Vertical asymptote} at \(x=a\) --- at least one of the one-sided limits at \(a\) is infinite.
+    \item \emph{Continuity at a point}, introduced in terms of limits as \(\lim_{x\to a}f(x)=f(a)\); studied systematically in a later chapter.
+\end{itemize}
+
+\paragraph{Key theorems, propositions, and corollaries.}
+\begin{itemize}
+    \item \emph{Horizontal line test} --- \(f\) is one-to-one if and only if every horizontal line meets its graph at most once.
+    \item \emph{Existence of an inverse} --- a function has an inverse if and only if it is one-to-one.
+    \item \emph{Inverse trigonometric identities} --- on the principal ranges, \(\sin(\arcsin x)=x\) and \(\arcsin(\sin x)=x\), and analogous identities for \(\arccos\) and \(\arctan\).
+    \item \emph{Criterion for a two-sided limit} --- \(\lim_{x\to a}f(x)=L\) if and only if both one-sided limits at \(a\) equal \(L\).
+    \item \emph{Limit laws} --- limits respect sums, differences, products, quotients (with non-zero denominator limit), and powers.
+    \item \emph{Squeeze theorem} --- if \(g(x)\le f(x)\le h(x)\) near \(a\) and \(g\) and \(h\) share a common limit \(L\) at \(a\), then so does \(f\).
+    \item \emph{Uniqueness of limits} --- a limit, if it exists, is unique.
+\end{itemize}
+
+\paragraph{Key formulas and identities.}
+\begin{itemize}
+    \item Inverse composition: \(f^{-1}(f(x))=x\) for \(x\) in the domain of \(f\), and \(f(f^{-1}(y))=y\) for \(y\) in the range of \(f\).
+    \item Principal ranges of the inverse trig functions: \(\arcsin x\in\left[-\tfrac{\pi}{2},\tfrac{\pi}{2}\right]\), \(\arccos x\in[0,\pi]\), \(\arctan x\in\left(-\tfrac{\pi}{2},\tfrac{\pi}{2}\right)\).
+    \item Direct substitution: for polynomials and rational functions, \(\lim_{x\to a}p(x)=p(a)\) where defined.
+    \item Two-sided-limit criterion: \(\lim_{x\to a}f(x)=L\) exactly when both one-sided limits \(\lim_{x\to a^\pm}f(x)\) equal \(L\).
+    \item Precise \(\varepsilon\)-\(\delta\) statement: \(\lim_{x\to a}f(x)=L\) means that for every \(\varepsilon>0\) there exists \(\delta>0\) such that \(|f(x)-L|<\varepsilon\) whenever \(0<|x-a|<\delta\).
+\end{itemize}
 

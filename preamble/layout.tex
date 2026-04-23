@@ -75,36 +75,12 @@
     \]
   \fi\fi
 }
-% ---------------------------------------------------------------------------
-% DEPRECATED (v3.0): \iffwithconditions and \iffstackeddisplay are retained
-% here only so existing chapter content continues to compile during the
-% transition. The v3.0 approved-display-helper set has 5 modes (inline,
-% display, aligneddisplay, conditiondisplay, pairdisplay); equivalences
-% between statements are now written as ordinary display math with
-% \Longleftrightarrow plus an inline or prose condition. New chapter content
-% MUST NOT use the two macros below. Once every existing use has been
-% migrated, both macros and this block will be removed.
-% ---------------------------------------------------------------------------
-\newcommand{\iffwithconditions}[3]{%
-  \[
-  #1
-  \quad \Longleftrightarrow \quad
-  \begin{cases}
-    #2\\
-    #3
-  \end{cases}
-  \]
-}
-\newcommand{\iffstackeddisplay}[3]{%
-  \[
-  #1
-  \quad \Longleftrightarrow \quad
-  \begin{aligned}[c]
-    #2\\
-    #3
-  \end{aligned}
-  \]
-}
+% Note: earlier versions of this preamble also defined \iffwithconditions and
+% \iffstackeddisplay helpers. v3.0 reduced the approved display-helper set to
+% five modes (inline, display, aligneddisplay, conditiondisplay, pairdisplay);
+% equivalences between statements are now written as ordinary display math with
+% \Longleftrightarrow plus an inline or prose condition. Both deprecated macros
+% have been removed along with their chapter-level uses.
 
 % Section headings should bring at least a small amount of body text with them.
 \newcommand{\sectionneedspace}{7\baselineskip}

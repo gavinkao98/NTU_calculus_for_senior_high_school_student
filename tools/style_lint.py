@@ -145,20 +145,93 @@ def check_named_theorems_have_index(path: Path, text: str) -> list[Violation]:
     return violations
 
 
-# TODO(v3.x content migration): add a fourth block check enforcing the
-# chapter-opening structure required by CONTENT_README.md v3.0 \u00a74:
-#   every chapter file MUST open with \chapter{...} followed by a 1-2 paragraph
-#   overview followed by a "\paragraph{By the end of this chapter, you will
-#   be able to:}" learning-outcomes bullet list.
-# Deferred until the existing chapters/ch01_foundations.tex has been migrated
-# to the new chapter-opening pattern. Turning this check on before that
-# migration would intentionally break CI; the rule in CONTENT_README is
-# already authoritative, and this lint check is the enforcement layer that
-# catches violations after the first migration pass.
+_CHAPTER_OPEN_RE = re.compile(r"\\chapter\{[^}]*\}", re.DOTALL)
+_LEARNING_OUTCOMES_RE = re.compile(
+    r"\\paragraph\{By the end of this chapter[^}]*\}\s*\\begin\{itemize\}",
+    re.DOTALL,
+)
+
+
+def check_chapter_opening_structure(path: Path, text: str) -> list[Violation]:
+    """Every chapter file MUST open with \\chapter{...} followed (eventually) by
+    a ``\\paragraph{By the end of this chapter, ...}`` learning-outcomes bullet
+    list, and at least one paragraph of overview prose between the two
+    (CONTENT_README.md v3.0 \u00a74).
+
+    The check is structural rather than editorial: we do not police the
+    wording of the overview, only that (1) the chapter begins with
+    ``\\chapter{...}``, (2) a learning-outcomes bullet list of the prescribed
+    shape exists before the first ``\\section{...}``, and (3) at least one
+    non-empty line of prose sits between the chapter header and the bullet
+    list.
+    """
+    violations: list[Violation] = []
+    chapter_match = _CHAPTER_OPEN_RE.search(text)
+    if not chapter_match:
+        # Not every file under chapters/ is a chapter (e.g. _scratch is a
+        # scratch pad); require \chapter only when there is any \section.
+        if re.search(r"\\section\{", text):
+            violations.append(
+                Violation(
+                    path=path,
+                    line_number=1,
+                    message="chapter file has sections but no \\chapter{...} (CONTENT_README.md v3.0 \u00a74)",
+                    line="",
+                )
+            )
+        return violations
+
+    # Look only at the region between \chapter{...} and the first \section{...};
+    # the bullet list must appear there.
+    region_start = chapter_match.end()
+    first_section = re.search(r"\\section\{", text[region_start:])
+    region_end = region_start + (first_section.start() if first_section else len(text) - region_start)
+    region = text[region_start:region_end]
+
+    if not _LEARNING_OUTCOMES_RE.search(region):
+        line_number = _find_line_number(text, chapter_match.start())
+        snippet_line = text.splitlines()[line_number - 1].strip() if line_number - 1 < len(text.splitlines()) else ""
+        violations.append(
+            Violation(
+                path=path,
+                line_number=line_number,
+                message=(
+                    "chapter opening lacks ``\\paragraph{By the end of this chapter, ...}'' "
+                    "learning-outcomes bullet list before the first \\section "
+                    "(CONTENT_README.md v3.0 \u00a74)"
+                ),
+                line=snippet_line,
+            )
+        )
+        return violations
+
+    # Also require at least one non-empty prose line between \chapter and the
+    # bullet list, so the overview paragraph is not skipped outright.
+    learning_match = _LEARNING_OUTCOMES_RE.search(region)
+    overview = region[: learning_match.start()].strip()
+    overview_lines = [line for line in overview.splitlines() if line.strip()]
+    if not overview_lines:
+        line_number = _find_line_number(text, chapter_match.start())
+        snippet_line = text.splitlines()[line_number - 1].strip() if line_number - 1 < len(text.splitlines()) else ""
+        violations.append(
+            Violation(
+                path=path,
+                line_number=line_number,
+                message=(
+                    "chapter opening lacks overview prose before the learning-outcomes "
+                    "bullet list (CONTENT_README.md v3.0 \u00a74)"
+                ),
+                line=snippet_line,
+            )
+        )
+
+    return violations
+
 
 BLOCK_CHECKS = (
     check_definitions_have_index,
     check_named_theorems_have_index,
+    check_chapter_opening_structure,
 )
 
 
