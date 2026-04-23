@@ -7,18 +7,33 @@
 
 \chapter{Chapter Title}
 
-This chapter develops the main ideas of the chapter in one or two opening
-paragraphs. The overview should identify the mathematical territory, connect
-the chapter to earlier material, and preview the central results students
-should look forward to.
+Open the chapter with one or two paragraphs of prose. The overview should
+identify the mathematical territory this chapter covers, connect the chapter
+to earlier material, and preview the central results. Keep it motivational
+and orienting; do not introduce new notation unless it is unavoidable.
 
-Use the opening overview for motivation and orientation only. Do not introduce
-new notation here unless it is unavoidable.
+% Layout note:
+% - The bullet list below is MUST per CONTENT_README.md v3.0 §4 (Chapter
+%   opening). It lists 3-5 concrete learning outcomes. Use verbs describing
+%   what the reader will be able to *do* (solve, compute, recognise, prove),
+%   not what the chapter will "cover" or "discuss". Target at most half a
+%   page. Mirror this bullet list in the chapter-end Summary.
+
+\paragraph{By the end of this chapter, you will be able to:}
+\begin{itemize}
+    \item (concrete outcome 1 -- one action the reader performs);
+    \item (concrete outcome 2);
+    \item (concrete outcome 3);
+    \item (concrete outcome 4, optional);
+    \item (concrete outcome 5, optional).
+\end{itemize}
 
 \section{Section Title}
 
 Open the section with a short paragraph that explains what problem this
-section addresses and why it matters.
+section addresses and why it matters. For a purely computational section
+(e.g.\ ``Direct substitution''), a single connecting sentence tied to the
+preceding section is also acceptable.
 
 % Layout note:
 % - section and subsection headings now reserve space automatically, so avoid
@@ -28,14 +43,27 @@ section addresses and why it matters.
 \subsection{Subsection title}
 
 Continue with textbook-style prose before the first formal environment.
+Use ``we'' as the default pronoun; ``you'' is permitted sparingly for
+gentle verifications (``You should check that...'') or forward references.
 
 \begin{definition}
 State the new concept cleanly and without examples or side remarks.
+\emph{Informally, this means ...} (optional one-sentence vernacular
+translation; do not include examples, figures, or new notation here).
 \end{definition}
 
 \begin{remark}
-Use a remark for interpretation, contrast, or a brief warning if it helps.
+Use a remark for genuine asides, short historical or applied notes,
+forward references to later chapters, or interpretation that the main
+flow does not need. Soft target: 2-3 remarks per section.
 \end{remark}
+
+\begin{caution}
+Use a \texttt{caution} for notation traps, common errors, or domain
+restrictions that are easy to miss. Keep it to 1-3 sentences. For example:
+the symbol \(\sin^{-1}x\) denotes the inverse sine; it does not mean
+\(1/\sin x\).
+\end{caution}
 
 \begin{workedexample}
 \begin{example}
@@ -54,20 +82,29 @@ Since \(L_- \ne L_+\), \(\lim_{x\to a}f(x)\) does not exist.
 \end{solution}
 \end{workedexample}
 
+\begin{strategy}
+Use a \texttt{strategy} env when several worked examples share a common
+method. Spell the method out as a short numbered list so the reader can
+refer back to it as a checklist.
+\begin{enumerate}
+    \item First step of the method.
+    \item Second step, with any branching conditions.
+    \item Third step, and what to do if the first two fail.
+\end{enumerate}
+\end{strategy}
+
 % Pattern note:
 % - keep `Solution.` inline unless the body opens with a block; then start with
 %   `\solutionbreak`
 % - if a solution ends with display math, place `\qedhere` on the last display
 %   line so the closing box stays attached to the mathematics
-% - use one local display grammar per algebraic unit instead of mixing centered
-%   displays, aligned blocks, and prose-side notes
-% - `aligneddisplay`: short top-to-bottom peers or derivation lines
-% - `conditiondisplay`: formula plus a domain/range/branch condition
-% - `\pairdisplay{...}{...}`: exactly two short formulas meant to be compared
-% - `\iffwithconditions{...}{...}{...}`: equivalence plus one grouped
-%   restriction set (brace is semantic)
-% - `\iffstackeddisplay{...}{...}{...}`: equivalence plus two equal-status
-%   stacked criteria
+% - v3.0 approved display helpers (5 modes): inline math, display math,
+%   aligneddisplay, conditiondisplay, \pairdisplay
+% - aligneddisplay: short top-to-bottom peers or derivation lines
+% - conditiondisplay: formula plus a domain/range/branch condition
+% - \pairdisplay{...}{...}: exactly two short formulas meant to be compared
+% - formal equivalence "A iff B": use display math with \Longleftrightarrow,
+%   not the deprecated \iffwithconditions / \iffstackeddisplay macros
 % - if an example has no worked solution, use `example` alone rather than
 %   `workedexample`
 % - see CONTENT_README.md for the full policy before committing
@@ -83,10 +120,6 @@ g(x) &= x^2, \qquad & -1 \le x \le 1.
 \end{conditiondisplay}
 
 \pairdisplay{\lim_{x\to a^-}f(x)=L,}{\lim_{x\to a^+}f(x)=L.}
-
-\iffwithconditions{f^{-1}(y)=x}{f(x)=y,}{y\in B.}
-
-\iffstackeddisplay{\lim_{x\to a}f(x)=L}{\lim_{x\to a^-}f(x)=L,}{\lim_{x\to a^+}f(x)=L.}
 
 \begin{aligneddisplay}
 f(x+y) &= f(x)+f(y),\\
@@ -128,8 +161,10 @@ Therefore,
 State a brief illustrative example here when no worked solution follows.
 \end{example}
 
-\begin{theorem}
-State a formal result here when the section needs one.
+\begin{theorem}[Example Theorem Name]
+State a formal result here when the section needs one. Named theorems MUST
+use a title in square brackets and carry an \texttt{\textbackslash index}
+entry.\index{example theorem name}
 \end{theorem}
 
 \begin{proof}
@@ -137,4 +172,30 @@ Give a genuine proof only when the book's level and the manuscript warrant it.
 \end{proof}
 
 % TODO: add \subsection*{Exercises} block with end-of-section problems for
-% this section, following CONTENT_README.md.
+% this section, following CONTENT_README.md §14.
+
+\section*{Summary}
+
+% Layout note:
+% - The Summary section at chapter end is MUST per CONTENT_README.md v3.0 §4.
+% - Half a page to one page total, organised into three blocks.
+% - Do not introduce new content here; reference existing items by name only.
+
+\paragraph{Key definitions.}
+\begin{itemize}
+    \item (Definition name 1 -- one-line reminder).
+    \item (Definition name 2 -- one-line reminder).
+\end{itemize}
+
+\paragraph{Key theorems, propositions, and corollaries.}
+\begin{itemize}
+    \item (Theorem name 1 -- one-sentence plain-English restatement).
+    \item (Proposition name -- one-sentence plain-English restatement).
+\end{itemize}
+
+\paragraph{Key formulas and identities.}
+\begin{itemize}
+    \item \((\text{formula 1})\);
+    \item \((\text{formula 2})\);
+    \item \((\text{formula 3})\).
+\end{itemize}

@@ -75,8 +75,16 @@
     \]
   \fi\fi
 }
-% Brace-bearing right side: use when the two right-hand lines form one grouped
-% restriction or condition set rather than two visually stacked peer criteria.
+% ---------------------------------------------------------------------------
+% DEPRECATED (v3.0): \iffwithconditions and \iffstackeddisplay are retained
+% here only so existing chapter content continues to compile during the
+% transition. The v3.0 approved-display-helper set has 5 modes (inline,
+% display, aligneddisplay, conditiondisplay, pairdisplay); equivalences
+% between statements are now written as ordinary display math with
+% \Longleftrightarrow plus an inline or prose condition. New chapter content
+% MUST NOT use the two macros below. Once every existing use has been
+% migrated, both macros and this block will be removed.
+% ---------------------------------------------------------------------------
 \newcommand{\iffwithconditions}[3]{%
   \[
   #1
@@ -87,8 +95,6 @@
   \end{cases}
   \]
 }
-% Brace-free right side: use when the two right-hand lines are equal-status
-% criteria and the stacking is purely presentational.
 \newcommand{\iffstackeddisplay}[3]{%
   \[
   #1

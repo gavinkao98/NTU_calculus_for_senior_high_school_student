@@ -1,0 +1,25 @@
+% Semantic colour palette for the handout.
+% Three roles only, per CONTENT_README.md (Figures and Colour).
+% Every figure, accent bar, dashed asymptote, and callout that would
+% otherwise use raw colour names MUST go through these macros so the
+% palette can be retuned in one place.
+%
+% Role assignment:
+%   \colorprimary   = main object / principal function / focus of a figure
+%                     (also drives the `strategy` env accent bar)
+%   \colorcaution   = warning / asymptote / dashed reference line
+%                     (also drives the `caution` env accent bar)
+%   \colorauxiliary = structural scaffolding (axes, guide lines, reference construction)
+%
+% Hex values are the working draft; tune once the first few chapters are
+% proofread in print. Do not introduce additional colour roles without
+% revising CONTENT_README.md and bumping its version.
+
+\definecolor{colorprimary}{HTML}{1F4E79}
+\definecolor{colorcaution}{HTML}{C0392B}
+\definecolor{colorauxiliary}{HTML}{7F7F7F}
+
+% Convenience macros for use in TikZ / pgfplots / tcolorbox style definitions.
+\newcommand{\colorprimary}{colorprimary}
+\newcommand{\colorcaution}{colorcaution}
+\newcommand{\colorauxiliary}{colorauxiliary}

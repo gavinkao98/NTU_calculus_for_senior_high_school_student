@@ -19,39 +19,26 @@
 }
 
 % ---------------------------------------------------------------------------
-% Shared counter group for formal statements.
-% Per CONTENT_README.md (Numbering Policy), the environments
-%   definition, theorem, proposition, lemma, corollary
-% share a single chapter-scoped counter and increment in order of appearance.
+% Formal-statement environments.
+% Per CONTENT_README.md v3.0 (Numbering and Cross-References), each formal
+% environment has its own chapter-scoped counter. This is a change from the
+% v2.x shared-counter pattern: high-school self-study readers looking up
+% "Definition 1.3" expect it to be the third definition, not the third
+% formal statement of any type. Per-env counters match that expectation.
 %
-% We implement this with aliascnt rather than amsthm's [theorem] optional
-% argument. The [theorem] shortcut works for the printed number, but it
-% also makes amsthm tag every label with counter name "theorem", which in
-% turn makes cleveref print every formal-statement reference as "Theorem"
-% regardless of the environment actually used. aliascnt gives each
-% environment its own counter name that steps the shared master counter,
-% preserving distinct cleveref types.
+% Note: `lemma` is intentionally absent. In the HS audience, the cognitive
+% cost of distinguishing lemma from theorem outweighs the benefit; results
+% that would be lemmas in a graduate-level text are either absorbed into
+% proofs or promoted to proposition.
 % ---------------------------------------------------------------------------
 
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}[chapter]
-
-\newaliascnt{proposition}{theorem}
-\newtheorem{proposition}[proposition]{Proposition}
-\aliascntresetthe{proposition}
-
-\newaliascnt{lemma}{theorem}
-\newtheorem{lemma}[lemma]{Lemma}
-\aliascntresetthe{lemma}
-
-\newaliascnt{corollary}{theorem}
-\newtheorem{corollary}[corollary]{Corollary}
-\aliascntresetthe{corollary}
+\newtheorem{proposition}{Proposition}[chapter]
+\newtheorem{corollary}{Corollary}[chapter]
 
 \theoremstyle{definition}
-\newaliascnt{definition}{theorem}
-\newtheorem{definition}[definition]{Definition}
-\aliascntresetthe{definition}
+\newtheorem{definition}{Definition}[chapter]
 
 % Worked blocks keep their own chapter-scoped counters.
 \newtheorem{example}{Example}[chapter]
@@ -60,19 +47,61 @@
 \theoremstyle{remark}
 \newtheorem{remark}{Remark}[chapter]
 
+% ---------------------------------------------------------------------------
+% `caution` and `strategy` environments.
+% Added in v3.0 to support the Stewart-style self-study register. Visually
+% distinct from `remark` via a left-side coloured accent bar, implemented
+% with mdframed so page breaks still work for strategy boxes that contain
+% multi-step numbered lists.
+%
+%   caution  -- red bar, used for notation traps, common errors, restrictions
+%               that are easy to miss. Typically 1-3 sentences.
+%   strategy -- blue bar, used for Stewart-style problem-solving method
+%               boxes (numbered step list or short paragraph).
+%
+% Both carry chapter-scoped counters of their own. Labels are optional (see
+% CONTENT_README.md §6).
+% ---------------------------------------------------------------------------
+\mdfdefinestyle{cautionmdstyle}{%
+  leftline=true, rightline=false, topline=false, bottomline=false,
+  linewidth=2pt, linecolor=colorcaution,
+  innerleftmargin=0.9em, innerrightmargin=0em,
+  innertopmargin=0.25em, innerbottommargin=0.25em,
+  skipabove=0.6em, skipbelow=0.6em,
+  nobreak=false,
+}
+\mdfdefinestyle{strategymdstyle}{%
+  leftline=true, rightline=false, topline=false, bottomline=false,
+  linewidth=2pt, linecolor=colorprimary,
+  innerleftmargin=0.9em, innerrightmargin=0em,
+  innertopmargin=0.25em, innerbottommargin=0.25em,
+  skipabove=0.6em, skipbelow=0.6em,
+  nobreak=false,
+}
+
+\theoremstyle{remark}
+\newmdtheoremenv[style=cautionmdstyle]{caution}{Caution}[chapter]
+\newmdtheoremenv[style=strategymdstyle]{strategy}{Strategy}[chapter]
+
+% ---------------------------------------------------------------------------
+% Pagination protection.
+% Formal result blocks reserve more page-bottom space; worked material and
+% aside environments use lighter protection.
+% ---------------------------------------------------------------------------
 \reserveblockspace{theorem}{\formalblockneedspace}
 \reserveblockspace{proposition}{\formalblockneedspace}
-\reserveblockspace{lemma}{\formalblockneedspace}
 \reserveblockspace{corollary}{\formalblockneedspace}
 \reserveblockspace{definition}{\formalblockneedspace}
 \reserveblockspace{example}{\exampleblockneedspace}
 \reserveblockspace{exercise}{\exerciseblockneedspace}
 \reserveblockspace{remark}{\supportingblockneedspace}
+\reserveblockspace{caution}{\supportingblockneedspace}
+\reserveblockspace{strategy}{\supportingblockneedspace}
 
 % ---------------------------------------------------------------------------
 % Solution environment.
-% Visually distinct from proof, per CONTENT_README.md (Example, Solution, and
-% Proof Policy, rule 11): bold "Solution." label, upright body text, and a
+% Visually distinct from proof, per CONTENT_README.md v3.0 (Environment Set --
+% example and solution): bold "Solution." label, upright body text, and a
 % filled QED box at the end (proof uses italic "Proof." with an open box).
 % Optional argument overrides the label, e.g. \begin{solution}[Alternative solution].
 % Style policy: keep "Solution." inline when the body opens with prose; if the
@@ -144,15 +173,15 @@
 
 % ---------------------------------------------------------------------------
 % cleveref name bindings.
-% With aliascnt, each formal-statement environment has its own counter name
-% that cleveref sees, so these \crefname declarations actually take effect.
+% With per-env counters (v3.0), each environment has its own counter name
+% that cleveref sees, so these \crefname declarations take effect directly.
+% `lemma` is intentionally absent; if a future revision re-introduces it,
+% add the corresponding \newtheorem, \reserveblockspace, and \crefname lines.
 % ---------------------------------------------------------------------------
 \crefname{theorem}{Theorem}{Theorems}
 \Crefname{theorem}{Theorem}{Theorems}
 \crefname{proposition}{Proposition}{Propositions}
 \Crefname{proposition}{Proposition}{Propositions}
-\crefname{lemma}{Lemma}{Lemmas}
-\Crefname{lemma}{Lemma}{Lemmas}
 \crefname{corollary}{Corollary}{Corollaries}
 \Crefname{corollary}{Corollary}{Corollaries}
 \crefname{definition}{Definition}{Definitions}
@@ -163,3 +192,7 @@
 \Crefname{exercise}{Exercise}{Exercises}
 \crefname{remark}{Remark}{Remarks}
 \Crefname{remark}{Remark}{Remarks}
+\crefname{caution}{Caution}{Cautions}
+\Crefname{caution}{Caution}{Cautions}
+\crefname{strategy}{Strategy}{Strategies}
+\Crefname{strategy}{Strategy}{Strategies}
