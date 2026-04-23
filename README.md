@@ -63,9 +63,10 @@ Manim-storyboard note:
 
 The `preamble/` directory is split by responsibility so layout and template behavior can be found quickly:
 
-- `preamble/packages.tex`: shared package loading for Times-style text and math fonts (`newtxtext` + `newtxmath`), micro-typography (`microtype`), math (`amsmath`, `amsthm`, `mathtools`), figures (`graphicx`, `tikz`, `pgfplots`), float handling (`float`, `flafter`), page-break control (`needspace`), lists (`enumitem`), page geometry (`margin=3.3cm`, see *Output Format* below), headers, cross-references (`hyperref`, `cleveref`), and house inverse-trig operators (`\arccsc`, `\arcsec`, `\arccot` via `\DeclareMathOperator`, added when `physics` was removed)
-- `preamble/layout.tex`: paragraph indentation and spacing, list spacing, global line spread (`\linespread{1.05}` to give display math breathing room at 12pt Times), float placement parameters, running headers and footers, chapter-title spacing, `\Needspace` hooks on `\section` and `\subsection`, shared short-formula display helpers such as `aligneddisplay`, `conditiondisplay`, `\pairdisplay`, `\iffwithconditions`, and `\iffstackeddisplay`, and the `\newdisplayenv{name}{begin}{end}` helper used to declare any new environment that wraps `\[...\]` so `\parindent` is correctly suppressed on the following paragraph (the helper installs LaTeX's kernel `\@doendpe` hook in the outer scope via `\AfterEndEnvironment`)
-- `preamble/theorem_setup.tex`: theorem-like environment definitions, chapter-based counters for those environments, the `solution` environment, stronger page-bottom protection for formal result blocks, lighter page-flow protection for examples, exercises, remarks, and proofs, and the `workedexample` semantic wrapper that measures and reserves space for an `example`+`solution` pair as one unit
+- `preamble/packages.tex`: shared package loading for Times-style text and math fonts (`newtxtext` + `newtxmath`), micro-typography (`microtype`), math (`amsmath`, `amsthm`, `mathtools`), figures (`graphicx`, `tikz`, `pgfplots`), float handling (`float`, `flafter`), page-break control (`needspace`), lists (`enumitem`), page geometry (`margin=3.3cm`, see *Output Format* below), headers, cross-references (`hyperref`, `cleveref`), framed-environment support for `caution` / `strategy` (`mdframed` with `framemethod=TikZ`), colour infrastructure (`xcolor`), and house inverse-trig operators (`\arccsc`, `\arcsec`, `\arccot` via `\DeclareMathOperator`, added when `physics` was removed)
+- `preamble/colors.tex`: the three-role semantic palette (`colorprimary` blue, `colorcaution` red, `colorauxiliary` gray) that drives figure colouring and the accent bars on the `caution` / `strategy` environments. Hex values are the working draft; tune once the first few chapters are proofread in print
+- `preamble/layout.tex`: paragraph indentation and spacing, list spacing, global line spread (`\linespread{1.05}` to give display math breathing room at 12pt Times), float placement parameters, running headers and footers, chapter-title spacing, `\Needspace` hooks on `\section` and `\subsection`, shared short-formula display helpers (`aligneddisplay`, `conditiondisplay`, `\pairdisplay`), and the `\newdisplayenv{name}{begin}{end}` helper used to declare any new environment that wraps `\[...\]` so `\parindent` is correctly suppressed on the following paragraph (the helper installs LaTeX's kernel `\@doendpe` hook in the outer scope via `\AfterEndEnvironment`)
+- `preamble/theorem_setup.tex`: formal-statement environments (`definition`, `theorem`, `proposition`, `corollary`) each with their own chapter-scoped counter (per-env numbering, v3.0), the `solution` environment, the `caution` and `strategy` environments with left-colour-bar styling via `\newmdtheoremenv`, stronger page-bottom protection for formal result blocks, lighter page-flow protection for worked material and aside environments, and the `workedexample` semantic wrapper that measures and reserves space for an `example`+`solution` pair as one unit
 - `preamble/numbering.tex`: equation numbering by chapter
 - `preamble/bibliography.tex`: bibliography backend and bibliography source file
 
@@ -93,10 +94,17 @@ Recent repository-level changes worth knowing before editing the book:
 - `\newdisplayenv` uses LaTeX's kernel `\@doendpe` hook so prose after custom display wrappers does not pick up a stray paragraph indent
 - Chapter 1 figure code was adjusted to compile warning-free, including the inverse-composition diagram sizing and the sine-graph marker overlay
 - book-source checks now include a regex style lint, a dedicated preamble smoke test, and a GitHub Actions workflow that runs both plus a full `latexmk` build
+- [`CONTENT_README.md`](CONTENT_README.md) was rewritten from scratch as v3.0 with a new positioning ("self-sufficient Stewart-register A4 handout for high-school self-study readers"). Concrete infrastructure follow-ups that landed alongside v3.0:
+  - formal-statement environments now use per-type chapter-scoped counters (Definition 1.1, 1.2, ...; Theorem 1.1, 1.2, ...), replacing the earlier shared-counter pattern; `aliascnt` is no longer loaded
+  - `lemma` is dropped from the environment set
+  - two new environments `caution` (red left-bar) and `strategy` (blue left-bar) are available for notation traps and Stewart-style method boxes, implemented via `\newmdtheoremenv`
+  - the display-helper set is reduced from seven to five: `aligneddisplay`, `conditiondisplay`, `\pairdisplay`, plain `\[...\]`, and inline `\(...\)`. The earlier `\iffwithconditions` and `\iffstackeddisplay` macros are removed; equivalences are written as ordinary display math with `\Longleftrightarrow`
+  - `preamble/colors.tex` declares the semantic colour palette (blue / red / gray)
+  - `tools/style_lint.py` gained four new checks: no `\textbf` / `\textit` in prose, every `\begin{definition}` body contains an `\index{...}`, every named theorem has a matching index entry, and every chapter file opens with `\chapter{...}` plus an overview plus a learning-outcomes bullet list
 
 Template pagination note:
-- formal result blocks such as `theorem`, `lemma`, `proposition`, `corollary`, and `definition` reserve more vertical space before they start
-- `example`, `exercise`, `solution`, and `proof` use lighter protection and may span pages naturally
+- formal result blocks such as `theorem`, `proposition`, `corollary`, and `definition` reserve more vertical space before they start
+- `example`, `exercise`, `solution`, `proof`, `remark`, `caution`, and `strategy` use lighter protection and may span pages naturally
 - `\section` and `\subsection` headings reserve a few baselines of the following body text, so a heading cannot be stranded alone at the bottom of a page
 - `workedexample` measures the combined `example`+`solution` height once (capped at 16 baselines) and reserves that much space, so short pairs stay together without forcing a break for near-page-height units
 - do not add manual `\newpage`, `\pagebreak`, or `\clearpage` in chapter files just to keep these blocks together unless a task explicitly calls for a local exception
@@ -116,11 +124,9 @@ Use this as the quick authoring rule for how formulas should appear on the page:
 - use `conditiondisplay` when formulas carry trailing domain/range/branch conditions that need explicit spacing
 - use `\pairdisplay{...}{...}` only when exactly two short formulas are meant to be compared left-to-right; it auto-stacks if either side gets too wide
 - do not use `aligneddisplay` just to line up unrelated factual statements; if two short facts are being compared, prefer `\pairdisplay{...}{...}` or ordinary display math
-- use `\iffwithconditions{...}{...}{...}` when the brace itself means one grouped restriction or condition set
-- use `\iffstackeddisplay{...}{...}{...}` when one formal statement is equivalent to two equal-status stacked conditions
-- in displayed formal equivalences, prefer `\Longleftrightarrow` over a separate text line saying `if and only if`
+- for a formal equivalence `A iff B`, use ordinary display math with `\Longleftrightarrow` and an inline or prose condition; do not introduce a custom iff helper (the earlier `\iffwithconditions` and `\iffstackeddisplay` macros were removed in the v3.0 rewrite)
 
-For the full decision rules and examples, see the `## Formula Display Policy` section in [`CONTENT_README.md`](CONTENT_README.md).
+For the full decision rules and examples, see `§7 Formula Display` in [`CONTENT_README.md`](CONTENT_README.md).
 
 ## Which File To Read
 
@@ -137,7 +143,7 @@ If you are generating media, first decide which pipeline:
 
 The book source is general, but the checked-in textbook draft is currently centered on Chapter 1:
 
-- `chapters/ch01_foundations.tex` now drafts the full Chapter 1 arc: inverse functions, inverse trigonometric functions, limits, one-sided and infinite limits, limit laws, and the precise definition of a limit
+- `chapters/ch01_foundations.tex` now drafts the full Chapter 1 arc: inverse functions, inverse trigonometric functions, limits, one-sided and infinite limits, limit laws, and the precise definition of a limit. The chapter carries the v3.0 chapter-opening pattern (overview + ``By the end of this chapter, you will be able to:'' bullet list), a mandatory `\section*{Summary}` at chapter end, three `strategy` boxes (finding an inverse, computing a limit, verifying an $\varepsilon$-$\delta$ limit), and two `caution` boxes for the `\sin^{-1}` notation trap and the out-of-principal-interval identity trap
 - end-of-section exercises are still placeholders in that chapter; see *Known open items* below
 - the media pipeline exemplar is still Section 1.1 ("Inverse Functions"), even though the book chapter itself now extends well beyond that section
 - the storyboard [`inputs/manim_storyboards/ch01_inverse_functions.yml`](inputs/manim_storyboards/ch01_inverse_functions.yml) -- currently v2, hand-authored against `STORYBOARD_AUTHORING.md` v1.2 with 19 scenes including two `section_transition` interludes and three supplementary `graph_focus` visualizations not present in the book prose
@@ -206,7 +212,7 @@ For the actual commands and file paths, use:
 
 For book-source changes, run these checks before committing:
 
-- `python tools/style_lint.py` -- regex linter (forbids manual cross-reference prefixes such as `Figure~\ref{...}`, manual page-break commands like `\newpage`/`\pagebreak`/`\clearpage` in chapter or `main.tex` source, and ASCII `"..."` quotes)
+- `python tools/style_lint.py` -- regex linter. Line-level checks forbid manual cross-reference prefixes such as `Figure~\ref{...}`, manual page-break commands (`\newpage`/`\pagebreak`/`\clearpage`) in chapter or `main.tex` source, ASCII `"..."` quotes, and `\textbf{}`/`\textit{}` used for emphasis in prose. Block-level checks then require every `\begin{definition}` body to carry an `\index{...}` (with an exemption for paired precise restatements labeled `def:*-precise`), every `\begin{theorem}[Name]` to have a matching `\index{}` entry nearby, and every chapter file to open with `\chapter{...}` followed by an overview paragraph followed by a `\paragraph{By the end of this chapter, ...}` learning-outcomes bullet list before the first `\section`
 - `python tools/run_preamble_smoketest.py` -- compiles `preamble_smoketest.tex` and checks that continuation prose after `aligneddisplay` / `conditiondisplay` is not spuriously indented (guards the `\newdisplayenv` `\@doendpe` hook)
 - `latexmk -pdf -interaction=nonstopmode -halt-on-error -file-line-error main.tex`
 
