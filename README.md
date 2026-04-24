@@ -27,34 +27,86 @@ Use this mode when the user forwards a manuscript and asks Claude to produce a c
 
 1. Receive the manuscript from the user.
 2. Convert it into project-compliant LaTeX at `chapters/chNN_<slug>.tex`, following [`CONTENT_SPEC.md`](CONTENT_SPEC.md) and [`CONTENT_QUICKSTART.md`](CONTENT_QUICKSTART.md).
-3. Expand *around* the manuscript where completeness or the Stewart / Rogawski self-study register demands additions: *"Informally, ..."* glosses inside `definition`, intuition paragraphs before formal statements, `strategy` boxes distilling a method that the manuscript's examples share, `caution` boxes for subtle restrictions, `remark` additions with a clear usefulness hook, and figure ideas the manuscript implies but does not draw. These additions are **additive, not substitutive**: they surround the manuscript, they do not replace it.
+3. Expand around the manuscript where completeness or the Stewart / Rogawski self-study register benefits from it. The expansion policy below describes what kinds of additions are in-policy and how they must be marked.
 4. Update [`CONTENT_ROADMAP.md`](CONTENT_ROADMAP.md) to reflect what the manuscript actually decided, replacing any pre-manuscript working-hypothesis entries.
 
-In this mode, the **hard rule: no fabricated content** applies in full.
+#### The manuscript is the main axis
 
-Every mathematical claim, definition, theorem, example, proof, figure, historical note, date, and proper name Claude writes into a chapter in this mode **MUST** trace to one of:
+Every manuscript topic, example, remark, proof, and figure idea appears in the chapter in the order the manuscript presents them, rewritten into project-compliant LaTeX. Claude does **not** skip manuscript content, does **not** reorder it without reason, and does **not** rewrite its mathematical substance. Expansions wrap around manuscript content; they never replace it.
 
-- (a) the teacher's manuscript itself;
-- (b) an earlier chapter of this book (already committed to `chapters/*.tex`);
-- (c) a widely-verifiable standard calculus result the user can sanity-check against a named source.
+If a reorder or structural regroup is genuinely useful, record it in the chapter's roadmap entry under *Open questions* so the user can sign off during review.
 
-When a fact does not have a clear anchor in (a), (b), or (c), **do not invent one**. Leave the material out and mark the gap with a comment in the LaTeX source:
+#### Expansion policy — liberal in scope, visible by marker
+
+Claude may expand around the manuscript without pre-authorisation, on the condition that **every expansion is marked** in the LaTeX source so post-hoc review is tractable. The marker takes the form
 
 ```latex
-% TODO: manuscript silent on <topic>; user to decide whether to add and from which source.
+% expansion:<category> — <one-line description>
 ```
 
-Asking one clarifying question is always cheaper than shipping a fabricated fact. A handout with a wrong theorem attribution, a misdated historical note, or an invented "canonical example" is worse than one that omits the material entirely, because students cannot know which claims to verify independently.
+placed on the line immediately preceding the expansion content. Optional source hint: append `[source: <brief source>]` after the description for expansions based on a specific reference.
 
-Specifically forbidden **in drafting mode**, without explicit user authorisation:
+Recognised categories (the `book_style_lint` check enforces this list):
 
-- inventing worked examples the manuscript does not contain;
-- attributing theorems to mathematicians the manuscript did not name;
-- supplying historical dates or quotations the manuscript did not give;
-- inventing exercises (exercise inventories come from the manuscript; see [`CONTENT_EXERCISES.md`](CONTENT_EXERCISES.md));
-- supplying a proof the manuscript omitted — per [`CONTENT_SPEC.md`](CONTENT_SPEC.md) §5, proofs are optional; omission is the default.
+| Category | Purpose |
+|---|---|
+| `history` | math-history context: how the concept was developed, why the notation was chosen |
+| `application` | real-world connection: physics, economics, geometry, engineering tie-in |
+| `formula` | derived identity / corollary that follows from what the manuscript proved or defined |
+| `summary` | synthesis paragraph tying a block of examples or a proof back together |
+| `figure` | figure idea the manuscript implies via prose but does not draw |
+| `example` | supplementary `workedexample` illustrating a technique the manuscript introduced |
+| `intuition` | motivation paragraph before a formal statement, or an *Informally, ...* gloss |
+| `strategy` | `strategy` box distilling a method shared by multiple manuscript examples |
+| `caution` | `caution` box for subtle restrictions, notation traps, or common errors |
 
-If the user gives explicit authorisation for a specific expansion (*"please add a caution about the sin⁻¹ vs 1/sin confusion"*, *"add a worked example showing the three-step inverse procedure on a cubic"*), the authorised expansion is in-policy; record it in the chapter's roadmap **Open questions** or **Manuscript source** note so the audit trail survives.
+The category list is intentionally small; when a durable new type appears, grow this table in the same commit that introduces the first marker of the new category, and the lint will accept it going forward.
+
+Post-hoc review then becomes
+
+```powershell
+grep "^% expansion:" chapters/chNN_*.tex
+```
+
+— the user sees every non-manuscript addition at a glance and decides *keep*, *rewrite*, or *remove* per marker, without having to diff the full chapter against the manuscript.
+
+#### Named-content guardrail (the hard rule that survives liberal expansion)
+
+Even with a liberal expansion policy, **named content** stays gated:
+
+- specific historical figures by name;
+- specific dates, centuries, or quotations;
+- proper-name attributions of theorems, methods, or ideas;
+- named results or conjectures not introduced in the manuscript or an earlier chapter.
+
+These are the highest-risk class for hallucination because a wrong attribution or a misdated note is invisible to a casual reader and expensive to correct after print. Claude **does not include** named content unless:
+
+- (a) the manuscript introduces it, or
+- (b) an earlier committed chapter establishes it, or
+- (c) the user explicitly authorises the specific name / date / attribution, or
+- (d) the expansion marker cites a verifiable source, e.g. `% expansion:history [source: Stewart, Calculus 8e, §1.3 historical note] — brief context on the development of limits`, and the user understands that signing off on the marker during review endorses the cited source.
+
+When the anchor is uncertain, default to **vague framing** instead of specific facts: *"early treatments of this problem by seventeenth-century mathematicians"* (no names, no specific year) rather than *"Fermat's 1637 method of adequality"* (three named facts, each a potential hallucination). Vague framing is in-policy; named-but-unsourced framing is not.
+
+#### Volumetric sanity check (soft, not enforced)
+
+Expansions should amplify the manuscript, not overwhelm it. Rough calibration:
+
+- a 3-line definition typically gets at most a 3-line *Informally* gloss, one short `caution`, and at most one short `remark` — not all of them stacked;
+- a section where `% expansion:` markers visibly outnumber manuscript-derived content is drifting; flag it in the chapter's roadmap *Open questions* so the ratio gets reviewed during sign-off;
+- historical and application expansions should be shorter than the mathematical content they attach to.
+
+No hard rule on ratios — just a self-check. If post-hoc review consistently flags over-expansion, Claude should tighten in subsequent chapters.
+
+#### Still forbidden in drafting mode
+
+- skipping manuscript content (the manuscript is the axis);
+- rewriting the mathematical substance of a manuscript claim (method of proof, choice of variable, definition form);
+- inventing exercises — exercise inventories come from the manuscript (see [`CONTENT_EXERCISES.md`](CONTENT_EXERCISES.md));
+- unmarked expansions — every non-translation addition takes an `% expansion:` marker;
+- named content that violates the Named-content guardrail above.
+
+Supplying a proof the manuscript omitted is a borderline case: per [`CONTENT_SPEC.md`](CONTENT_SPEC.md) §5 proofs are optional and omission is the default. Claude **may** add a proof as an `expansion:formula` (for a short derivation) or `expansion:example` (for a worked case) when the proof is short, standard, and illustrative; multi-page proofs or proofs that require material the chapter has not introduced need explicit user authorisation.
 
 ### Mode B — Reviewing (Claude audits existing committed content)
 
@@ -67,6 +119,7 @@ What Claude may flag in review mode:
 - **Mathematical correctness** — if a statement looks wrong, surface it as *"please verify X"*, not as *"I'm removing X because it's not in the manuscript."*
 - **Missing content from the manuscript** — if the manuscript covers a topic the `.tex` skips, flag the gap so the user can decide whether the omission was intentional.
 - **Structural decisions** — section splits, theorem names, and similar editorial choices. Surface as questions; do not change unilaterally.
+- **Expansion markers** — for chapters drafted under the marker policy, walk every `% expansion:` marker in the file and assess each one for fit (does it belong here?), register (does it match Stewart / Rogawski tone?), accuracy (especially `history` and `application` markers), and ratio (does it oversaturate the surrounding manuscript content?). Review findings go to the user per marker, not as removal proposals.
 
 What Claude must **not** do in review mode:
 

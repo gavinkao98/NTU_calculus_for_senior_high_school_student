@@ -56,6 +56,33 @@ LINE_CHECKS: tuple[tuple[str, re.Pattern[str]], ...] = (
 )
 
 
+# Expansion-marker check.
+# The Mode A drafting policy (see README.md \u00a7 Authoring workflow) requires
+# every non-translation addition to the chapter to be prefixed by a comment of
+# the form:
+#
+#     % expansion:<category> \u2014 <one-line description>
+#
+# with <category> drawn from the list below. This keeps post-hoc review
+# tractable: the user can grep "^% expansion:" and see every addition that is
+# not a direct translation of the manuscript. An unknown or misspelled category
+# would silently hide the expansion from that review; hence this check.
+_EXPANSION_CATEGORIES = frozenset(
+    {
+        "history",
+        "application",
+        "formula",
+        "summary",
+        "figure",
+        "example",
+        "intuition",
+        "strategy",
+        "caution",
+    }
+)
+_EXPANSION_MARKER_RE = re.compile(r"^\s*%\s*expansion:([A-Za-z_]+)")
+
+
 # Whole-file structural checks.
 # These run on the combined (comment-stripped) text of a chapter file rather
 # than line-by-line, because they reason about block structure (definition
@@ -261,6 +288,25 @@ def lint_file(path: Path) -> list[Violation]:
     violations: list[Violation] = []
     raw_lines = path.read_text(encoding="utf-8").splitlines()
     for line_number, raw_line in enumerate(raw_lines, start=1):
+        # Expansion marker check runs on the raw line because the marker *is* a
+        # LaTeX comment; comment-stripping would erase it.
+        expansion_match = _EXPANSION_MARKER_RE.match(raw_line)
+        if expansion_match:
+            category = expansion_match.group(1)
+            if category not in _EXPANSION_CATEGORIES:
+                valid = ", ".join(sorted(_EXPANSION_CATEGORIES))
+                violations.append(
+                    Violation(
+                        path=path,
+                        line_number=line_number,
+                        message=(
+                            f"unknown expansion category '{category}'; "
+                            f"valid categories are: {valid} "
+                            f"(see README.md \u00a7 Authoring workflow)"
+                        ),
+                        line=raw_line.strip(),
+                    )
+                )
         line = strip_comments(raw_line)
         if not line:
             continue
