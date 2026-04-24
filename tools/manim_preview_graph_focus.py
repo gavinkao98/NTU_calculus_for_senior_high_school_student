@@ -6,8 +6,8 @@ from pathlib import Path
 
 from manim_storyboard_workflow import find_scene, load_storyboard, resolve_storyboard_path, to_tex_text
 from manim_templates.graph_utils import safe_eval_expression, sample_function_points
-from media_paths import DEFAULT_DECK_ID, manim_graph_preview_path
-from runtime_bootstrap import REPO_ROOT, ensure_directory
+from shared_media_paths import DEFAULT_DECK_ID, manim_graph_preview_path
+from shared_runtime_bootstrap import REPO_ROOT, ensure_directory
 
 
 LABEL_OFFSETS = {
@@ -36,7 +36,7 @@ def load_matplotlib():
     if importlib.util.find_spec("matplotlib") is None:
         raise RuntimeError(
             "matplotlib is not installed in the current Python environment. "
-            "Install it to use preview_graph_focus.py."
+            "Install it to use manim_preview_graph_focus.py."
         )
 
     import matplotlib

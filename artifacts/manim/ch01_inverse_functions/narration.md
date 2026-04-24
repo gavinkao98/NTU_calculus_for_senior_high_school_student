@@ -6,7 +6,7 @@ Deck ID: `ch01_inverse_functions`
 You may edit the narration text below each **Narration:** heading.
 Do NOT change the hidden hash comment lines either — they are used for stale-file conflict detection.
 Do NOT change the Slide ID lines — they are used to match edits back to the correct scene.
-After editing, run `python tools/sync_narration_back.py --deck-id ch01_inverse_functions` to write changes back to the storyboard YAML.
+After editing, run `python tools/manim_sync_narration_back.py --deck-id ch01_inverse_functions` to write changes back to the storyboard YAML.
 
 ## Slide 1: Inverse Functions
 

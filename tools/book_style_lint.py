@@ -299,14 +299,14 @@ def main() -> int:
         violations.extend(lint_file(path))
 
     if not violations:
-        print("style_lint: ok")
+        print("book_style_lint: ok")
         return 0
 
     for violation in violations:
         rel_path = violation.path.relative_to(ROOT)
         print(f"{rel_path}:{violation.line_number}: {violation.message}")
         print(f"  {violation.line}")
-    print(f"style_lint: {len(violations)} violation(s)")
+    print(f"book_style_lint: {len(violations)} violation(s)")
     return 1
 
 

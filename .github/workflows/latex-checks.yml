@@ -29,10 +29,10 @@ jobs:
             texlive-pictures
 
       - name: Run style lint
-        run: python tools/style_lint.py
+        run: python tools/book_style_lint.py
 
       - name: Run preamble smoke test
-        run: python tools/run_preamble_smoketest.py
+        run: python tools/book_preamble_smoketest.py
 
       - name: Build main book
         run: latexmk -pdf -interaction=nonstopmode -halt-on-error -file-line-error main.tex

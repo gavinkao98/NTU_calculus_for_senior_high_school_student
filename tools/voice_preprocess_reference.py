@@ -3,7 +3,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from runtime_bootstrap import REPO_ROOT, bootstrap_repo_deps, ensure_directory, require_path
+from shared_runtime_bootstrap import REPO_ROOT, bootstrap_repo_deps, ensure_directory, require_path
 
 bootstrap_repo_deps()
 

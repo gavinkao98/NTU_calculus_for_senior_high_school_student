@@ -14,7 +14,7 @@ from manim_storyboard_workflow import (
     scene_visual_fingerprint,
     write_render_manifest,
 )
-from media_paths import (
+from shared_media_paths import (
     DEFAULT_DECK_ID,
     audio_dir_path,
     audio_manifest_path,
@@ -22,7 +22,7 @@ from media_paths import (
     manim_segment_output_path,
     video_output_path,
 )
-from runtime_bootstrap import REPO_ROOT
+from shared_runtime_bootstrap import REPO_ROOT
 
 
 def parse_args() -> argparse.Namespace:
@@ -165,12 +165,12 @@ def build_audio_error(
     missing_detail = f" First missing file: {first_missing}." if first_missing else ""
     manifest_path = audio_manifest_path(REPO_ROOT, deck_id, "manim").resolve()
     coqui_cmd = (
-        "python .\\tools\\synthesize_section_audio.py "
+        "python .\\tools\\voice_synthesize_coqui.py "
         f"--deck-json {bridge_deck_path} --script-file {bridge_script_path} "
         f"--output-dir {audio_dir} --manifest {manifest_path} --coqui-tos-agreed"
     )
     f5_cmd = (
-        "python .\\tools\\synthesize_section_audio_f5.py "
+        "python .\\tools\\voice_synthesize_f5.py "
         f"--deck-json {bridge_deck_path} --script-file {bridge_script_path} "
         f"--output-dir {audio_dir} --manifest {manifest_path} --reference-mode clone"
     )

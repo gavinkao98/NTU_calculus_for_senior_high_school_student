@@ -8,13 +8,13 @@ import wave
 from importlib.resources import files
 from pathlib import Path
 
-from media_paths import (
+from shared_media_paths import (
     DEFAULT_DECK_ID,
     audio_dir_path,
     audio_manifest_path,
     deck_json_path,
 )
-from runtime_bootstrap import (
+from shared_runtime_bootstrap import (
     F5_DEPS_DIR,
     HF_CACHE_DIR,
     REPO_ROOT,
@@ -22,7 +22,7 @@ from runtime_bootstrap import (
     ensure_directory,
     require_path,
 )
-from slide_script_workflow import final_script_path, load_slide_scripts
+from slides_script_workflow import final_script_path, load_slide_scripts
 
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))

@@ -81,7 +81,7 @@ def main() -> int:
     required = ("baseline", "indented", "aligned", "condition")
     missing = [name for name in required if name not in positions]
     if missing:
-        print("preamble_smoketest: missing recorded positions")
+        print("book_preamble_smoketest: missing recorded positions")
         for name in missing:
             print(f"  {name}")
         return 1
@@ -98,12 +98,12 @@ def main() -> int:
             )
 
     if failures:
-        print("preamble_smoketest: indentation drift detected")
+        print("book_preamble_smoketest: indentation drift detected")
         for failure in failures:
             print(f"  {failure}")
         return 1
 
-    print("preamble_smoketest: ok")
+    print("book_preamble_smoketest: ok")
     return 0
 
 

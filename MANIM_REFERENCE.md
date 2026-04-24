@@ -19,7 +19,7 @@ This pipeline adds a second video path alongside the existing slide/PDF renderer
 - optionally bridge the storyboard voiceover into the existing TTS scripts
 - concatenate scene videos into one lesson MP4
 
-The storyboard is the source of truth for Manim output. The recommended workflow is to hand-write the storyboard directly from the LaTeX chapter source using [`MANIM_STORYBOARD.md`](MANIM_STORYBOARD.md) as the translation playbook. `tools/seed_manim_storyboard.py` remains available as a legacy bootstrap path that produces a first-draft YAML from an existing deck JSON; a seeded draft still needs substantial hand-revision before it matches the quality bar.
+The storyboard is the source of truth for Manim output. The recommended workflow is to hand-write the storyboard directly from the LaTeX chapter source using [`MANIM_STORYBOARD.md`](MANIM_STORYBOARD.md) as the translation playbook. `tools/manim_seed_storyboard.py` remains available as a legacy bootstrap path that produces a first-draft YAML from an existing deck JSON; a seeded draft still needs substantial hand-revision before it matches the quality bar.
 
 **Authoring a new storyboard from a chapter section?** This file is the *reference* layer — field contracts, template catalog, visual design system, render commands. For the *methodology* layer — how to decompose a section into scenes, map textbook environments to templates, rewrite prose as spoken narration, and handle book figures — see [`MANIM_STORYBOARD.md`](MANIM_STORYBOARD.md).
 
@@ -96,11 +96,11 @@ tools/manim_hooks/
 
 - `inputs/manim_storyboards/`: user-edited storyboard YAML files
 - `schemas/manim_storyboard.schema.json`: storyboard contract reference
-- `tools/seed_manim_storyboard.py`: seed a storyboard from an existing deck JSON
-- `tools/preview_manim_scene.py`: render one scene only
-- `tools/preview_graph_focus.py`: fast Matplotlib debug preview for `graph_focus` scenes
-- `tools/render_manim_lesson.py`: render the full lesson with scene caching
-- `tools/sync_narration_back.py`: sync edited `narration.md` back into the storyboard YAML
+- `tools/manim_seed_storyboard.py`: seed a storyboard from an existing deck JSON
+- `tools/manim_preview_scene.py`: render one scene only
+- `tools/manim_preview_graph_focus.py`: fast Matplotlib debug preview for `graph_focus` scenes
+- `tools/manim_render_lesson.py`: render the full lesson with scene caching
+- `tools/manim_sync_narration_back.py`: sync edited `narration.md` back into the storyboard YAML
 - `tools/manim_templates/`: reusable scene templates plus legacy hook compatibility
 - `tools/manim_hooks/`: recommended home for chapter/topic-specific custom hooks
 - `artifacts/manim/<deck_id>/`: cached scene videos, muxed segments, bridge deck JSON, render manifest
@@ -115,7 +115,7 @@ The runtime scripts need local tools that are separate from this repo:
 
 - `manim` in the active Python environment
 - either standalone `ffmpeg` on `PATH`, or the Python package `imageio-ffmpeg`
-- optional: `matplotlib` if you want to use `preview_graph_focus.py`
+- optional: `matplotlib` if you want to use `manim_preview_graph_focus.py`
 
 Without them, the scripts still support validation and seeding, but actual scene rendering will stop with a clear prerequisite error.
 
@@ -212,7 +212,7 @@ data:
     always produce different outputs.
 ```
 
-The local YAML loader supports both `|` and `>` forms, and `sync_narration_back.py` can now write block scalars back into the storyboard when a narration becomes multi-line.
+The local YAML loader supports both `|` and `>` forms, and `manim_sync_narration_back.py` can now write block scalars back into the storyboard when a narration becomes multi-line.
 
 ### Graph authoring rules (`graph_focus`)
 
@@ -260,7 +260,7 @@ plots:
 If you only want to debug curve placement or `label_x`, use the fast preview tool instead of running Manim:
 
 ```powershell
-python .\tools\preview_graph_focus.py `
+python .\tools\manim_preview_graph_focus.py `
   --deck-id ch01_inverse_functions `
   --scene-id cubic_graph_reflection
 ```
@@ -344,7 +344,7 @@ The `narration.md` file is a clean, readable transcript of all scene narrations 
 1. Export the narration file (this happens automatically when rendering):
 
     ```powershell
-    python .\tools\render_manim_lesson.py --deck-id ch01_inverse_functions --quality preview --with-audio
+    python .\tools\manim_render_lesson.py --deck-id ch01_inverse_functions --quality preview --with-audio
     ```
 
     If scene WAV files do not exist yet, the command still writes `narration.md` and `tts_deck.json`, then stops with ready-to-run TTS instructions.
@@ -356,13 +356,13 @@ The `narration.md` file is a clean, readable transcript of all scene narrations 
 3. Preview what changed:
 
     ```powershell
-    python .\tools\sync_narration_back.py --deck-id ch01_inverse_functions --dry-run
+    python .\tools\manim_sync_narration_back.py --deck-id ch01_inverse_functions --dry-run
     ```
 
 4. Write changes back to the YAML:
 
     ```powershell
-    python .\tools\sync_narration_back.py --deck-id ch01_inverse_functions
+    python .\tools\manim_sync_narration_back.py --deck-id ch01_inverse_functions
     ```
 
     The script creates a `.yml.bak` backup before writing.
@@ -380,13 +380,13 @@ The `narration.md` file is a clean, readable transcript of all scene narrations 
 Seed a storyboard from an existing deck JSON (legacy bootstrap path -- prefer hand-writing per [`MANIM_STORYBOARD.md`](MANIM_STORYBOARD.md)):
 
 ```powershell
-python .\tools\seed_manim_storyboard.py --deck-id ch01_inverse_functions
+python .\tools\manim_seed_storyboard.py --deck-id ch01_inverse_functions
 ```
 
 Preview one scene:
 
 ```powershell
-python .\tools\preview_manim_scene.py `
+python .\tools\manim_preview_scene.py `
   --deck-id ch01_inverse_functions `
   --scene-id one_to_one_definition
 ```
@@ -394,7 +394,7 @@ python .\tools\preview_manim_scene.py `
 Preview only the wiring without rendering:
 
 ```powershell
-python .\tools\preview_manim_scene.py `
+python .\tools\manim_preview_scene.py `
   --deck-id ch01_inverse_functions `
   --scene-id horizontal_line_test_figure `
   --dry-run
@@ -403,7 +403,7 @@ python .\tools\preview_manim_scene.py `
 Preview a `graph_focus` scene with Matplotlib for fast `label_x` / curve debugging:
 
 ```powershell
-python .\tools\preview_graph_focus.py `
+python .\tools\manim_preview_graph_focus.py `
   --deck-id ch01_inverse_functions `
   --scene-id cubic_graph_reflection
 ```
@@ -411,13 +411,13 @@ python .\tools\preview_graph_focus.py `
 Render the whole lesson:
 
 ```powershell
-python .\tools\render_manim_lesson.py --deck-id ch01_inverse_functions --quality preview
+python .\tools\manim_render_lesson.py --deck-id ch01_inverse_functions --quality preview
 ```
 
 Render a lesson with audio once the scene WAV files exist:
 
 ```powershell
-python .\tools\render_manim_lesson.py `
+python .\tools\manim_render_lesson.py `
   --deck-id ch01_inverse_functions `
   --quality preview `
   --with-audio
@@ -426,7 +426,7 @@ python .\tools\render_manim_lesson.py `
 Validate the lesson pipeline without rendering:
 
 ```powershell
-python .\tools\render_manim_lesson.py `
+python .\tools\manim_render_lesson.py `
   --deck-id ch01_inverse_functions `
   --quality preview `
   --dry-run
@@ -435,18 +435,18 @@ python .\tools\render_manim_lesson.py `
 Sync edited narration from `narration.md` back to the storyboard:
 
 ```powershell
-python .\tools\sync_narration_back.py --deck-id ch01_inverse_functions
+python .\tools\manim_sync_narration_back.py --deck-id ch01_inverse_functions
 ```
 
 Preview narration changes without writing:
 
 ```powershell
-python .\tools\sync_narration_back.py --deck-id ch01_inverse_functions --dry-run
+python .\tools\manim_sync_narration_back.py --deck-id ch01_inverse_functions --dry-run
 ```
 
 ## Audio Bridge
 
-When you pass `--with-audio`, `render_manim_lesson.py` first exports:
+When you pass `--with-audio`, `manim_render_lesson.py` first exports:
 
 - `artifacts/manim/<deck_id>/narration.md`
 - `artifacts/manim/<deck_id>/tts_deck.json`
@@ -463,16 +463,16 @@ If the audio files are missing, the script prints ready-to-run Coqui and F5 brid
 Recommended audio flow:
 
 1. Edit `voiceover` in the storyboard until the spoken wording feels right.
-2. Run `render_manim_lesson.py --with-audio` once.
+2. Run `manim_render_lesson.py --with-audio` once.
 3. If scene WAV files are missing, copy one of the printed TTS commands and generate audio.
-4. Re-run `render_manim_lesson.py --with-audio` to mux the lesson.
+4. Re-run `manim_render_lesson.py --with-audio` to mux the lesson.
 
 Equivalent explicit commands are:
 
 ### Coqui bridge
 
 ```powershell
-python .\tools\synthesize_section_audio.py `
+python .\tools\voice_synthesize_coqui.py `
   --deck-json artifacts\manim\ch01_inverse_functions\tts_deck.json `
   --script-file artifacts\manim\ch01_inverse_functions\narration.md `
   --output-dir artifacts\audio\ch01_inverse_functions_manim `
@@ -483,7 +483,7 @@ python .\tools\synthesize_section_audio.py `
 ### F5 bridge
 
 ```powershell
-python .\tools\synthesize_section_audio_f5.py `
+python .\tools\voice_synthesize_f5.py `
   --deck-json artifacts\manim\ch01_inverse_functions\tts_deck.json `
   --script-file artifacts\manim\ch01_inverse_functions\narration.md `
   --output-dir artifacts\audio\ch01_inverse_functions_manim `
@@ -495,7 +495,7 @@ Maintenance rule:
 
 - for Manim lessons, the storyboard `voiceover` is the narration source of truth
 - `artifacts/manim/<deck_id>/narration.md` is the Manim narration transcript (separate from the Beamer `artifacts/scripts/` pipeline)
-- you may edit `narration.md` for proofreading, then run `sync_narration_back.py` to write changes back to the YAML (see Narration Proofreading above)
+- you may edit `narration.md` for proofreading, then run `manim_sync_narration_back.py` to write changes back to the YAML (see Narration Proofreading above)
 - if you edit `narration.md` but do **not** sync, your changes will be overwritten the next time the bridge is exported
 
 Runtime note:
@@ -527,11 +527,11 @@ The Manim pipeline is **independent** from the slide/PDF pipeline. Storyboards a
 Once a chapter's LaTeX content is finalised, the path to a teaching video is:
 
 1. **Design** — read the LaTeX source and write a storyboard YAML from scratch, choosing templates, writing voiceover, and structuring data for animation
-2. **Preview** — `preview_manim_scene.py` renders one scene at a time for rapid iteration
-3. **Proofread** — export `narration.md`, review and edit the narration, then run `sync_narration_back.py` to push corrections back to the YAML
+2. **Preview** — `manim_preview_scene.py` renders one scene at a time for rapid iteration
+3. **Proofread** — export `narration.md`, review and edit the narration, then run `manim_sync_narration_back.py` to push corrections back to the YAML
 4. **Audio** — synthesise voiceover audio via the TTS bridge (Coqui or F5)
-5. **Render** — `render_manim_lesson.py --with-audio` produces the final lesson MP4
+5. **Render** — `manim_render_lesson.py --with-audio` produces the final lesson MP4
 
 See [`MANIM_CHECKLIST.md`](MANIM_CHECKLIST.md) for the full step-by-step checklist.
 
-The seeding script (`seed_manim_storyboard.py`) still exists for bootstrapping a first draft from an existing deck JSON, but the recommended workflow is to design the storyboard independently to take full advantage of Manim's animation capabilities.
+The seeding script (`manim_seed_storyboard.py`) still exists for bootstrapping a first draft from an existing deck JSON, but the recommended workflow is to design the storyboard independently to take full advantage of Manim's animation capabilities.

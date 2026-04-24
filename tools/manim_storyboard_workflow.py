@@ -7,7 +7,7 @@ import re
 from pathlib import Path
 from typing import Any
 
-from media_paths import (
+from shared_media_paths import (
     DEFAULT_DECK_ID,
     deck_json_path,
     manim_narration_path,
@@ -15,9 +15,9 @@ from media_paths import (
     manim_storyboard_path,
     manim_tts_deck_path,
 )
-from runtime_bootstrap import REPO_ROOT, ensure_directory, require_path
-from simple_yaml import dump_yaml, load_yaml_path
-from slide_script_workflow import final_script_path, load_slide_scripts
+from shared_runtime_bootstrap import REPO_ROOT, ensure_directory, require_path
+from shared_simple_yaml import dump_yaml, load_yaml_path
+from slides_script_workflow import final_script_path, load_slide_scripts
 
 
 TEMPLATE_NAMES = {
@@ -746,7 +746,7 @@ def render_storyboard_script_markdown(storyboard: dict[str, Any], storyboard_pat
         "You may edit the narration text below each **Narration:** heading.",
         "Do NOT change the hidden hash comment lines either — they are used for stale-file conflict detection.",
         "Do NOT change the Slide ID lines — they are used to match edits back to the correct scene.",
-        "After editing, run `python tools/sync_narration_back.py --deck-id "
+        "After editing, run `python tools/manim_sync_narration_back.py --deck-id "
         + storyboard["deck_id"]
         + "` to write changes back to the storyboard YAML.",
         "",

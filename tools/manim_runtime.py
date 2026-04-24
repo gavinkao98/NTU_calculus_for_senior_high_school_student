@@ -9,14 +9,14 @@ import wave
 from pathlib import Path
 from typing import Any
 
-from runtime_bootstrap import REPO_ROOT, ensure_directory, require_path
+from shared_runtime_bootstrap import REPO_ROOT, ensure_directory, require_path
 
 
 def ensure_manim_available() -> None:
     if importlib.util.find_spec("manim") is None:
         raise RuntimeError(
             "Manim is not installed in the current Python environment. "
-            "Install it before using preview_manim_scene.py or render_manim_lesson.py."
+            "Install it before using manim_preview_scene.py or manim_render_lesson.py."
         )
 
 

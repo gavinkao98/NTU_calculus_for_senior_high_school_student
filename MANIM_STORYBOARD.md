@@ -78,8 +78,8 @@ Do **not** seed from the deck JSON. The modern workflow designs directly from La
 4. **Add transitions** between subsections if the section has enough structural breaks -- a `section_transition` scene is 3-4 seconds of relief between conceptual blocks.
 5. **Add supplementary visualizations** where prose-only content in the book benefits from a graph (reflection across `y = x`, counterexamples on curves, domain restrictions). These are not in the book; they are added for pedagogy.
 6. **Write each scene** -- `scene_id`, `template`, `content_type` if ambiguous, `title`, `voiceover`, `data`, `timing`. See per-field rules below.
-7. **Preview every new `graph_focus` scene** with `tools/preview_graph_focus.py` before committing -- this is faster than a full Manim render and catches most expression/labeling mistakes.
-8. **Proofread the full narration** by exporting `narration.md` and reading it top to bottom as if you were a student. Edit in place, then `sync_narration_back.py`.
+7. **Preview every new `graph_focus` scene** with `tools/manim_preview_graph_focus.py` before committing -- this is faster than a full Manim render and catches most expression/labeling mistakes.
+8. **Proofread the full narration** by exporting `narration.md` and reading it top to bottom as if you were a student. Edit in place, then `manim_sync_narration_back.py`.
 9. **Render with audio** and watch the whole thing at 1x speed. Anything that sounds awkward or looks cramped is a signal to re-edit, not ship.
 
 ---
@@ -450,7 +450,7 @@ Thus the inverse is correct.
 
 - Stay inside the expression-helper vocabulary: `sin`, `cos`, `tan`, `sqrt`, `exp`, `log`, `cbrt`, `abs`, `pi`, `e`. `graph_focus` expressions **MUST** use `cbrt(...)` for cube roots and **MUST NOT** use `**(1/3)`; the latter produces complex numbers on negative bases and breaks Manim's plotter. ([MANIM_REFERENCE.md:220-233](MANIM_REFERENCE.md#L220-L233))
 - Set `x_range` on a plot to the restricted domain if you are illustrating a restriction; do not rely on axis clipping.
-- Use `label_side` and `label_x` when two curves are close together or a label might overlap the `y = x` line. Preview with `preview_graph_focus.py` to verify.
+- Use `label_side` and `label_x` when two curves are close together or a label might overlap the `y = x` line. Preview with `manim_preview_graph_focus.py` to verify.
 - Keep `annotations` to one short sentence each, 6.5 units wide at most.
 - For the Midnight Canvas color assignment: primary curve cool cyan `#4cc9f0`, inverse/contrast curve warm gold `#f9a825`, `y = x` reflection line faded grey `#c8c8d8` dashed, counterexample lines coral `#ff6b6b` dashed, highlighted points gold.
 
@@ -614,7 +614,7 @@ A `hook` is a dotted Python path to a custom animation function (e.g., `tools.ma
 
 ## Pre-render Checklist
 
-Before running `render_manim_lesson.py`:
+Before running `manim_render_lesson.py`:
 
 ### Content
 - [ ] Every `\begin{definition}`, `\begin{theorem}`, `\begin{proposition}`, and `\begin{example}` in the source section is covered by a scene.
@@ -636,7 +636,7 @@ Before running `render_manim_lesson.py`:
 - [ ] `transform_from_previous` is used between evolving equations, `highlight` on the final line.
 - [ ] Every `graph_focus` plot has its `x_range` set to the restricted domain if relevant, and `label_side` / `label_x` set when labels could overlap.
 - [ ] `cbrt(...)` is used for cube roots, not `**(1/3)`.
-- [ ] Every graph scene has been previewed with `preview_graph_focus.py`.
+- [ ] Every graph scene has been previewed with `manim_preview_graph_focus.py`.
 
 ### Metadata
 - [ ] `content_type` is explicit on every `definition_math` scene.

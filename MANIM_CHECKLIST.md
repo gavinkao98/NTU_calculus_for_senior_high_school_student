@@ -40,7 +40,7 @@ Work through [`MANIM_STORYBOARD.md`](MANIM_STORYBOARD.md) for the full translati
 A first-draft YAML can be seeded from an existing slide-pipeline deck JSON:
 
 ```powershell
-python .\tools\seed_manim_storyboard.py --deck-id <DECK_ID>
+python .\tools\manim_seed_storyboard.py --deck-id <DECK_ID>
 ```
 
 Prerequisite: `artifacts/slide_spec/<DECK_ID>.json` exists. The seeded draft is a bootstrap, not a finished storyboard -- it must be hand-revised against `MANIM_STORYBOARD.md` before rendering.
@@ -90,7 +90,7 @@ The storyboard YAML is the **single source of truth**. Edit per scene:
 Iterate on one scene at a time at preview quality:
 
 ```powershell
-python .\tools\preview_manim_scene.py --deck-id <DECK_ID> --scene-id <SCENE_ID>
+python .\tools\manim_preview_scene.py --deck-id <DECK_ID> --scene-id <SCENE_ID>
 ```
 
 Watch the output at `artifacts/manim/<DECK_ID>/scenes/NN_<SCENE_ID>.mp4`.
@@ -98,19 +98,19 @@ Watch the output at `artifacts/manim/<DECK_ID>/scenes/NN_<SCENE_ID>.mp4`.
 Validate without rendering:
 
 ```powershell
-python .\tools\preview_manim_scene.py --deck-id <DECK_ID> --scene-id <SCENE_ID> --dry-run
+python .\tools\manim_preview_scene.py --deck-id <DECK_ID> --scene-id <SCENE_ID> --dry-run
 ```
 
 Force re-render after code changes:
 
 ```powershell
-python .\tools\preview_manim_scene.py --deck-id <DECK_ID> --scene-id <SCENE_ID> --force
+python .\tools\manim_preview_scene.py --deck-id <DECK_ID> --scene-id <SCENE_ID> --force
 ```
 
 For `graph_focus` scenes, use the fast Matplotlib preview when you only need to tune a curve or `label_x`:
 
 ```powershell
-python .\tools\preview_graph_focus.py --deck-id <DECK_ID> --scene-id <SCENE_ID>
+python .\tools\manim_preview_graph_focus.py --deck-id <DECK_ID> --scene-id <SCENE_ID>
 ```
 
 Repeat until every scene looks right.
@@ -122,13 +122,13 @@ Repeat until every scene looks right.
 Validate the complete lesson:
 
 ```powershell
-python .\tools\render_manim_lesson.py --deck-id <DECK_ID> --quality preview --dry-run
+python .\tools\manim_render_lesson.py --deck-id <DECK_ID> --quality preview --dry-run
 ```
 
 Render and concatenate all scenes:
 
 ```powershell
-python .\tools\render_manim_lesson.py --deck-id <DECK_ID> --quality preview
+python .\tools\manim_render_lesson.py --deck-id <DECK_ID> --quality preview
 ```
 
 Watch `artifacts/video/<DECK_ID>_manim.mp4`. Check:
@@ -146,7 +146,7 @@ Watch `artifacts/video/<DECK_ID>_manim.mp4`. Check:
 ### 5a. Export bridge files
 
 ```powershell
-python .\tools\render_manim_lesson.py --deck-id <DECK_ID> --quality preview --with-audio
+python .\tools\manim_render_lesson.py --deck-id <DECK_ID> --quality preview --with-audio
 ```
 
 This creates:
@@ -160,7 +160,7 @@ It will fail with an error showing the exact TTS commands to run. This is expect
 **Coqui XTTS (clone mode)** — best quality, requires `artifacts/voice/reference_30s.wav`:
 
 ```powershell
-python .\tools\synthesize_section_audio.py `
+python .\tools\voice_synthesize_coqui.py `
   --deck-json artifacts\manim\<DECK_ID>\tts_deck.json `
   --script-file artifacts\manim\<DECK_ID>\narration.md `
   --output-dir artifacts\audio\<DECK_ID>_manim `
@@ -171,7 +171,7 @@ python .\tools\synthesize_section_audio.py `
 **Coqui Jenny (builtin mode)** — no reference WAV needed:
 
 ```powershell
-python .\tools\synthesize_section_audio.py `
+python .\tools\voice_synthesize_coqui.py `
   --deck-json artifacts\manim\<DECK_ID>\tts_deck.json `
   --script-file artifacts\manim\<DECK_ID>\narration.md `
   --output-dir artifacts\audio\<DECK_ID>_manim `
@@ -183,7 +183,7 @@ python .\tools\synthesize_section_audio.py `
 **F5-TTS (example mode)** — alternative, no reference WAV:
 
 ```powershell
-python .\tools\synthesize_section_audio_f5.py `
+python .\tools\voice_synthesize_f5.py `
   --deck-json artifacts\manim\<DECK_ID>\tts_deck.json `
   --script-file artifacts\manim\<DECK_ID>\narration.md `
   --output-dir artifacts\audio\<DECK_ID>_manim `
@@ -203,7 +203,7 @@ Narration-only edits now reuse the cached silent Manim scene video, so you shoul
 ## Phase 6 — Final Render with Audio
 
 ```powershell
-python .\tools\render_manim_lesson.py --deck-id <DECK_ID> --quality final --with-audio
+python .\tools\manim_render_lesson.py --deck-id <DECK_ID> --quality final --with-audio
 ```
 
 This:
@@ -252,7 +252,7 @@ artifacts/video/<DECK_ID>_manim.mp4        <- final output
 |---------|-----|
 | `ModuleNotFoundError: manim` | `pip install manim` |
 | `FFmpeg is not available` | Install ffmpeg or `pip install imageio-ffmpeg` |
-| `matplotlib is not installed` | Install `matplotlib` if you want to use `preview_graph_focus.py` |
+| `matplotlib is not installed` | Install `matplotlib` if you want to use `manim_preview_graph_focus.py` |
 | `Missing voice reference WAV` | Provide `artifacts/voice/reference_30s.wav` or use `--voice-mode builtin` / `--reference-mode example` |
 | `XTTS v2 requires explicit agreement` | Add `--coqui-tos-agreed` |
 | Scene not re-rendering after edits | Use `--force` (fingerprint may have matched) |

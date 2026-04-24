@@ -10,8 +10,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from runtime_bootstrap import REPO_ROOT, ensure_directory, require_path
-from slide_script_workflow import (
+from shared_runtime_bootstrap import REPO_ROOT, ensure_directory, require_path
+from slides_script_workflow import (
     assert_no_raw_latex_narration,
     draft_script_path,
     final_script_path,

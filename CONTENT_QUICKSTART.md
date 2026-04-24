@@ -143,8 +143,8 @@ Rule of thumb: **if a reader will flip back to find it, it goes in the index**. 
 Run locally:
 
 ```powershell
-python tools/style_lint.py
-python tools/run_preamble_smoketest.py
+python tools/book_style_lint.py
+python tools/book_preamble_smoketest.py
 latexmk -pdf -interaction=nonstopmode -halt-on-error -file-line-error main.tex
 ```
 

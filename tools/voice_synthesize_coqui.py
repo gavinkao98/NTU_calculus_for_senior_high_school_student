@@ -6,14 +6,14 @@ import os
 import re
 from pathlib import Path
 
-from media_paths import (
+from shared_media_paths import (
     DEFAULT_DECK_ID,
     audio_dir_path,
     audio_manifest_path,
     deck_json_path,
 )
-from runtime_bootstrap import REPO_ROOT, bootstrap_repo_deps, ensure_directory, require_path
-from slide_script_workflow import final_script_path, load_slide_scripts
+from shared_runtime_bootstrap import REPO_ROOT, bootstrap_repo_deps, ensure_directory, require_path
+from slides_script_workflow import final_script_path, load_slide_scripts
 
 bootstrap_repo_deps()
 

@@ -60,7 +60,7 @@ Finalize the chapter content first. Hand-write the storyboard from the finalized
 - `preamble/` — shared LaTeX setup (see *Preamble Map* below).
 - `preamble_smoketest.tex` — minimal regression document for preamble-only layout checks.
 - `refs/` — bibliography data.
-- `tools/` — media-generation scripts plus book-source utilities (`style_lint.py`, `run_preamble_smoketest.py`, and vendored helpers).
+- `tools/` — media-generation scripts plus book-source utilities (`book_style_lint.py`, `book_preamble_smoketest.py`, and vendored helpers).
 - `schemas/` — JSON schema files for generated deck data.
 - `inputs/` — reusable raw inputs: voice recordings, section media plans, Manim storyboards.
 - `artifacts/` — mostly generated slides, narration, audio, video. Tracked exceptions: `artifacts/scripts/*_final.md`, `artifacts/slides/*.tex`, and `artifacts/manim/*/narration.md`.
@@ -107,8 +107,8 @@ latexmk -pdf -interaction=nonstopmode -halt-on-error -file-line-error main.tex
 Before committing a chapter, also run:
 
 ```powershell
-python tools/style_lint.py
-python tools/run_preamble_smoketest.py
+python tools/book_style_lint.py
+python tools/book_preamble_smoketest.py
 ```
 
 All three checks run on every push and PR via [`.github/workflows/latex-checks.yml`](.github/workflows/latex-checks.yml).

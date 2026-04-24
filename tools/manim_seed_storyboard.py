@@ -3,7 +3,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from media_paths import DEFAULT_DECK_ID, deck_json_path, manim_storyboard_path
+from shared_media_paths import DEFAULT_DECK_ID, deck_json_path, manim_storyboard_path
 from manim_storyboard_workflow import (
     build_seed_storyboard,
     load_deck_json,
@@ -11,7 +11,7 @@ from manim_storyboard_workflow import (
     load_storyboard,
     write_storyboard,
 )
-from runtime_bootstrap import REPO_ROOT
+from shared_runtime_bootstrap import REPO_ROOT
 
 
 def parse_args() -> argparse.Namespace:

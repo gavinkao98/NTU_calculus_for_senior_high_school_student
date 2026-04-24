@@ -5,8 +5,8 @@ import json
 import subprocess
 from pathlib import Path
 
-from media_paths import DEFAULT_DECK_ID, audio_dir_path, deck_json_path, slide_pdf_path, video_output_path
-from runtime_bootstrap import REPO_ROOT, bootstrap_repo_deps, ensure_directory, require_path
+from shared_media_paths import DEFAULT_DECK_ID, audio_dir_path, deck_json_path, slide_pdf_path, video_output_path
+from shared_runtime_bootstrap import REPO_ROOT, bootstrap_repo_deps, ensure_directory, require_path
 
 bootstrap_repo_deps()
 

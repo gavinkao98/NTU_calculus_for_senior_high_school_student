@@ -3,11 +3,11 @@
 
 Usage
 -----
-    python tools/sync_narration_back.py --deck-id ch01_inverse_functions
+    python tools/manim_sync_narration_back.py --deck-id ch01_inverse_functions
 
 Workflow
 --------
-1. Run ``render_manim_lesson.py --with-audio`` (or the export step) to produce
+1. Run ``manim_render_lesson.py --with-audio`` (or the export step) to produce
    ``artifacts/manim/<deck_id>/narration.md``.
 2. Edit the narration text under each scene's ``Narration:`` heading.
 3. Run this script to push changed narration back into the storyboard YAML.
@@ -36,8 +36,8 @@ if str(_TOOLS_DIR) not in sys.path:
     sys.path.insert(0, str(_TOOLS_DIR))
 
 from manim_storyboard_workflow import normalize_narration_text, voiceover_content_hash
-from media_paths import manim_narration_path, manim_storyboard_path
-from runtime_bootstrap import REPO_ROOT
+from shared_media_paths import manim_narration_path, manim_storyboard_path
+from shared_runtime_bootstrap import REPO_ROOT
 
 
 _SLIDE_HEADER_RE = re.compile(r"^## Slide \d+:\s+.+$")
@@ -160,7 +160,7 @@ def update_voiceovers_in_yaml(yaml_text: str, updates: dict[str, str]) -> str:
 
 
 def extract_current_voiceovers(yaml_text: str) -> dict[str, str]:
-    from simple_yaml import load_yaml
+    from shared_simple_yaml import load_yaml
 
     current_storyboard = load_yaml(yaml_text)
     current_voiceovers: dict[str, str] = {}
@@ -218,7 +218,7 @@ def main() -> None:
 
     if not script_path.exists():
         print(f"ERROR: narration file not found: {script_path}", file=sys.stderr)
-        print("Run render_manim_lesson.py first to export the narration file.", file=sys.stderr)
+        print("Run manim_render_lesson.py first to export the narration file.", file=sys.stderr)
         sys.exit(1)
     if not storyboard_path.exists():
         print(f"ERROR: storyboard not found: {storyboard_path}", file=sys.stderr)

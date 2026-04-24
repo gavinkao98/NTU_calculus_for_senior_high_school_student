@@ -598,7 +598,7 @@ Use `\dots` (context-aware). Do not hard-code `\ldots` or three literal periods.
 
 - Double quotes in prose: `` ``...'' `` (double backtick open, double apostrophe close).
 - Single quotes: `` `...' ``.
-- **MUST NOT** use straight ASCII `"..."` in chapter files. This is enforced by `tools/style_lint.py`.
+- **MUST NOT** use straight ASCII `"..."` in chapter files. This is enforced by `tools/book_style_lint.py`.
 
 ### Emphasis
 
@@ -800,7 +800,7 @@ New environments, new display helpers, and new colour definitions belong in `pre
 
 The continuous-integration pipeline ([`.github/workflows/latex-checks.yml`](.github/workflows/latex-checks.yml)) runs three checks on every push and pull request:
 
-1. **`tools/style_lint.py`** — regex-based linter that enforces, at minimum:
+1. **`tools/book_style_lint.py`** — regex-based linter that enforces, at minimum:
    - no manual cross-reference prefixes;
    - no `\newpage` / `\pagebreak` / `\clearpage` in chapter or `main.tex` source;
    - no ASCII `"..."` quotes;
@@ -808,7 +808,7 @@ The continuous-integration pipeline ([`.github/workflows/latex-checks.yml`](.git
    - every `\begin{definition}` body contains at least one `\index{...}`;
    - every `\begin{theorem}[Name]` has a matching `\index{Name}` nearby;
    - every chapter file opens with `\chapter{...}` followed by an overview paragraph and a learning-outcomes bullet list.
-2. **`tools/run_preamble_smoketest.py`** — compiles `preamble_smoketest.tex` and verifies that continuation prose after `aligneddisplay` / `conditiondisplay` is not spuriously indented.
+2. **`tools/book_preamble_smoketest.py`** — compiles `preamble_smoketest.tex` and verifies that continuation prose after `aligneddisplay` / `conditiondisplay` is not spuriously indented.
 3. **`latexmk -pdf -interaction=nonstopmode -halt-on-error -file-line-error main.tex`** — full build, catching structural errors, missing references, and malformed source.
 
 All three checks **MUST** pass on the feature branch before a chapter is considered ready for review.
@@ -930,8 +930,8 @@ Before committing a chapter or declaring it ready for review, verify:
 - [ ] Every section end has either a real `\subsection*{Exercises}` block or a TODO placeholder.
 
 **CI**
-- [ ] `python tools/style_lint.py` passes.
-- [ ] `python tools/run_preamble_smoketest.py` passes.
+- [ ] `python tools/book_style_lint.py` passes.
+- [ ] `python tools/book_preamble_smoketest.py` passes.
 - [ ] `latexmk -pdf` builds without errors.
 
 ---
@@ -940,7 +940,7 @@ Before committing a chapter or declaring it ready for review, verify:
 
 - **v3.0** — from-scratch rewrite. Target register shifted from Spivak / Apostol (shared formal-statement counter, austere pronouns, strict definition purity, sparing figures and remarks) to Stewart / Rogawski (per-type counters, "you" permitted in specific contexts, *"Informally, ..."* gloss allowed inside `definition`, denser figures and more generous remarks). New environments `caution` and `strategy` added to support notation-trap warnings and problem-solving strategy boxes; `lemma` dropped. Display-helper set reduced from 7 to 5 (removed `\iffstackeddisplay` and `\iffwithconditions`). Display Block Cohesion downgraded from MUST to SHOULD. Index policy expanded to cover key examples, notation traps, and first-mention applied settings. Chapter opening gains a mandatory learning-outcomes bullet list; chapter closing gains a mandatory `\section*{Summary}` block. `\emph{...}` permitted in motivation prose for the first mention of a term. Exercise-system design deferred until main content is complete. CI checks expanded to cover the new rules. Notation policy consolidated into its own section (§9). The voice reference sample is rewritten in Stewart tone.
 
-  v3.0 is the positioning-level rewrite. Concrete preamble and template implementation work (per-env counters via individual `\newtheorem`, new `caution`/`strategy` environments, `preamble/colors.tex`, expanded `style_lint.py` rules, updated `_chapter_template.tex`) follows in a separate implementation pass and is not part of this document's version bump.
+  v3.0 is the positioning-level rewrite. Concrete preamble and template implementation work (per-env counters via individual `\newtheorem`, new `caution`/`strategy` environments, `preamble/colors.tex`, expanded `book_style_lint.py` rules, updated `_chapter_template.tex`) follows in a separate implementation pass and is not part of this document's version bump.
 
 - **v2.x** — earlier versions (v2.0 through v2.0.11) accreted rule additions through per-chapter review; the resulting document was organised by date of addition rather than by topic. Notable decisions from v2.x preserved verbatim in v3.0 include: cleveref-only cross-references, `[H]` default figure placement with Exception Protocol, shared formula-display helpers `aligneddisplay` / `conditiondisplay` / `\pairdisplay`, chapter-scoped counters, paired-definition cross-reference rule, `workedexample` wrapper semantics, `\qedhere` on final display line of `solution`, and the three-layer CI (style lint + preamble smoketest + latexmk).
 

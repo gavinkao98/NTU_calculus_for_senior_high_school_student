@@ -12,8 +12,8 @@ from manim_storyboard_workflow import (
     scene_visual_fingerprint,
     write_render_manifest,
 )
-from media_paths import DEFAULT_DECK_ID, manim_scene_output_path
-from runtime_bootstrap import REPO_ROOT
+from shared_media_paths import DEFAULT_DECK_ID, manim_scene_output_path
+from shared_runtime_bootstrap import REPO_ROOT
 
 
 def parse_args() -> argparse.Namespace:

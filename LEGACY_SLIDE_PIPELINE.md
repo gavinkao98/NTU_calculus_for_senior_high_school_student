@@ -48,7 +48,7 @@ If you want to change slide selection rules for one section, edit this plan file
 ### 3. Generate slides and narration files
 
 ```powershell
-python .\tools\generate_section_media.py --deck-id ch01_inverse_functions --compile auto
+python .\tools\slides_generate_section_media.py --deck-id ch01_inverse_functions --compile auto
 ```
 
 Regenerated artifacts:
@@ -65,7 +65,7 @@ First-time-only:
 JSON + TeX + draft markdown only (skip PDF):
 
 ```powershell
-python .\tools\generate_section_media.py --deck-id ch01_inverse_functions --compile never
+python .\tools\slides_generate_section_media.py --deck-id ch01_inverse_functions --compile never
 ```
 
 ### 4. Edit the final narration
@@ -105,8 +105,8 @@ Quality pass before moving on:
 ### 5. Validate before TTS
 
 ```powershell
-python .\tools\synthesize_section_audio.py --deck-id ch01_inverse_functions --dry-run
-python .\tools\synthesize_section_audio_f5.py --deck-id ch01_inverse_functions --reference-mode clone --dry-run
+python .\tools\voice_synthesize_coqui.py --deck-id ch01_inverse_functions --dry-run
+python .\tools\voice_synthesize_f5.py --deck-id ch01_inverse_functions --reference-mode clone --dry-run
 ```
 
 Both commands confirm:
@@ -122,13 +122,13 @@ If dry-run fails, do not start a long synthesis run.
 Coqui clone:
 
 ```powershell
-python .\tools\synthesize_section_audio.py --deck-id ch01_inverse_functions --coqui-tos-agreed
+python .\tools\voice_synthesize_coqui.py --deck-id ch01_inverse_functions --coqui-tos-agreed
 ```
 
 F5 clone:
 
 ```powershell
-python .\tools\synthesize_section_audio_f5.py --deck-id ch01_inverse_functions --reference-mode clone
+python .\tools\voice_synthesize_f5.py --deck-id ch01_inverse_functions --reference-mode clone
 ```
 
 Check that WAV filenames match current slide ids. If `--reference-text` is passed to F5, it **must** match the reference WAV's spoken content word for word.
@@ -136,7 +136,7 @@ Check that WAV filenames match current slide ids. If `--reference-text` is passe
 ### 7. Validate video inputs
 
 ```powershell
-python .\tools\render_section_video.py --deck-id ch01_inverse_functions --dry-run
+python .\tools\slides_render_section_video.py --deck-id ch01_inverse_functions --dry-run
 ```
 
 Common failure causes: missing audio, stale audio filenames from an older deck version, slide count mismatch between PDF and deck JSON.
@@ -144,13 +144,13 @@ Common failure causes: missing audio, stale audio filenames from an older deck v
 ### 8. Render the MP4
 
 ```powershell
-python .\tools\render_section_video.py --deck-id ch01_inverse_functions
+python .\tools\slides_render_section_video.py --deck-id ch01_inverse_functions
 ```
 
 With a custom audio set:
 
 ```powershell
-python .\tools\render_section_video.py `
+python .\tools\slides_render_section_video.py `
   --deck-id ch01_inverse_functions `
   --audio-dir artifacts\audio\ch01_inverse_functions_f5_clone `
   --output artifacts\video\ch01_inverse_functions_f5_clone.mp4
@@ -265,7 +265,7 @@ Examples:
 
 - per-section narration wording — edit `artifacts/scripts/<deck_id>_final.md`.
 - seeded draft wording for future regenerations — edit `inputs/media_plans/<deck_id>.json`.
-- markdown structure and parser rules — edit `tools/slide_script_workflow.py`.
+- markdown structure and parser rules — edit `tools/slides_script_workflow.py`.
 
 ---
 
@@ -274,13 +274,13 @@ Examples:
 Use the preprocessor when you want a cleaned reference clip for voice cloning:
 
 ```powershell
-python .\tools\preprocess_voice_reference.py
+python .\tools\voice_preprocess_reference.py
 ```
 
 Custom input:
 
 ```powershell
-python .\tools\preprocess_voice_reference.py `
+python .\tools\voice_preprocess_reference.py `
   --input inputs\voice\sample_reference.wav `
   --output artifacts\voice\sample_reference_30s.wav
 ```
@@ -297,7 +297,7 @@ Reference-script notes:
 
 ## TTS: Coqui
 
-Script: `tools/synthesize_section_audio.py`
+Script: `tools/voice_synthesize_coqui.py`
 
 What it does:
 
@@ -309,7 +309,7 @@ What it does:
 Default example:
 
 ```powershell
-python .\tools\synthesize_section_audio.py `
+python .\tools\voice_synthesize_coqui.py `
   --deck-id ch01_inverse_functions `
   --coqui-tos-agreed
 ```
@@ -335,12 +335,12 @@ Notes:
 
 ## TTS: F5
 
-Script: `tools/synthesize_section_audio_f5.py`
+Script: `tools/voice_synthesize_f5.py`
 
 Clone example:
 
 ```powershell
-python .\tools\synthesize_section_audio_f5.py `
+python .\tools\voice_synthesize_f5.py `
   --deck-id ch01_inverse_functions `
   --reference-mode clone
 ```
@@ -348,7 +348,7 @@ python .\tools\synthesize_section_audio_f5.py `
 Example-reference mode:
 
 ```powershell
-python .\tools\synthesize_section_audio_f5.py `
+python .\tools\voice_synthesize_f5.py `
   --deck-id ch01_inverse_functions `
   --reference-mode example
 ```
@@ -374,7 +374,7 @@ Clone-mode notes:
 
 ## Video rendering
 
-Script: `tools/render_section_video.py`
+Script: `tools/slides_render_section_video.py`
 
 What it does:
 
@@ -387,13 +387,13 @@ What it does:
 Basic render:
 
 ```powershell
-python .\tools\render_section_video.py --deck-id ch01_inverse_functions
+python .\tools\slides_render_section_video.py --deck-id ch01_inverse_functions
 ```
 
 With custom audio:
 
 ```powershell
-python .\tools\render_section_video.py `
+python .\tools\slides_render_section_video.py `
   --deck-id ch01_inverse_functions `
   --audio-dir artifacts\audio\ch01_inverse_functions_f5_clone `
   --output artifacts\video\ch01_inverse_functions_f5_clone.mp4
@@ -418,29 +418,29 @@ Useful options:
 ### Path A — Coqui clone
 
 ```powershell
-python .\tools\preprocess_voice_reference.py
-python .\tools\synthesize_section_audio.py --deck-id ch01_inverse_functions --dry-run
-python .\tools\synthesize_section_audio.py --deck-id ch01_inverse_functions --coqui-tos-agreed
-python .\tools\render_section_video.py --deck-id ch01_inverse_functions --dry-run
-python .\tools\render_section_video.py --deck-id ch01_inverse_functions
+python .\tools\voice_preprocess_reference.py
+python .\tools\voice_synthesize_coqui.py --deck-id ch01_inverse_functions --dry-run
+python .\tools\voice_synthesize_coqui.py --deck-id ch01_inverse_functions --coqui-tos-agreed
+python .\tools\slides_render_section_video.py --deck-id ch01_inverse_functions --dry-run
+python .\tools\slides_render_section_video.py --deck-id ch01_inverse_functions
 ```
 
 ### Path B — F5 clone
 
 ```powershell
-python .\tools\preprocess_voice_reference.py
-python .\tools\synthesize_section_audio_f5.py `
+python .\tools\voice_preprocess_reference.py
+python .\tools\voice_synthesize_f5.py `
   --deck-id ch01_inverse_functions `
   --reference-mode clone `
   --dry-run
-python .\tools\synthesize_section_audio_f5.py `
+python .\tools\voice_synthesize_f5.py `
   --deck-id ch01_inverse_functions `
   --reference-mode clone
-python .\tools\render_section_video.py `
+python .\tools\slides_render_section_video.py `
   --deck-id ch01_inverse_functions `
   --audio-dir artifacts\audio\ch01_inverse_functions_f5_clone `
   --dry-run
-python .\tools\render_section_video.py `
+python .\tools\slides_render_section_video.py `
   --deck-id ch01_inverse_functions `
   --audio-dir artifacts\audio\ch01_inverse_functions_f5_clone `
   --output artifacts\video\ch01_inverse_functions_f5_clone.mp4
@@ -460,11 +460,11 @@ python .\tools\render_section_video.py `
 ### Where to change pipeline rules
 
 - section-specific slide content, wording, or draft narration — `inputs/media_plans/<deck_id>.json`.
-- repo-wide slide selection or density — `tools/generate_section_media.py`.
-- repo-wide Beamer layout — `tools/generate_section_media.py`.
-- narration markdown format — `tools/slide_script_workflow.py`.
+- repo-wide slide selection or density — `tools/slides_generate_section_media.py`.
+- repo-wide Beamer layout — `tools/slides_generate_section_media.py`.
+- narration markdown format — `tools/slides_script_workflow.py`.
 - allowed slide types or render-hint schema — `schemas/slide_deck.schema.json` (and keep the generator in sync).
-- audio/video path defaults — `tools/media_paths.py`.
+- audio/video path defaults — `tools/shared_media_paths.py`.
 
 ---
 
@@ -506,7 +506,7 @@ Expected. The generator preserves the final narration file on purpose. Manually 
 - the audio directory belongs to an older deck version.
 - slide ids changed after regeneration, so old WAV filenames are stale.
 
-`render_section_video.py --dry-run` exists precisely to catch this before a long ffmpeg run.
+`slides_render_section_video.py --dry-run` exists precisely to catch this before a long ffmpeg run.
 
 ### XTTS run fails before synthesis
 
@@ -548,7 +548,7 @@ If you decide a section should become a Manim lesson instead, you have two start
 - **seed a first-draft storyboard from an existing slide deck JSON**:
 
   ```powershell
-  python .\tools\seed_manim_storyboard.py --deck-id ch01_inverse_functions
+  python .\tools\manim_seed_storyboard.py --deck-id ch01_inverse_functions
   ```
 
   The seeded YAML still needs substantial hand-revision before it matches the Manim quality bar.
