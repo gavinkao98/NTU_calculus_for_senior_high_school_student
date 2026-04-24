@@ -42,7 +42,13 @@
 
 % Worked blocks keep their own chapter-scoped counters.
 \newtheorem{example}{Example}[chapter]
-\newtheorem{exercise}{Exercise}[chapter]
+
+% Exercises sit inside \subsection*{Exercises} blocks and are consumed locally
+% rather than cited across chapters. Per CONTENT_SPEC.md §6, the counter
+% resets at each \section and the display is the bare arabic number
+% (Exercise 1, 2, 3 within the section), not chapter.section-prefixed.
+\newtheorem{exercise}{Exercise}[section]
+\renewcommand{\theexercise}{\arabic{exercise}}
 
 \theoremstyle{remark}
 \newtheorem{remark}{Remark}[chapter]

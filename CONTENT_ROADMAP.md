@@ -27,7 +27,7 @@ Two cross-cutting targets sit above any chapter-specific content:
 
 | # | Title | Status | Sections |
 |---|---|---|---|
-| 1 | Foundations: Inverse Functions and Limits | draft | 1.1 Inverse Functions and One-to-One Functions; 1.2 Inverse Trigonometric Functions; 1.3 Limits; 1.4 One-Sided and Infinite Limits; 1.5 Limit Laws; 1.6 The Precise Definition of a Limit |
+| 1 | Inverse Functions and Limits | draft | 1.1 Inverse Functions and One-to-One Functions; 1.2 Inverse Trigonometric Functions; 1.3 Limits; 1.4 One-Sided and Infinite Limits; 1.5 Limit Laws; 1.6 The Precise Definition of a Limit |
 | 2 | *(TBD — fill in before drafting)* | planned | — |
 | 3 | *(TBD)* | planned | — |
 | … | | | |
@@ -89,14 +89,14 @@ Each item MUST match a bullet in the chapter's "By the end of this chapter, you 
 
 ## Chapter 1 (filled exemplar)
 
-### Chapter 1: Foundations — Inverse Functions and Limits
+### Chapter 1: Inverse Functions and Limits
 
 **Status**: draft
-**Source file**: [`chapters/ch01_foundations.tex`](chapters/ch01_foundations.tex)
+**Source file**: [`chapters/ch01_foundations.tex`](chapters/ch01_foundations.tex) — the filename slug `foundations` is the arc-level tag (Chapter 1 is the *foundations* phase of the arc), not part of the printed chapter title.
 **Estimated length**: *(fill in after first full compile)*
 
 **Role in the arc**
-Sets up the two foundational machines of calculus: inverse functions (the algebraic machine for "running a rule backward") and limits (the analytic machine for "approaching without equalling"). The chapter intentionally pairs these because both force the reader to reason about correspondences and approximations rather than about formulas in isolation.
+Chapter 1 is the **foundations** phase of the course arc. It sets up the two foundational machines of calculus: inverse functions (the algebraic machine for "running a rule backward") and limits (the analytic machine for "approaching without equalling"). The chapter intentionally pairs these because both force the reader to reason about correspondences and approximations rather than about formulas in isolation.
 
 **Prerequisites**
 - Precalculus functions: domain, range, composition, graphs.

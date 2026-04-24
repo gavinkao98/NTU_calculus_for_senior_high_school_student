@@ -1,6 +1,6 @@
 # Calculus Handout: Master Typesetting Guide
 
-**Version 3.0** — a from-scratch rewrite replacing versions 1.x and 2.x. The previous document had grown by accretion through per-chapter reviews and no longer reflected a single coherent editorial model. This version is organized around a specific product definition: a single-sided A4 English handout for high-school students preparing to self-study college calculus, paired with companion videos, written in Stewart / Rogawski register. Rules that used to sit in multiple places are now consolidated; rules that turned out to be too restrictive for the target register have been loosened; new environments and policies needed to support the register have been added. The Changelog (§16) summarises the concrete differences from v2.x.
+**Version 3.1** — refinement pass on v3.0 after the documentation framework was split into spec + quickstart + roadmap + exercises skeleton, and the preamble/template implementation landed. v3.0 was the from-scratch rewrite replacing versions 1.x and 2.x, reorganizing the rulebook around a specific product definition: a single-sided A4 English handout for high-school students preparing to self-study college calculus, paired with companion videos, written in Stewart / Rogawski register. v3.1 adds content-level refinements (remark usefulness test with good-vs-bad examples, figure redundant-encoding rule for grayscale and accessibility, index lookup test, per-section exercise numbering) on top of that foundation. The Changelog (§16) summarises concrete differences.
 
 ---
 
@@ -438,14 +438,17 @@ Each formal-statement environment has its **own counter**, chapter-scoped:
 Aside environments also have their own chapter-scoped counters:
 
 - `example` → Example 1.1, 1.2, ...
-- `exercise` → Exercise 1.1, 1.2, ...
 - `remark` → Remark 1.1, 1.2, ...
 - `caution` → Caution 1.1, 1.2, ...
 - `strategy` → Strategy 1.1, 1.2, ...
 
 Figures, tables, and numbered equations also reset per chapter: Figure 1.1, (1.1).
 
-Rationale: high-school self-study readers flip back and ask *"where was Definition 1.3?"*, expecting "Definition 1.3" to be the **third definition** in Chapter 1. A shared counter (used in earlier versions of this project) would break that expectation — "Definition 1.3" might be preceded by intervening theorems and propositions, making the number less informative for lookup. Per-env counters match the reader's mental model.
+Exercises are the exception and are numbered differently because they sit inside per-section `\subsection*{Exercises}` blocks that are primarily consumed locally:
+
+- `exercise` → Exercise 1, 2, ..., restarting at each `\section`. No chapter or section prefix appears in the displayed number. See [`CONTENT_EXERCISES.md`](CONTENT_EXERCISES.md) for exercise-system rationale; cross-section references to a specific exercise use the label + `\cref` convention in §6 below.
+
+Rationale: high-school self-study readers flip back and ask *"where was Definition 1.3?"*, expecting "Definition 1.3" to be the **third definition** in Chapter 1. A shared counter (used in earlier versions of this project) would break that expectation — "Definition 1.3" might be preceded by intervening theorems and propositions, making the number less informative for lookup. Per-env chapter-scoped counters match the reader's mental model for formal statements and aside environments. Exercises break the rule because a student who has just finished §1.3 and turns to the end-of-section exercises thinks *"Exercise 1, Exercise 2, ..."* rather than *"Exercise 1.3.1, Exercise 1.3.2, ..."*; the book-wide prefix is friction, not information, in that local reading context.
 
 Implementation note: `preamble/theorem_setup.tex` declares each environment with its own `\newtheorem{...}{Label}[chapter]`. The previous `aliascnt`-based shared-counter pattern is removed in v3.0.
 
@@ -980,9 +983,11 @@ Before committing a chapter or declaring it ready for review, verify:
 
 ## 16. Changelog
 
+- **v3.1** — framework split and implementation landed. The v3.0 document was split into four author-facing files keyed to how authors actually use them: this file (authoritative spec), [`CONTENT_QUICKSTART.md`](CONTENT_QUICKSTART.md) (1-2 page daily reference), [`CONTENT_ROADMAP.md`](CONTENT_ROADMAP.md) (course arc, chapter order, prerequisites, per-chapter core skills), and [`CONTENT_EXERCISES.md`](CONTENT_EXERCISES.md) (minimum exercise skeleton ahead of the full deferred design round). The preamble and template implementation flagged as pending under v3.0 has now landed: per-env chapter-scoped counters via individual `\newtheorem`, `caution` and `strategy` environments via `\newmdtheoremenv`, the three-role semantic palette in `preamble/colors.tex`, expanded `tools/book_style_lint.py` rules, and the updated `_chapter_template.tex`. Content-level refinements added in this pass: remark policy expanded with a usefulness test and explicit good-vs-bad examples; figures gain a "Redundant encoding for grayscale and accessibility" subsection in §10 requiring line-style / label / marker alongside colour; index policy gains an overarching "lookup test" judgement criterion in §11. The `example` + `solution` pairing rule in §5 is now aligned between this document and `chapters/_chapter_template.tex` (every `example` MUST be wrapped in `workedexample`; standalone `example` is no longer allowed). Exercise numbering is now per-section (Exercise 1, 2, ..., resetting at each `\section`) rather than chapter-scoped, reflecting that end-of-section exercise blocks are consumed locally.
+
 - **v3.0** — from-scratch rewrite. Target register shifted from Spivak / Apostol (shared formal-statement counter, austere pronouns, strict definition purity, sparing figures and remarks) to Stewart / Rogawski (per-type counters, "you" permitted in specific contexts, *"Informally, ..."* gloss allowed inside `definition`, denser figures and more generous remarks). New environments `caution` and `strategy` added to support notation-trap warnings and problem-solving strategy boxes; `lemma` dropped. Display-helper set reduced from 7 to 5 (removed `\iffstackeddisplay` and `\iffwithconditions`). Display Block Cohesion downgraded from MUST to SHOULD. Index policy expanded to cover key examples, notation traps, and first-mention applied settings. Chapter opening gains a mandatory learning-outcomes bullet list; chapter closing gains a mandatory `\section*{Summary}` block. `\emph{...}` permitted in motivation prose for the first mention of a term. Exercise-system design deferred until main content is complete. CI checks expanded to cover the new rules. Notation policy consolidated into its own section (§9). The voice reference sample is rewritten in Stewart tone.
 
-  v3.0 is the positioning-level rewrite. Concrete preamble and template implementation work (per-env counters via individual `\newtheorem`, new `caution`/`strategy` environments, `preamble/colors.tex`, expanded `book_style_lint.py` rules, updated `_chapter_template.tex`) follows in a separate implementation pass and is not part of this document's version bump.
+  (v3.0 was the positioning-level rewrite; the concrete preamble and template implementation it flagged as pending has since landed — see v3.1 above.)
 
 - **v2.x** — earlier versions (v2.0 through v2.0.11) accreted rule additions through per-chapter review; the resulting document was organised by date of addition rather than by topic. Notable decisions from v2.x preserved verbatim in v3.0 include: cleveref-only cross-references, `[H]` default figure placement with Exception Protocol, shared formula-display helpers `aligneddisplay` / `conditiondisplay` / `\pairdisplay`, chapter-scoped counters, paired-definition cross-reference rule, `workedexample` wrapper semantics, `\qedhere` on final display line of `solution`, and the three-layer CI (style lint + preamble smoketest + latexmk).
 

@@ -11,7 +11,8 @@ If you are new to the project, also skim [`CONTENT_ROADMAP.md`](CONTENT_ROADMAP.
 Stewart / Rogawski tone: accessible to a motivated high-schooler self-studying, full sentences with explicit connectives, intuition before formalism, warm without being chatty. Not Spivak, not lecture shorthand.
 
 - default pronoun: **we**. Reserve **you** for gentle reminders or forward-reference (*"you will see this again in §4.2"*).
-- every formal environment **SHOULD** have one *"Informally, ..."* sentence of intuition either inside or in the paragraph immediately before it.
+- every formal statement (`definition`, `theorem`, `proposition`, `corollary`) **SHOULD** be **preceded** by 1-2 paragraphs of intuition prose explaining why the concept is worth introducing and what it should mean.
+- a `definition` body **MAY** additionally end with one vernacular gloss sentence of the form *"Informally, ..."*. This is a definition-specific option, not a blanket requirement on every formal environment. The gloss **MUST NOT** introduce examples, figures, or new notation.
 
 ---
 
@@ -125,7 +126,7 @@ Rules of thumb:
 - emphasis: `\emph{...}` only, and only for first mention of a new term or a rare load-bearing phrase. **No** `\textbf{...}` or `\textit{...}` in prose (style lint enforces this).
 - quotes: TeX style `` ``...'' ``. **No** ASCII `"..."` (style lint enforces).
 - dashes: `--` for numeric range (*pp. 12--18*), `---` for aside dashes. No unicode em-dash in source.
-- ellipses: `\ldots` in math, `\dots` in prose.
+- ellipses: always `\dots` (context-aware). Do not hard-code `\ldots` or three literal periods. LaTeX chooses `\cdots` automatically inside display operators.
 
 ---
 
