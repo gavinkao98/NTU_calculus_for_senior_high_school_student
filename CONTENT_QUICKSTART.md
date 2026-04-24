@@ -148,10 +148,11 @@ Run locally:
 ```powershell
 python tools/book_style_lint.py
 python tools/book_preamble_smoketest.py
+python tools/book_docs_lint.py
 latexmk -pdf -interaction=nonstopmode -halt-on-error -file-line-error main.tex
 ```
 
-All three **MUST** pass. They also run on every push and PR via [`.github/workflows/latex-checks.yml`](.github/workflows/latex-checks.yml).
+All four **MUST** pass. They also run on every push and PR via [`.github/workflows/latex-checks.yml`](.github/workflows/latex-checks.yml). `book_docs_lint` catches stale `tools/<name>.py` command examples and broken markdown links — it is cheap to run and will save review churn after renames.
 
 For the full consistency checklist (positioning, register, structure, environments, typography, ...), see the checklist at the end of [`CONTENT_SPEC.md`](CONTENT_SPEC.md) §15.
 

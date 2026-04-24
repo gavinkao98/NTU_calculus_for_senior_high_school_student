@@ -109,9 +109,10 @@ Before committing a chapter, also run:
 ```powershell
 python tools/book_style_lint.py
 python tools/book_preamble_smoketest.py
+python tools/book_docs_lint.py
 ```
 
-All three checks run on every push and PR via [`.github/workflows/latex-checks.yml`](.github/workflows/latex-checks.yml).
+All four checks (the three above plus the `latexmk` build) run on every push and PR via [`.github/workflows/latex-checks.yml`](.github/workflows/latex-checks.yml). `book_docs_lint.py` scans markdown for stale `tools/<name>.py` command references and broken relative links, so doc-rename drift cannot slip through review unnoticed.
 
 Authority: when repository layout or preamble decisions change, **this file** is authoritative; when writing or typesetting rules change, [`CONTENT_SPEC.md`](CONTENT_SPEC.md) is authoritative.
 

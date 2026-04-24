@@ -843,7 +843,7 @@ New environments, new display helpers, and new colour definitions belong in `pre
 
 ### CI checks
 
-The continuous-integration pipeline ([`.github/workflows/latex-checks.yml`](.github/workflows/latex-checks.yml)) runs three checks on every push and pull request:
+The continuous-integration pipeline ([`.github/workflows/latex-checks.yml`](.github/workflows/latex-checks.yml)) runs four checks on every push and pull request:
 
 1. **`tools/book_style_lint.py`** — regex-based linter that enforces, at minimum:
    - no manual cross-reference prefixes;
@@ -854,9 +854,10 @@ The continuous-integration pipeline ([`.github/workflows/latex-checks.yml`](.git
    - every `\begin{theorem}[Name]` has a matching `\index{Name}` nearby;
    - every chapter file opens with `\chapter{...}` followed by an overview paragraph and a learning-outcomes bullet list.
 2. **`tools/book_preamble_smoketest.py`** — compiles `preamble_smoketest.tex` and verifies that continuation prose after `aligneddisplay` / `conditiondisplay` is not spuriously indented.
-3. **`latexmk -pdf -interaction=nonstopmode -halt-on-error -file-line-error main.tex`** — full build, catching structural errors, missing references, and malformed source.
+3. **`tools/book_docs_lint.py`** — scans repository markdown for stale `tools/<name>.py` command references and broken relative links, so doc-rename drift is caught automatically rather than at review.
+4. **`latexmk -pdf -interaction=nonstopmode -halt-on-error -file-line-error main.tex`** — full build, catching structural errors, missing references, and malformed source.
 
-All three checks **MUST** pass on the feature branch before a chapter is considered ready for review.
+All four checks **MUST** pass on the feature branch before a chapter is considered ready for review.
 
 ---
 
