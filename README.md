@@ -101,6 +101,31 @@ The committed Chapter 1 before the fresh Mode A pass (commit `f701c02`) is a use
 
 No hard rule on expansion-to-manuscript ratio, just a self-check: if a section's `% expansion:` markers dominate to the point where the manuscript content is hard to find amid the expansions, something has drifted. Flag it in the chapter's roadmap *Open questions* so the ratio can be reviewed during sign-off. Otherwise, amplify freely.
 
+#### Non-repetition rule: different depth, different framing
+
+Pedagogical repetition (a key concept returning at chapter open, section open, and Summary) is fine and often helpful — but **only if each resurface is at a different depth or with a different frame**. The same-depth rehash is what produces the "didn't we just read this?" feeling. Four concrete mechanisms keep expansions from stepping on each other:
+
+1. **Per-category role clauses.** Each expansion category has a narrow job and explicitly avoids the jobs of neighboring categories:
+   - **Chapter overview** (`intuition`): describes the chapter's arc — which two or three themes it develops and how they connect. Does **not** predict what each section will teach; that is the job of the learning-outcomes list and of each section's own opener.
+   - **Learning outcomes** (`summary`): a verb-first bullet list of operational skills (*decide*, *compute*, *apply*). Does **not** explain the concepts or give their motivation; that is the body's job.
+   - **Section opener** (`intuition` or `application`): motivates *this* section specifically, including how it builds on the previous section. Does **not** restate the chapter overview, and does **not** list what the next section will cover.
+   - **Informally gloss** (`intuition`, inside a `definition`): one vernacular sentence. Does **not** become a motivation paragraph, an example, or a preview of the surrounding theorem.
+   - **Strategy box** (`strategy`): distils a method already demonstrated by two or more worked examples in the same section. Does **not** repeat the worked examples' prose; it names the steps.
+   - **Caution** (`caution`): one specific trap or subtle restriction. Does **not** restate the definition or theorem it attaches to; readers still have those nearby.
+   - **Summary** (`summary`, chapter end): one-line reminders per item (a definition by its one-clause essence, a theorem by its condition-and-conclusion, a formula as the bare identity). Does **not** reprove, re-derive, or re-motivate.
+
+2. **Point, don't repeat.** When a concept introduced earlier returns, use an explicit cross-reference (`\cref{sec:foo}`, *"as introduced in §1.3, the limit of..."*) rather than restating the content. A cross-reference is honest: it signals "we have this, here is where." A restatement is dishonest: it pretends the concept is new.
+
+3. **Depth-layered resurfacing.** The same concept may appear three times (chapter open, section open, Summary) if each appearance is at a different depth:
+   - chapter open: one sentence placing the concept in the arc;
+   - section open: one paragraph on why this section sharpens the concept;
+   - Summary: one-line reminder.
+   Three occurrences at the same depth = repetition; three at different depths = spiral review.
+
+4. **Drafting-end self-check.** After the chapter is drafted, scan the first sentence after each `% expansion:` marker in order. If any two consecutive expansions open with the same claim or concept, collapse one into a cross-reference. In particular, scan chapter overview against §1 opener, each section opener against the previous section's closing, and Summary items against learning outcomes — those are the three places where same-depth rehash most often slips in.
+
+If an expansion does not have a job that the other expansions are not already doing, it should either be rewritten to carve out a distinct role or deleted.
+
 #### Still forbidden in drafting mode
 
 - skipping manuscript content (the manuscript is the axis);
