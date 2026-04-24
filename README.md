@@ -19,30 +19,34 @@ Pick the task you have, open the linked file.
 
 ## Authoring workflow
 
-Chapters originate as **manuscripts written by different teachers** who have split the book between them. Claude's role in this repository is:
+Chapters originate as **manuscripts written by different teachers** who have split the book between them. Claude interacts with those manuscripts in two distinct modes, and the rules differ by mode. Get the mode right before acting.
 
-1. Receive a teacher's manuscript from the user.
+### Mode A — Drafting (Claude converts a new manuscript to LaTeX)
+
+Use this mode when the user forwards a manuscript and asks Claude to produce a chapter file. Claude's role:
+
+1. Receive the manuscript from the user.
 2. Convert it into project-compliant LaTeX at `chapters/chNN_<slug>.tex`, following [`CONTENT_SPEC.md`](CONTENT_SPEC.md) and [`CONTENT_QUICKSTART.md`](CONTENT_QUICKSTART.md).
 3. Expand *around* the manuscript where completeness or the Stewart / Rogawski self-study register demands additions: *"Informally, ..."* glosses inside `definition`, intuition paragraphs before formal statements, `strategy` boxes distilling a method that the manuscript's examples share, `caution` boxes for subtle restrictions, `remark` additions with a clear usefulness hook, and figure ideas the manuscript implies but does not draw. These additions are **additive, not substitutive**: they surround the manuscript, they do not replace it.
 4. Update [`CONTENT_ROADMAP.md`](CONTENT_ROADMAP.md) to reflect what the manuscript actually decided, replacing any pre-manuscript working-hypothesis entries.
 
-### Hard rule: no fabricated content
+In this mode, the **hard rule: no fabricated content** applies in full.
 
-Every mathematical claim, definition, theorem, example, proof, figure, historical note, date, and proper name in a chapter **MUST** trace to one of:
+Every mathematical claim, definition, theorem, example, proof, figure, historical note, date, and proper name Claude writes into a chapter in this mode **MUST** trace to one of:
 
 - (a) the teacher's manuscript itself;
 - (b) an earlier chapter of this book (already committed to `chapters/*.tex`);
 - (c) a widely-verifiable standard calculus result the user can sanity-check against a named source.
 
-When a fact does not have a clear anchor in (a), (b), or (c), **do not invent one**. Instead, leave the material out and mark the gap with a comment in the LaTeX source:
+When a fact does not have a clear anchor in (a), (b), or (c), **do not invent one**. Leave the material out and mark the gap with a comment in the LaTeX source:
 
 ```latex
 % TODO: manuscript silent on <topic>; user to decide whether to add and from which source.
 ```
 
-Asking one clarifying question is always cheaper than shipping a fabricated fact. A calculus handout with a wrong theorem attribution, a misdated historical note, or an invented "canonical example" is worse than a handout that omits the material entirely, because students cannot know which claims to verify independently.
+Asking one clarifying question is always cheaper than shipping a fabricated fact. A handout with a wrong theorem attribution, a misdated historical note, or an invented "canonical example" is worse than one that omits the material entirely, because students cannot know which claims to verify independently.
 
-Specifically forbidden without explicit authorisation:
+Specifically forbidden **in drafting mode**, without explicit user authorisation:
 
 - inventing worked examples the manuscript does not contain;
 - attributing theorems to mathematicians the manuscript did not name;
@@ -50,13 +54,35 @@ Specifically forbidden without explicit authorisation:
 - inventing exercises (exercise inventories come from the manuscript; see [`CONTENT_EXERCISES.md`](CONTENT_EXERCISES.md));
 - supplying a proof the manuscript omitted — per [`CONTENT_SPEC.md`](CONTENT_SPEC.md) §5, proofs are optional; omission is the default.
 
-### When manuscript and spec disagree
+If the user gives explicit authorisation for a specific expansion (*"please add a caution about the sin⁻¹ vs 1/sin confusion"*, *"add a worked example showing the three-step inverse procedure on a cubic"*), the authorised expansion is in-policy; record it in the chapter's roadmap **Open questions** or **Manuscript source** note so the audit trail survives.
+
+### Mode B — Reviewing (Claude audits existing committed content)
+
+Use this mode when Claude is asked to review or reconcile an existing `chapters/*.tex` file against its manuscript or against the current spec. **Committed content is authorised content.** The user has signed off on what landed in `main`; Claude must **not** treat pre-existing expansions beyond the manuscript as "hallucination" just because they are not verbatim in the manuscript — the user may have authored the expansion themselves during the original drafting pass.
+
+What Claude may flag in review mode:
+
+- **Spec compliance** — rule violations against [`CONTENT_SPEC.md`](CONTENT_SPEC.md): disallowed display helpers, `\textbf` / `\textit` in prose, ASCII quotes, manual cross-reference prefixes, `\newcommand` in chapter files, missing chapter opening structure, etc. These are definite defects; propose fixes.
+- **Notation drift** from the manuscript — e.g., the manuscript uses `[x]` and the `.tex` silently uses `\lfloor x \rfloor`. Surface this as a question for the user, not as a hallucination. The user may have intentionally upgraded the notation, or may want to realign to the manuscript.
+- **Mathematical correctness** — if a statement looks wrong, surface it as *"please verify X"*, not as *"I'm removing X because it's not in the manuscript."*
+- **Missing content from the manuscript** — if the manuscript covers a topic the `.tex` skips, flag the gap so the user can decide whether the omission was intentional.
+- **Structural decisions** — section splits, theorem names, and similar editorial choices. Surface as questions; do not change unilaterally.
+
+What Claude must **not** do in review mode:
+
+- treat content in the `.tex` that is absent from the manuscript as hallucination by default;
+- silently remove or rewrite user-authored expansions on the grounds that they lack a manuscript anchor;
+- propose deletion of historical notes, extra worked examples, or extra remarks without first asking whether they were user-authored expansion or drafting-mode hallucination.
+
+The operative question in review mode is *"is this content correct and compliant?"* — not *"is this content in the manuscript?"* Only in drafting mode does the second question become load-bearing.
+
+### When manuscript and spec disagree (both modes)
 
 - **Formatting**: [`CONTENT_SPEC.md`](CONTENT_SPEC.md) wins. Rewrite the manuscript's phrasing to comply (e.g., `\textbf{...}` → `\emph{...}` in prose, ASCII quotes → TeX quotes, manual cross-reference prefixes → `\cref{}`). The mathematics is unchanged.
 - **Mathematical content**: the manuscript wins. If the manuscript proves a theorem a particular way, preserve the method; if the manuscript defines a term in a specific form, preserve that form. Notational differences from §9 of the spec get reconciled to the house convention, with a `caution` note if the reconciliation is non-trivial.
 - **Genuine conflicts** (manuscript insists on a rule the spec forbids for editorial reasons, not mathematical ones): ask the user. Record the decision in the chapter's roadmap entry under *Open questions*.
 
-Per-chapter manuscript tracking — who wrote it, when it was received, conversion status — lives in each chapter's entry in [`CONTENT_ROADMAP.md`](CONTENT_ROADMAP.md) under **Manuscript source**.
+Per-chapter manuscript tracking — who wrote it, when it was received, conversion status, and any user-authored expansion notes — lives in each chapter's entry in [`CONTENT_ROADMAP.md`](CONTENT_ROADMAP.md) under **Manuscript source**.
 
 ---
 
