@@ -33,7 +33,9 @@ Pick the environment that matches the semantic role. Do not nest formal environm
 | `strategy` | method box with numbered steps ("given a problem of type X, do..."). |
 | `exercise` | lives in `\subsection*{Exercises}`. See [`CONTENT_EXERCISES.md`](CONTENT_EXERCISES.md). |
 
-Soft density targets per section: **2-3 remarks**, **≥1 strategy** when worked examples share a method.
+Pedagogical targets per section (not quotas): **2-3 remarks**, **≥1 strategy** when worked examples share a method. Zero natural remarks is fine; padding to hit the number is not.
+
+**Remark usefulness test.** Before you keep a `remark`, ask: *would a reader lose something if it were removed?* If the honest answer is "nothing, it just padded the section," drop it. Main-line facts, definition restatements, illustrative examples, and trivial tautologies are **not** remarks — promote them to prose, put them inside the `definition` as *"Informally, ..."*, wrap them in `workedexample`, or connect them with one sentence of prose instead. See SPEC §5 for good-vs-bad examples.
 
 ---
 
@@ -87,7 +89,7 @@ Rules of thumb:
 ## Figure rule
 
 - palette is three roles only: blue = primary, red = caution/counterexample, gray = auxiliary. See `preamble/colors.tex`.
-- do not encode meaning in colour alone — also use line style, labels, or markers (figures must survive grayscale print).
+- **do not encode meaning in colour alone.** Redundantly encode with at least one of: line style, label, marker. House line-style convention: solid = primary curves; `dashed` = asymptotes and reference lines (including `$y = x$`); `dotted` = auxiliary / scaffolding. Figures **must** survive grayscale print and photocopy. See SPEC §10 for the full redundant-encoding rule.
 - default placement `[H]`. Declare an exception in a comment if you use `[htbp]`.
 - captions: sentence case, end with a period, describe mathematical purpose.
 - **worked-example figures** must not reveal the quantity the example asks the reader to compute.
@@ -105,7 +107,7 @@ Rules of thumb:
 - every applied setting (physics, economics) introduced in the chapter;
 - every notation trap (also flagged by `caution`).
 
-Rule of thumb: **if a reader will flip back to find it, it goes in the index**. Purely local symbols or one-off throwaway setups do not.
+**Lookup test** (authoritative over the list above when they conflict): *will a reader want to find this item later without remembering which chapter introduced it?* If yes, index. Purely local symbols, one-off throwaway setups, and incidental applied settings used once for flavour do **not** need an entry, even when they would nominally fit one of the categories above.
 
 ---
 

@@ -365,9 +365,25 @@ While content is being drafted, every section end **MUST** carry a placeholder:
 
 Genuine aside, notation comment, warning about a subtle restriction (when the warning is prose-shaped rather than trap-shaped; see `caution` for trap-shaped warnings), short historical note (2-5 sentences), or forward reference to a later chapter.
 
-Per-chapter soft target: roughly **2-3 remarks per section** (so 12-18 per chapter of 6 sections). Below that range usually means the chapter is very dense; above that range usually means some remarks should have been prose or promoted to a stronger environment.
+Per-chapter **pedagogical target**: roughly **2-3 remarks per section** (so 12-18 per chapter of 6 sections). This is a target, not a production quota. A section with zero natural remarks should stay at zero rather than carry padding to hit the number; a section with five genuinely useful remarks should keep all five rather than drop two to land in range. The usefulness test below is authoritative when the count would force the wrong call.
 
 A `remark` **MUST NOT** carry main-line knowledge that every student must read. If the content is part of the logical flow of the section, write it as prose.
+
+**Usefulness test.** Before adding a `remark`, ask: *would a reader lose something if this paragraph were silently removed?* If the honest answer is "nothing, it just padded the section," drop it. If the answer is "a bit of context, motivation, historical colour, or a future connection that would be missed," keep it.
+
+**Good uses** — these belong in `remark`:
+
+- *Historical note*: *"Euler introduced this notation in 1748 in his* Introductio in Analysin Infinitorum*, where he also first treated $e$ as a limit rather than as the base of the natural logarithm."*
+- *Applied motivation*: *"Exponential functions model radioactive decay, continuously compounded interest, and population growth under constant per-capita rates. We will return to each in §3.6."*
+- *Forward reference*: *"The composition $f \circ f^{-1}$ we just computed will reappear as the setup for the inverse-function derivative in §4.3."*
+- *Prose-shaped subtle restriction*: *"The identity holds for real $a > 0$; extending to complex or negative $a$ requires choosing a branch of the logarithm, which is outside this book's scope."*
+
+**Bad uses** — these do not belong in `remark`; rewrite as indicated:
+
+- *Main-line fact in disguise*: *"Note that the limit laws we just proved also apply when both limits are infinite."* → the reader needs this; promote it to prose, a `proposition`, or a `corollary`.
+- *Definition restatement as padding*: *"In other words, a one-to-one function never sends two different inputs to the same output."* → if the definition needs a vernacular gloss, put the *"Informally, ..."* sentence inside the `definition` body, not in a separate `remark`.
+- *Example in disguise*: *"For instance, when $x = 2$ we have $f(2) = 5$, which illustrates..."* → if it illustrates, it is an `example` + `solution` inside a `workedexample`, not a `remark`.
+- *Trivial tautology*: *"This follows from the theorem above."* → if a reader should notice it, write one sentence of prose connecting the two; a standalone `remark` saying only this is padding.
 
 Short historical or applied motivation notes (2-5 sentences) at chapter or section openings, or immediately before a key concept, are a good use of `remark` and directly support the target register.
 
@@ -706,7 +722,25 @@ Working-draft hex values: blue `#1f4e79`, red `#c0392b`, gray `#7f7f7f`. Exact v
 
 Additional colours **MUST** be introduced via Exception Protocol (see §13) and documented at the chapter level.
 
-Figures **SHOULD** remain readable in grayscale as far as possible — colour is semantic, not decorative.
+### Redundant encoding for grayscale and accessibility
+
+Colour carries pedagogical meaning but **MUST NOT be the only channel** carrying it. Every figure that uses colour to distinguish curves, lines, regions, or points **MUST** also distinguish them by at least one of:
+
+- **line style** — solid for primary curves, `dashed` for reference lines and asymptotes, `dotted` for auxiliary / scaffolding constructions;
+- **labels** — each curve or line labelled near its body (*$f$*, *$f^{-1}$*, *$y = x$*), not only via a colour legend;
+- **markers** — `$\bullet$` / `$\circ$` / `$\square$` at key points so labelled points remain distinguishable when colour is lost.
+
+House conventions:
+
+- primary curve: blue (`\colorprimary`), solid, labelled;
+- inverse or paired curve: solid or dashed depending on its role in the pair, labelled;
+- asymptote or reference line (including `$y = x$`): dashed, red (`\colorcaution`) if it is a warning/asymptote, gray (`\colorauxiliary`) if it is scaffolding; labelled with its equation where space permits;
+- auxiliary construction (guide lines, midpoints, reference rectangles): gray, dotted;
+- key points: marker `$\bullet$` for filled, `$\circ$` for open, labelled with coordinates or a name.
+
+Figures **MUST** remain readable in grayscale — colour is semantic, layered on top of line-style and marker information, not in place of it.
+
+Rationale: students print on single-sided black-and-white printers, photocopy sections, or read under display conditions that wash colour out. A figure that says "the red curve vs. the blue curve" collapses into two identical grey curves when colour is lost. The existing grayscale-readability target is a promise, not a spot check; redundant encoding is how it gets kept. Redundant encoding also supports colour-blind readers without requiring a separate accessibility pass.
 
 ### Placement
 
@@ -744,6 +778,14 @@ If the manuscript already contains a figure idea, preserve its mathematical purp
 
 The book has a back-of-book index compiled by `imakeidx`. Build wiring (three-pass compile, automatic under `latexmk -pdf main.tex`) is documented in [`README.md`](README.md).
 
+### The lookup test
+
+Before adding any `\index{...}` entry — mandatory or optional — apply the **lookup test**: *will a reader want to find this item later without remembering which chapter introduced it?* If yes, it belongs in the index.
+
+Items that fail the lookup test do **not** belong in the index, even if the author happens to give them names: a one-off substitution variable inside a single proof, a throwaway example label used only in its own paragraph, an intermediate lemma-style claim the proof never references again, a mnemonic only meaningful in context. Adding these clutters the index and degrades the items that readers actually need to find.
+
+The mandatory and optional lists below are the default answers to the lookup test for their categories. When a specific item in a mandatory category genuinely fails the test in its context (for example, a one-shot applied setting used only for flavour), the lookup test wins: leave it out and note the omission in an exception comment.
+
 ### Mandatory entries
 
 An `\index{...}` entry **MUST** appear at the first occurrence of:
@@ -751,9 +793,9 @@ An `\index{...}` entry **MUST** appear at the first occurrence of:
 1. **Every term introduced by a `definition`** — the primary term and any synonyms used elsewhere.
 2. **Every named theorem** — *Squeeze Theorem*, *Intermediate Value Theorem*, *Mean Value Theorem*, *Fundamental Theorem of Calculus*, and so on.
 3. **Every notation the book introduces** — `\arcsin`, `\lim`, `\int`, etc., using the sort-key-plus-display form: `\index{arcsine@$\arcsin$}`, `\index{limit@$\lim$}`, `\index{integral@$\int$}`.
-4. **Every key example** the book expects readers to remember by name — the $1/x$-near-$0$ example, the $x^{2}\sin(1/x)$ squeeze example, and so on. Format: `\index{1/x near 0@$1/x$ near $0$}`, `\index{x^2 sin(1/x) example@$x^{2}\sin(1/x)$ example}`.
+4. **Every key example** the book expects readers to remember by name — the $1/x$-near-$0$ example, the $x^{2}\sin(1/x)$ squeeze example, and so on. Format: `\index{1/x near 0@$1/x$ near $0$}`, `\index{x^2 sin(1/x) example@$x^{2}\sin(1/x)$ example}`. "Expects readers to remember by name" is the lookup test: if the example is referenced later in the book or is a canonical counterexample the field itself names, index it. Purely local illustrations of a method do not need an entry.
 5. **Every notation trap** that could confuse readers — *sine inverse vs reciprocal*, *absolute value vs interval brackets*, etc. Format: `\index{sine inverse vs reciprocal@$\sin^{-1}$ vs $1/\sin$}`.
-6. **Every applied setting introduced for the first time** — *instantaneous velocity*, *tangent line*, *rate of change*, *slope*, *area under a curve*. These entries let the self-study reader locate where a real-world concept was first connected to the mathematics.
+6. **Every applied setting that introduces new terminology or will be reused** — *instantaneous velocity*, *tangent line*, *rate of change*, *slope*, *area under a curve*. Purely incidental applications used once for flavour (a beaker of water in an introduction, a numerical example framed around a dropped ball that is never revisited) do not need an entry.
 
 ### Optional entries
 
