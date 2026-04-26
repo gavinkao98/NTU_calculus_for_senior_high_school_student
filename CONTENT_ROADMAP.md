@@ -30,9 +30,9 @@ Two cross-cutting targets sit above any chapter-specific content:
 | # | Title | Status | Sections |
 |---|---|---|---|
 | 1 | Inverse Functions and Limits | draft | 1.1 Inverse Functions and One-to-One Functions; 1.2 Inverse Trigonometric Functions; 1.3 Limits; 1.4 One-Sided and Infinite Limits; 1.5 Limit Laws; 1.6 The Precise Definition of a Limit |
-| 2 | Derivatives | drafting | 2.1 The Tangent Line and the Derivative at a Point; 2.2 The Derivative as a Function; 2.3 Differentiability, Continuity, and Higher Derivatives; 2.4 Derivatives of Polynomials and the Exponential Function; 2.5 The Product and Quotient Rules |
-| 3 | Chain Rule and Trigonometric Derivatives | drafting | 3.1 Derivatives of the Sine and Cosine Functions; 3.2 The Chain Rule; 3.3 Applications of the Chain Rule |
-| 4 | The Exponential and Logarithmic Functions | planned | 4.1 Construction of the Exponential Function; 4.2 Continuity and the Exponent Law for $e^x$; 4.3 The Derivative of $e^x$; 4.4 Rolle's Theorem and the Mean Value Theorem; 4.5 Monotonicity and the Logarithmic Function |
+| 2 | Derivatives | draft | 2.1 The Tangent Line and the Derivative at a Point; 2.2 The Derivative as a Function; 2.3 Differentiability, Continuity, and Higher Derivatives; 2.4 Derivatives of Polynomials and the Exponential Function; 2.5 The Product and Quotient Rules |
+| 3 | Chain Rule and Trigonometric Derivatives | draft | 3.1 Derivatives of the Sine and Cosine Functions; 3.2 The Chain Rule; 3.3 Applications of the Chain Rule |
+| 4 | The Exponential and Logarithmic Functions | draft | 4.1 Construction of the Exponential Function; 4.2 Continuity and the Exponent Law for $e^x$; 4.3 The Derivative of $e^x$; 4.4 Rolle's Theorem and the Mean Value Theorem; 4.5 Monotonicity and the Logarithmic Function |
 | 5-14 | *(TBD — titles added as each chapter is drafted)* | planned | — |
 
 Target scope: Calc I + II + III (single-variable through multivariable vector calculus). Loose Stewart / Rogawski TOC as the reference arc. The natural full arc at this scope runs roughly 14 chapters:
@@ -157,7 +157,7 @@ Chapter 1 is the **foundations** phase of the course arc. It sets up the two fou
 
 ### Chapter 2: Derivatives
 
-**Status**: drafting
+**Status**: draft
 **Source file**: `chapters/ch02_derivatives.tex`
 **Estimated length**: *(fill in after first full compile)*
 **Manuscript source**: received 2026-04-27 (13-page handwritten manuscript by the chapter author). The manuscript covers the foundational portion of the differentiation chapter: tangent-line motivation, the derivative at a point, the derivative as a function, differentiability vs continuity, higher derivatives, derivatives of constants / power functions / the exponential, and the product / quotient rules. It does **not** include the trigonometric, chain-rule, implicit, inverse-function, or logarithmic-derivative material that the pre-manuscript working hypothesis listed as §2.4–§2.8. Whether those topics will arrive as a follow-up manuscript (extending Ch 2) or shift to a later chapter is an Open question below.
@@ -212,7 +212,7 @@ Chapter 2 is the **development** phase of Calc I. It converts the limit machiner
 
 ### Chapter 3: Chain Rule and Trigonometric Derivatives
 
-**Status**: drafting
+**Status**: draft
 **Source file**: `chapters/ch03_chain_rule.tex`
 **Estimated length**: *(fill in after first full compile)*
 **Manuscript source**: `2023-10-28-chainRule` (handwritten manuscript dated 2023-10-28, received 2026-04-27). The manuscript covers (i) derivatives of $\sin x$ and $\cos x$ via the squeezing lemma + sector geometry, (ii) the chain rule with a proof using the remainder-form definition of differentiability ($f(x_0 + h) = f(x_0) + mh + R(h)$ with $R(h)/h \to 0$), and (iii) chain-rule applications including $d/dx \ln x$, $d/dx x^x$, and $d/dx \arcsin y$. The manuscript also re-states the product rule and the differentiable-implies-continuous lemma; both are treated as cross-references back to Ch 2 rather than re-derived in Ch 3.
@@ -260,7 +260,7 @@ Chapter 3 is the **rules continuation** of Calc I. Chapter 2 built the limit def
 
 ### Chapter 4: The Exponential and Logarithmic Functions
 
-**Status**: drafting
+**Status**: draft
 **Source file**: `chapters/ch04_exponential_logarithm.tex`
 **Estimated length**: *(fill in after first full compile)*
 **Manuscript source**: `2023-11-4-ExponentialFunction` (handwritten manuscript dated 2023-11-04, received 2026-04-27). The manuscript covers (i) the rigorous construction of $e^x$ via the power series $\sum x^n / n!$, with completeness of $\mathbb{R}$ used to prove convergence; (ii) continuity of $e^x$ and the exponent law $e^x e^y = e^{x+y}$ via a careful series-multiplication argument and Cauchy convergence; (iii) the derivative $d/dx \, e^x = e^x$ (a more rigorous re-derivation than the one given in Ch 2 §2.4, with an explicit bound on $(e^h - 1)/h - 1$); (iv) Rolle's theorem and the Mean Value Theorem; (v) the corollary $f' \ge 0 \Rightarrow f$ increasing; (vi) the logarithm $\ln x$ as the inverse of $e^x$, its continuity, and $d/dx \ln x = 1/x$ via the inverse-function technique.
