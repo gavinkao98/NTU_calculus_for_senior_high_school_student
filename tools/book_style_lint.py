@@ -61,12 +61,16 @@ LINE_CHECKS: tuple[tuple[str, re.Pattern[str]], ...] = (
 # every non-translation addition to the chapter to be prefixed by a comment of
 # the form:
 #
-#     % expansion:<category> \u2014 <one-line description>
+#     % expansion:<category> [pass: <pass-id>] [source: <brief source>] \u2014 <one-line description>
 #
-# with <category> drawn from the list below. This keeps post-hoc review
-# tractable: the user can grep "^% expansion:" and see every addition that is
-# not a direct translation of the manuscript. An unknown or misspelled category
-# would silently hide the expansion from that review; hence this check.
+# with <category> drawn from the list below. The bracket hints are optional
+# (Mode A drafting may omit both; Mode C enrichment must include
+# [pass: enrichment]); when both are present, [pass: ...] precedes
+# [source: ...]. This keeps post-hoc review tractable: the user can grep
+# "^% expansion:" and see every addition that is not a direct translation of
+# the manuscript. An unknown or misspelled category, an unknown bracket key,
+# or out-of-order hints would silently hide an expansion (or its provenance)
+# from that review; hence the checks below.
 _EXPANSION_CATEGORIES = frozenset(
     {
         "history",
@@ -80,7 +84,9 @@ _EXPANSION_CATEGORIES = frozenset(
         "caution",
     }
 )
-_EXPANSION_MARKER_RE = re.compile(r"^\s*%\s*expansion:([A-Za-z_]+)")
+_EXPANSION_MARKER_RE = re.compile(r"^\s*%\s*expansion:([A-Za-z_]+)\s*(.*)$")
+_BRACKET_HINT_RE = re.compile(r"\[\s*([A-Za-z_][A-Za-z0-9_]*)\s*:")
+_RECOGNISED_HINT_KEYS = ("pass", "source")  # tuple order is the canonical order
 
 
 # Whole-file structural checks.
@@ -293,6 +299,7 @@ def lint_file(path: Path) -> list[Violation]:
         expansion_match = _EXPANSION_MARKER_RE.match(raw_line)
         if expansion_match:
             category = expansion_match.group(1)
+            rest = expansion_match.group(2)
             if category not in _EXPANSION_CATEGORIES:
                 valid = ", ".join(sorted(_EXPANSION_CATEGORIES))
                 violations.append(
@@ -307,6 +314,42 @@ def lint_file(path: Path) -> list[Violation]:
                         line=raw_line.strip(),
                     )
                 )
+            # Bracket-hint checks: only scan the region between the category
+            # and the em-dash separator, so brackets inside the description
+            # (e.g. "[x]" notation references) cannot false-positive.
+            em_dash_idx = rest.find("\u2014")
+            if em_dash_idx >= 0:
+                bracket_region = rest[:em_dash_idx]
+                hint_keys = [m.group(1) for m in _BRACKET_HINT_RE.finditer(bracket_region)]
+                for key in hint_keys:
+                    if key not in _RECOGNISED_HINT_KEYS:
+                        valid_keys = ", ".join(_RECOGNISED_HINT_KEYS)
+                        violations.append(
+                            Violation(
+                                path=path,
+                                line_number=line_number,
+                                message=(
+                                    f"unknown bracket hint key '{key}' in expansion marker; "
+                                    f"recognised keys are: {valid_keys} "
+                                    f"(see README.md \u00a7 Authoring workflow)"
+                                ),
+                                line=raw_line.strip(),
+                            )
+                        )
+                if "pass" in hint_keys and "source" in hint_keys:
+                    if hint_keys.index("pass") > hint_keys.index("source"):
+                        violations.append(
+                            Violation(
+                                path=path,
+                                line_number=line_number,
+                                message=(
+                                    "expansion marker bracket hints out of canonical order; "
+                                    "[pass: ...] must precede [source: ...] "
+                                    "(see README.md \u00a7 Authoring workflow)"
+                                ),
+                                line=raw_line.strip(),
+                            )
+                        )
         line = strip_comments(raw_line)
         if not line:
             continue
