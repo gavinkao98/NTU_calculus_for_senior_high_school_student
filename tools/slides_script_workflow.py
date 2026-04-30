@@ -8,6 +8,7 @@ from typing import Any
 SLIDE_HEADING_RE = re.compile(r"^## Slide (?P<slide_number>\d+): .+$", re.MULTILINE)
 SLIDE_ID_RE = re.compile(r"^Slide ID: `(?P<slide_id>[^`]+)`$", re.MULTILINE)
 NARRATION_MARKER_RE = re.compile(r"^Narration:\s*$", re.MULTILINE)
+VOICEOVER_BEATS_MARKER_RE = re.compile(r"^Voiceover Beats:\s*$", re.MULTILINE)
 RAW_LATEX_RE = re.compile(r"(\\\(|\\\)|\\[A-Za-z]+)")
 
 
@@ -108,7 +109,11 @@ def load_slide_scripts(path: Path, deck: dict[str, Any], enforce_spoken_math: bo
             raise ValueError(
                 f"Slide {slide_number} in {path} is missing a 'Narration:' marker."
             )
-        narration = section_text[narration_marker.end() :].strip()
+        narration_end = len(section_text)
+        beats_marker = VOICEOVER_BEATS_MARKER_RE.search(section_text, narration_marker.end())
+        if beats_marker:
+            narration_end = beats_marker.start()
+        narration = section_text[narration_marker.end() : narration_end].strip()
         sections[(slide_number, slide_id)] = narration
 
     expected_keys = [

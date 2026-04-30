@@ -4,6 +4,7 @@ Source file: `inputs\manim_storyboards\ch01_inverse_functions.yml`
 Deck ID: `ch01_inverse_functions`
 
 You may edit the narration text below each **Narration:** heading.
+For scenes with **Voiceover Beats**, edit the beat text/reveal map in the storyboard YAML; the joined beat text is exported here for proofreading.
 Do NOT change the hidden hash comment lines either — they are used for stale-file conflict detection.
 Do NOT change the Slide ID lines — they are used to match edits back to the correct scene.
 After editing, run `python tools/manim_sync_narration_back.py --deck-id ch01_inverse_functions` to write changes back to the storyboard YAML.

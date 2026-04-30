@@ -238,9 +238,9 @@ Hence \(\{a_{n}\}\) is Cauchy.
 
 The reverse direction is harder. We pick up two lemmas first.
 
-\begin{lemma}\label{lem:cauchy-bounded}
+\begin{proposition}\label{prop:cauchy-bounded}
 A Cauchy sequence is bounded.
-\end{lemma}
+\end{proposition}
 
 \begin{proof}
 Let \(\{a_{n}\}\) be Cauchy. Apply the Cauchy condition with \(\varepsilon = 1\) to get an index \(N_{0}\) such that \(\lvert a_{m} - a_{N_{0}} \rvert < 1\) for all \(m \geq N_{0}\). Then \(\lvert a_{m} \rvert \leq \lvert a_{N_{0}} \rvert + 1\) for \(m \geq N_{0}\). Setting
@@ -250,9 +250,9 @@ M = \max\bigl\{\lvert a_{1} \rvert, \lvert a_{2} \rvert, \dots, \lvert a_{N_{0} 
 we have \(\lvert a_{n} \rvert \leq M\) for every \(n \geq 1\).
 \end{proof}
 
-\begin{lemma}[Monotone subsequence]\label{lem:monotone-subsequence}
+\begin{proposition}[Monotone subsequence]\label{prop:monotone-subsequence}
 Every sequence of real numbers has a monotone (non-decreasing or non-increasing) subsequence.
-\end{lemma}
+\end{proposition}
 
 \begin{proof}
 Call an index \(n\) a \emph{peak} of the sequence \(\{a_{n}\}\) if \(a_{n} \geq a_{m}\) for every \(m > n\). Two cases.
@@ -267,11 +267,11 @@ Every bounded sequence of real numbers has a convergent subsequence.
 \end{theorem}
 
 \begin{proof}
-By \cref{lem:monotone-subsequence}, the sequence has a monotone subsequence; the subsequence is bounded (any subsequence of a bounded sequence is bounded). A bounded monotone sequence converges by \cref{thm:completeness}.
+By \cref{prop:monotone-subsequence}, the sequence has a monotone subsequence; the subsequence is bounded (any subsequence of a bounded sequence is bounded). A bounded monotone sequence converges by \cref{thm:completeness}.
 \end{proof}
 
 \begin{proof}[Proof of \cref{thm:cauchy-iff-convergent}, \(\Leftarrow\) direction]
-Let \(\{a_{n}\}\) be Cauchy. By \cref{lem:cauchy-bounded} it is bounded; by \cref{thm:bolzano-weierstrass} it has a convergent subsequence \(\{a_{n_{k}}\}\) with limit \(L\) for some \(L \in \mathbb{R}\). We claim the full sequence converges to \(L\).
+Let \(\{a_{n}\}\) be Cauchy. By \cref{prop:cauchy-bounded} it is bounded; by \cref{thm:bolzano-weierstrass} it has a convergent subsequence \(\{a_{n_{k}}\}\) with limit \(L\) for some \(L \in \mathbb{R}\). We claim the full sequence converges to \(L\).
 
 Given \(\varepsilon > 0\), apply the Cauchy condition to find \(N_{1}\) such that \(\lvert a_{m} - a_{n} \rvert < \varepsilon / 2\) for all \(m, n \geq N_{1}\). Apply the subsequence convergence to find \(K\) such that \(\lvert a_{n_{K}} - L \rvert < \varepsilon / 2\) and \(n_{K} \geq N_{1}\) (the second condition is automatic for \(K\) large enough since \(n_{K} \to \infty\)). Then for every \(n \geq N_{1}\),
 \[
@@ -464,13 +464,13 @@ The exponent law lets us factor \(e^{x + h}\) as \(e^{x} \cdot e^{h}\), so the d
 \]
 The factor \(e^{x}\) is independent of \(h\); the entire derivative calculation reduces to evaluating \(\lim_{h \to 0} (e^{h} - 1)/h\). We do this directly from the series.
 
-\begin{lemma}\label{lem:eh-minus-1-over-h-bound}
+\begin{proposition}\label{prop:eh-minus-1-over-h-bound}
 For \(\lvert h \rvert \leq 1/2\),
 \[
 \left\lvert \frac{e^{h} - 1}{h} - 1 \right\rvert \leq \lvert h \rvert.
 \]
 In particular \(\lim_{h \to 0} (e^{h} - 1)/h = 1\).
-\end{lemma}
+\end{proposition}
 
 \begin{proof}
 By the series definition (\cref{def:exponential-function}),
@@ -501,7 +501,7 @@ where we used \(1/n! \leq 1/2\) for every \(n \geq 2\) (since \(n! \geq 2\)) and
 
 % expansion:caution — comparison to ch02's informal derivation
 \begin{caution}
-\Cref{lem:eh-minus-1-over-h-bound} is the rigorous version of the term-by-term argument in \cref{thm:derivative-of-exp} (Chapter 2). The earlier proof asserted that all higher-order terms ``vanish as \(h \to 0\)'' without quantifying the rate; the lemma here gives the explicit bound \(\lvert h \rvert\), so the convergence is not just qualitative but proceeds at a rate at least linear in \(h\). For most calculus purposes the qualitative version is enough; for any later argument that needs to track derivative errors quantitatively (Taylor remainders, error analysis), the bound is what we will use.
+\Cref{prop:eh-minus-1-over-h-bound} is the rigorous version of the term-by-term argument in \cref{thm:derivative-of-exp} (Chapter 2). The earlier proof asserted that all higher-order terms ``vanish as \(h \to 0\)'' without quantifying the rate; the lemma here gives the explicit bound \(\lvert h \rvert\), so the convergence is not just qualitative but proceeds at a rate at least linear in \(h\). For most calculus purposes the qualitative version is enough; for any later argument that needs to track derivative errors quantitatively (Taylor remainders, error analysis), the bound is what we will use.
 \end{caution}
 
 \subsection{The derivative formula}
@@ -514,7 +514,7 @@ For every \(x \in \mathbb{R}\),
 \end{theorem}
 
 \begin{proof}
-By the exponent law (\cref{thm:exponent-law}) and \cref{lem:eh-minus-1-over-h-bound},
+By the exponent law (\cref{thm:exponent-law}) and \cref{prop:eh-minus-1-over-h-bound},
 \[
 \lim_{h \to 0} \frac{e^{x + h} - e^{x}}{h}
 = \lim_{h \to 0} e^{x} \cdot \frac{e^{h} - 1}{h}
@@ -718,7 +718,7 @@ f'(c) = \frac{f(x_{2}) - f(x_{1})}{x_{2} - x_{1}}.
 The denominator \(x_{2} - x_{1}\) is positive. If \(f'(c) \geq 0\), the numerator is non-negative, so \(f(x_{2}) \geq f(x_{1})\). If \(f'(c) > 0\), the numerator is strictly positive, so \(f(x_{2}) > f(x_{1})\).
 \end{proof}
 
-\begin{example}[Sine on \([0, \pi/4]\)]
+\begin{example}[Sine on {\([0, \pi/4]\)}]
 The derivative \((\sin x)' = \cos x\) (\cref{thm:derivative-sin}) is positive on \((0, \pi/4) \subseteq (0, \pi/2)\), where cosine is positive. By \cref{cor:monotonicity}, \(\sin\) is strictly increasing on \([0, \pi/4]\): for \(0 \leq x_{1} < x_{2} \leq \pi/4\), \(\sin x_{1} < \sin x_{2}\). The same argument extends \(\sin\) being strictly increasing to \([0, \pi/2]\) where \(\cos\) remains positive.
 \end{example}
 

@@ -1,0 +1,581 @@
+# Section 1.2 Inverse Trigonometric Functions -- storyboard v1
+# (authored against MANIM_STORYBOARD.md v1.6).
+#
+# Source: chapters/ch01_foundations.tex, Section 1.2 (lines 270-565).
+# Scene plan: 13 scenes. The section has four subsections (arcsin, arccos, arctan, the
+# remaining three), but the teaching weight is heavily on arcsin (longest worked-example
+# pair) and arctan (the cos(arctan x) simplification). arccos is given a single definition
+# scene because the structure is identical to arcsin and adding more weight would invite
+# repetition. The "remaining inverses" subsection is folded into a single definition_math
+# scene listing the three definitions side by side -- the textbook treats them as a unit.
+#
+# Deliberate skips:
+# - The textbook's separate restricted-cosine and restricted-tangent figures are folded
+#   into supporting bullets / annotations on their definition scenes; the restricted-sine
+#   figure earns its own graph_focus because arcsin is the lead example.
+# - The two branch-choice remarks for arcsec / arccsc are folded into the
+#   `remaining_inverses` voiceover; they do not warrant their own scene.
+# - The chapter's right-triangle TikZ figure inside the arcsin example is redrawn through
+#   a custom hook (numbers + sides labelled), since graph_focus has no triangle primitive.
+
+deck_id: "ch01_inverse_trig_functions"
+language: "English"
+theme:
+  name: "midnight"
+video:
+  aspect_ratio: "16:9"
+  pixel_width: 1920
+  pixel_height: 1080
+  frame_rate: 30
+  preview_scale: 0.5
+
+scenes:
+
+  # ============================================================
+  # 1. Opening hook. Motivating physical setup: recovering an angle from a ratio.
+  # ============================================================
+  -
+    scene_id: "opening_hook"
+    template: "title_bullets"
+    content_type: "definition"
+    scene_exit: "hold"
+    title: "Inverse Trigonometric Functions"
+    voiceover: >
+      The trig functions take an angle and return a ratio. Often we need the reverse: we
+      know a ratio and want the angle. The slope of a ramp gives an angle of inclination;
+      the ratio of sides in a right triangle gives one of its acute angles. None of the
+      trig functions are one-to-one on the whole real line, so to invert them we have to
+      restrict each one to an interval where it is one-to-one. Today we build the inverse
+      sine, cosine, and tangent, and then list the three less common inverses.
+    timing:
+      lead_in_seconds: 0.3
+      hold_after_seconds: 0.8
+      minimum_duration_seconds: 7.0
+    data:
+      bullets:
+        - "Trig: angle \\(\\to\\) ratio. Inverse trig: ratio \\(\\to\\) angle."
+        - "None of \\(\\sin\\), \\(\\cos\\), \\(\\tan\\) are one-to-one on \\(\\mathbb{R}\\)."
+        - "Restrict to a principal interval, then invert."
+
+  # ============================================================
+  # 2. Why we cannot invert sine on R. Visual: horizontal line meets sine curve many times.
+  # ============================================================
+  -
+    scene_id: "sine_not_one_to_one"
+    template: "graph_focus"
+    content_type: "warning"
+    scene_exit: "hold"
+    title: "$\\sin x$ Is Not One-to-One on $\\mathbb{R}$"
+    voiceover: >
+      Here is the sine function on the interval from minus two pi to two pi. A horizontal
+      line at height one half slices through the curve in five places inside this window
+      alone, and infinitely many places on the full real line. Five different inputs all
+      have sine equal to one half. So if we tried to define the inverse globally, asking
+      for the angle whose sine is one half would give us infinitely many answers. To get
+      a function back, we must pick out exactly one of these answers by restricting the
+      domain.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.9
+      minimum_duration_seconds: 6.5
+    data:
+      axes:
+        x_range: [-6.5, 6.5, 3.14159]
+        y_range: [-1.4, 1.4, 1]
+        x_length: 11.0
+        y_length: 3.5
+        include_numbers: false
+        tips: true
+      plots:
+        -
+          kind: "function"
+          expression: "sin(x)"
+          x_range: [-6.4, 6.4]
+          color: "#4cc9f0"
+          label: "$y = \\sin x$"
+          label_x: 3.3
+          label_side: "up"
+        -
+          kind: "line"
+          start: [-6.4, 0.5]
+          end: [6.4, 0.5]
+          color: "#ff6b6b"
+          dashed: true
+          label: "$y = 1/2$"
+        -
+          kind: "point"
+          point: [0.5236, 0.5]
+          color: "#f9a825"
+          hollow: false
+        -
+          kind: "point"
+          point: [2.6180, 0.5]
+          color: "#f9a825"
+          hollow: false
+        -
+          kind: "point"
+          point: [-3.6652, 0.5]
+          color: "#f9a825"
+          hollow: false
+        -
+          kind: "point"
+          point: [-5.7596, 0.5]
+          color: "#f9a825"
+          hollow: false
+      annotations:
+        -
+          text: "Many inputs share the same sine."
+        -
+          text: "No single inverse is possible globally."
+
+  # ============================================================
+  # 3. Restricted sine: the principal branch.
+  # ============================================================
+  -
+    scene_id: "restricted_sine"
+    template: "graph_focus"
+    content_type: "definition"
+    scene_exit: "hold"
+    title: "The Principal Branch: $\\sin x$ on $[-\\pi/2, \\pi/2]$"
+    voiceover: >
+      Now restrict to the closed interval from minus pi over two to pi over two. On this
+      interval, sine climbs strictly from minus one up to one. Strictly increasing means
+      one-to-one, and the values cover the entire interval from minus one to one. Inside
+      this window every horizontal line at a height between minus one and one hits the
+      curve exactly once, so we can invert. This restricted piece is what defines arcsin.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.9
+      minimum_duration_seconds: 6.0
+    data:
+      axes:
+        x_range: [-1.9, 1.9, 1.5708]
+        y_range: [-1.3, 1.3, 1]
+        x_length: 7.0
+        y_length: 4.5
+        include_numbers: false
+        tips: true
+      plots:
+        -
+          kind: "function"
+          expression: "sin(x)"
+          x_range: [-1.5708, 1.5708]
+          color: "#4cc9f0"
+          label: "$\\sin x$"
+          label_x: 0.95
+          label_side: "up"
+        -
+          kind: "point"
+          point: [-1.5708, -1.0]
+          color: "#06d6a0"
+          hollow: false
+        -
+          kind: "point"
+          point: [1.5708, 1.0]
+          color: "#06d6a0"
+          hollow: false
+      annotations:
+        -
+          text: "Strictly increasing on \\([-\\pi/2, \\pi/2]\\)."
+        -
+          text: "Range: \\([-1, 1]\\)."
+
+  # ============================================================
+  # 4. Definition of arcsin.
+  # ============================================================
+  -
+    scene_id: "arcsin_definition"
+    template: "definition_math"
+    content_type: "definition"
+    scene_exit: "hold"
+    title: "The Inverse Sine"
+    voiceover: >
+      The inverse sine of x, written arcsin x or sine to the minus one of x, is the angle
+      y in the closed interval from minus pi over two to pi over two whose sine equals x.
+      Its domain, the set of legal inputs, is the closed interval from minus one to one,
+      because that is the range of sine. Its range, the set of outputs, is the principal
+      interval. The composition identities follow: applying sine to arcsin gives back x,
+      and applying arcsin to sine gives back x as long as the angle stays inside the
+      principal interval.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.7
+      minimum_duration_seconds: 7.0
+    data:
+      statement: "\\(\\arcsin x\\) is the unique angle \\(y \\in [-\\pi/2, \\pi/2]\\) with \\(\\sin y = x\\)."
+      math_lines:
+        -
+          text: "\\[\\arcsin x = y \\;\\Longleftrightarrow\\; \\sin y = x \\text{ and } -\\tfrac{\\pi}{2} \\le y \\le \\tfrac{\\pi}{2}.\\]"
+          animation: "write"
+        -
+          text: "\\[\\sin(\\arcsin x) = x, \\qquad -1 \\le x \\le 1.\\]"
+          animation: "write"
+        -
+          text: "\\[\\arcsin(\\sin x) = x, \\qquad -\\tfrac{\\pi}{2} \\le x \\le \\tfrac{\\pi}{2}.\\]"
+          animation: "highlight"
+      supporting_bullets:
+        - "Domain: \\([-1, 1]\\). Range: \\([-\\pi/2, \\pi/2]\\)."
+
+  # ============================================================
+  # 5. Two cautions: notation trap, and arcsin(sin x) outside the principal interval.
+  # Combined into one definition_math scene with content_type warning -- both cautions
+  # share the topic of "what arcsin does NOT mean" and the manuscript prints them as
+  # two consecutive caution boxes.
+  # ============================================================
+  -
+    scene_id: "arcsin_cautions"
+    template: "definition_math"
+    content_type: "warning"
+    scene_exit: "hold"
+    title: "Two Common Traps"
+    voiceover: >
+      Two warnings before we use arcsin. First, the notation sine to the minus one of x
+      means arcsin of x; it does not mean one over sine of x, because the exponent minus
+      one is a function-inverse symbol here, not a power. Second, arcsin of sine of x
+      equals x only on the principal interval. Outside, it returns whatever value in the
+      principal interval has the same sine. For example, arcsin of sine of pi is arcsin
+      of zero, which is zero, not pi. Always read identities like this with their domain
+      restrictions attached.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.8
+      minimum_duration_seconds: 7.0
+    data:
+      statement: "\\(\\sin^{-1}\\) is the inverse function, never the reciprocal; identities only hold on the principal interval."
+      math_lines:
+        -
+          text: "\\[\\sin^{-1} x = \\arcsin x \\;\\neq\\; \\frac{1}{\\sin x}.\\]"
+          animation: "write"
+        -
+          text: "\\[\\arcsin(\\sin \\pi) = \\arcsin(0) = 0 \\;\\neq\\; \\pi.\\]"
+          animation: "highlight"
+      supporting_bullets:
+        - "The exponent \\(-1\\) on a function name denotes inverse, not reciprocal."
+        - "\\(\\arcsin(\\sin x) = x\\) requires \\(x \\in [-\\pi/2, \\pi/2]\\)."
+
+  # ============================================================
+  # 6. Worked example #1: arcsin(1/2). Quick recall.
+  # ============================================================
+  -
+    scene_id: "arcsin_eval_simple"
+    template: "example_walkthrough"
+    content_type: "example"
+    scene_exit: "hold"
+    title: "Evaluating $\\arcsin(1/2)$"
+    voiceover: >
+      First a quick evaluation. We want the angle y in the principal interval whose sine
+      is one half. Pi over six is in the principal interval, and sine of pi over six is
+      one half by the standard thirty-sixty-ninety triangle. So arcsin of one half equals
+      pi over six. Notice that five pi over six also has sine one half, but it sits
+      outside the principal interval, so arcsin does not return it.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.7
+      minimum_duration_seconds: 5.5
+    data:
+      steps:
+        - "Find \\(y \\in [-\\pi/2, \\pi/2]\\) with \\(\\sin y = \\tfrac{1}{2}\\)."
+        - "Recall \\(\\sin(\\pi/6) = \\tfrac{1}{2}\\) and \\(\\pi/6 \\in [-\\pi/2, \\pi/2]\\)."
+        - "Therefore \\(\\arcsin(1/2) = \\pi/6\\)."
+      takeaway: "Always pick the angle from the principal interval; other angles with the same sine are excluded by definition."
+      math_lines:
+        - "\\[\\sin\\!\\left(\\tfrac{\\pi}{6}\\right) = \\tfrac{1}{2}\\]"
+        -
+          text: "\\[\\arcsin\\!\\left(\\tfrac{1}{2}\\right) = \\tfrac{\\pi}{6}\\]"
+          animation: "highlight"
+
+  # ============================================================
+  # 7. Worked example #2: tan(arcsin(1/3)). Right-triangle technique.
+  # Custom hook redraws the manuscript's small right triangle (hypotenuse 3, opposite 1,
+  # adjacent 2 sqrt(2)) since graph_focus has no triangle primitive.
+  # ============================================================
+  -
+    scene_id: "arcsin_triangle"
+    template: "example_walkthrough"
+    content_type: "example"
+    scene_exit: "hold"
+    title: "Computing $\\tan(\\arcsin(1/3))$"
+    voiceover: >
+      Here is the standard trick when one trig function is composed with the inverse of
+      another. Set theta equal to arcsin of one third, so by definition sine of theta is
+      one third and theta sits in the principal interval. Draw a right triangle with
+      angle theta, opposite side one, hypotenuse three. Pythagoras gives the adjacent
+      side: square root of nine minus one, which is two root two. Tangent is opposite
+      over adjacent, so tan of theta is one over two root two. The triangle picture turns
+      a composition of arcsin and tan into pure right-triangle geometry.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.7
+      minimum_duration_seconds: 8.0
+    data:
+      steps:
+        - "Let \\(\\theta = \\arcsin(1/3)\\); so \\(\\sin\\theta = 1/3\\), \\(\\theta \\in [-\\pi/2, \\pi/2]\\)."
+        - "Draw a right triangle with opposite \\(= 1\\), hypotenuse \\(= 3\\)."
+        - "Adjacent \\(= \\sqrt{9 - 1} = 2\\sqrt{2}\\) by Pythagoras."
+        - "\\(\\tan\\theta = \\dfrac{\\text{opp}}{\\text{adj}} = \\dfrac{1}{2\\sqrt{2}}\\)."
+      takeaway: "When a trig function meets an inverse trig function, sketch the implied right triangle."
+      math_lines:
+        - "\\[\\sin\\theta = \\tfrac{1}{3}, \\qquad \\theta \\in \\left[-\\tfrac{\\pi}{2}, \\tfrac{\\pi}{2}\\right].\\]"
+        -
+          text: "\\[\\text{adjacent} = \\sqrt{3^{2} - 1^{2}} = 2\\sqrt{2}.\\]"
+          animation: "write"
+        -
+          text: "\\[\\tan\\!\\bigl(\\arcsin(1/3)\\bigr) = \\tfrac{1}{2\\sqrt{2}}.\\]"
+          animation: "highlight"
+
+  # ============================================================
+  # 8. Definition of arccos.
+  # restricted-cosine figure (manuscript fig:restricted-cosine) folded into supporting bullets.
+  # ============================================================
+  -
+    scene_id: "arccos_definition"
+    template: "definition_math"
+    content_type: "definition"
+    scene_exit: "hold"
+    title: "The Inverse Cosine"
+    voiceover: >
+      Cosine on the closed interval from zero to pi is one-to-one: it descends strictly
+      from one down to minus one. So arccos of x is the angle y in zero to pi whose
+      cosine is x. The domain is again minus one to one, but the range is now zero to
+      pi instead of the symmetric interval. The composition identities mirror the arcsin
+      ones: cosine of arccos returns x for inputs in minus one to one, and arccos of
+      cosine returns x for angles in zero to pi.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.7
+      minimum_duration_seconds: 6.5
+    data:
+      statement: "\\(\\arccos x\\) is the unique angle \\(y \\in [0, \\pi]\\) with \\(\\cos y = x\\)."
+      math_lines:
+        -
+          text: "\\[\\arccos x = y \\;\\Longleftrightarrow\\; \\cos y = x \\text{ and } 0 \\le y \\le \\pi.\\]"
+          animation: "write"
+        -
+          text: "\\[\\cos(\\arccos x) = x, \\qquad -1 \\le x \\le 1.\\]"
+          animation: "write"
+        -
+          text: "\\[\\arccos(\\cos x) = x, \\qquad 0 \\le x \\le \\pi.\\]"
+          animation: "highlight"
+      supporting_bullets:
+        - "Cosine on \\([0, \\pi]\\) decreases from \\(1\\) to \\(-1\\); one-to-one there."
+        - "Domain: \\([-1, 1]\\). Range: \\([0, \\pi]\\)."
+
+  # ============================================================
+  # 9. Concept transition: arctan has a different range shape (open interval, asymptotes).
+  # ============================================================
+  -
+    scene_id: "transition_to_arctan"
+    template: "section_transition"
+    scene_exit: "hold"
+    title: "Inverting Tangent"
+    voiceover: >
+      Tangent is a different beast: its restricted branch is bounded in the input but
+      unbounded in the output. That changes the shape of arctan in two important ways.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.5
+      minimum_duration_seconds: 3.5
+    data:
+      subtitle: "From bounded outputs to unbounded outputs"
+      upcoming:
+        - "The principal branch of tangent"
+        - "The arctan definition"
+        - "A simplification using the right-triangle picture"
+
+  # ============================================================
+  # 10. Restricted tangent + arctan definition together. Graph as the lead because the
+  # asymptotic behavior is the conceptual story for arctan.
+  # ============================================================
+  -
+    scene_id: "restricted_tangent"
+    template: "graph_focus"
+    content_type: "definition"
+    scene_exit: "hold"
+    title: "$\\tan x$ on $(-\\pi/2, \\pi/2)$"
+    voiceover: >
+      The restricted branch of tangent runs over the open interval from minus pi over
+      two to pi over two. Inside that window tangent climbs from negative infinity at
+      the left edge up through zero to positive infinity at the right edge. So the
+      domain of arctan is the entire real line: every real number is the tangent of
+      some angle in this interval. The range of arctan is the open interval, with the
+      endpoints missing because tangent never actually attains plus or minus infinity.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.9
+      minimum_duration_seconds: 6.5
+    data:
+      axes:
+        x_range: [-1.9, 1.9, 1.5708]
+        y_range: [-5, 5, 1]
+        x_length: 6.5
+        y_length: 5.5
+        include_numbers: false
+        tips: true
+      plots:
+        -
+          kind: "function"
+          expression: "tan(x)"
+          x_range: [-1.35, 1.35]
+          color: "#4cc9f0"
+          label: "$\\tan x$"
+          label_x: 0.7
+          label_side: "right"
+        -
+          kind: "line"
+          start: [-1.5708, -5]
+          end: [-1.5708, 5]
+          color: "#ff6b6b"
+          dashed: true
+        -
+          kind: "line"
+          start: [1.5708, -5]
+          end: [1.5708, 5]
+          color: "#ff6b6b"
+          dashed: true
+      annotations:
+        -
+          text: "Vertical asymptotes at \\(x = \\pm \\pi/2\\)."
+        -
+          text: "Range covers all of \\(\\mathbb{R}\\)."
+
+  # ============================================================
+  # 11. Definition of arctan.
+  # ============================================================
+  -
+    scene_id: "arctan_definition"
+    template: "definition_math"
+    content_type: "definition"
+    scene_exit: "hold"
+    title: "The Inverse Tangent"
+    voiceover: >
+      Arctan of x is the angle y in the open interval from minus pi over two to pi over
+      two whose tangent is x. The domain is the whole real line; the range is the open
+      principal interval. The composition identities take the same form as before:
+      tangent of arctan returns x for every real x, and arctan of tangent returns x for
+      angles strictly inside the principal interval.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.7
+      minimum_duration_seconds: 6.0
+    data:
+      statement: "\\(\\arctan x\\) is the unique angle \\(y \\in (-\\pi/2, \\pi/2)\\) with \\(\\tan y = x\\)."
+      math_lines:
+        -
+          text: "\\[\\arctan x = y \\;\\Longleftrightarrow\\; \\tan y = x \\text{ and } -\\tfrac{\\pi}{2} < y < \\tfrac{\\pi}{2}.\\]"
+          animation: "write"
+        -
+          text: "\\[\\tan(\\arctan x) = x, \\qquad x \\in \\mathbb{R}.\\]"
+          animation: "write"
+        -
+          text: "\\[\\arctan(\\tan x) = x, \\qquad -\\tfrac{\\pi}{2} < x < \\tfrac{\\pi}{2}.\\]"
+          animation: "highlight"
+      supporting_bullets:
+        - "Domain: \\(\\mathbb{R}\\). Range: \\((-\\pi/2, \\pi/2)\\) (endpoints excluded)."
+
+  # ============================================================
+  # 12. Worked example: cos(arctan x). Identity-driven simplification.
+  # ============================================================
+  -
+    scene_id: "arctan_simplify"
+    template: "example_walkthrough"
+    content_type: "example"
+    scene_exit: "hold"
+    title: "Simplifying $\\cos(\\arctan x)$"
+    voiceover: >
+      Let y equal arctan x, so tan of y is x and y lies in the open principal interval.
+      We want cos of y. Use the Pythagorean identity one plus tan squared equals secant
+      squared. So secant squared of y is one plus x squared. Since y is in the open
+      interval from minus pi over two to pi over two, cosine is positive there, so
+      secant is positive. Take the positive square root: secant of y is the square root
+      of one plus x squared. Cosine is the reciprocal of secant, so cos of arctan x is
+      one over the square root of one plus x squared. The branch choice on arctan was
+      the load-bearing step: it forced the positive sign.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.8
+      minimum_duration_seconds: 9.0
+    data:
+      steps:
+        - "Let \\(y = \\arctan x\\); so \\(\\tan y = x\\), \\(y \\in (-\\pi/2, \\pi/2)\\)."
+        - "Pythagorean: \\(\\sec^{2} y = 1 + \\tan^{2} y = 1 + x^{2}\\)."
+        - "On \\((-\\pi/2, \\pi/2)\\), \\(\\cos y > 0\\), hence \\(\\sec y > 0\\)."
+        - "So \\(\\sec y = \\sqrt{1 + x^{2}}\\) and \\(\\cos y = 1/\\sec y\\)."
+      takeaway: "The principal interval fixes the sign; the rest is a Pythagorean identity."
+      math_layout: "equals_aligned"
+      math_lines:
+        - "\\[\\sec^{2} y = 1 + x^{2}\\]"
+        -
+          text: "\\[\\sec y = \\sqrt{1 + x^{2}}\\]"
+          animation: "transform_from_previous"
+        -
+          text: "\\[\\cos(\\arctan x) = \\dfrac{1}{\\sqrt{1 + x^{2}}}\\]"
+          animation: "highlight"
+
+  # ============================================================
+  # 13. Remaining inverses (arccsc, arcsec, arccot). Definition_math containing all three;
+  # the textbook treats them as a list, and the branch-choice cautions are folded into the
+  # voiceover rather than getting their own scenes (low pedagogical payoff individually).
+  # ============================================================
+  -
+    scene_id: "remaining_inverses"
+    template: "definition_math"
+    content_type: "definition"
+    scene_exit: "hold"
+    title: "Three More: $\\operatorname{arccsc}$, $\\operatorname{arcsec}$, $\\operatorname{arccot}$"
+    voiceover: >
+      The remaining three inverses come up less often, but the recipe is identical:
+      restrict to a principal interval, then invert. Arccsc and arcsec take inputs of
+      absolute value at least one, since cosecant and secant never produce values
+      strictly between minus one and one. Arccot is defined for all real inputs. Be
+      warned: textbooks differ on which principal interval to use for arcsec and
+      arccsc. We use the convention that makes later derivative formulas cleanest, but
+      always check which branch a source is using before plugging in numbers.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.8
+      minimum_duration_seconds: 7.5
+    data:
+      statement: "Restrict, invert, list -- but watch the branch convention."
+      math_lines:
+        - "\\[\\operatorname{arccsc} x = y \\;\\Longleftrightarrow\\; \\csc y = x, \\; y \\in (0, \\tfrac{\\pi}{2}] \\cup (\\pi, \\tfrac{3\\pi}{2}].\\]"
+        - "\\[\\operatorname{arcsec} x = y \\;\\Longleftrightarrow\\; \\sec y = x, \\; y \\in [0, \\tfrac{\\pi}{2}) \\cup [\\pi, \\tfrac{3\\pi}{2}).\\]"
+        -
+          text: "\\[\\operatorname{arccot} x = y \\;\\Longleftrightarrow\\; \\cot y = x, \\; y \\in (0, \\pi).\\]"
+          animation: "highlight"
+      supporting_bullets:
+        - "\\(\\operatorname{arccsc}\\) and \\(\\operatorname{arcsec}\\): domain \\((-\\infty, -1] \\cup [1, \\infty)\\)."
+        - "\\(\\operatorname{arccot}\\): domain \\(\\mathbb{R}\\)."
+
+  # ============================================================
+  # 14. Recap.
+  # ============================================================
+  -
+    scene_id: "recap"
+    template: "recap_cards"
+    content_type: "recap"
+    scene_exit: "hold"
+    title: "Key Takeaways"
+    voiceover: >
+      Six things to remember. First, no trig function is one-to-one on the real line.
+      Second, restrict each one to a principal interval, then invert. Third, the
+      principal intervals are the closed interval minus pi over two to pi over two for
+      arcsin, the closed interval zero to pi for arccos, and the open principal interval
+      for arctan. Fourth, sine to the minus one means inverse, never reciprocal. Fifth,
+      a composition like arcsin of sine of x equals x only inside the principal
+      interval. Finally, when a trig function meets an inverse trig function, draw the
+      implied right triangle.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 1.0
+      minimum_duration_seconds: 7.5
+    data:
+      points:
+        - "Trig is not one-to-one on \\(\\mathbb{R}\\); restrict, then invert."
+        - "Principal intervals: \\([-\\pi/2, \\pi/2]\\), \\([0, \\pi]\\), \\((-\\pi/2, \\pi/2)\\)."
+        - "\\(\\sin^{-1} x = \\arcsin x \\neq 1/\\sin x\\)."
+        - "\\(\\arcsin(\\sin x) = x\\) only on the principal interval."
+        - "Use a right triangle to compute \\(\\tan(\\arcsin x)\\), \\(\\cos(\\arctan x)\\), etc."
+        - "\\(\\operatorname{arccsc}\\), \\(\\operatorname{arcsec}\\), \\(\\operatorname{arccot}\\) follow the same recipe."
+      identities:
+        - "\\[\\sin(\\arcsin x) = x, \\quad \\cos(\\arccos x) = x, \\quad \\tan(\\arctan x) = x.\\]"
+        - "\\[\\cos(\\arctan x) = \\dfrac{1}{\\sqrt{1 + x^{2}}}.\\]"

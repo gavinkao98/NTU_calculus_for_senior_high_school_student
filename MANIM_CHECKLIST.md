@@ -56,6 +56,7 @@ The storyboard YAML is the **single source of truth**. Edit per scene:
 | Field | Purpose | Written for |
 |-------|---------|-------------|
 | `voiceover` | Spoken narration | The ear (plain English, no raw LaTeX) |
+| `voiceover_beats` | Optional beat-level narration | Synchronize spoken math with reveal timing |
 | `data` | Visual content (bullets, math_lines, steps, axes, plots) | The eye (LaTeX math) |
 | `template` | One of the 9 templates (see below) | Animation style |
 | `content_type` | Accent colour: definition=cyan, theorem=gold, example=highlight, warning=coral | Visual meaning |
@@ -67,6 +68,7 @@ The storyboard YAML is the **single source of truth**. Edit per scene:
 - One teaching idea per scene
 - One spoken paragraph per `voiceover`
 - `voiceover` and `data` complement each other, never duplicate
+- Use `voiceover_beats` for long derivations whose formulas should appear only when spoken. Keep each beat to one sentence or one algebraic move.
 - Use YAML block scalars (`|` / `>`) when narration paragraphs or LaTeX blocks become hard to read as one escaped line
 
 ### Template Selection Guide
@@ -198,6 +200,8 @@ Output: `artifacts/audio/<DECK_ID>_manim/01_<scene_id>.wav` through `NN_<scene_i
 Play individual WAV files. If a scene sounds wrong, adjust `voiceover` in the YAML, re-export bridge files (repeat 5a), and re-run TTS for that scene with `--max-slides N`.
 Narration-only edits now reuse the cached silent Manim scene video, so you should not need to re-render the visuals unless the scene's visual data changed.
 
+Before synthesis, Coqui and F5 both apply `tools/tts_pronunciation.py`. This TTS-only pass makes math symbols clearer, including variable `a` as `ayyy` in contexts such as `x approaches a`, `x minus a`, `f of a`, and `limit at a`, while leaving article uses such as `a function` unchanged. If the voice model needs a shorter or longer variable-`a` sound, adjust `_VARIABLE_A_TTS` there and regenerate TTS.
+
 ---
 
 ## Phase 6 — Final Render with Audio
@@ -269,6 +273,7 @@ The mux step computes: `target_duration = max(video_duration, lead_in + audio_du
 
 - If audio is longer than video: video's last frame is cloned (frozen)
 - If video is longer than audio: silence pads the audio
+- If `voiceover_beats` is present: TTS writes per-beat durations to `manifest.json`, and Manim waits beat-by-beat before muxing.
 - To lengthen a scene: increase `minimum_duration_seconds` or add more animation steps in `data`
 - To add breathing room: increase `hold_after_seconds`
 - Default timing: `lead_in=0.15s`, `hold_after=0.45s`, `minimum_duration=4.0s`

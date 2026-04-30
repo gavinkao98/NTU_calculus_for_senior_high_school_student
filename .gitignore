@@ -36,6 +36,12 @@
 !/artifacts/manim/*/narration.md
 /video_pipeline/output/
 
+# Manim CLI default output directory
+media/
+
+# Third-party reference scans (copyrighted; not for distribution)
+stewart/
+
 # Local raw voice inputs
 /inputs/voice/*.wav
 /inputs/voice/*.mp3

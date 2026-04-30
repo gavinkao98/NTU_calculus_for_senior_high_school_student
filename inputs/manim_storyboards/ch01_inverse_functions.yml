@@ -183,10 +183,12 @@ scenes:
           kind: "point"
           point: [0.5, 0.25]
           color: "#f9a825"
+          hollow: false
         -
           kind: "point"
           point: [-0.5, 0.25]
           color: "#f9a825"
+          hollow: false
       annotations:
         -
           text: "Two inputs share the same output."

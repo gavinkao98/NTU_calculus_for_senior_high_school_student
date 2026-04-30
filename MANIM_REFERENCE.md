@@ -144,7 +144,46 @@ Optional scene fields:
 - `disabled` — skip this scene during rendering
 - `content_type` — `definition`, `theorem`, `lemma`, `proposition`, `example`, `warning`, `procedure`, `recap`. Controls accent colour. Inferred from template if omitted.
 - `scene_exit` — `fade`, `hold` (recommended for audio), `none`. Use `hold` when the voiceover is longer than the animation so the content remains visible while the narration finishes
+- `voiceover_beats` — optional beat-level narration map. When present, the joined beat text becomes the scene narration and each beat can reveal named visual elements.
 - `reveal_groups` — optional progressive-reveal timing
+
+### Beat-paced narration
+
+Use `voiceover_beats` when a derivation should appear at the moment it is spoken. Each beat has:
+
+- `id`: unique within the scene
+- `text`: spoken narration for that beat
+- `reveal`: visual element IDs to animate at the start of that beat
+- `hold_after_seconds` (or `hold_after`): optional silence after the beat
+- `duration_seconds`: optional preview-only fallback before TTS durations exist
+
+Example:
+
+```yaml
+voiceover_beats:
+  -
+    id: setup
+    text: Given a positive epsilon, start from the expression we need to control.
+    reveal: ["header", "statement"]
+  -
+    id: simplify
+    text: The absolute value simplifies to four times the distance from x to three.
+    reveal: ["math_line_0"]
+    hold_after_seconds: 0.2
+```
+
+The Coqui/F5 synthesis scripts write `manifest.json` with a `beats` array per scene. `manim_render_lesson.py --with-audio` reads those measured durations before rendering, so formula reveals are paced by the actual TTS output. Without `--with-audio`, Manim uses a rough words-per-second estimate for preview.
+
+Common reveal IDs:
+
+- `title_bullets`: `title`, `bullet_0`, `bullets`
+- `definition_math`: `header`, `statement`, `math_line_0`, `math_lines`, `support_0`
+- `example_walkthrough`: `header`, `stage_0`, `step_0`, `math_line_0`, `takeaway`
+- `procedure_steps`: `header`, `step_0`, `equation_0`, `math_line_0`, `equations`
+- `graph_focus`: `title`, `axes`, `plot_0`, `labels`, `annotation_0`
+- `theorem_proof`: `header`, `statement`, `proof_label`, `proof_step_0`, `qed`
+
+`manim_storyboard_lint.py` validates reveal IDs before rendering. For custom `hook` scenes, beat pacing applies to the template portion; hook-specific animation must be handled inside the hook.
 
 ### Templates (9)
 
@@ -168,8 +207,10 @@ Backward compatible — plain strings still work:
 math_lines:
   # Plain string:
   - "\\[f(x)=x^2\\]"
-  # Extended dict with animation hint:
-  - text: "\\[f^{-1}(x)=\\sqrt{x}\\]"
+  # Extended dict with animation hint -- dash MUST be on its own line
+  # (see "YAML format constraints" below for why):
+  -
+    text: "\\[f^{-1}(x)=\\sqrt{x}\\]"
     animation: "highlight"  # write | fade | highlight | transform_from_previous
 ```
 
@@ -185,9 +226,11 @@ data:
   decay_previous: true            # example_walkthrough only; defaults to true
   math_lines:
     - "\\[y = x^3 + 2\\]"
-    - text: "\\[x = \\sqrt[3]{y - 2}\\]"
+    -
+      text: "\\[x = \\sqrt[3]{y - 2}\\]"
       animation: "transform_from_previous"
-    - text: "\\[f^{-1}(x) = \\sqrt[3]{x - 2}\\]"
+    -
+      text: "\\[f^{-1}(x) = \\sqrt[3]{x - 2}\\]"
       animation: "highlight"
 ```
 
@@ -213,6 +256,31 @@ data:
 ```
 
 The local YAML loader supports both `|` and `>` forms, and `manim_sync_narration_back.py` can now write block scalars back into the storyboard when a narration becomes multi-line.
+
+### YAML format constraints
+
+The storyboard is parsed by [`tools/shared_simple_yaml.py`](tools/shared_simple_yaml.py), a deliberately minimal YAML subset rather than full PyYAML. Two consequences are worth knowing because both can produce confusing `Unexpected indentation` errors that look like upstream YAML problems but are not:
+
+- **List item that is a mapping MUST put the dash on its own line.** PyYAML accepts both
+  ```yaml
+  # Inline form -- accepted by PyYAML, REJECTED by shared_simple_yaml.py:
+  math_lines:
+    - text: "\\[x^2\\]"
+      animation: "highlight"
+  ```
+  and the dash-on-its-own-line form. The local parser only accepts the latter:
+  ```yaml
+  # Required form:
+  math_lines:
+    -
+      text: "\\[x^2\\]"
+      animation: "highlight"
+  ```
+  The reason is that `parse_list` in `shared_simple_yaml.py` treats anything after the dash as a scalar; it does not detect when that scalar is the start of a mapping. Symptom when violated: `SimpleYamlError: Unexpected indentation at line N: expected 8 spaces, found 10`. Fix: split the dash onto its own line and indent the keys two spaces beyond the dash's column.
+
+- **Indentation steps are exactly 2 spaces.** PyYAML tolerates non-uniform indentation; the local parser requires every nested level to be exactly two spaces deeper than its parent. A four-space jump under a `data:` key will be reported as unexpected indentation.
+
+If you copy a snippet from another YAML source (a PyYAML-generated dump, a pasted Stack Overflow answer, or another tool's storyboard) and the dry-run reports an indentation error you cannot see, the inline-mapping rule is almost always the culprit.
 
 ### Graph authoring rules (`graph_focus`)
 
@@ -279,6 +347,36 @@ When illustrating a restricted domain, set `x_range` on the plot to exactly the 
 **Annotations**
 
 Annotations are clamped to the visible frame automatically. Keep annotation text short (one sentence). The text box is 6.5 units wide.
+
+**Hollow vs solid points**
+
+Every `kind: point` plot must declare `hollow: true|false`. Hollow circles indicate "the function is undefined at this x" or "the limit value differs from `f(a)`"; solid dots indicate a real point on the curve, an intersection, or a marked function value. Lint warns if the field is missing -- defaulting silently to solid produced wrong renders before the rule was added.
+
+```yaml
+- kind: "point"
+  point: [3, 5]          # limit value, but f(3) = 6, not 5
+  color: "#c8c8d8"
+  hollow: true           # stroke-only circle
+- kind: "point"
+  point: [3, 6]          # actual function value f(3) = 6
+  color: "#f9a825"
+  hollow: false          # solid dot
+```
+
+**Equal-scale axes**
+
+For figures where the visual x:y ratio carries meaning -- slopes, reflections about `y = x`, `\varepsilon`-`\delta` boxes, geometric figures -- set `axes.equal_scale: true`. Lint then enforces `x_length / x_span == y_length / y_span`:
+
+```yaml
+axes:
+  x_range: [0, 5, 1]      # x_span = 5
+  y_range: [0, 8, 1]      # y_span = 8
+  x_length: 3.125         # 0.625 manim units per chart-x
+  y_length: 5.0           # 0.625 manim units per chart-y -> ratio matches
+  equal_scale: true       # lint enforces ratio match
+```
+
+Omit the field (or set `false`) for symbol-heavy figures where the curve is just a generic illustration. See `graph-focus-axes-equal-scale-mismatch` lint finding for the exact tolerance.
 
 ### Theme system
 
@@ -490,6 +588,20 @@ python .\tools\voice_synthesize_f5.py `
   --manifest artifacts\audio\ch01_inverse_functions_manim\manifest.json `
   --reference-mode clone
 ```
+
+### TTS pronunciation normalization
+
+Both Coqui and F5 pass narration through `tools/tts_pronunciation.py` before synthesis. This layer is intentionally TTS-only: it does not edit storyboard YAML, `narration.md`, or on-screen math.
+
+Current math-symbol pronunciation rules include:
+
+- variable `a` in math contexts becomes `ayyy`, so `x approaches a`, `x minus a`, `f of a`, and `limit at a` are pronounced as a clearly audible letter name instead of the English article
+- English article uses remain unchanged, e.g. `a function`, `a positive delta`, `a specific number`
+- common function letters become `eff`, `gee`, `aitch` in contexts such as `f of x`, `g inverse`, and `h is`
+- limit/threshold letters become `ell`, `em`, `en` for `L`, `M`, `N`
+- `y equals c`-style constants become `C`
+
+Adjust `_VARIABLE_A_TTS` in `tools/tts_pronunciation.py` if the variable-`a` pronunciation is too short or too exaggerated for a chosen voice model, then regenerate TTS audio.
 
 Maintenance rule:
 

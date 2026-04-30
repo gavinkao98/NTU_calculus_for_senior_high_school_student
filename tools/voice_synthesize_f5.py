@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import sys
 import wave
 from importlib.resources import files
@@ -23,6 +24,7 @@ from shared_runtime_bootstrap import (
     require_path,
 )
 from slides_script_workflow import final_script_path, load_slide_scripts
+from tts_pronunciation import normalize_tts_pronunciation
 
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
@@ -188,6 +190,129 @@ def default_output_suffix(reference_mode: str) -> str:
     return f"f5_{reference_mode}"
 
 
+def normalize_script(text: str) -> str:
+    return normalize_tts_pronunciation(text)
+
+
+def silence(sample_rate: int, seconds: float) -> np.ndarray:
+    sample_count = max(int(round(sample_rate * seconds)), 0)
+    return np.zeros(sample_count, dtype=np.float32)
+
+
+def safe_audio_stem(value: str) -> str:
+    cleaned = re.sub(r"[^a-zA-Z0-9_-]+", "_", value.strip())
+    return cleaned.strip("_") or "beat"
+
+
+def script_from_slide_beats(slide: dict) -> str | None:
+    beats = slide.get("voiceover_beats") or []
+    if not beats:
+        return None
+    return normalize_script(" ".join(str(beat["text"]) for beat in beats))
+
+
+def synthesize_f5_text(
+    script: str,
+    processed_reference_wav: str,
+    processed_reference_text: str,
+    model_obj,
+    vocoder,
+    mel_spec_type: str,
+    args: argparse.Namespace,
+    device: str,
+) -> tuple[np.ndarray, int]:
+    audio, sample_rate, _ = infer_process(
+        ref_audio=processed_reference_wav,
+        ref_text=processed_reference_text,
+        gen_text=script,
+        model_obj=model_obj,
+        vocoder=vocoder,
+        mel_spec_type=mel_spec_type,
+        show_info=print,
+        progress=None,
+        nfe_step=args.nfe_step,
+        cfg_strength=args.cfg_strength,
+        sway_sampling_coef=args.sway_sampling_coef,
+        cross_fade_duration=args.cross_fade_duration,
+        speed=args.speed,
+        fix_duration=args.fix_duration,
+        device=device,
+    )
+    if audio is None:
+        raise RuntimeError("F5-TTS returned no audio.")
+    return audio, sample_rate
+
+
+def synthesize_slide_beats(
+    slide: dict,
+    output_dir: Path,
+    processed_reference_wav: str,
+    processed_reference_text: str,
+    model_obj,
+    vocoder,
+    mel_spec_type: str,
+    args: argparse.Namespace,
+    device: str,
+) -> tuple[np.ndarray, int, list[dict], str]:
+    slide_number = int(slide["slide_number"])
+    slide_id = slide["slide_id"]
+    beats = slide.get("voiceover_beats") or []
+    if not beats:
+        raise ValueError(f"Slide {slide_number} ({slide_id}) has no voiceover beats.")
+
+    beat_dir = ensure_directory(output_dir / "beats" / f"{slide_number:02d}_{slide_id}")
+    rendered_parts: list[np.ndarray] = []
+    manifest_beats: list[dict] = []
+    sample_rate: int | None = None
+    timeline = 0.0
+
+    for beat_index, beat in enumerate(beats, start=1):
+        tts_text = normalize_script(beat["text"])
+        audio, current_sample_rate = synthesize_f5_text(
+            script=tts_text,
+            processed_reference_wav=processed_reference_wav,
+            processed_reference_text=processed_reference_text,
+            model_obj=model_obj,
+            vocoder=vocoder,
+            mel_spec_type=mel_spec_type,
+            args=args,
+            device=device,
+        )
+        if sample_rate is None:
+            sample_rate = current_sample_rate
+        elif sample_rate != current_sample_rate:
+            raise RuntimeError(f"F5-TTS sample rate changed within slide {slide_number}.")
+
+        beat_audio_seconds = len(audio) / sample_rate
+        hold_after = float(beat.get("hold_after_seconds", 0.0))
+        beat_wav = beat_dir / f"{beat_index:02d}_{safe_audio_stem(beat['id'])}.wav"
+        sf.write(str(beat_wav), audio, sample_rate)
+
+        rendered_parts.append(audio)
+        if hold_after > 0:
+            rendered_parts.append(silence(sample_rate, hold_after))
+
+        manifest_beats.append(
+            {
+                "id": beat["id"],
+                "text": beat["text"],
+                "tts_text": tts_text,
+                "reveal": beat.get("reveal", []),
+                "audio_file": str(beat_wav),
+                "audio_seconds": round(beat_audio_seconds, 3),
+                "hold_after_seconds": round(hold_after, 3),
+                "start_seconds": round(timeline, 3),
+                "end_seconds": round(timeline + beat_audio_seconds + hold_after, 3),
+            }
+        )
+        timeline += beat_audio_seconds + hold_after
+
+    if sample_rate is None:
+        raise RuntimeError(f"Slide {slide_number} ({slide_id}) produced no beat audio.")
+    combined = np.concatenate(rendered_parts) if rendered_parts else silence(sample_rate, 0)
+    return combined, sample_rate, manifest_beats, script_from_slide_beats(slide) or ""
+
+
 def main() -> int:
     args = parse_args()
     deck_json = (args.deck_json or deck_json_path(REPO_ROOT, args.deck_id)).resolve()
@@ -206,7 +331,8 @@ def main() -> int:
         scripts = scripts[: args.max_slides]
 
     if args.dry_run:
-        print(f"Validated {len(slides)} slide narrations from {script_file}")
+        beat_count = sum(len(slide.get("voiceover_beats") or []) for slide in slides)
+        print(f"Validated {len(slides)} slide narrations from {script_file} ({beat_count} beat narrations).")
         return 0
 
     model_config = load_model_config(args.config_path)
@@ -261,36 +387,47 @@ def main() -> int:
         slide_id = slide["slide_id"]
         output_wav = output_dir / f"{slide_number:02d}_{slide_id}.wav"
 
-        audio, sample_rate, _ = infer_process(
-            ref_audio=processed_reference_wav,
-            ref_text=processed_reference_text,
-            gen_text=script,
-            model_obj=model_obj,
-            vocoder=vocoder,
-            mel_spec_type=mel_spec_type,
-            show_info=print,
-            progress=None,
-            nfe_step=args.nfe_step,
-            cfg_strength=args.cfg_strength,
-            sway_sampling_coef=args.sway_sampling_coef,
-            cross_fade_duration=args.cross_fade_duration,
-            speed=args.speed,
-            fix_duration=args.fix_duration,
-            device=device,
-        )
-        if audio is None:
-            raise RuntimeError(f"F5-TTS returned no audio for slide {slide_number}.")
+        beat_manifest: list[dict] = []
+        narration_mode = "single"
+        script_text = script
+        if slide.get("voiceover_beats"):
+            narration_mode = "beats"
+            audio, sample_rate, beat_manifest, script_text = synthesize_slide_beats(
+                slide=slide,
+                output_dir=output_dir,
+                processed_reference_wav=processed_reference_wav,
+                processed_reference_text=processed_reference_text,
+                model_obj=model_obj,
+                vocoder=vocoder,
+                mel_spec_type=mel_spec_type,
+                args=args,
+                device=device,
+            )
+        else:
+            script_text = normalize_script(script)
+            audio, sample_rate = synthesize_f5_text(
+                script=script_text,
+                processed_reference_wav=processed_reference_wav,
+                processed_reference_text=processed_reference_text,
+                model_obj=model_obj,
+                vocoder=vocoder,
+                mel_spec_type=mel_spec_type,
+                args=args,
+                device=device,
+            )
 
         sf.write(str(output_wav), audio, sample_rate)
-        manifest["slides"].append(
-            {
-                "slide_number": slide_number,
-                "slide_id": slide_id,
-                "audio_file": str(output_wav),
-                "script": script,
-                "audio_seconds": round(len(audio) / sample_rate, 3),
-            }
-        )
+        slide_entry = {
+            "slide_number": slide_number,
+            "slide_id": slide_id,
+            "audio_file": str(output_wav),
+            "script": script_text,
+            "narration_mode": narration_mode,
+            "audio_seconds": round(len(audio) / sample_rate, 3),
+        }
+        if beat_manifest:
+            slide_entry["beats"] = beat_manifest
+        manifest["slides"].append(slide_entry)
         print(f"Synthesized slide {slide_number}: {output_wav.name}")
         if device == "cuda":
             torch.cuda.empty_cache()

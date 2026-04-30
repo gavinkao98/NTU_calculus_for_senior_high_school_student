@@ -1,0 +1,376 @@
+# Section 1.3 The Limit of a Function -- storyboard v1
+# (authored against MANIM_STORYBOARD.md v1.6).
+#
+# Source: chapters/ch01_foundations.tex, Section 1.3 (lines 567-769).
+# Scene plan: 9 scenes. The section is short and graph-heavy: it introduces the informal
+# limit, emphasizes that f(a) is irrelevant to the limit, and demonstrates two numerical
+# tabular guesses. The teaching arc is motivation -> definition -> "f(a) is irrelevant"
+# punchline -> two worked tabular examples -> forward pointer to systematic methods.
+#
+# Deliberate choices:
+# - The textbook prints three side-by-side panels for fig:limit-same-near-a (f(a)=L,
+#   f(a) != L, f(a) undefined). A faithful three-panel render needs a hook. Instead we
+#   show one graph_focus illustrating the punchline (hollow circle + linear band) and
+#   carry the three cases verbally; the visual asset budget is better spent on the
+#   secant->tangent motivation graph than on triplicating one observation.
+# - The two tabular examples (rational x->1 and sqrt(t^2+9)-3)/t^2 t->0) keep the
+#   manuscript's table values, since the table IS the lesson in those scenes.
+
+deck_id: "ch01_limit_of_function"
+language: "English"
+theme:
+  name: "midnight"
+video:
+  aspect_ratio: "16:9"
+  pixel_width: 1920
+  pixel_height: 1080
+  frame_rate: 30
+  preview_scale: 0.5
+
+scenes:
+
+  # ============================================================
+  # 1. Opening hook. Motivate by ratios that we want to take to a limit.
+  # ============================================================
+  -
+    scene_id: "opening_hook"
+    template: "title_bullets"
+    content_type: "definition"
+    scene_exit: "hold"
+    title: "The Limit of a Function"
+    voiceover: >
+      A central question in calculus: how does a quantity behave as something else gets
+      arbitrarily small? The average velocity over an interval is a clean example. As
+      the time interval shrinks toward zero, what does the average velocity approach?
+      That target value, when it exists, is the instantaneous velocity. Today we
+      formalize this idea as the limit of a function and start guessing limits from
+      tables and graphs.
+    timing:
+      lead_in_seconds: 0.3
+      hold_after_seconds: 0.8
+      minimum_duration_seconds: 6.5
+    data:
+      bullets:
+        - "Average rate of change: \\(\\dfrac{f(y) - f(x)}{y - x}\\)."
+        - "Shrink \\(y\\) toward \\(x\\); the ratio's target is the limit."
+        - "Today: an informal definition plus tabular guessing."
+
+  # ============================================================
+  # 2. Secant-to-tangent visualization. graph_focus.
+  # Added per MANIM_STORYBOARD.md: prose mention of "the ratio approaches a target" deserves
+  # its own visualization showing successive secant slopes converging to a tangent slope.
+  # ============================================================
+  -
+    scene_id: "secant_to_tangent"
+    template: "graph_focus"
+    content_type: "example"
+    scene_exit: "hold"
+    title: "Secants Sweeping Toward the Tangent"
+    voiceover: >
+      Here is the picture behind the limit. Take a curve, fix a base point on it, and
+      draw secant lines through that base point and another point further along the
+      curve. As the second point slides toward the base point, each secant gets steeper,
+      then less steep, eventually leveling out. The slopes of those secants approach a
+      single number: the slope of the tangent line at the base point. The same machinery
+      that finds this tangent slope is what defines a limit in general.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.9
+      minimum_duration_seconds: 7.0
+    data:
+      axes:
+        x_range: [-0.5, 3.5, 1]
+        y_range: [-1, 9.5, 2]
+        x_length: 8.0
+        y_length: 5.0
+        include_numbers: false
+        tips: true
+      plots:
+        -
+          kind: "function"
+          expression: "x**2"
+          x_range: [-0.4, 3.1]
+          color: "#4cc9f0"
+          label: "$y = x^{2}$"
+          label_x: -0.3
+          label_side: "up"
+        -
+          kind: "line"
+          start: [-0.5, -3]
+          end: [3.5, 13]
+          color: "#505060"
+          dashed: true
+          label: "$\\text{slope } 4$"
+        -
+          kind: "line"
+          start: [-0.5, -2]
+          end: [3.5, 10]
+          color: "#c8c8d8"
+          dashed: true
+          label: "$\\text{slope } 3$"
+        -
+          kind: "line"
+          start: [-0.5, -1.5]
+          end: [3.5, 7.5]
+          color: "#f9a825"
+          label: "$\\text{slope } 2 \\;(\\text{tangent})$"
+        -
+          kind: "point"
+          point: [1, 1]
+          color: "#06d6a0"
+          hollow: false
+        -
+          kind: "point"
+          point: [3, 9]
+          color: "#505060"
+          hollow: false
+        -
+          kind: "point"
+          point: [2, 4]
+          color: "#c8c8d8"
+          hollow: false
+      annotations:
+        -
+          text: "Secant slopes \\(4 \\to 3 \\to \\dots \\to 2\\)."
+        -
+          text: "Limit slope: the tangent at \\((1, 1)\\)."
+
+  # ============================================================
+  # 3. The informal limit definition.
+  # ============================================================
+  -
+    scene_id: "limit_definition"
+    template: "definition_math"
+    content_type: "definition"
+    scene_exit: "hold"
+    title: "The Limit (Informal)"
+    voiceover: >
+      Here is the informal definition we will use today. Suppose f is defined for every
+      x near a, except possibly at a itself. We say the limit of f of x as x approaches
+      a is L if we can make f of x arbitrarily close to L by taking x sufficiently close
+      to a, but not equal to a. The phrase "arbitrarily close" carries the weight: any
+      target tolerance on the output can be achieved by choosing x close enough to a.
+      The phrase "not equal to a" is the technical caveat that lets the limit ignore
+      the value of f at a itself.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.8
+      minimum_duration_seconds: 8.0
+    data:
+      statement: "The limit of \\(f(x)\\) as \\(x \\to a\\) equals \\(L\\) if \\(f(x)\\) can be made arbitrarily close to \\(L\\) by taking \\(x\\) sufficiently close to \\(a\\), \\(x \\neq a\\)."
+      math_lines:
+        -
+          text: "\\[\\lim_{x \\to a} f(x) = L\\]"
+          animation: "highlight"
+      supporting_bullets:
+        - "\\(x\\) approaches \\(a\\) but never equals \\(a\\)."
+        - "\\(f\\) need not be defined at \\(a\\)."
+
+  # ============================================================
+  # 4. Alternative notation. Treated as a small proposition-style scene.
+  # ============================================================
+  -
+    scene_id: "notation_variants"
+    template: "definition_math"
+    content_type: "proposition"
+    scene_exit: "hold"
+    title: "An Equivalent Notation"
+    voiceover: >
+      A second notation says the same thing in different symbols. Instead of writing
+      limit of f of x as x approaches a equals L, you may write f of x arrow L as x
+      arrow a. We read this aloud as f of x tends to L as x tends to a. The two
+      notations are interchangeable, and you will see both freely in textbooks. We
+      will use whichever reads most cleanly in context.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.6
+      minimum_duration_seconds: 5.0
+    data:
+      statement: "The arrow notation \\(f(x) \\to L\\) as \\(x \\to a\\) is shorthand for the same statement."
+      math_lines:
+        -
+          text: "\\[\\lim_{x \\to a} f(x) = L \\;\\Longleftrightarrow\\; f(x) \\to L \\text{ as } x \\to a.\\]"
+          animation: "highlight"
+
+  # ============================================================
+  # 5. The "f(a) is irrelevant" punchline.
+  # ============================================================
+  -
+    scene_id: "value_at_a_irrelevant"
+    template: "graph_focus"
+    content_type: "warning"
+    scene_exit: "hold"
+    title: "The Limit Ignores $f(a)$"
+    voiceover: >
+      Here is the most important consequence. The limit looks at the values of f near a,
+      not the value at a. Three different functions can share the same limit at a even
+      when their values at a disagree. The function might equal L at a, it might equal
+      something else, or it might not be defined at a at all. The hollow circle marks
+      that we are taking x toward three but excluding three itself. The limit, traced
+      by the curve, is eight regardless.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.9
+      minimum_duration_seconds: 7.5
+    data:
+      axes:
+        x_range: [0, 4, 1]
+        y_range: [0, 13, 2]
+        x_length: 7.5
+        y_length: 5.0
+        include_numbers: false
+        tips: true
+      plots:
+        -
+          kind: "function"
+          expression: "exp(x*log(2))"
+          x_range: [0.45, 2.95]
+          color: "#4cc9f0"
+          label: "$y = 2^{x}$"
+          label_x: 1.0
+          label_side: "up"
+        -
+          kind: "function"
+          expression: "exp(x*log(2))"
+          x_range: [3.05, 3.5]
+          color: "#4cc9f0"
+        -
+          kind: "line"
+          start: [0, 8]
+          end: [3, 8]
+          color: "#ff6b6b"
+          dashed: true
+          label: "$L = 8$"
+        -
+          kind: "point"
+          point: [3, 8]
+          color: "#c8c8d8"
+          hollow: true
+      annotations:
+        -
+          text: "\\(\\lim_{x \\to 3} 2^{x} = 8\\) regardless of \\(f(3)\\)."
+
+  # ============================================================
+  # 6. Worked example: tabular guess for (x-1) / (x^2-1) as x -> 1.
+  # ============================================================
+  -
+    scene_id: "tabular_example_rational"
+    template: "example_walkthrough"
+    content_type: "example"
+    scene_exit: "hold"
+    title: "Guessing $\\lim_{x \\to 1} \\dfrac{x - 1}{x^{2} - 1}$"
+    voiceover: >
+      The expression x minus one over x squared minus one is undefined at x equals one,
+      because the denominator vanishes. So we cannot just plug in. Build a small table
+      of values. From below: at x equals zero point nine, the ratio is about zero point
+      five two six. At zero point nine nine, it is about zero point five zero three.
+      From above: at one point zero one, about zero point four nine eight; at one point
+      one, about zero point four seven six. The values are crowding toward one half.
+      So we guess that the limit equals one half. We are not proving it yet, only
+      conjecturing from the data.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.8
+      minimum_duration_seconds: 8.5
+    data:
+      steps:
+        - "Direct substitution at \\(x = 1\\) gives \\(\\tfrac{0}{0}\\): undefined."
+        - "Tabulate values near \\(x = 1\\) from both sides."
+        - "Both sides crowd toward \\(\\tfrac{1}{2}\\)."
+      takeaway: "Tabular values support a conjectured limit; they do not prove it."
+      math_lines:
+        - "\\[x \\in \\{0.9,\\; 0.99,\\; 0.999,\\; 1.001,\\; 1.01,\\; 1.1\\}\\]"
+        - "\\[\\tfrac{x - 1}{x^{2} - 1} \\approx 0.526,\\; 0.503,\\; 0.500,\\; 0.500,\\; 0.498,\\; 0.476\\]"
+        -
+          text: "\\[\\lim_{x \\to 1} \\dfrac{x - 1}{x^{2} - 1} = \\tfrac{1}{2}\\]"
+          animation: "highlight"
+
+  # ============================================================
+  # 7. Worked example: tabular guess for (sqrt(t^2+9)-3)/t^2 as t -> 0.
+  # ============================================================
+  -
+    scene_id: "tabular_example_radical"
+    template: "example_walkthrough"
+    content_type: "example"
+    scene_exit: "hold"
+    title: "Guessing $\\lim_{t \\to 0} \\dfrac{\\sqrt{t^{2} + 9} - 3}{t^{2}}$"
+    voiceover: >
+      Same idea, different shape. The expression is undefined at t equals zero. Tabulate
+      values near zero. At t equals minus zero point one and at t equals zero point one,
+      the ratio is roughly zero point one six six six two. At t equals plus or minus
+      zero point zero one, it is closer to zero point one six six six six six. The
+      values are settling on one sixth, which is zero point one six six six and so on.
+      So we guess that the limit equals one sixth. Notice the two-sided agreement: the
+      values from the left and from the right are heading to the same number, which
+      makes the conjecture more credible.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.8
+      minimum_duration_seconds: 8.5
+    data:
+      steps:
+        - "Direct substitution at \\(t = 0\\) gives \\(\\tfrac{0}{0}\\)."
+        - "Tabulate at \\(t = \\pm 0.1, \\pm 0.01\\)."
+        - "Both sides crowd toward \\(\\tfrac{1}{6}\\)."
+      takeaway: "When tabulating near a root of the denominator, sample from both sides."
+      math_lines:
+        - "\\[t \\in \\{-0.1,\\; -0.01,\\; 0.01,\\; 0.1\\}\\]"
+        - "\\[\\tfrac{\\sqrt{t^{2} + 9} - 3}{t^{2}} \\approx 0.16662,\\; 0.16667,\\; 0.16667,\\; 0.16662\\]"
+        -
+          text: "\\[\\lim_{t \\to 0} \\dfrac{\\sqrt{t^{2} + 9} - 3}{t^{2}} = \\tfrac{1}{6}\\]"
+          animation: "highlight"
+
+  # ============================================================
+  # 8. Forward pointer to upcoming sections.
+  # ============================================================
+  -
+    scene_id: "forward_to_techniques"
+    template: "section_transition"
+    scene_exit: "hold"
+    title: "What Comes Next"
+    voiceover: >
+      Tables are unreliable: they can lie if the function does something subtle very
+      close to a. Coming up, we will get systematic. One-sided and infinite limits,
+      then algebraic limit laws, and finally the precise definition that makes every
+      claim provable.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.6
+      minimum_duration_seconds: 4.5
+    data:
+      subtitle: "From numerical guesses to algebraic technique"
+      upcoming:
+        - "One-sided limits and infinite limits"
+        - "The limit laws"
+        - "The precise epsilon-delta definition"
+
+  # ============================================================
+  # 9. Recap.
+  # ============================================================
+  -
+    scene_id: "recap"
+    template: "recap_cards"
+    content_type: "recap"
+    scene_exit: "hold"
+    title: "Key Takeaways"
+    voiceover: >
+      Five things to take away. First, the informal limit says f of x can be made
+      arbitrarily close to L by taking x close to a but not equal to a. Second, two
+      notations: limit of f equals L, or f arrow L as x arrow a. Third, and most
+      important, the limit ignores f of a entirely; what happens at the point itself
+      is invisible. Fourth, when direct substitution fails, build a small two-sided
+      table of values to guess the limit. Fifth, a tabular guess is a conjecture, not
+      a proof.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 1.0
+      minimum_duration_seconds: 7.5
+    data:
+      points:
+        - "Informal limit: \\(f(x)\\) can be made arbitrarily close to \\(L\\)."
+        - "Two notations: \\(\\lim_{x \\to a} f(x) = L\\) and \\(f(x) \\to L\\)."
+        - "The limit ignores \\(f(a)\\); only neighborhood values matter."
+        - "Tabulate from both sides when direct substitution fails."
+        - "A tabular guess is a conjecture; proof comes later."
+      identities:
+        - "\\[\\lim_{x \\to a} f(x) = L \\;\\Longleftrightarrow\\; f(x) \\to L \\text{ as } x \\to a.\\]"

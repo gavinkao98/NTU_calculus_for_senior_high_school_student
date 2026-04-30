@@ -89,6 +89,10 @@ def parse_narration_md(text: str) -> ParsedNarration:
             collecting = True
             continue
 
+        if line.strip() == "Voiceover Beats:" and collecting:
+            collecting = False
+            continue
+
         if collecting:
             narration_lines.append(line)
 
@@ -171,6 +175,17 @@ def extract_current_voiceovers(yaml_text: str) -> dict[str, str]:
     return current_voiceovers
 
 
+def extract_beat_scene_ids(yaml_text: str) -> set[str]:
+    from shared_simple_yaml import load_yaml
+
+    current_storyboard = load_yaml(yaml_text)
+    beat_scene_ids: set[str] = set()
+    for scene in current_storyboard.get("scenes", []):
+        if scene.get("voiceover_beats"):
+            beat_scene_ids.add(str(scene.get("scene_id", "")))
+    return beat_scene_ids
+
+
 def print_change_summary(scene_id: str, old_text: str, new_text: str) -> None:
     old_preview = old_text[:60].replace("\n", " ")
     new_preview = new_text[:60].replace("\n", " ")
@@ -232,6 +247,7 @@ def main() -> None:
 
     yaml_text = storyboard_path.read_text(encoding="utf-8")
     current_voiceovers = extract_current_voiceovers(yaml_text)
+    beat_scene_ids = extract_beat_scene_ids(yaml_text)
 
     unknown_ids = set(md_narrations) - set(current_voiceovers)
     if unknown_ids:
@@ -253,6 +269,8 @@ def main() -> None:
     changes: dict[str, str] = {}
     conflicts: list[dict[str, Any]] = []
     for scene_id, entry in md_narrations.items():
+        if scene_id in beat_scene_ids:
+            continue
         new_text = normalize_narration_text(entry["narration"] or "")
         current_text = current_voiceovers.get(scene_id, "")
         if not new_text:
@@ -295,7 +313,12 @@ def main() -> None:
             )
 
     if not changes:
-        print("No narration changes detected. Storyboard is already up to date.")
+        if beat_scene_ids:
+            print(
+                "No narration changes detected. Scenes with voiceover_beats must be edited in the storyboard YAML."
+            )
+        else:
+            print("No narration changes detected. Storyboard is already up to date.")
         sys.exit(0)
 
     print(f"Detected {len(changes)} narration change(s):\n")

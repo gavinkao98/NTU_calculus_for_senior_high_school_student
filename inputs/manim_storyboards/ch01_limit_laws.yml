@@ -1,0 +1,479 @@
+# Section 1.5 Limit Laws and Computational Techniques -- storyboard v1
+# (authored against MANIM_STORYBOARD.md v1.6).
+#
+# Source: chapters/ch01_foundations.tex, Section 1.5 (lines 1097-1330).
+# Scene plan: 14 scenes covering all five subsections (limit laws, direct substitution,
+# algebraic simplification, piecewise, squeeze theorem) and the strategy box.
+#
+# Deliberate choices:
+# - The two squeeze examples (x^2 sin(1/x) and x cos(1/x)) share the same shape, so they
+#   are bundled into a single example_walkthrough that does the first in detail and the
+#   second as a parallel one-step variant. This saves a scene without losing either.
+# - The two indeterminate-form algebraic techniques (factor-cancel and rationalize)
+#   each get their own example_walkthrough, since the manuscript treats them as
+#   distinct technique demonstrations.
+# - The strategy box at the end of the section earns a procedure_steps scene because
+#   it carries five concrete decisions and is presented as an algorithm-shaped recipe.
+
+deck_id: "ch01_limit_laws"
+language: "English"
+theme:
+  name: "midnight"
+video:
+  aspect_ratio: "16:9"
+  pixel_width: 1920
+  pixel_height: 1080
+  frame_rate: 30
+  preview_scale: 0.5
+
+scenes:
+
+  # ============================================================
+  # 1. Opening hook.
+  # ============================================================
+  -
+    scene_id: "opening_hook"
+    template: "title_bullets"
+    content_type: "definition"
+    scene_exit: "hold"
+    title: "Limit Laws and Computational Techniques"
+    voiceover: >
+      Up to now, we have guessed limits from tables and graphs. Today we get systematic.
+      A handful of algebraic limit laws lets us combine known limits into new ones the
+      same way we combine numbers. With those laws and a few standard maneuvers, almost
+      every elementary limit becomes routine. We will build up the laws, then practice
+      direct substitution, factor-and-cancel, rationalization, piecewise splitting,
+      and the squeeze theorem.
+    timing:
+      lead_in_seconds: 0.3
+      hold_after_seconds: 0.8
+      minimum_duration_seconds: 7.0
+    data:
+      bullets:
+        - "Limit of a sum / product / quotient: combine the constituent limits."
+        - "Direct substitution works when the function is well-behaved at \\(a\\)."
+        - "When direct substitution fails, simplify, split, or squeeze."
+
+  # ============================================================
+  # 2. The limit laws.
+  # ============================================================
+  -
+    scene_id: "limit_laws_theorem"
+    template: "definition_math"
+    content_type: "theorem"
+    scene_exit: "hold"
+    title: "The Limit Laws"
+    voiceover: >
+      Suppose c is a constant and both the limit of f and the limit of g exist at a.
+      Then the limit of a sum or difference is the sum or difference of the limits, and
+      the limit of a constant times f is the constant times the limit of f. The limit
+      of a product is the product of the limits, and the limit of a quotient is the
+      quotient as long as the denominator's limit is nonzero. The limit of an integer
+      power is the corresponding power of the limit. In short, limits commute with all
+      the basic algebraic operations as long as everything stays defined.
+    timing:
+      lead_in_seconds: 0.3
+      hold_after_seconds: 0.8
+      minimum_duration_seconds: 8.5
+    data:
+      statement: "If \\(\\lim f\\) and \\(\\lim g\\) exist, the limit commutes with sums, differences, scalar multiples, products, quotients (when the denominator is nonzero), and integer powers."
+      math_lines:
+        - "\\[\\lim_{x \\to a} \\bigl(f(x) \\pm g(x)\\bigr) = \\lim_{x \\to a} f(x) \\pm \\lim_{x \\to a} g(x).\\]"
+        - "\\[\\lim_{x \\to a} \\bigl(c \\, f(x)\\bigr) = c \\lim_{x \\to a} f(x), \\qquad \\lim_{x \\to a} \\bigl(f(x)\\, g(x)\\bigr) = \\bigl(\\lim f\\bigr)\\bigl(\\lim g\\bigr).\\]"
+        - "\\[\\lim_{x \\to a} \\dfrac{f(x)}{g(x)} = \\dfrac{\\lim_{x \\to a} f(x)}{\\lim_{x \\to a} g(x)} \\;\\;(\\text{denominator } \\neq 0).\\]"
+        -
+          text: "\\[\\lim_{x \\to a} \\bigl[f(x)\\bigr]^{n} = \\bigl[\\lim_{x \\to a} f(x)\\bigr]^{n}, \\qquad n \\in \\mathbb{Z}_{\\ge 1}.\\]"
+          animation: "highlight"
+
+  # ============================================================
+  # 3. Polynomial / rational direct substitution.
+  # ============================================================
+  -
+    scene_id: "direct_substitution_proposition"
+    template: "definition_math"
+    content_type: "proposition"
+    scene_exit: "hold"
+    title: "Polynomials Substitute Cleanly"
+    voiceover: >
+      The simplest application of the laws is also the most useful. The limit of the
+      identity function at a is just a. By the product law, the limit of x to the n
+      at a is a to the n. Apply the sum law and the constant-multiple law: the limit
+      of any polynomial at a is the polynomial evaluated at a. By the quotient law,
+      the limit of any rational function at a is the rational function evaluated at a,
+      as long as the denominator is not zero there. So for polynomials and well-behaved
+      rationals, direct substitution gives the answer.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.7
+      minimum_duration_seconds: 8.5
+    data:
+      statement: "Polynomials (always) and rational functions (when the denominator is nonzero) take the limit by direct substitution."
+      math_lines:
+        - "\\[\\lim_{x \\to a} x = a, \\qquad \\lim_{x \\to a} x^{n} = a^{n}.\\]"
+        - "\\[\\lim_{x \\to a} p(x) = p(a) \\;\\;(\\text{polynomial}).\\]"
+        -
+          text: "\\[\\lim_{x \\to a} r(x) = r(a) \\;\\;(\\text{rational, } r(a) \\text{ defined}).\\]"
+          animation: "highlight"
+
+  # ============================================================
+  # 4. Worked example: rational at x = 1, denominator nonzero.
+  # ============================================================
+  -
+    scene_id: "direct_substitution_example"
+    template: "example_walkthrough"
+    content_type: "example"
+    scene_exit: "hold"
+    title: "Direct Substitution on a Rational"
+    voiceover: >
+      Take the rational function x cubed plus two x squared minus one over five minus
+      three x, and find its limit as x approaches one. Numerator and denominator are
+      both polynomials. The limit of the numerator at one is one plus two minus one,
+      which is two. The limit of the denominator at one is five minus three, which is
+      also two. The denominator's limit is not zero, so the quotient law applies. The
+      answer is two over two, which is one.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.7
+      minimum_duration_seconds: 7.5
+    data:
+      steps:
+        - "Numerator at \\(1\\): \\(1 + 2 - 1 = 2\\)."
+        - "Denominator at \\(1\\): \\(5 - 3 = 2\\)."
+        - "Denominator nonzero, so apply the quotient law."
+      takeaway: "When direct substitution lands on a defined value, that value is the limit."
+      math_layout: "equals_aligned"
+      math_lines:
+        - "\\[\\lim_{x \\to 1} (x^{3} + 2x^{2} - 1) = 2\\]"
+        - "\\[\\lim_{x \\to 1} (5 - 3x) = 2\\]"
+        -
+          text: "\\[\\lim_{x \\to 1} \\dfrac{x^{3} + 2x^{2} - 1}{5 - 3x} = \\dfrac{2}{2} = 1\\]"
+          animation: "highlight"
+
+  # ============================================================
+  # 5. Transition to indeterminate forms.
+  # ============================================================
+  -
+    scene_id: "transition_to_indeterminate"
+    template: "section_transition"
+    scene_exit: "hold"
+    title: "When Substitution Fails"
+    voiceover: >
+      Direct substitution sometimes lands on the indeterminate form zero over zero.
+      That is not an answer; it is a signal that the expression hides a removable
+      cancellation. Three standard tools handle the common cases.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.5
+      minimum_duration_seconds: 4.0
+    data:
+      subtitle: "From \\(\\tfrac{0}{0}\\) to a real number"
+      upcoming:
+        - "Factor and cancel"
+        - "Rationalize a numerator or denominator"
+        - "Split into pieces (piecewise functions)"
+
+  # ============================================================
+  # 6. Worked example: factor-and-cancel on (x-1) / (x^2-1) at x = 1.
+  # ============================================================
+  -
+    scene_id: "factor_cancel_example"
+    template: "example_walkthrough"
+    content_type: "example"
+    scene_exit: "hold"
+    title: "Factor and Cancel"
+    voiceover: >
+      The limit of x minus one over x squared minus one as x approaches one. Direct
+      substitution gives zero over zero. Factor the denominator as x minus one times
+      x plus one. Now the numerator and denominator share a factor of x minus one.
+      Since x is approaching one but never equal to one, x minus one is nonzero, and
+      we may cancel. What is left is one over x plus one. The limit of one over x
+      plus one at one is one half. So the original limit is one half, agreeing with
+      our table-based guess from earlier.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.7
+      minimum_duration_seconds: 8.5
+    data:
+      steps:
+        - "Direct substitution at \\(1\\) gives \\(\\tfrac{0}{0}\\)."
+        - "Factor: \\(x^{2} - 1 = (x - 1)(x + 1)\\)."
+        - "Cancel \\(x - 1\\) (valid because \\(x \\neq 1\\) in the limit)."
+        - "Direct substitution on the simplified form."
+      takeaway: "Cancellation is legal because the limit ignores the value at \\(a\\)."
+      math_layout: "equals_aligned"
+      math_lines:
+        - "\\[\\dfrac{x - 1}{x^{2} - 1} = \\dfrac{x - 1}{(x - 1)(x + 1)}\\]"
+        -
+          text: "\\[\\phantom{\\dfrac{x - 1}{x^{2} - 1}} = \\dfrac{1}{x + 1}, \\quad x \\neq 1\\]"
+          animation: "transform_from_previous"
+        -
+          text: "\\[\\lim_{x \\to 1} \\dfrac{x - 1}{x^{2} - 1} = \\dfrac{1}{2}\\]"
+          animation: "highlight"
+
+  # ============================================================
+  # 7. Worked example: rationalize on (sqrt(t^2+9)-3)/t^2 at t = 0.
+  # ============================================================
+  -
+    scene_id: "rationalize_example"
+    template: "example_walkthrough"
+    content_type: "example"
+    scene_exit: "hold"
+    title: "Rationalize the Numerator"
+    voiceover: >
+      The limit of square root of t squared plus nine minus three over t squared, as t
+      goes to zero. Direct substitution gives zero over zero. Multiply top and bottom
+      by the conjugate of the numerator: square root of t squared plus nine plus three.
+      The numerator becomes a difference of squares: t squared plus nine minus nine,
+      which collapses to t squared. The t squared on the new numerator cancels the t
+      squared on the denominator. We are left with one over square root of t squared
+      plus nine plus three. Direct substitution at t equals zero gives one over three
+      plus three, which is one sixth. Same answer as our table-based guess from
+      earlier.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.7
+      minimum_duration_seconds: 9.0
+    data:
+      steps:
+        - "Direct substitution gives \\(\\tfrac{0}{0}\\)."
+        - "Multiply by the conjugate \\(\\dfrac{\\sqrt{t^{2} + 9} + 3}{\\sqrt{t^{2} + 9} + 3}\\)."
+        - "The numerator becomes \\(t^{2}\\); cancel with the denominator."
+        - "Direct substitution on the simplified form."
+      takeaway: "When a square-root difference appears, multiply by its conjugate."
+      math_layout: "equals_aligned"
+      math_lines:
+        - "\\[\\dfrac{\\sqrt{t^{2} + 9} - 3}{t^{2}} \\cdot \\dfrac{\\sqrt{t^{2} + 9} + 3}{\\sqrt{t^{2} + 9} + 3} = \\dfrac{t^{2}}{t^{2}\\bigl(\\sqrt{t^{2} + 9} + 3\\bigr)}\\]"
+        -
+          text: "\\[\\phantom{\\dfrac{\\sqrt{t^{2} + 9} - 3}{t^{2}}} = \\dfrac{1}{\\sqrt{t^{2} + 9} + 3}, \\quad t \\neq 0\\]"
+          animation: "transform_from_previous"
+        -
+          text: "\\[\\lim_{t \\to 0} \\dfrac{\\sqrt{t^{2} + 9} - 3}{t^{2}} = \\dfrac{1}{6}\\]"
+          animation: "highlight"
+
+  # ============================================================
+  # 8. Piecewise example: |x| at 0. Two-sided agreement -> limit exists.
+  # ============================================================
+  -
+    scene_id: "abs_value_example"
+    template: "example_walkthrough"
+    content_type: "example"
+    scene_exit: "hold"
+    title: "Piecewise: $\\lim_{x \\to 0} |x|$"
+    voiceover: >
+      The absolute value function has the piecewise definition x for nonnegative x,
+      and minus x for negative x. To take a limit at zero, evaluate each one-sided
+      limit on its own branch. From the right, the active branch is x itself, and the
+      limit is zero. From the left, the active branch is minus x, and the limit is
+      also zero. Both one-sided limits equal zero, so the two-sided limit exists and
+      equals zero.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.7
+      minimum_duration_seconds: 7.0
+    data:
+      steps:
+        - "Branch \\(x \\ge 0\\): \\(|x| = x\\). Right limit equals \\(0\\)."
+        - "Branch \\(x < 0\\): \\(|x| = -x\\). Left limit equals \\(0\\)."
+        - "Both sides agree: the two-sided limit equals \\(0\\)."
+      takeaway: "On a piecewise definition, run each side through its own branch."
+      math_lines:
+        - "\\[\\lim_{x \\to 0^{+}} x = 0\\]"
+        - "\\[\\lim_{x \\to 0^{-}} (-x) = 0\\]"
+        -
+          text: "\\[\\lim_{x \\to 0} |x| = 0\\]"
+          animation: "highlight"
+
+  # ============================================================
+  # 9. Piecewise example: greatest integer at 3. Disagreement -> DNE.
+  # ============================================================
+  -
+    scene_id: "greatest_integer_example"
+    template: "example_walkthrough"
+    content_type: "example"
+    scene_exit: "hold"
+    title: "Piecewise: $\\lim_{x \\to 3} [x]$"
+    voiceover: >
+      The greatest integer function returns the largest integer no greater than x. So
+      the bracket of four is four, the bracket of four point one is four, the bracket
+      of four point eight is four. To take the limit at three, examine each side. From
+      the right, x is just above three, so the bracket is three; the right limit is
+      three. From the left, x is just below three, so the bracket is two; the left
+      limit is two. Three is not equal to two, so the two-sided limit does not exist.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.7
+      minimum_duration_seconds: 7.5
+    data:
+      steps:
+        - "Right side, \\(x \\in (3, 4)\\): \\([x] = 3\\). Right limit equals \\(3\\)."
+        - "Left side, \\(x \\in [2, 3)\\): \\([x] = 2\\). Left limit equals \\(2\\)."
+        - "One-sided limits disagree."
+      takeaway: "When the one-sided limits disagree, the two-sided limit does not exist."
+      math_lines:
+        - "\\[\\lim_{x \\to 3^{+}} [x] = 3\\]"
+        - "\\[\\lim_{x \\to 3^{-}} [x] = 2\\]"
+        -
+          text: "\\[\\lim_{x \\to 3} [x] \\text{ does not exist.}\\]"
+          animation: "highlight"
+
+  # ============================================================
+  # 10. Transition to squeeze theorem.
+  # ============================================================
+  -
+    scene_id: "transition_to_squeeze"
+    template: "section_transition"
+    scene_exit: "hold"
+    title: "When the Laws Are Not Enough"
+    voiceover: >
+      The product law needs both factors to have a limit. Sometimes one factor
+      oscillates wildly. The squeeze theorem rescues such cases by trapping the value
+      we want between two friendly functions.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.5
+      minimum_duration_seconds: 4.0
+    data:
+      subtitle: "From algebraic combination to geometric trapping"
+      upcoming:
+        - "The squeeze theorem statement"
+        - "Worked example: \\(x^{2} \\sin(1/x)\\)"
+        - "A parallel example with cosine"
+
+  # ============================================================
+  # 11. Squeeze theorem statement. definition_math (theorem accent).
+  # ============================================================
+  -
+    scene_id: "squeeze_theorem"
+    template: "definition_math"
+    content_type: "theorem"
+    scene_exit: "hold"
+    title: "The Squeeze Theorem"
+    voiceover: >
+      Suppose g of x is at most f of x is at most h of x for all x near a, possibly
+      excluding a itself. Suppose further that g and h have the same limit L at a.
+      Then f also has limit L at a. The picture is exactly the name: f is squeezed
+      between g and h, and as g and h close in on the same value, f has nowhere else
+      to go. The hypothesis only needs to hold near a, not globally.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.8
+      minimum_duration_seconds: 7.0
+    data:
+      statement: "If \\(g(x) \\le f(x) \\le h(x)\\) near \\(a\\) and \\(\\lim g = \\lim h = L\\), then \\(\\lim f = L\\)."
+      math_lines:
+        - "\\[g(x) \\le f(x) \\le h(x) \\text{ near } a, \\quad x \\neq a.\\]"
+        - "\\[\\lim_{x \\to a} g(x) = L = \\lim_{x \\to a} h(x).\\]"
+        -
+          text: "\\[\\Longrightarrow \\quad \\lim_{x \\to a} f(x) = L.\\]"
+          animation: "highlight"
+
+  # ============================================================
+  # 12. Squeeze worked example: x^2 sin(1/x) -> 0 + parallel x cos(1/x) -> 0.
+  # The 9-sentence carve-out applies (procedure + verification + parallel restate).
+  # ============================================================
+  -
+    scene_id: "squeeze_examples"
+    template: "example_walkthrough"
+    content_type: "example"
+    scene_exit: "hold"
+    title: "Squeezing Oscillating Products"
+    voiceover: >
+      Take the limit of x squared times sine of one over x at zero. The product law
+      fails because sine of one over x oscillates between minus one and one and has no
+      limit there. Use the squeeze instead: since sine is bounded between minus one
+      and one, multiplying by the nonnegative x squared gives the chain minus x
+      squared at most x squared sine one over x at most x squared. Both bounds tend
+      to zero, so the squeeze pins the middle quantity to zero. The companion limit,
+      x times cosine of one over x at zero, runs the same argument with the cosine
+      bound: minus absolute value of x at most x cosine one over x at most absolute
+      value of x. Again both bounds go to zero, so this limit is also zero.
+    timing:
+      lead_in_seconds: 0.3
+      hold_after_seconds: 0.8
+      minimum_duration_seconds: 11.0
+    data:
+      steps:
+        - "Bound: \\(-1 \\le \\sin(1/x) \\le 1\\) for \\(x \\neq 0\\)."
+        - "Multiply by \\(x^{2} \\ge 0\\): \\(-x^{2} \\le x^{2} \\sin(1/x) \\le x^{2}\\)."
+        - "Both bounds tend to \\(0\\): the squeeze gives \\(\\lim x^{2} \\sin(1/x) = 0\\)."
+        - "Parallel: \\(|\\cos(1/x)| \\le 1\\) gives \\(-|x| \\le x \\cos(1/x) \\le |x|\\)."
+        - "Both bounds tend to \\(0\\): \\(\\lim x \\cos(1/x) = 0\\)."
+      takeaway: "When one factor has no limit, bound it and apply the squeeze."
+      math_lines:
+        - "\\[-x^{2} \\le x^{2} \\sin(1/x) \\le x^{2}\\]"
+        -
+          text: "\\[\\lim_{x \\to 0} x^{2} \\sin(1/x) = 0\\]"
+          animation: "highlight"
+        -
+          text: "\\[\\lim_{x \\to 0} x \\cos(1/x) = 0\\]"
+          animation: "write"
+
+  # ============================================================
+  # 13. Strategy box from the manuscript: how to compute a limit.
+  # ============================================================
+  -
+    scene_id: "computing_limit_strategy"
+    template: "procedure_steps"
+    content_type: "procedure"
+    scene_exit: "hold"
+    title: "How to Compute $\\lim_{x \\to a} f(x)$"
+    voiceover: >
+      Here is the order to attempt computational techniques. First, try direct
+      substitution; if f of a is defined and the function is a polynomial or rational
+      with nonzero denominator there, that is the answer. Second, if substitution
+      gives an indeterminate form like zero over zero, simplify algebraically by
+      factoring and cancelling, rationalizing a square-root, or combining fractions.
+      Third, if the function is piecewise, split into one-sided limits on each branch.
+      Fourth, if the function is trapped between two simpler functions whose limits
+      agree, apply the squeeze theorem. Fifth, if the values grow without bound, the
+      limit is plus or minus infinity and you have a vertical asymptote.
+    timing:
+      lead_in_seconds: 0.3
+      hold_after_seconds: 0.8
+      minimum_duration_seconds: 9.0
+    data:
+      steps:
+        - "Try direct substitution."
+        - "If indeterminate, simplify (factor, rationalize, combine)."
+        - "If piecewise, split into one-sided limits."
+        - "If trapped between two known limits, squeeze."
+        - "If unbounded, the limit is \\(\\pm\\infty\\) (vertical asymptote)."
+      math_layout: "left"
+      worked_equations:
+        - "\\[f(a) \\text{ defined? Substitute.} \\quad\\to\\quad \\tfrac{0}{0}? \\text{ Simplify.}\\]"
+        - "\\[\\text{Piecewise? Split.} \\quad\\to\\quad \\text{Trapped? Squeeze.}\\]"
+        - "\\[\\text{Unbounded? Read off } \\pm\\infty.\\]"
+
+  # ============================================================
+  # 14. Recap.
+  # ============================================================
+  -
+    scene_id: "recap"
+    template: "recap_cards"
+    content_type: "recap"
+    scene_exit: "hold"
+    title: "Key Takeaways"
+    voiceover: >
+      Six things to take away. First, limits commute with sums, differences, scalar
+      multiples, products, integer powers, and quotients with nonzero denominator
+      limit. Second, polynomials and well-behaved rationals submit to direct
+      substitution. Third, when substitution gives zero over zero, simplify. Fourth,
+      on piecewise definitions, split into one-sided limits and check whether they
+      agree. Fifth, the squeeze theorem rescues bounded oscillation. Sixth, follow
+      the strategy in order: substitute first, simplify second, split third, squeeze
+      fourth, and otherwise read off plus or minus infinity.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 1.0
+      minimum_duration_seconds: 7.5
+    data:
+      points:
+        - "Limit laws: sum, difference, scalar, product, integer power, quotient (nonzero den.)."
+        - "Polynomial / rational: direct substitution when defined."
+        - "\\(\\tfrac{0}{0}\\): simplify algebraically."
+        - "Piecewise: split into one-sided limits."
+        - "Squeeze theorem: trap between two known limits."
+        - "Strategy: substitute, simplify, split, squeeze, or read off \\(\\pm\\infty\\)."
+      identities:
+        - "\\[\\lim_{x \\to a} \\bigl(f \\pm g\\bigr)(x) = \\lim f \\pm \\lim g.\\]"
+        - "\\[g \\le f \\le h, \\;\\; \\lim g = L = \\lim h \\;\\Longrightarrow\\; \\lim f = L.\\]"

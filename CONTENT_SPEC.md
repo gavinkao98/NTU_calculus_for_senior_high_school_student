@@ -95,9 +95,11 @@ Avoid fillers (*basically*, *actually*, *essentially* used as hedges), over-fami
 
 A formal statement (definition, theorem, proposition, corollary) **SHOULD** be preceded by one or two paragraphs of prose that explain why the concept is worth introducing and what it should mean intuitively.
 
-A `definition` body **MAY** end with one sentence of the form *"Informally, this means..."* giving a vernacular restatement. The informal sentence **MUST NOT** introduce examples, figures, or new notation — if the restatement needs those, promote it to a separate remark or prose paragraph following the definition.
+A `definition` body **MAY** end with one sentence of the form *"Informally, this means..."* giving a vernacular restatement, **when the formal statement is syntactically heavy** — that is, when it uses nested quantifiers (e.g., $\varepsilon$-$\delta$), multiple logical clauses, or symbol-dense notation that is hard to parse on first reading. **Skip the inline gloss when the formal statement already reads as near-English with one or two symbols** (e.g., $f^{-1}(y) = x \Longleftrightarrow f(x) = y$); in that case any motivation belongs in prose **before** the definition or in a following remark.
 
-Rationale: Stewart register plus self-sufficient handout means the reader cannot rely on a teacher to "translate" the formal statement in real time. The handout itself must do that translation, usually twice — once in motivation prose before the formal statement and once (when syntactically heavy formalism warrants it, e.g., $\varepsilon$-$\delta$) as an inline gloss inside the definition.
+The informal sentence **MUST NOT** introduce examples, figures, or new notation — if the restatement needs those, promote it to a separate remark or prose paragraph following the definition.
+
+Rationale: Stewart register plus self-sufficient handout means the reader cannot rely on a teacher to "translate" the formal statement in real time. The handout itself must do that translation, usually twice — once in motivation prose before the formal statement and once (when syntactically heavy formalism warrants it, e.g., $\varepsilon$-$\delta$) as an inline gloss inside the definition. The "skip when near-English" clause exists to prevent the inline gloss from becoming a reflex: a definition whose symbolic body is already vernacular gains nothing from a paraphrase.
 
 ### Style do / don't
 

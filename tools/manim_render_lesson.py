@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 from pathlib import Path
 
 from manim_runtime import concat_scene_videos, mux_scene_video_with_audio, render_storyboard_scene
@@ -11,6 +12,7 @@ from manim_storyboard_workflow import (
     load_render_manifest,
     load_storyboard,
     resolve_storyboard_path,
+    scene_render_fingerprint,
     scene_visual_fingerprint,
     write_render_manifest,
 )
@@ -53,37 +55,6 @@ def main() -> int:
         or video_output_path(REPO_ROOT, f"{storyboard['deck_id']}_manim")
     ).resolve()
     manifest = load_render_manifest(storyboard["deck_id"])
-    rendered_scene_paths: list[Path] = []
-
-    for scene in scenes:
-        output_path = manim_scene_output_path(REPO_ROOT, storyboard["deck_id"], scene["scene_number"], scene["scene_id"]).resolve()
-        fingerprint = scene_visual_fingerprint(storyboard, scene, args.quality)
-        cached = manifest.setdefault("scenes", {}).get(scene["scene_id"], {})
-        cached_fingerprint = cached.get("visual_fingerprint") or cached.get("fingerprint")
-        if (
-            not args.force
-            and output_path.exists()
-            and cached_fingerprint == fingerprint
-            and cached.get("quality") == args.quality
-        ):
-            rendered_scene_paths.append(output_path)
-            continue
-
-        if args.dry_run:
-            rendered_scene_paths.append(output_path)
-            continue
-
-        rendered = render_storyboard_scene(storyboard_path, storyboard, scene, output_path, args.quality)
-        manifest["scenes"][scene["scene_id"]] = {
-            "fingerprint": fingerprint,
-            "visual_fingerprint": fingerprint,
-            "quality": args.quality,
-            "output_file": str(rendered),
-        }
-        rendered_scene_paths.append(rendered)
-
-    if not args.dry_run:
-        write_render_manifest(storyboard["deck_id"], manifest)
 
     if args.with_audio:
         bridge_files = (
@@ -99,6 +70,19 @@ def main() -> int:
             bridge_files.get("deck_path") or bridge_files["bridge_deck_path"],
             bridge_files.get("script_path") or bridge_files["bridge_script_path"],
         )
+        audio_timing = load_audio_timing(audio_dir, scenes)
+        rendered_scene_paths = render_scenes(
+            storyboard_path,
+            storyboard,
+            scenes,
+            args.quality,
+            manifest,
+            args.force,
+            args.dry_run,
+            audio_timing,
+        )
+        if not args.dry_run:
+            write_render_manifest(storyboard["deck_id"], manifest)
         segment_paths = [
             manim_segment_output_path(REPO_ROOT, storyboard["deck_id"], scene["scene_number"], scene["scene_id"]).resolve()
             for scene in scenes
@@ -116,6 +100,19 @@ def main() -> int:
         print(f"Rendered Manim lesson with audio to {output}")
         return 0
 
+    rendered_scene_paths = render_scenes(
+        storyboard_path,
+        storyboard,
+        scenes,
+        args.quality,
+        manifest,
+        args.force,
+        args.dry_run,
+        {},
+    )
+    if not args.dry_run:
+        write_render_manifest(storyboard["deck_id"], manifest)
+
     if args.dry_run:
         print(
             f"Validated storyboard for {len(scenes)} scenes at quality '{args.quality}'. "
@@ -126,6 +123,112 @@ def main() -> int:
     concat_scene_videos(rendered_scene_paths, output, with_audio=False)
     print(f"Rendered Manim lesson to {output}")
     return 0
+
+
+def render_scenes(
+    storyboard_path: Path,
+    storyboard: dict,
+    scenes: list[dict],
+    quality: str,
+    manifest: dict,
+    force: bool,
+    dry_run: bool,
+    audio_timing: dict[str, dict],
+) -> list[Path]:
+    rendered_scene_paths: list[Path] = []
+    for scene in scenes:
+        output_path = manim_scene_output_path(
+            REPO_ROOT, storyboard["deck_id"], scene["scene_number"], scene["scene_id"]
+        ).resolve()
+        scene_audio_timing = audio_timing.get(scene["scene_id"])
+        fingerprint = scene_render_fingerprint(storyboard, scene, quality, scene_audio_timing)
+        visual_fingerprint = scene_visual_fingerprint(storyboard, scene, quality)
+        cached = manifest.setdefault("scenes", {}).get(scene["scene_id"], {})
+        cached_fingerprint = (
+            cached.get("render_fingerprint")
+            or cached.get("visual_fingerprint")
+            or cached.get("fingerprint")
+        )
+        if (
+            not force
+            and output_path.exists()
+            and cached_fingerprint == fingerprint
+            and cached.get("quality") == quality
+        ):
+            rendered_scene_paths.append(output_path)
+            continue
+
+        if dry_run:
+            rendered_scene_paths.append(output_path)
+            continue
+
+        rendered = render_storyboard_scene(
+            storyboard_path,
+            storyboard,
+            scene,
+            output_path,
+            quality,
+            audio_timing=scene_audio_timing,
+        )
+        manifest["scenes"][scene["scene_id"]] = {
+            "fingerprint": fingerprint,
+            "render_fingerprint": fingerprint,
+            "visual_fingerprint": visual_fingerprint,
+            "quality": quality,
+            "output_file": str(rendered),
+            "audio_timed": bool(scene.get("voiceover_beats")),
+        }
+        rendered_scene_paths.append(rendered)
+    return rendered_scene_paths
+
+
+def load_audio_timing(audio_dir: Path, scenes: list[dict]) -> dict[str, dict]:
+    manifest_path = audio_dir / "manifest.json"
+    if not manifest_path.exists():
+        beat_scenes = [scene["scene_id"] for scene in scenes if scene.get("voiceover_beats")]
+        if beat_scenes:
+            raise FileNotFoundError(
+                f"Beat-paced scenes require a TTS manifest with per-beat durations: {manifest_path}. "
+                "Regenerate the scene audio with voice_synthesize_coqui.py or voice_synthesize_f5.py."
+            )
+        return {}
+
+    with manifest_path.open("r", encoding="utf-8") as handle:
+        manifest = json.load(handle)
+
+    timing_by_id: dict[str, dict] = {}
+    for slide in manifest.get("slides", []):
+        beats = slide.get("beats") or []
+        if beats:
+            timing_by_id[str(slide["slide_id"])] = {"beats": beats}
+
+    missing = [
+        scene["scene_id"]
+        for scene in scenes
+        if scene.get("voiceover_beats") and scene["scene_id"] not in timing_by_id
+    ]
+    stale = []
+    for scene in scenes:
+        if not scene.get("voiceover_beats") or scene["scene_id"] not in timing_by_id:
+            continue
+        expected_ids = {beat["id"] for beat in scene["voiceover_beats"]}
+        actual_ids = {beat.get("id") for beat in timing_by_id[scene["scene_id"]].get("beats", [])}
+        missing_ids = sorted(expected_ids - actual_ids)
+        if missing_ids:
+            stale.append(f"{scene['scene_id']} missing beat ids {missing_ids}")
+    if missing:
+        raise RuntimeError(
+            "Beat-paced scenes are missing per-beat timing in the audio manifest: "
+            + ", ".join(missing)
+            + ". Regenerate the scene audio so manifest.json includes a beats array."
+        )
+    if stale:
+        raise RuntimeError(
+            "Beat-paced scene timing is stale: "
+            + "; ".join(stale)
+            + ". Regenerate the scene audio so manifest.json matches voiceover_beats."
+        )
+    return timing_by_id
 
 
 def resolve_audio_files(

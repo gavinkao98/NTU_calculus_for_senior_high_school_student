@@ -47,6 +47,7 @@ def render_storyboard_scene(
     scene_spec: dict[str, Any],
     output_path: Path,
     quality: str,
+    audio_timing: dict[str, Any] | None = None,
 ) -> Path:
     ensure_manim_available()
     ensure_miktex_env()
@@ -70,6 +71,7 @@ def render_storyboard_scene(
         "theme": storyboard["theme"],
         "video": {**storyboard["video"], **settings},
         "total_scenes": total_scenes,
+        "scene_audio_timing": audio_timing or {},
     }
     config = {
         "media_dir": str(temp_media_dir),

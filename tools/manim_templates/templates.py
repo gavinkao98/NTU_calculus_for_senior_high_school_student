@@ -19,7 +19,8 @@ Colour semantics
 
 from __future__ import annotations
 
-from typing import Any
+import re
+from typing import Any, Callable
 
 from manim import (
     Axes,
@@ -93,6 +94,96 @@ def _pace(theme: dict[str, Any], band: str = "normal") -> float:
     return float(transitions.get("write_speed", 0.8))
 
 
+RevealFn = Callable[[], float]
+
+
+def _has_voiceover_beats(spec: dict[str, Any]) -> bool:
+    return bool(spec.get("voiceover_beats"))
+
+
+def _estimate_spoken_seconds(text: str) -> float:
+    words = re.findall(r"[A-Za-z0-9']+", text)
+    # Roughly 150 words per minute, with a small floor for short transition beats.
+    return max(len(words) / 2.5, 0.8)
+
+
+def _beat_duration(beat: dict[str, Any], timing_by_id: dict[str, dict[str, Any]]) -> float:
+    exact = timing_by_id.get(beat["id"], {})
+    audio_seconds = exact.get("audio_seconds", beat.get("duration_seconds"))
+    if audio_seconds is None:
+        audio_seconds = _estimate_spoken_seconds(beat["text"])
+    hold_after = exact.get("hold_after_seconds", beat.get("hold_after_seconds", 0.0))
+    return max(float(audio_seconds), 0.0) + max(float(hold_after), 0.0)
+
+
+def _run_voiceover_beats(
+    scene,
+    spec: dict[str, Any],
+    ctx: dict[str, Any],
+    revealers: dict[str, RevealFn],
+) -> None:
+    timing_by_id = {
+        beat["id"]: beat
+        for beat in (ctx.get("scene_audio_timing") or {}).get("beats", [])
+        if isinstance(beat, dict) and beat.get("id")
+    }
+    revealed: set[str] = set()
+    lead_in = float(spec.get("timing", {}).get("lead_in_seconds", 0.0))
+    if lead_in > 0:
+        scene.wait(lead_in)
+
+    for beat in spec.get("voiceover_beats", []):
+        consumed = 0.0
+        for element_id in beat.get("reveal", []):
+            if element_id in revealed:
+                continue
+            reveal = revealers.get(element_id)
+            if reveal is None:
+                raise ValueError(
+                    f"Scene '{spec['scene_id']}' beat '{beat['id']}' references unknown reveal element '{element_id}'."
+                )
+            consumed += max(float(reveal()), 0.0)
+            revealed.add(element_id)
+            revealed.update(getattr(reveal, "_reveals", set()))
+        wait_time = _beat_duration(beat, timing_by_id) - consumed
+        if wait_time > 0:
+            scene.wait(wait_time)
+
+
+def _play_fade_in(scene, mob, *, shift=None, run_time: float = 0.4) -> float:
+    if shift is None:
+        shift = 0.1 * RIGHT
+    scene.play(FadeIn(mob, shift=shift), run_time=run_time)
+    return run_time
+
+
+def _play_create(scene, mob, *, run_time: float = 0.4) -> float:
+    scene.play(Create(mob), run_time=run_time)
+    return run_time
+
+
+def _play_grow(scene, mob, *, run_time: float = 0.3) -> float:
+    scene.play(GrowFromCenter(mob), run_time=run_time)
+    return run_time
+
+
+def _run_revealers_once(keys: list[str], revealers: dict[str, RevealFn]) -> RevealFn:
+    seen: set[str] = set()
+
+    def reveal() -> float:
+        elapsed = 0.0
+        for key in keys:
+            if key in seen:
+                continue
+            reveal_fn = revealers[key]
+            elapsed += reveal_fn()
+            seen.add(key)
+        return elapsed
+
+    setattr(reveal, "_reveals", set(keys))
+    return reveal
+
+
 def _equals_anchor(mob: MathTex):
     return mob.get_part_by_tex("=")
 
@@ -120,7 +211,7 @@ def _arrange_math_stack(math_mobs: list[MathTex], *, buff: float, layout_mode: s
     return group
 
 
-def _dim_previous(scene, mobjects: list[Any], theme) -> None:
+def _dim_previous(scene, mobjects: list[Any], theme) -> float:
     animations = []
     context_color = theme["colors"].get("context", theme["colors"].get("muted_text"))
     for mob in mobjects:
@@ -128,40 +219,51 @@ def _dim_previous(scene, mobjects: list[Any], theme) -> None:
             continue
         animations.append(mob.animate.set_color(context_color).set_opacity(0.55))
     if animations:
-        scene.play(*animations, run_time=_pace(theme, "decay"))
+        run_time = _pace(theme, "decay")
+        scene.play(*animations, run_time=run_time)
+        return run_time
+    return 0.0
 
 
-def _transform_from_previous(scene, previous_mob: MathTex, mob: MathTex, theme) -> None:
+def _transform_from_previous(scene, previous_mob: MathTex, mob: MathTex, theme) -> float:
     source = previous_mob.copy().set_color(theme_color(theme, "math")).set_opacity(1.0)
     scene.add(source)
+    run_time = _pace(theme, "normal")
     scene.play(
         TransformMatchingTex(source, mob),
-        run_time=_pace(theme, "normal"),
+        run_time=run_time,
     )
     scene.remove(source)
+    return run_time
 
 
-def _play_math(scene, mob, anim: str, theme, *, previous_mob: MathTex | None = None) -> None:
+def _play_math(scene, mob, anim: str, theme, *, previous_mob: MathTex | None = None) -> float:
     speed = _pace(theme, "normal")
     quick = _pace(theme, "quick")
     if anim == "highlight":
+        elapsed = 0.0
+        hero = _pace(theme, "hero")
         if mob.width > 8.0:
-            scene.play(FadeIn(mob, shift=0.1 * UP), run_time=_pace(theme, "hero"))
+            scene.play(FadeIn(mob, shift=0.1 * UP), run_time=hero)
         else:
-            scene.play(Write(mob), run_time=_pace(theme, "hero"))
+            scene.play(Write(mob), run_time=hero)
+        elapsed += hero
         # Brief glow: flash the highlight colour, then settle
         mob_copy = mob.copy().set_color(theme_color(theme, "highlight"))
         scene.play(FadeIn(mob_copy, run_time=0.2))
         scene.play(FadeOut(mob_copy, run_time=0.3))
+        return elapsed + 0.5
     elif anim == "transform_from_previous" and previous_mob is not None:
-        _transform_from_previous(scene, previous_mob, mob, theme)
+        return _transform_from_previous(scene, previous_mob, mob, theme)
     elif anim == "fade":
         scene.play(FadeIn(mob, shift=0.1 * UP), run_time=quick)
+        return quick
     else:  # "write"
         if mob.width > 8.0:
             scene.play(FadeIn(mob, shift=0.1 * UP), run_time=speed)
         else:
             scene.play(Write(mob), run_time=speed)
+        return speed
 
 
 def _title(text: str, theme, *, layout: SceneLayout) -> Tex:
@@ -217,6 +319,20 @@ def render_title_bullets(scene, spec: dict[str, Any], ctx: dict[str, Any]) -> No
 
     group = VGroup(*bullets).arrange(DOWN, aligned_edge=LEFT, buff=0.4)
     lay.place_primary(group, title, buff=0.7)
+
+    if _has_voiceover_beats(spec):
+        revealers: dict[str, RevealFn] = {
+            "title": lambda: _play_fade_in(scene, title, shift=0.15 * DOWN, run_time=0.5),
+        }
+        for i, bullet in enumerate(bullets):
+            revealers[f"bullet_{i}"] = (
+                lambda bullet=bullet: _play_fade_in(scene, bullet, shift=0.12 * RIGHT, run_time=0.45)
+            )
+        revealers["bullets"] = _run_revealers_once(
+            [f"bullet_{i}" for i in range(len(bullets))], revealers
+        )
+        _run_voiceover_beats(scene, spec, ctx, revealers)
+        return
 
     # Animate
     scene.play(FadeIn(title, shift=0.15 * DOWN), run_time=0.5)
@@ -281,6 +397,41 @@ def render_definition_math(scene, spec: dict[str, Any], ctx: dict[str, Any]) -> 
         support_group.align_to(stmt, LEFT)
 
     # ── Animate ──
+    if _has_voiceover_beats(spec):
+        revealers: dict[str, RevealFn] = {
+            "title": lambda: _play_fade_in(scene, title, shift=0.15 * DOWN, run_time=0.5),
+            "label": lambda: _play_fade_in(scene, lbl, shift=0.08 * LEFT, run_time=0.3),
+            "rule": lambda: _play_create(scene, rule, run_time=0.35),
+            "statement": lambda: _play_fade_in(scene, stmt, shift=0.1 * RIGHT, run_time=0.5),
+        }
+        revealers["header"] = _run_revealers_once(["title", "label", "rule"], revealers)
+        for i, m in enumerate(maths):
+            previous_math = maths[i - 1] if i > 0 else None
+            revealers[f"math_line_{i}"] = (
+                lambda i=i, m=m, previous_math=previous_math: _play_math(
+                    scene,
+                    m,
+                    _math_anim(data["math_lines"][i]),
+                    theme,
+                    previous_mob=previous_math,
+                )
+            )
+        revealers["math_lines"] = _run_revealers_once(
+            [f"math_line_{i}" for i in range(len(maths))], revealers
+        )
+        if support_group:
+            for i, support_mob in enumerate(support_group):
+                revealers[f"support_{i}"] = (
+                    lambda support_mob=support_mob: _play_fade_in(
+                        scene, support_mob, shift=0.08 * UP, run_time=0.35
+                    )
+                )
+            revealers["supporting_bullets"] = _run_revealers_once(
+                [f"support_{i}" for i in range(len(support_group))], revealers
+            )
+        _run_voiceover_beats(scene, spec, ctx, revealers)
+        return
+
     scene.play(FadeIn(title, shift=0.15 * DOWN), run_time=0.5)
     scene.play(FadeIn(lbl, shift=0.08 * LEFT), run_time=0.3)
     scene.play(Create(rule), run_time=0.35)
@@ -358,6 +509,54 @@ def render_example_walkthrough(scene, spec: dict[str, Any], ctx: dict[str, Any])
     takeaway.align_to([lay.left_edge + 0.3, 0, 0], LEFT)
 
     # ── Animate ──
+    if _has_voiceover_beats(spec):
+        state = {"active_step": None, "active_math": None}
+        decay_previous = data.get("decay_previous", True)
+
+        def reveal_step(index: int) -> float:
+            current_anim = _math_anim(math_lines[index]) if index < len(math_mobs) else None
+            elapsed = 0.0
+            if decay_previous:
+                to_dim = [state["active_step"]]
+                if not (current_anim == "transform_from_previous" and state["active_math"] is not None):
+                    to_dim.append(state["active_math"])
+                elapsed += _dim_previous(scene, to_dim, theme)
+            elapsed += _play_fade_in(scene, step_mobs[index], shift=0.1 * RIGHT, run_time=quick)
+            state["active_step"] = step_mobs[index]
+            return elapsed
+
+        def reveal_math(index: int) -> float:
+            previous_math = state["active_math"]
+            elapsed = _play_math(
+                scene,
+                math_mobs[index],
+                _math_anim(math_lines[index]),
+                theme,
+                previous_mob=previous_math,
+            )
+            state["active_math"] = math_mobs[index]
+            return elapsed
+
+        revealers: dict[str, RevealFn] = {
+            "title": lambda: _play_fade_in(scene, title, shift=0.15 * DOWN, run_time=0.5),
+            "label": lambda: _play_fade_in(scene, lbl, shift=0.08 * LEFT, run_time=quick),
+            "rule": lambda: _play_create(scene, rule, run_time=quick),
+            "takeaway": lambda: _play_fade_in(scene, takeaway, shift=0.08 * UP, run_time=0.4),
+        }
+        revealers["header"] = _run_revealers_once(["title", "label", "rule"], revealers)
+        for i in range(len(step_mobs)):
+            revealers[f"step_{i}"] = lambda i=i: reveal_step(i)
+            if i < len(math_mobs):
+                revealers[f"stage_{i}"] = lambda i=i: reveal_step(i) + reveal_math(i)
+        for i in range(len(math_mobs)):
+            revealers[f"math_line_{i}"] = lambda i=i: reveal_math(i)
+        revealers["steps"] = _run_revealers_once([f"step_{i}" for i in range(len(step_mobs))], revealers)
+        revealers["math_lines"] = _run_revealers_once(
+            [f"math_line_{i}" for i in range(len(math_mobs))], revealers
+        )
+        _run_voiceover_beats(scene, spec, ctx, revealers)
+        return
+
     scene.play(FadeIn(title, shift=0.15 * DOWN), run_time=0.5)
     scene.play(FadeIn(lbl, shift=0.08 * LEFT), run_time=quick)
     scene.play(Create(rule), run_time=quick)
@@ -437,9 +636,7 @@ def _label_at_curve_edge(
     """
     if x_val is not None:
         try:
-            pt = graph.point_from_proportion(
-                axes.x_axis.point_to_proportion(axes.c2p(x_val, 0))
-            )
+            pt = axes.input_to_graph_point(float(x_val), graph)
         except Exception:
             pt = None
         if pt is not None:
@@ -511,7 +708,17 @@ def render_graph_focus(scene, spec: dict[str, Any], ctx: dict[str, Any]) -> None
                 lb.next_to(ln, side, buff=0.12)
                 label_mobs.append(lb)
         else:
-            d = Dot(axes.c2p(*p["point"]), color=c, radius=float(p.get("radius", 0.08)))
+            radius = float(p.get("radius", 0.08))
+            if p.get("hollow"):
+                d = Dot(
+                    axes.c2p(*p["point"]),
+                    color=c,
+                    radius=radius,
+                    fill_opacity=0,
+                    stroke_width=2,
+                )
+            else:
+                d = Dot(axes.c2p(*p["point"]), color=c, radius=radius)
             plot_mobs.append(("point", d))
             if p.get("label"):
                 lb = Tex(p["label"], color=c, font_size=float(theme["typography"]["small_size"]))
@@ -538,6 +745,40 @@ def render_graph_focus(scene, spec: dict[str, Any], ctx: dict[str, Any]) -> None
         _clamp_to_frame(ann_group)
 
     # ── Animate ──
+    if _has_voiceover_beats(spec):
+        revealers: dict[str, RevealFn] = {
+            "title": lambda: _play_fade_in(scene, title, shift=0.15 * DOWN, run_time=0.5),
+            "axes": lambda: _play_create(scene, axes, run_time=0.8),
+        }
+        for i, (kind, mob) in enumerate(plot_mobs):
+            if kind == "function":
+                revealers[f"plot_{i}"] = lambda mob=mob: _play_create(scene, mob, run_time=0.9)
+            elif kind == "point":
+                revealers[f"plot_{i}"] = lambda mob=mob: _play_grow(scene, mob, run_time=0.3)
+            else:
+                revealers[f"plot_{i}"] = (
+                    lambda mob=mob: _play_fade_in(scene, mob, shift=0.06 * UP, run_time=0.35)
+                )
+        revealers["plots"] = _run_revealers_once([f"plot_{i}" for i in range(len(plot_mobs))], revealers)
+        for i, label_mob in enumerate(label_mobs):
+            revealers[f"label_{i}"] = (
+                lambda label_mob=label_mob: _play_fade_in(
+                    scene, label_mob, shift=0.05 * UP, run_time=0.35
+                )
+            )
+        revealers["labels"] = _run_revealers_once([f"label_{i}" for i in range(len(label_mobs))], revealers)
+        for i, ann_mob in enumerate(ann_mobs):
+            revealers[f"annotation_{i}"] = (
+                lambda ann_mob=ann_mob: _play_fade_in(
+                    scene, ann_mob, shift=0.08 * UP, run_time=0.4
+                )
+            )
+        revealers["annotations"] = _run_revealers_once(
+            [f"annotation_{i}" for i in range(len(ann_mobs))], revealers
+        )
+        _run_voiceover_beats(scene, spec, ctx, revealers)
+        return
+
     scene.play(FadeIn(title, shift=0.15 * DOWN), run_time=0.5)
     scene.play(Create(axes), run_time=0.8)
 
@@ -603,6 +844,32 @@ def render_procedure_steps(scene, spec: dict[str, Any], ctx: dict[str, Any]) -> 
         eq_group.align_to(step_group, LEFT)
 
     # ── Animate ──
+    if _has_voiceover_beats(spec):
+        revealers: dict[str, RevealFn] = {
+            "title": lambda: _play_fade_in(scene, title, shift=0.15 * DOWN, run_time=0.5),
+            "rule": lambda: _play_create(scene, rule, run_time=quick),
+        }
+        revealers["header"] = _run_revealers_once(["title", "rule"], revealers)
+        for i, row in enumerate(step_mobs):
+            revealers[f"step_{i}"] = (
+                lambda row=row: _play_fade_in(scene, row, shift=0.1 * RIGHT, run_time=quick)
+            )
+        for i, m in enumerate(math_mobs):
+            previous_math = math_mobs[i - 1] if i > 0 else None
+            revealers[f"equation_{i}"] = (
+                lambda i=i, m=m, previous_math=previous_math: _play_math(
+                    scene, m, _math_anim(eqs[i]), theme, previous_mob=previous_math
+                )
+            )
+            revealers[f"math_line_{i}"] = revealers[f"equation_{i}"]
+        revealers["steps"] = _run_revealers_once([f"step_{i}" for i in range(len(step_mobs))], revealers)
+        revealers["equations"] = _run_revealers_once(
+            [f"equation_{i}" for i in range(len(math_mobs))], revealers
+        )
+        revealers["math_lines"] = revealers["equations"]
+        _run_voiceover_beats(scene, spec, ctx, revealers)
+        return
+
     scene.play(FadeIn(title, shift=0.15 * DOWN), run_time=0.5)
     scene.play(Create(rule), run_time=quick)
 
@@ -657,6 +924,29 @@ def render_recap_cards(scene, spec: dict[str, Any], ctx: dict[str, Any]) -> None
         id_group.next_to(pts_group, DOWN, buff=0.5)
 
     # ── Animate ──
+    if _has_voiceover_beats(spec):
+        revealers: dict[str, RevealFn] = {
+            "title": lambda: _play_fade_in(scene, title, shift=0.15 * DOWN, run_time=0.5),
+            "rule": lambda: _play_create(scene, rule, run_time=0.3),
+        }
+        revealers["header"] = _run_revealers_once(["title", "rule"], revealers)
+        for i, row in enumerate(points):
+            revealers[f"point_{i}"] = (
+                lambda row=row: _play_fade_in(scene, row, shift=0.1 * RIGHT, run_time=0.4)
+            )
+        for i, m in enumerate(math_mobs):
+            revealers[f"identity_{i}"] = (
+                lambda i=i, m=m: _play_math(scene, m, _math_anim(ids_[i]), theme)
+            )
+            revealers[f"math_line_{i}"] = revealers[f"identity_{i}"]
+        revealers["points"] = _run_revealers_once([f"point_{i}" for i in range(len(points))], revealers)
+        revealers["identities"] = _run_revealers_once(
+            [f"identity_{i}" for i in range(len(math_mobs))], revealers
+        )
+        revealers["math_lines"] = revealers["identities"]
+        _run_voiceover_beats(scene, spec, ctx, revealers)
+        return
+
     scene.play(FadeIn(title, shift=0.15 * DOWN), run_time=0.5)
     scene.play(Create(rule), run_time=0.3)
 
@@ -716,6 +1006,28 @@ def render_section_transition(scene, spec: dict[str, Any], ctx: dict[str, Any]) 
         ug.next_to(ref, DOWN, buff=0.5)
 
     # ── Animate ──
+    if _has_voiceover_beats(spec):
+        revealers: dict[str, RevealFn] = {
+            "title": lambda: _play_fade_in(scene, title, shift=0.12 * DOWN, run_time=0.6),
+            "rule": lambda: _play_create(scene, rule, run_time=0.3),
+        }
+        revealers["header"] = _run_revealers_once(["title", "rule"], revealers)
+        if sub_mob:
+            revealers["subtitle"] = (
+                lambda: _play_fade_in(scene, sub_mob, shift=0.08 * UP, run_time=0.4)
+            )
+        for i, upcoming_mob in enumerate(up_mobs):
+            revealers[f"upcoming_{i}"] = (
+                lambda upcoming_mob=upcoming_mob: _play_fade_in(
+                    scene, upcoming_mob, shift=0.1 * RIGHT, run_time=0.35
+                )
+            )
+        revealers["upcoming"] = _run_revealers_once(
+            [f"upcoming_{i}" for i in range(len(up_mobs))], revealers
+        )
+        _run_voiceover_beats(scene, spec, ctx, revealers)
+        return
+
     scene.play(FadeIn(title, shift=0.12 * DOWN, scale=0.94), run_time=0.6)
     scene.play(Create(rule), run_time=0.3)
     if sub_mob:
@@ -782,6 +1094,29 @@ def render_theorem_proof(scene, spec: dict[str, Any], ctx: dict[str, Any]) -> No
         qed.align_to(pg, RIGHT)
 
     # ── Animate ──
+    if _has_voiceover_beats(spec):
+        revealers: dict[str, RevealFn] = {
+            "title": lambda: _play_fade_in(scene, title, shift=0.15 * DOWN, run_time=0.5),
+            "label": lambda: _play_fade_in(scene, lbl, shift=0.08 * LEFT, run_time=0.3),
+            "rule": lambda: _play_create(scene, rule, run_time=0.3),
+            "statement": lambda: _play_fade_in(scene, stmt, shift=0.1 * RIGHT, run_time=0.5),
+            "proof_label": lambda: _play_fade_in(scene, proof_lbl, shift=0.06 * RIGHT, run_time=0.3),
+        }
+        revealers["header"] = _run_revealers_once(["title", "label", "rule"], revealers)
+        for i, proof_mob in enumerate(p_mobs):
+            revealers[f"proof_step_{i}"] = (
+                lambda proof_mob=proof_mob: _play_fade_in(
+                    scene, proof_mob, shift=0.08 * RIGHT, run_time=0.45
+                )
+            )
+        revealers["proof_steps"] = _run_revealers_once(
+            [f"proof_step_{i}" for i in range(len(p_mobs))], revealers
+        )
+        if qed:
+            revealers["qed"] = lambda: _play_fade_in(scene, qed, shift=0 * RIGHT, run_time=0.25)
+        _run_voiceover_beats(scene, spec, ctx, revealers)
+        return
+
     scene.play(FadeIn(title, shift=0.15 * DOWN), run_time=0.5)
     scene.play(FadeIn(lbl, shift=0.08 * LEFT), run_time=0.3)
     scene.play(Create(rule), run_time=0.3)
@@ -852,6 +1187,26 @@ def render_comparison(scene, spec: dict[str, Any], ctx: dict[str, Any]) -> None:
 
     pair = VGroup(left_col, divider, right_col).arrange(RIGHT, buff=0.8)
     pair.next_to(rule, DOWN, buff=0.55)
+
+    if _has_voiceover_beats(spec):
+        revealers: dict[str, RevealFn] = {
+            "title": lambda: _play_fade_in(scene, title, shift=0.15 * DOWN, run_time=0.5),
+            "rule": lambda: _play_create(scene, rule, run_time=0.3),
+            "divider": lambda: _play_fade_in(scene, divider, shift=0 * RIGHT, run_time=0.2),
+        }
+        revealers["header"] = _run_revealers_once(["title", "rule"], revealers)
+        for i, mob in enumerate(left_col):
+            revealers[f"left_{i}"] = (
+                lambda mob=mob: _play_fade_in(scene, mob, shift=0.1 * RIGHT, run_time=0.4)
+            )
+        for i, mob in enumerate(right_col):
+            revealers[f"right_{i}"] = (
+                lambda mob=mob: _play_fade_in(scene, mob, shift=0.1 * RIGHT, run_time=0.4)
+            )
+        revealers["left"] = _run_revealers_once([f"left_{i}" for i in range(len(left_col))], revealers)
+        revealers["right"] = _run_revealers_once([f"right_{i}" for i in range(len(right_col))], revealers)
+        _run_voiceover_beats(scene, spec, ctx, revealers)
+        return
 
     # ── Animate ──
     scene.play(FadeIn(title, shift=0.15 * DOWN), run_time=0.5)

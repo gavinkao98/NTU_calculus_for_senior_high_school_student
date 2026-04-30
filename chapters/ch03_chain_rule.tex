@@ -68,13 +68,13 @@ We begin with a geometric inequality involving a unit-circle sector and two tria
 \label{fig:sector-bound}
 \end{figure}
 
-\begin{lemma}\label{lem:sector-inequality}
+\begin{proposition}\label{prop:sector-inequality}
 For \(0 < \theta < \pi/2\),
 \[
 \sin \theta \leq \theta \leq \tan \theta,
 \]
 where \(\tan \theta = \sin \theta / \cos \theta\).
-\end{lemma}
+\end{proposition}
 
 \begin{proof}
 Refer to \cref{fig:sector-bound}. Working on the unit circle, with \(O\) the origin, \(A = (1, 0)\), \(B = (\cos \theta, \sin \theta)\), and \(C = (1, \tan \theta)\) the intersection of the tangent line at \(A\) with the ray \(\overrightarrow{OB}\):
@@ -100,7 +100,7 @@ and consequently \(\lvert \sin \theta \rvert \leq \lvert \theta \rvert\) for eve
 \end{corollary}
 
 \begin{proof}
-For \(0 < \theta < \pi/2\), divide \cref{lem:sector-inequality} by \(\sin \theta > 0\):
+For \(0 < \theta < \pi/2\), divide \cref{prop:sector-inequality} by \(\sin \theta > 0\):
 \[
 1 \;\leq\; \frac{\theta}{\sin \theta} \;\leq\; \frac{1}{\cos \theta},
 \]

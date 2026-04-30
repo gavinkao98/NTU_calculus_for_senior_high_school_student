@@ -198,7 +198,7 @@ When Mode B runs as the required follow-up to Mode C, scope the verdict pass to 
 
 Independently of the per-marker verdict, Claude flags:
 
-- **Spec compliance** — rule violations against [`CONTENT_SPEC.md`](CONTENT_SPEC.md): disallowed display helpers, `\textbf` / `\textit` in prose, ASCII quotes, manual cross-reference prefixes, `\newcommand` in chapter files, missing chapter opening structure, etc. These are definite defects; propose fixes.
+- **Spec compliance** — rule violations against [`CONTENT_SPEC.md`](CONTENT_SPEC.md): disallowed display helpers, `\textbf` / `\textit` in prose, ASCII quotes, manual cross-reference prefixes, `\newcommand` in chapter files, missing chapter opening structure, etc. These are definite defects; propose fixes. Spec compliance also includes **pattern-level rules that require cross-comparison within the chapter** — e.g., whether all definitions in the chapter follow §3's gloss decision rule consistently, whether all figures follow §10's placement rule, whether parallel structures (definitions of similar weight, propositions stated in similar form) are formatted alike. A single-line lint pass is necessary but not sufficient; pattern-level audits require explicitly walking each SPEC rule that has a decision criterion and checking the chapter as a whole.
 - **Notation drift** from the manuscript — e.g., the manuscript uses `[x]` and the `.tex` silently uses `\lfloor x \rfloor`. Surface this as a question for the user, not as a hallucination. The user may have intentionally upgraded the notation, or may want to realign to the manuscript.
 - **Mathematical correctness** — if a statement looks wrong, surface it as *"please verify X"*, not as *"I'm removing X because it's not in the manuscript."*
 - **Missing content from the manuscript** — if the manuscript covers a topic the `.tex` skips, flag the gap so the user can decide whether the omission was intentional.
@@ -334,9 +334,10 @@ Before committing a chapter, also run:
 python tools/book_style_lint.py
 python tools/book_preamble_smoketest.py
 python tools/book_docs_lint.py
+python tools/manim_storyboard_lint.py --all
 ```
 
-All four checks (the three above plus the `latexmk` build) run on every push and PR via [`.github/workflows/latex-checks.yml`](.github/workflows/latex-checks.yml). `book_docs_lint.py` scans markdown for stale `tools/<name>.py` command references and broken relative links, so doc-rename drift cannot slip through review unnoticed.
+All five checks (the four above plus the `latexmk` build) run on every push and PR via [`.github/workflows/latex-checks.yml`](.github/workflows/latex-checks.yml). `book_docs_lint.py` scans markdown for stale `tools/<name>.py` command references and broken relative links, so doc-rename drift cannot slip through review unnoticed. `manim_storyboard_lint.py` enforces the mechanically verifiable subset of the [`MANIM_STORYBOARD.md`](MANIM_STORYBOARD.md) pre-render checklist (template / scene_id contracts, voiceover sentence count and spoken-math compliance, opening / closing scene shape, `cbrt` for cube roots) so storyboard regressions surface before review.
 
 Authority: when repository layout or preamble decisions change, **this file** is authoritative; when writing or typesetting rules change, [`CONTENT_SPEC.md`](CONTENT_SPEC.md) is authoritative.
 
@@ -346,9 +347,13 @@ Authority: when repository layout or preamble decisions change, **this file** is
 
 End-of-section `\subsection*{Exercises}` blocks are for the printed handout only. They are **not** included in slide decks, narration scripts, Manim storyboards, synthesized audio, or rendered video. When planning section media, ignore the exercise block of the source section and build from definitions, theorems, examples, and exposition prose.
 
+## TTS pronunciation normalization
+
+Manim narration passes through `tools/tts_pronunciation.py` before Coqui or F5 synthesis. This is a TTS-only cleanup layer: it does not change storyboard text or on-screen math. The current rules make single-letter mathematical variables more audible, including variable `a` as `ayyy` in math contexts (`x approaches a`, `x minus a`, `f of a`, `limit at a`) while leaving English articles such as `a function` and `a positive delta` unchanged. The same pass also spells common function and limit letters as `eff`, `gee`, `aitch`, `ell`, `em`, and `en` where context indicates they are mathematical symbols.
+
 ---
 
 ## Notes
 
 - Local caches, virtual environments, and vendored dependencies live in hidden repo folders such as `.cache/`, `.venv/`, `.deps/`, and `.deps_f5/`.
-- The checked-in media exemplar is Section 1.1 *Inverse Functions* (`ch01_inverse_functions`). The Manim storyboard lives at [`inputs/manim_storyboards/ch01_inverse_functions.yml`](inputs/manim_storyboards/ch01_inverse_functions.yml); the frozen slide plan lives at [`inputs/media_plans/ch01_inverse_functions.json`](inputs/media_plans/ch01_inverse_functions.json).
+- The checked-in media exemplars are two deliberately contrasting Manim storyboards used to calibrate [`MANIM_STORYBOARD.md`](MANIM_STORYBOARD.md): Section 1.1 *Inverse Functions* ([`inputs/manim_storyboards/ch01_inverse_functions.yml`](inputs/manim_storyboards/ch01_inverse_functions.yml)), graph-heavy with light symbolic content, and Section 1.6 *The Precise Definition of a Limit* ([`inputs/manim_storyboards/ch01_precise_limit.yml`](inputs/manim_storyboards/ch01_precise_limit.yml)), symbol-heavy with two anchor graphs. Sec. 1.1 was the original v1.0-v1.3 reference; Sec. 1.6 was added as the v1.4 stress-test exemplar to surface rules that did not appear when the methodology was calibrated on graph-heavy content alone. New storyboards should consult both -- methodology rules that hold across the pair are the ones meant to generalise. The frozen slide plan for Sec. 1.1 lives at [`inputs/media_plans/ch01_inverse_functions.json`](inputs/media_plans/ch01_inverse_functions.json); the legacy slide path is not extended to Sec. 1.6.

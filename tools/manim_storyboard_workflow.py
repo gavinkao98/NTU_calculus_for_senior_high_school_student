@@ -194,6 +194,16 @@ def normalize_storyboard(storyboard: Any, source_path: Path | None = None) -> di
         else:
             scene_exit_val = "fade"
 
+        voiceover_beats = raw_scene.get("voiceover_beats")
+        normalized_beats = None
+        if voiceover_beats is not None:
+            normalized_beats = normalize_voiceover_beats(
+                voiceover_beats, f"{label}.scenes[{index}].voiceover_beats"
+            )
+            voiceover = voiceover_text_from_beats(normalized_beats)
+        else:
+            voiceover = require_text(raw_scene.get("voiceover"), f"{label}.scenes[{index}].voiceover")
+
         normalized_scene = {
             "scene_number": index,
             "scene_id": scene_id,
@@ -201,11 +211,13 @@ def normalize_storyboard(storyboard: Any, source_path: Path | None = None) -> di
             "content_type": content_type,
             "scene_exit": scene_exit_val,
             "title": require_text(raw_scene.get("title"), f"{label}.scenes[{index}].title"),
-            "voiceover": require_text(raw_scene.get("voiceover"), f"{label}.scenes[{index}].voiceover"),
+            "voiceover": voiceover,
             "data": normalize_scene_data(template, raw_scene.get("data"), f"{label}.scenes[{index}].data"),
             "timing": normalize_timing(raw_scene.get("timing"), f"{label}.scenes[{index}].timing"),
             "disabled": require_optional_bool(raw_scene.get("disabled"), f"{label}.scenes[{index}].disabled", False),
         }
+        if normalized_beats is not None:
+            normalized_scene["voiceover_beats"] = normalized_beats
 
         # Optional reveal_groups for progressive reveal.
         reveal_groups = raw_scene.get("reveal_groups")
@@ -272,6 +284,49 @@ def normalize_timing(value: Any, label: str) -> dict[str, Any]:
     for key in ("lead_in_seconds", "hold_after_seconds", "minimum_duration_seconds"):
         require_non_negative_number(timing.get(key), f"{label}.{key}")
     return timing
+
+
+def normalize_voiceover_beats(value: Any, label: str) -> list[dict[str, Any]]:
+    if not isinstance(value, list) or not value:
+        raise ValueError(f"{label} must be a non-empty array.")
+
+    normalized: list[dict[str, Any]] = []
+    seen_ids: set[str] = set()
+    for index, beat in enumerate(value):
+        entry_label = f"{label}[{index}]"
+        item = require_mapping(beat, entry_label)
+        beat_id = require_text(item.get("id"), f"{entry_label}.id")
+        if beat_id in seen_ids:
+            raise ValueError(f"Duplicate voiceover beat id '{beat_id}' in {label}.")
+        seen_ids.add(beat_id)
+
+        reveal = item.get("reveal", [])
+        if reveal is None:
+            reveal = []
+        if not isinstance(reveal, list) or not all(isinstance(entry, str) and entry.strip() for entry in reveal):
+            raise ValueError(f"{entry_label}.reveal must be an array of non-empty strings.")
+
+        if "hold_after" in item and "hold_after_seconds" in item:
+            raise ValueError(f"{entry_label} must use only one of hold_after or hold_after_seconds.")
+        hold_after = item.get("hold_after_seconds", item.get("hold_after", 0.0))
+        duration_override = item.get("duration_seconds")
+
+        normalized_beat = {
+            "id": beat_id,
+            "text": require_text(item.get("text"), f"{entry_label}.text"),
+            "reveal": [entry.strip() for entry in reveal],
+            "hold_after_seconds": require_non_negative_number(hold_after, f"{entry_label}.hold_after_seconds"),
+        }
+        if duration_override is not None:
+            normalized_beat["duration_seconds"] = require_positive_number(
+                duration_override, f"{entry_label}.duration_seconds"
+            )
+        normalized.append(normalized_beat)
+    return normalized
+
+
+def voiceover_text_from_beats(beats: list[dict[str, Any]]) -> str:
+    return normalize_narration_text(" ".join(beat["text"] for beat in beats))
 
 
 def normalize_scene_data(template: str, value: Any, label: str) -> dict[str, Any]:
@@ -682,6 +737,8 @@ def strip_runtime_fields(storyboard: dict[str, Any]) -> dict[str, Any]:
             item["scene_exit"] = scene["scene_exit"]
         if scene.get("reveal_groups"):
             item["reveal_groups"] = scene["reveal_groups"]
+        if scene.get("voiceover_beats"):
+            item["voiceover_beats"] = scene["voiceover_beats"]
         if scene.get("disabled"):
             item["disabled"] = True
         if scene.get("hook"):
@@ -716,6 +773,7 @@ def storyboard_to_bridge_deck(storyboard: dict[str, Any], storyboard_path: Path)
                 "math_blocks": [],
                 "tikz_code": None,
                 "script_draft": normalize_narration_text(scene["voiceover"]),
+                "voiceover_beats": scene.get("voiceover_beats", []),
                 "render_hints": DEFAULT_BRIDGE_RENDER_HINTS,
             }
         )
@@ -744,6 +802,7 @@ def render_storyboard_script_markdown(storyboard: dict[str, Any], storyboard_pat
         f"Deck ID: `{storyboard['deck_id']}`",
         "",
         "You may edit the narration text below each **Narration:** heading.",
+        "For scenes with **Voiceover Beats**, edit the beat text/reveal map in the storyboard YAML; the joined beat text is exported here for proofreading.",
         "Do NOT change the hidden hash comment lines either — they are used for stale-file conflict detection.",
         "Do NOT change the Slide ID lines — they are used to match edits back to the correct scene.",
         "After editing, run `python tools/manim_sync_narration_back.py --deck-id "
@@ -766,6 +825,17 @@ def render_storyboard_script_markdown(storyboard: dict[str, Any], storyboard_pat
                 "",
             ]
         )
+        if scene.get("voiceover_beats"):
+            sections.extend(["Voiceover Beats:", ""])
+            for beat in scene["voiceover_beats"]:
+                reveal = ", ".join(beat.get("reveal", [])) or "none"
+                sections.extend(
+                    [
+                        f"- `{beat['id']}` reveal: {reveal}",
+                        f"  text: {normalize_narration_text(beat['text'])}",
+                    ]
+                )
+            sections.append("")
     return "\n".join(sections).strip() + "\n"
 
 
@@ -791,7 +861,8 @@ def scene_visual_fingerprint(storyboard: dict[str, Any], scene: dict[str, Any], 
     """Fingerprint only the rendered visual payload for scene-cache reuse.
 
     Narration and mux timing are intentionally excluded because they affect the
-    bridge/audio pipeline, not the silent Manim scene render itself.
+    bridge/audio pipeline, not the silent Manim scene render itself. Beat maps
+    are included because they control progressive reveal order.
     """
     payload = {
         "deck_id": storyboard["deck_id"],
@@ -815,9 +886,42 @@ def strip_visual_scene(scene: dict[str, Any]) -> dict[str, Any]:
     }
     if scene.get("reveal_groups"):
         cleaned["reveal_groups"] = scene["reveal_groups"]
+    if scene.get("voiceover_beats"):
+        cleaned["voiceover_beats"] = scene["voiceover_beats"]
     if scene.get("hook"):
         cleaned["hook"] = scene["hook"]
     return cleaned
+
+
+def scene_render_fingerprint(
+    storyboard: dict[str, Any],
+    scene: dict[str, Any],
+    quality: str,
+    audio_timing: dict[str, Any] | None = None,
+) -> str:
+    if not scene.get("voiceover_beats"):
+        return scene_visual_fingerprint(storyboard, scene, quality)
+    payload = {
+        "visual_fingerprint": scene_visual_fingerprint(storyboard, scene, quality),
+    }
+    payload["timing"] = scene["timing"]
+    payload["audio_timing"] = compact_audio_timing(audio_timing)
+    return hashlib.sha256(canonical_json(payload).encode("utf-8")).hexdigest()
+
+
+def compact_audio_timing(audio_timing: dict[str, Any] | None) -> dict[str, Any] | None:
+    if not audio_timing:
+        return None
+    return {
+        "beats": [
+            {
+                "id": beat.get("id"),
+                "audio_seconds": beat.get("audio_seconds"),
+                "hold_after_seconds": beat.get("hold_after_seconds"),
+            }
+            for beat in audio_timing.get("beats", [])
+        ]
+    }
 
 
 scene_fingerprint = scene_visual_fingerprint

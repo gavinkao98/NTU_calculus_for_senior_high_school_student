@@ -1,0 +1,518 @@
+# Section 1.4 One-Sided and Infinite Limits -- storyboard v1
+# (authored against MANIM_STORYBOARD.md v1.6).
+#
+# Source: chapters/ch01_foundations.tex, Section 1.4 (lines 771-1095).
+# Scene plan: 13 scenes covering the section's three subsections (one-sided limits,
+# infinite limits, vertical asymptotes). The teaching arc is: extend the basic limit
+# in two directions -- different behavior from the two sides, and unbounded behavior.
+#
+# Deliberate choices:
+# - The textbook's four-panel fig:one-sided-infinite-limits is folded into a single
+#   graph_focus that shows 1/(x-2) capturing two of the four cases (positive infinity
+#   from the right, negative infinity from the left); the voiceover names the other
+#   two cases as sign flips. A faithful four-panel render needs a hook and the visual
+#   payoff is small.
+# - The 1/x^2 motivation is given a graph_focus rather than a tabular example_walkthrough,
+#   because the punchline ("the values shoot up faster than any number you pick") is
+#   geometric.
+# - The 2x/(x-3) asymptote example earns its full sign-analysis walkthrough; the
+#   ln x example is short and pedagogical, kept because the monotone-decay shape is
+#   different from the rational case.
+
+deck_id: "ch01_one_sided_infinite_limits"
+language: "English"
+theme:
+  name: "midnight"
+video:
+  aspect_ratio: "16:9"
+  pixel_width: 1920
+  pixel_height: 1080
+  frame_rate: 30
+  preview_scale: 0.5
+
+scenes:
+
+  # ============================================================
+  # 1. Opening hook.
+  # ============================================================
+  -
+    scene_id: "opening_hook"
+    template: "title_bullets"
+    content_type: "definition"
+    scene_exit: "hold"
+    title: "One-Sided and Infinite Limits"
+    voiceover: >
+      The basic limit asks how a function behaves as x approaches a from any direction.
+      Two extensions of this idea earn their own machinery. First, a function may
+      approach different values depending on which side x is coming from. Second, a
+      function may not approach any finite number at all, but instead grow without
+      bound. Today we make both of these precise and tie infinite limits to vertical
+      asymptotes.
+    timing:
+      lead_in_seconds: 0.3
+      hold_after_seconds: 0.8
+      minimum_duration_seconds: 6.5
+    data:
+      bullets:
+        - "Approach from one side only: \\(x \\to a^{-}\\) or \\(x \\to a^{+}\\)."
+        - "Values grow without bound: \\(f(x) \\to \\pm\\infty\\)."
+        - "Vertical asymptotes are the geometric face of infinite limits."
+
+  # ============================================================
+  # 2. One-sided limit definition.
+  # ============================================================
+  -
+    scene_id: "one_sided_definition"
+    template: "definition_math"
+    content_type: "definition"
+    scene_exit: "hold"
+    title: "Left- and Right-Hand Limits"
+    voiceover: >
+      The left-hand limit of f at a, written limit as x approaches a minus, is the value
+      L that f of x approaches when x comes in from the left, that is, through values
+      less than a. The right-hand limit, written limit as x approaches a plus, uses
+      values greater than a. The minus and plus superscripts are not algebraic signs;
+      they tell you which side of a we approach from. Everything else from the basic
+      limit definition is unchanged: the value f of a is still ignored, and the
+      arbitrarily-close-by-going-sufficiently-close idea is the same.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.7
+      minimum_duration_seconds: 7.5
+    data:
+      statement: "The one-sided limits restrict the approach to one side of \\(a\\)."
+      math_lines:
+        -
+          text: "\\[\\lim_{x \\to a^{-}} f(x) = L \\;\\text{:}\\;\\; x \\to a \\text{ through } x < a.\\]"
+          animation: "write"
+        -
+          text: "\\[\\lim_{x \\to a^{+}} f(x) = L \\;\\text{:}\\;\\; x \\to a \\text{ through } x > a.\\]"
+          animation: "highlight"
+
+  # ============================================================
+  # 3. Visualization: a function whose left and right limits at a differ.
+  # Replaces manuscript fig:one-sided-limits.
+  # ============================================================
+  -
+    scene_id: "one_sided_figure"
+    template: "graph_focus"
+    content_type: "example"
+    scene_exit: "hold"
+    title: "Left and Right Limits Can Differ"
+    voiceover: >
+      Here is a function with a jump at x equals a. From the left, the curve is heading
+      up toward L one. From the right, the curve is heading up toward L two, a strictly
+      higher value. Both one-sided limits exist: limit from the minus side is L one,
+      limit from the plus side is L two. But the two-sided limit, the one without a
+      sign on the arrow, does not exist, because the values from the two sides do not
+      agree. The hollow circles signal that the function value at a itself is not part
+      of either limit.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.9
+      minimum_duration_seconds: 7.0
+    data:
+      axes:
+        x_range: [-0.5, 4.5, 1]
+        y_range: [-0.5, 3.2, 1]
+        x_length: 8.0
+        y_length: 4.5
+        include_numbers: false
+        tips: true
+      plots:
+        -
+          kind: "function"
+          expression: "1 + 0.25*(x - 2)**2"
+          x_range: [0.2, 1.95]
+          color: "#4cc9f0"
+          label: "$f$ on $x < a$"
+          label_x: 0.5
+          label_side: "up"
+        -
+          kind: "function"
+          expression: "2 + 0.2*(x - 2)**2"
+          x_range: [2.05, 4.2]
+          color: "#4cc9f0"
+          label: "$f$ on $x > a$"
+          label_x: 3.5
+          label_side: "up"
+        -
+          kind: "point"
+          point: [2, 1]
+          color: "#c8c8d8"
+          hollow: true
+        -
+          kind: "point"
+          point: [2, 2]
+          color: "#c8c8d8"
+          hollow: true
+        -
+          kind: "line"
+          start: [-0.5, 1]
+          end: [2, 1]
+          color: "#505060"
+          dashed: true
+        -
+          kind: "line"
+          start: [-0.5, 2]
+          end: [2, 2]
+          color: "#505060"
+          dashed: true
+      annotations:
+        -
+          text: "Left limit \\(= L_{1}\\); right limit \\(= L_{2}\\); two-sided limit fails."
+
+  # ============================================================
+  # 4. Two-sided criterion.
+  # ============================================================
+  -
+    scene_id: "two_sided_criterion"
+    template: "definition_math"
+    content_type: "proposition"
+    scene_exit: "hold"
+    title: "When the Two-Sided Limit Exists"
+    voiceover: >
+      Here is the bridge between one-sided and two-sided limits. The two-sided limit
+      equals L if and only if both one-sided limits equal L. Both directions of this
+      biconditional are useful. To prove a two-sided limit exists, check that both
+      one-sided limits agree. To prove a two-sided limit fails to exist, find a case
+      where the two one-sided limits disagree. The previous figure was such a case.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.7
+      minimum_duration_seconds: 6.5
+    data:
+      statement: "The two-sided limit exists exactly when both one-sided limits exist and agree."
+      math_lines:
+        -
+          text: "\\[\\lim_{x \\to a} f(x) = L \\;\\Longleftrightarrow\\; \\lim_{x \\to a^{-}} f(x) = L \\text{ and } \\lim_{x \\to a^{+}} f(x) = L.\\]"
+          animation: "highlight"
+      supporting_bullets:
+        - "If the one-sided limits disagree, the two-sided limit does not exist."
+
+  # ============================================================
+  # 5. Worked example: piecewise function with x+1 and 4-x branches.
+  # ============================================================
+  -
+    scene_id: "piecewise_example"
+    template: "example_walkthrough"
+    content_type: "example"
+    scene_exit: "hold"
+    title: "A Piecewise Function at $x = 2$"
+    voiceover: >
+      Consider f equal to x plus one when x is less than two, and four minus x when x
+      is at least two. To take the left limit, use the branch that holds for x less
+      than two: x plus one. As x approaches two from the left, x plus one approaches
+      three. To take the right limit, use the branch for x at least two: four minus x.
+      As x approaches two from the right, four minus x approaches two. The two
+      one-sided limits are three and two. They are different, so the two-sided limit
+      does not exist.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.7
+      minimum_duration_seconds: 8.0
+    data:
+      steps:
+        - "From the left use \\(f = x + 1\\): \\(\\lim_{x \\to 2^{-}} f(x) = 3\\)."
+        - "From the right use \\(f = 4 - x\\): \\(\\lim_{x \\to 2^{+}} f(x) = 2\\)."
+        - "Different one-sided limits, so the two-sided limit fails."
+      takeaway: "On a piecewise definition, plug each side into its own branch."
+      math_lines:
+        - "\\[\\lim_{x \\to 2^{-}} (x + 1) = 3\\]"
+        - "\\[\\lim_{x \\to 2^{+}} (4 - x) = 2\\]"
+        -
+          text: "\\[\\lim_{x \\to 2} f(x) \\text{ does not exist.}\\]"
+          animation: "highlight"
+
+  # ============================================================
+  # 6. Concept transition into infinite limits.
+  # ============================================================
+  -
+    scene_id: "transition_to_infinite"
+    template: "section_transition"
+    scene_exit: "hold"
+    title: "When the Limit Is Not Finite"
+    voiceover: >
+      Sometimes the values do not crowd toward a finite L at all. Instead they grow
+      without bound. We need a notation and a definition for that case.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.5
+      minimum_duration_seconds: 3.5
+    data:
+      subtitle: "From bounded behavior to unbounded growth"
+      upcoming:
+        - "The motivating example: \\(1/x^{2}\\) near \\(0\\)"
+        - "The infinite-limit definition"
+        - "Vertical asymptotes"
+
+  # ============================================================
+  # 7. Motivating graph: y = 1/x^2 blowing up at 0.
+  # ============================================================
+  -
+    scene_id: "one_over_x_squared_motivation"
+    template: "graph_focus"
+    content_type: "example"
+    scene_exit: "hold"
+    title: "$y = 1/x^{2}$ Near $0$"
+    voiceover: >
+      Look at one over x squared near zero. As x gets close to zero from either side,
+      x squared is a very small positive number, so its reciprocal is enormous. At
+      x equals zero point one, the value is one hundred. At x equals zero point zero
+      one, the value is ten thousand. The values shoot up faster than any number you
+      could pick. There is no finite L the function approaches; the limit in the
+      ordinary sense does not exist. We capture this growth with a new notation:
+      limit equals plus infinity.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.9
+      minimum_duration_seconds: 8.0
+    data:
+      axes:
+        x_range: [-2, 2, 1]
+        y_range: [0, 25, 5]
+        x_length: 7.0
+        y_length: 5.0
+        include_numbers: false
+        tips: true
+      plots:
+        -
+          kind: "function"
+          expression: "1/(x**2)"
+          x_range: [-1.8, -0.21]
+          color: "#4cc9f0"
+          label: "$y = 1/x^{2}$"
+          label_x: -1.5
+          label_side: "up"
+        -
+          kind: "function"
+          expression: "1/(x**2)"
+          x_range: [0.21, 1.8]
+          color: "#4cc9f0"
+        -
+          kind: "line"
+          start: [0, 0]
+          end: [0, 25]
+          color: "#ff6b6b"
+          dashed: true
+      annotations:
+        -
+          text: "\\(1/(0.1)^{2} = 100;\\; 1/(0.01)^{2} = 10{,}000\\)."
+        -
+          text: "Values exceed every threshold near \\(x = 0\\)."
+
+  # ============================================================
+  # 8. Definition of an infinite limit.
+  # ============================================================
+  -
+    scene_id: "infinite_limit_definition"
+    template: "definition_math"
+    content_type: "definition"
+    scene_exit: "hold"
+    title: "Infinite Limits"
+    voiceover: >
+      Here is the informal definition. We write limit equals plus infinity if the values
+      of f of x can be made arbitrarily large by taking x sufficiently close to a, with
+      x not equal to a. The phrase "arbitrarily large" is doing the work: any threshold
+      you set, the function will eventually exceed it once x is close enough to a. The
+      minus infinity version is the mirror image: the values are arbitrarily large in
+      the negative direction. The symbol infinity does not name a real number; it
+      records the unbounded growth.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.8
+      minimum_duration_seconds: 8.0
+    data:
+      statement: "Replace \"approaches \\(L\\)\" with \"grows without bound\"; the rest is the same."
+      math_lines:
+        -
+          text: "\\[\\lim_{x \\to a} f(x) = \\infty: f(x) \\text{ can be made arbitrarily large.}\\]"
+          animation: "write"
+        -
+          text: "\\[\\lim_{x \\to a} f(x) = -\\infty: f(x) \\text{ can be made arbitrarily large negative.}\\]"
+          animation: "highlight"
+      supporting_bullets:
+        - "One-sided versions \\(\\lim_{x \\to a^{\\pm}} f(x) = \\pm\\infty\\) are defined the same way."
+        - "\\(\\infty\\) is not a real number; it labels unbounded behavior."
+
+  # ============================================================
+  # 9. Typical infinite limits picture. One curve, two of the four cases visible.
+  # ============================================================
+  -
+    scene_id: "typical_infinite_limits"
+    template: "graph_focus"
+    content_type: "example"
+    scene_exit: "hold"
+    title: "Two Sides, Two Infinities"
+    voiceover: >
+      Here is a curve that already shows two of the four typical infinite-limit cases.
+      The function one over x minus two has a vertical line at x equals two where the
+      denominator vanishes. Approach two from the right: x minus two is small and
+      positive, so the reciprocal blows up to plus infinity. Approach two from the
+      left: x minus two is small and negative, so the reciprocal blows down to minus
+      infinity. The other two cases, where the curve goes to plus infinity from the
+      left or to minus infinity from the right, look the same with the signs flipped.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.9
+      minimum_duration_seconds: 8.0
+    data:
+      axes:
+        x_range: [-0.2, 4.2, 1]
+        y_range: [-10, 10, 5]
+        x_length: 7.5
+        y_length: 5.0
+        include_numbers: false
+        tips: true
+      plots:
+        -
+          kind: "function"
+          expression: "1/(x - 2)"
+          x_range: [0.2, 1.85]
+          color: "#4cc9f0"
+          label: "$y = 1/(x - 2)$"
+          label_x: 3.2
+          label_side: "up"
+        -
+          kind: "function"
+          expression: "1/(x - 2)"
+          x_range: [2.15, 4.0]
+          color: "#4cc9f0"
+        -
+          kind: "line"
+          start: [2, -10]
+          end: [2, 10]
+          color: "#ff6b6b"
+          dashed: true
+      annotations:
+        -
+          text: "Right limit at \\(2\\): \\(+\\infty\\). Left limit at \\(2\\): \\(-\\infty\\)."
+
+  # ============================================================
+  # 10. Vertical asymptote definition.
+  # ============================================================
+  -
+    scene_id: "vertical_asymptote_definition"
+    template: "definition_math"
+    content_type: "definition"
+    scene_exit: "hold"
+    title: "Vertical Asymptotes"
+    voiceover: >
+      The line x equals a is called a vertical asymptote of the curve y equals f of x
+      if at least one of the four one-sided infinite limits at a holds. The qualifier
+      "at least one" matters: the curve does not have to blow up on both sides for
+      x equals a to count as an asymptote. So the test for a vertical asymptote at
+      x equals a is to check the four one-sided limits and see if any one of them is
+      plus or minus infinity.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.7
+      minimum_duration_seconds: 6.5
+    data:
+      statement: "The vertical line \\(x = a\\) is a vertical asymptote of \\(y = f(x)\\) when at least one one-sided limit is infinite."
+      math_lines:
+        -
+          text: "\\[\\lim_{x \\to a^{-}} f(x) = \\pm\\infty \\quad \\text{or} \\quad \\lim_{x \\to a^{+}} f(x) = \\pm\\infty.\\]"
+          animation: "highlight"
+      supporting_bullets:
+        - "\"At least one\": one infinite one-sided limit is enough."
+
+  # ============================================================
+  # 11. Worked example: y = 2x / (x - 3) has a vertical asymptote at x = 3.
+  # ============================================================
+  -
+    scene_id: "rational_asymptote_example"
+    template: "example_walkthrough"
+    content_type: "example"
+    scene_exit: "hold"
+    title: "Asymptote of $y = \\dfrac{2x}{x - 3}$"
+    voiceover: >
+      The denominator vanishes only at x equals three, so the only candidate for a
+      vertical asymptote is x equals three. Take the right limit. As x approaches three
+      from the right, x minus three is a small positive number, while two x is close
+      to six. The ratio is six over a small positive number, which goes to plus
+      infinity. Now the left limit. As x approaches three from the left, x minus three
+      is a small negative number, while two x is still close to six. The ratio goes
+      to minus infinity. At least one one-sided limit is infinite, so the line x equals
+      three is a vertical asymptote.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.8
+      minimum_duration_seconds: 8.5
+    data:
+      steps:
+        - "Denominator zeros: only \\(x = 3\\). Test there."
+        - "From the right: \\(2x \\to 6\\), \\(x - 3 \\to 0^{+}\\)."
+        - "From the left: \\(2x \\to 6\\), \\(x - 3 \\to 0^{-}\\)."
+        - "Both one-sided limits are infinite; \\(x = 3\\) is a vertical asymptote."
+      takeaway: "Rational functions have vertical asymptotes only where the denominator vanishes."
+      math_lines:
+        - "\\[\\lim_{x \\to 3^{+}} \\dfrac{2x}{x - 3} = +\\infty\\]"
+        - "\\[\\lim_{x \\to 3^{-}} \\dfrac{2x}{x - 3} = -\\infty\\]"
+        -
+          text: "\\[x = 3 \\text{ is a vertical asymptote.}\\]"
+          animation: "highlight"
+
+  # ============================================================
+  # 12. Worked example: ln x at 0+. Short, different shape.
+  # ============================================================
+  -
+    scene_id: "ln_x_asymptote_example"
+    template: "example_walkthrough"
+    content_type: "example"
+    scene_exit: "hold"
+    title: "Asymptote of $y = \\ln x$ at $0$"
+    voiceover: >
+      Now a non-rational example. The natural logarithm is defined only for positive x,
+      so we cannot take a left limit at zero; only the right limit makes sense. As x
+      approaches zero from the right, ln x decreases without bound. So the right limit
+      of ln x at zero is minus infinity. One one-sided limit is infinite, so x equals
+      zero is a vertical asymptote of the natural logarithm.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 0.7
+      minimum_duration_seconds: 6.5
+    data:
+      steps:
+        - "\\(\\ln x\\) is only defined for \\(x > 0\\); only the right limit at \\(0\\) is meaningful."
+        - "As \\(x \\to 0^{+}\\), \\(\\ln x\\) decreases without bound."
+        - "The right limit equals \\(-\\infty\\); \\(x = 0\\) is a vertical asymptote."
+      takeaway: "A vertical asymptote can come from one side only when the function is one-sided there."
+      math_lines:
+        -
+          text: "\\[\\lim_{x \\to 0^{+}} \\ln x = -\\infty\\]"
+          animation: "highlight"
+
+  # ============================================================
+  # 13. Recap.
+  # ============================================================
+  -
+    scene_id: "recap"
+    template: "recap_cards"
+    content_type: "recap"
+    scene_exit: "hold"
+    title: "Key Takeaways"
+    voiceover: >
+      Six things to remember. First, one-sided limits look at the approach from one
+      side only and are written with a minus or plus superscript. Second, the two-sided
+      limit exists if and only if both one-sided limits exist and agree. Third, when
+      the values of f grow without bound near a, write the limit as plus or minus
+      infinity. Fourth, infinity is a notational marker, not a number. Fifth, the line
+      x equals a is a vertical asymptote when at least one of the four one-sided
+      infinite limits holds. Sixth, on a rational function, vertical asymptotes can
+      occur only where the denominator vanishes.
+    timing:
+      lead_in_seconds: 0.2
+      hold_after_seconds: 1.0
+      minimum_duration_seconds: 7.5
+    data:
+      points:
+        - "One-sided limits: approach from \\(x < a\\) or \\(x > a\\) only."
+        - "Two-sided iff both one-sided agree."
+        - "Infinite limit: values grow without bound."
+        - "\\(\\infty\\) is not a real number."
+        - "Vertical asymptote: at least one one-sided limit is infinite."
+        - "Rational asymptotes occur only where the denominator vanishes."
+      identities:
+        - "\\[\\lim_{x \\to a} f(x) = L \\;\\Longleftrightarrow\\; \\lim_{x \\to a^{-}} f(x) = L = \\lim_{x \\to a^{+}} f(x).\\]"
+        - "\\[x = a \\text{ asymptote} \\;\\Longleftrightarrow\\; \\lim_{x \\to a^{\\pm}} f(x) = \\pm\\infty \\text{ for some sign.}\\]"
