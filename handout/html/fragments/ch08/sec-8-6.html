@@ -1,0 +1,258 @@
+<!-- §8.6 Improper Integrals. section-source: Stewart ET 9e §7.8; cross-checked Thomas 14e §8.8,
+     Rogawski 4e §7.7. Authored 2026-07-26 per PLAN-ch08 + brief-8-6 (canon-as-spine;
+     plain-register generation; ③ D7 confirmed proof route + A-02 p≤0 branch). Numbering: mints
+     Definition 8.1 (Type 1), Definition 8.2 (Type 2), Proposition 8.2 (p-test, PROVED),
+     Theorem 8.3 (Comparison Theorem, PROVED — the chapter's theory highlight, mainline tools
+     only: Thm 6.2(3)/(4) monotonicity, Thm 4.1 for the integer-indexed sequence, ⌊t−a⌋
+     bracketing glossed inline; ⌊·⌋ precedent §1.5), Examples 8.27–8.32. Cautions UNNUMBERED
+     (two: principal-value trap; hidden-singularity check).
+     SEAM GUARD (PLAN-ch08 D7 + brief-8-6): split-point independence for (c) justified via
+     additivity Thm 6.2(3), one sentence. Every verdict traces to Def 8.1/8.2, Prop 8.2, or
+     Thm 8.3 — no "obviously converges". Limit tools cited: L'Hôpital Thm 5.5 (s e^{−s});
+     arctan → ±π/2 via §1.2's horizontal-asymptote reading. p-test: p=1 by ln; explicit p≤0
+     sentence (integrand ≥ 1, comparison Thm 6.2(4) on finite intervals). Increasing G sits
+     below its limit: one-line contradiction argument, not assumed. NO absolute/conditional
+     convergence vocab, NO Integral Test statement (one forward clause in the summary — Ch11
+     §11.3 cites Def 8.1 + Prop 8.2 + Thm 8.3; EXPORT contract), NO principal-value name, NO
+     Gabriel's horn.
+     Counters handed to §8.7: Theorem 8.4, Example 8.33; §8.7 mints tags (M)/(T)/(S).
+     Record: PLAN-ch08.md, brief-8-6.md, ch08_ch-direction-codex3-audit.md (D7, A-02).
+     Math verified during authoring; sympy at sweep. -->
+
+<article class="sec" lang="en">
+
+  <header class="sec-head">
+    <h2 class="sec-title"><span class="sec-no">8.6</span>Improper Integrals</h2>
+  </header>
+
+  <!-- expansion:intuition — section opener: the collision (Def 6.2 needs a closed interval + continuous integrand; the symbol has no meaning otherwise) and the one extension move: limits of proper integrals -->
+  <p>Every integral so far has lived on a closed interval \([a, b]\): Definition 6.2 builds its Riemann sums from finitely many slices of a bounded interval, and for the continuous integrands this book evaluates, Theorem 6.1 guarantees the sums converge. Two natural questions leave that setting. What is the area under \(y = 1/x^{2}\) from \(x = 1\) all the way out? And what is the area under \(y = 1/\sqrt{x - 2}\) from \(2\) to \(5\), where the integrand blows up at the left end? In both cases the symbol \(\int\) has, as it stands, no meaning: no Riemann sum machinery applies. But the book already owns a device for questions like these. Truncate to a proper integral, and ask what the truncations approach. For the first region, \(\int_{1}^{t} x^{-2}\,dx = 1 - \tfrac{1}{t}\), and as \(t\) grows these values settle toward \(1\). An endless region can hold a finite area, and a limit is how we say so. This section extends the integral by exactly that move, made twice: once for infinite intervals, once for unbounded integrands.</p>
+
+  <h3 class="subsec-head">Type 1: infinite intervals</h3>
+
+  <section class="env env-definition">
+    <p class="env-head"><span class="env-kicker">Definition</span><span class="env-num">8.1</span><span class="env-name">Improper integral of Type 1</span></p>
+    <div class="env-body">
+      <p>(a) If \(f\) is continuous on \([a, \infty)\), then</p>
+      <p>\[ \int_{a}^{\infty} f(x)\,dx = \lim_{t \to \infty} \int_{a}^{t} f(x)\,dx, \]</p>
+      <p>provided the limit exists as a finite number; the improper integral is then called <em>convergent</em>, and <em>divergent</em> otherwise.</p>
+      <p>(b) If \(f\) is continuous on \((-\infty, b]\), then \(\displaystyle\int_{-\infty}^{b} f(x)\,dx = \lim_{t \to -\infty} \int_{t}^{b} f(x)\,dx\), with the same vocabulary.</p>
+      <p>(c) If \(f\) is continuous on \((-\infty, \infty)\), choose any number \(c\) and set</p>
+      <p>\[ \int_{-\infty}^{\infty} f(x)\,dx = \int_{-\infty}^{c} f(x)\,dx + \int_{c}^{\infty} f(x)\,dx, \]</p>
+      <p>provided <em>both</em> integrals on the right converge.</p>
+    </div>
+  </section>
+
+  <p>The choice of \(c\) in part (c) does not matter: additivity (Theorem 6.2, part 3) shifts any finite stretch between the two halves without changing their sum, so one split point gives a convergent sum exactly when another does, with the same value. Note also what part (c) does <em>not</em> say; see the caution below.</p>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.27</span></p>
+      <div class="env-body">
+        <p>Decide whether each integral converges, and evaluate the convergent one:</p>
+        <p>\[ \text{(a)}\ \int_{1}^{\infty} \frac{dx}{x}, \qquad \text{(b)}\ \int_{1}^{\infty} \frac{dx}{x^{2}}. \]</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>(a) For each \(t &gt; 1\),</p>
+        <p>\[ \int_{1}^{t} \frac{dx}{x} = \Bigl[\ln x\Bigr]_{1}^{t} = \ln t, \]</p>
+        <p>and \(\ln t\) grows without bound as \(t \to \infty\). The limit is not a finite number, so \(\int_{1}^{\infty} \tfrac{dx}{x}\) <em>diverges</em>.</p>
+        <p>(b) For each \(t &gt; 1\),</p>
+        <p>\[ \int_{1}^{t} \frac{dx}{x^{2}} = \Bigl[-\frac{1}{x}\Bigr]_{1}^{t} = 1 - \frac{1}{t} \longrightarrow 1, \]</p>
+        <p>so \(\int_{1}^{\infty} \tfrac{dx}{x^{2}}\) <em>converges</em>, with value \(1\).</p>
+        <p>The two curves look alike: both positive, both decreasing to \(0\). The verdicts differ because the tails thin at different rates. The values of \(1/x^{2}\) decay fast enough that the accumulated area stalls at \(1\); the values of \(1/x\) do not, and the area eventually passes any bound. How fast the integrand decays is the entire question, and the \(p\)-test below makes the boundary exact. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <!-- [FIGURE-OPPORTUNITY] 描述：y = 1/x and y = 1/x² on one axis over [1, ∞), 1/x on top (they meet only at x = 1), the region under each shaded up to a cutoff t with the tail beyond t ghosted — the Ex 8.27 contrast drawn: same shape, different tail thickness, finite vs infinite accumulated area. Domain facts: curves meet exactly at (1,1); 1/x > 1/x² for x > 1; both → 0.
+       類型：graph
+       理由：the section's load-bearing intuition (tail speed decides) in a single picture; essential tier. -->
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.28</span></p>
+      <div class="env-body">
+        <p>Evaluate \(\displaystyle\int_{-\infty}^{\infty} \frac{dx}{1 + x^{2}}\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>By Definition 8.1(c), split at \(c = 0\) and treat each half. For the right half,</p>
+        <p>\[ \int_{0}^{t} \frac{dx}{1 + x^{2}} = \Bigl[\arctan x\Bigr]_{0}^{t} = \arctan t \longrightarrow \frac{\pi}{2}, \]</p>
+        <p>since \(y = \tfrac{\pi}{2}\) is the horizontal asymptote of the arctangent (§1.2). By the symmetric computation, \(\int_{-t}^{0} \to \tfrac{\pi}{2}\) as well. Both halves converge, so the integral converges and</p>
+        <p>\[ \int_{-\infty}^{\infty} \frac{dx}{1 + x^{2}} = \frac{\pi}{2} + \frac{\pi}{2} = \pi. \]</p>
+        <p>An unbounded region whose area is exactly \(\pi\): the curve decays like \(1/x^{2}\) in both directions, fast enough for the \(p\)-test’s convergent side. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <section class="env env-caution">
+    <p class="env-head"><span class="env-kicker">Caution</span></p>
+    <div class="env-body">
+      <p>Definition 8.1(c) requires both halves to converge <em>separately</em>. It is not the same as \(\lim_{t \to \infty}\int_{-t}^{t} f(x)\,dx\), and the difference is not pedantry. For \(f(x) = x\), every symmetric truncation gives \(\int_{-t}^{t} x\,dx = 0\), yet each half of \(\int_{-\infty}^{\infty} x\,dx\) diverges, so the integral diverges. Symmetric cancellation of two infinite areas is not convergence.</p>
+    </div>
+  </section>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.29</span></p>
+      <div class="env-body">
+        <p>Evaluate \(\displaystyle\int_{0}^{\infty} t e^{-t}\,dt\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>On each interval \([0, s]\), integrate by parts (Theorem 8.2) with \(u = t\), \(dv = e^{-t}\,dt\), so \(du = dt\) and \(v = -e^{-t}\):</p>
+        <p>\[ \int_{0}^{s} t e^{-t}\,dt = \Bigl[-t e^{-t}\Bigr]_{0}^{s} + \int_{0}^{s} e^{-t}\,dt = -s e^{-s} + \bigl(1 - e^{-s}\bigr). \]</p>
+        <p>As \(s \to \infty\), the exponential term \(e^{-s} \to 0\), and \(s e^{-s} = s/e^{s}\) is an \(\infty/\infty\) form that L’Hôpital’s Rule (Theorem 5.5) settles: \(s/e^{s} \to 1/e^{s} \to 0\). So the truncations approach \(0 + 1 - 0\), and</p>
+        <p>\[ \int_{0}^{\infty} t e^{-t}\,dt = 1. \]</p>
+        <p>The techniques and the extended definition work in series: parts produced the truncated value, and the limit made sense of the infinite interval. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <h3 class="subsec-head">Type 2: unbounded integrands</h3>
+
+  <p>The second violation keeps the interval finite but lets the integrand blow up at an endpoint. The extension move is the same: truncate short of the bad point, and take a limit.</p>
+
+  <section class="env env-definition">
+    <p class="env-head"><span class="env-kicker">Definition</span><span class="env-num">8.2</span><span class="env-name">Improper integral of Type 2</span></p>
+    <div class="env-body">
+      <p>(a) If \(f\) is continuous on \([a, b)\) and unbounded near \(b\), then</p>
+      <p>\[ \int_{a}^{b} f(x)\,dx = \lim_{t \to b^{-}} \int_{a}^{t} f(x)\,dx, \]</p>
+      <p>provided the limit exists as a finite number; the integral is then <em>convergent</em>, and <em>divergent</em> otherwise.</p>
+      <p>(b) If \(f\) is continuous on \((a, b]\) and unbounded near \(a\), then \(\displaystyle\int_{a}^{b} f(x)\,dx = \lim_{t \to a^{+}} \int_{t}^{b} f(x)\,dx\), with the same vocabulary.</p>
+      <p>(c) If \(f\) is unbounded near an interior point \(c\) of \([a, b]\) and continuous elsewhere on the interval, split there: \(\displaystyle\int_{a}^{b} f(x)\,dx = \int_{a}^{c} f(x)\,dx + \int_{c}^{b} f(x)\,dx\), provided <em>both</em> halves converge.</p>
+    </div>
+  </section>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.30</span></p>
+      <div class="env-body">
+        <p>Decide whether each integral converges, and evaluate where possible:</p>
+        <p>\[ \text{(a)}\ \int_{2}^{5} \frac{dx}{\sqrt{x - 2}}, \qquad \text{(b)}\ \int_{0}^{1} \frac{dx}{x^{p}} \ \text{ for } p &gt; 0. \]</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>(a) The integrand is continuous on \((2, 5]\) and unbounded near \(2\), so Definition 8.2(b) applies. For \(2 &lt; t &lt; 5\),</p>
+        <p>\[ \int_{t}^{5} \frac{dx}{\sqrt{x - 2}} = \Bigl[2\sqrt{x - 2}\Bigr]_{t}^{5} = 2\sqrt{3} - 2\sqrt{t - 2} \longrightarrow 2\sqrt{3} \]</p>
+        <p>as \(t \to 2^{+}\). The integral converges to \(2\sqrt{3}\): the spike at \(x = 2\) is tall but thin enough.</p>
+        <p>(b) For \(p \ne 1\) and \(0 &lt; t &lt; 1\),</p>
+        <p>\[ \int_{t}^{1} x^{-p}\,dx = \frac{1 - t^{1 - p}}{1 - p}. \]</p>
+        <p>If \(p &lt; 1\), then \(t^{1-p} \to 0\) as \(t \to 0^{+}\), and the integral converges to \(\tfrac{1}{1 - p}\). If \(p &gt; 1\), then \(t^{1-p}\) grows without bound and the integral diverges; for \(p = 1\), \(\int_{t}^{1} \tfrac{dx}{x} = -\ln t\) also grows without bound. So \(\int_{0}^{1} x^{-p}\,dx\) converges exactly when \(p &lt; 1\). This is the mirror image of the \(p\)-test proved below: at \(0\) the mild powers converge, at \(\infty\) the steep ones do, and \(p = 1\) fails at both ends. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <!-- [FIGURE-OPPORTUNITY] 描述：region under y = 1/√(x−2) on (2,5], vertical asymptote x = 2 dashed red, the truncated region from t to 5 shaded solid and the sliver from 2 to t hatched — Def 8.2(b)'s truncation drawn. Domain facts: curve passes through (3,1) and (5,1/√3); unbounded as x→2⁺; nothing drawn AT x=2 (undefined).
+       類型：graph
+       理由：makes "tall but thin enough" visible and shows exactly what the limit is over; supporting tier. -->
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.31</span></p>
+      <div class="env-body">
+        <p>What is wrong with the computation \(\displaystyle\int_{-1}^{3} \frac{dx}{x^{2}} = \Bigl[-\frac{1}{x}\Bigr]_{-1}^{3} = -\frac{1}{3} - 1 = -\frac{4}{3}\)?</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>The answer refutes itself: the integrand is positive, and a definite integral of a positive function cannot be negative (Theorem 6.2, part 4). The error is upstream. The Fundamental Theorem applies to integrands continuous on the whole interval, and \(1/x^{2}\) is unbounded near the interior point \(0\). The integral is improper, and Definition 8.2(c) requires splitting there:</p>
+        <p>\[ \int_{-1}^{3} \frac{dx}{x^{2}} = \int_{-1}^{0} \frac{dx}{x^{2}} + \int_{0}^{3} \frac{dx}{x^{2}}, \]</p>
+        <p>provided both halves converge. They do not: near \(0\) the integrand is a \(p = 2\) power, and by the computation of Example 8.30(b), read on the interval \((0, 3]\), the right half diverges. So \(\int_{-1}^{3} x^{-2}\,dx\) diverges, and the number \(-\tfrac{4}{3}\) was meaningless. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <section class="env env-caution">
+    <p class="env-head"><span class="env-kicker">Caution</span></p>
+    <div class="env-body">
+      <p>Before applying the Fundamental Theorem on \([a, b]\), check the whole interval for points where the integrand is undefined or unbounded. A singularity in the interior does not announce itself in the limits of integration, and integrating across it, as in Example 8.31, produces a definite-looking number with no meaning. If a singularity is found, split there and test each piece by Definition 8.2.</p>
+    </div>
+  </section>
+
+  <h3 class="subsec-head">The \(p\)-test and the Comparison Theorem</h3>
+
+  <p>Example 8.27’s contrast deserves its exact boundary. The family \(\int_{1}^{\infty} x^{-p}\,dx\) sorts by the exponent, and the result is used often enough to record permanently.</p>
+
+  <section class="env env-proposition">
+    <p class="env-head"><span class="env-kicker">Proposition</span><span class="env-num">8.2</span><span class="env-name">The \(p\)-test</span></p>
+    <div class="env-body">
+      <p>The improper integral</p>
+      <p>\[ \int_{1}^{\infty} \frac{dx}{x^{p}} \]</p>
+      <p>converges if \(p &gt; 1\), with value \(\dfrac{1}{p - 1}\), and diverges if \(p \le 1\).</p>
+    </div>
+  </section>
+
+  <section class="env env-proof">
+    <p class="env-head"><span class="env-kicker">Proof</span></p>
+    <div class="env-body">
+      <p>For \(p \ne 1\), the power rule gives, for \(t &gt; 1\),</p>
+      <p>\[ \int_{1}^{t} x^{-p}\,dx = \frac{t^{1 - p} - 1}{1 - p}. \]</p>
+      <p>If \(p &gt; 1\), the exponent \(1 - p\) is negative, so \(t^{1-p} \to 0\) and the truncations approach \(\tfrac{-1}{1 - p} = \tfrac{1}{p - 1}\): convergence, with the stated value. If \(p &lt; 1\), the exponent is positive, \(t^{1-p}\) grows without bound, and the integral diverges. This already covers \(p \le 0\), where the integrand does not even tend to \(0\): there \(x^{-p} \ge 1\) on \([1, \infty)\), so \(\int_{1}^{t} x^{-p}\,dx \ge t - 1\) by comparison (Theorem 6.2, part 4), and divergence is direct. Finally, for \(p = 1\), Example 8.27(a) showed the truncations equal \(\ln t\), which grows without bound. <span class="qed qed-proof"></span></p>
+    </div>
+  </section>
+
+  <p>The last tool answers a question the \(p\)-test cannot. Section 8.5 met \(\int e^{-x^{2}}\,dx\), an integrand with no antiderivative among our functions, so no truncation can be evaluated in closed form and the definition cannot be applied directly. Yet convergence is a question about <em>size</em>, not about formulas. If a positive integrand sits below one whose improper integral converges, its accumulated area is trapped below a finite ceiling, and it should have nowhere to go but a limit. The next theorem makes that argument honest, and its proof is the section’s one genuinely theoretical moment: everything comes from machinery the book already owns.</p>
+
+  <section class="env env-theorem">
+    <p class="env-head"><span class="env-kicker">Theorem</span><span class="env-num">8.3</span><span class="env-name">Comparison Theorem for Improper Integrals</span></p>
+    <div class="env-body">
+      <p>Let \(f\) and \(g\) be continuous with \(0 \le f(x) \le g(x)\) for \(x \ge a\).</p>
+      <p>(a) If \(\displaystyle\int_{a}^{\infty} g(x)\,dx\) converges, then \(\displaystyle\int_{a}^{\infty} f(x)\,dx\) converges, and its value is at most \(\displaystyle\int_{a}^{\infty} g(x)\,dx\).</p>
+      <p>(b) If \(\displaystyle\int_{a}^{\infty} f(x)\,dx\) diverges, then \(\displaystyle\int_{a}^{\infty} g(x)\,dx\) diverges.</p>
+    </div>
+  </section>
+
+  <section class="env env-proof">
+    <p class="env-head"><span class="env-kicker">Proof</span></p>
+    <div class="env-body">
+      <p>(a) Write \(F(t) = \int_{a}^{t} f(x)\,dx\) and \(G(t) = \int_{a}^{t} g(x)\,dx\), and let \(M = \int_{a}^{\infty} g(x)\,dx\), the finite limit assumed to exist. Three observations set up the argument.</p>
+      <p>First, \(F\) is increasing: for \(t' &gt; t\), additivity (Theorem 6.2, part 3) gives \(F(t') - F(t) = \int_{t}^{t'} f(x)\,dx \ge 0\), since \(f \ge 0\) (Theorem 6.2, part 4). The same reasoning makes \(G\) increasing.</p>
+      <p>Second, \(G(t) \le M\) for every \(t\). An increasing function cannot overshoot its own limit: if some \(G(t_{0})\) exceeded \(M\), then every later \(G(t)\) would be at least \(G(t_{0})\), and the values could not approach \(M\).</p>
+      <p>Third, \(F(t) \le G(t)\) for every \(t\), by comparison on \([a, t]\) (Theorem 6.2, part 4). Combining: \(F\) is increasing and \(F(t) \le M\) for all \(t \ge a\).</p>
+      <p>Now sample \(F\) along the integers. The numbers \(F(a + n)\), for \(n = 1, 2, 3, \dots\), form an increasing sequence bounded above by \(M\), so by the monotone convergence theorem (Theorem 4.1) they converge to some limit \(L \le M\), and, being increasing with limit \(L\), each \(F(a + n) \le L\).</p>
+      <p>Finally, the sampled limit controls the whole function. Given any \(t \ge a + 1\), let \(n\) be the greatest integer not exceeding \(t - a\), so that \(a + n \le t &lt; a + n + 1\). Since \(F\) is increasing,</p>
+      <p>\[ F(a + n) \;\le\; F(t) \;\le\; F(a + n + 1) \;\le\; L. \]</p>
+      <p>As \(t \to \infty\), the index \(n\) grows with it, and \(F(a + n)\) approaches \(L\). Every value \(F(t)\) is thus squeezed between numbers that approach \(L\) and the ceiling \(L\) itself, so \(F(t) \to L\). By Definition 8.1, \(\int_{a}^{\infty} f(x)\,dx\) converges, with value \(L \le M\).</p>
+      <p>(b) This is the contrapositive of (a): if \(\int_{a}^{\infty} g\) converged, then (a) would force \(\int_{a}^{\infty} f\) to converge as well. <span class="qed qed-proof"></span></p>
+    </div>
+  </section>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.32</span></p>
+      <div class="env-body">
+        <p>Show that \(\displaystyle\int_{1}^{\infty} e^{-x^{2}}\,dx\) converges.</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>For \(x \ge 1\) we have \(x^{2} \ge x\), so \(-x^{2} \le -x\), and since the exponential function is increasing, \(0 &lt; e^{-x^{2}} \le e^{-x}\). The larger integrand’s integral converges by direct computation:</p>
+        <p>\[ \int_{1}^{t} e^{-x}\,dx = e^{-1} - e^{-t} \longrightarrow \frac{1}{e}. \]</p>
+        <p>By the Comparison Theorem (Theorem 8.3(a)), \(\int_{1}^{\infty} e^{-x^{2}}\,dx\) converges, with value at most \(\tfrac{1}{e}\). Over \([0, \infty)\) the conclusion extends at once, since \(\int_{0}^{1} e^{-x^{2}}\,dx\) is an ordinary proper integral: the full integral \(\int_{0}^{\infty} e^{-x^{2}}\,dx\) converges too.</p>
+        <p>This closes the loop opened in §8.5. No formula for the antiderivative exists among our functions, yet the improper integral is a definite finite number, pinned down without ever being evaluated. Section 8.7 is about computing such numbers. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <!-- [FIGURE-OPPORTUNITY] 描述：e^{−x} above e^{−x²} on [1, ∞), both decaying, region under the upper curve lightly shaded (finite area 1/e labeled in caption, not on the figure), region under the lower curve darker — the trapping picture of Thm 8.3(a). Domain facts: curves MEET at x = 1 (e^{−1} each) and separate immediately after; e^{−x} on top for x > 1; both → 0 fast.
+       類型：graph
+       理由：comparison is an area-trapping statement; one picture says "below a finite roof". Supporting tier. -->
+
+  <p>Mixed cases reduce to the two types. An integral such as \(\int_{0}^{\infty} \tfrac{dx}{\sqrt{x}(1 + x)}\) is improper twice, at the endpoint \(0\) and along the infinite tail; split it at any interior point, say \(1\), and require each piece to converge by its own definition. In every case the discipline is the same: locate each source of impropriety, isolate it at one end of one integral, and apply the matching definition or the Comparison Theorem.</p>
+
+  <!-- expansion:summary — close §8.6: the extension move + the two tools; forward clause = Ch11 §11.3 export contract; forward to §8.7 -->
+  <p>This section widened the integral without touching its foundations: an improper integral is a limit of proper ones, and <em>convergent</em> is a verdict about that limit. Definitions 8.1 and 8.2 cover the infinite interval and the unbounded integrand, the \(p\)-test (Proposition 8.2) marks the exact boundary between thick and thin tails, and the Comparison Theorem (Theorem 8.3), proved with the monotone-sequence principle of Chapter 4, delivers verdicts when no antiderivative is available. These three results have a second career ahead of them: Chapter 11’s Integral Test for infinite series is built directly on them. What this section does not do is produce numbers for integrals like \(\int_{1}^{\infty} e^{-x^{2}}\,dx\); it only certifies that the numbers exist. Producing them, to any stated accuracy, is the business of the chapter’s final section.</p>
+
+</article>

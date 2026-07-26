@@ -1,0 +1,135 @@
+<!-- §8.5 Strategy for Integration. section-source: Stewart ET 9e §7.5; cross-checked Thomas 14e
+     §8.6 intro, Rogawski 4e Ch7 framing. Authored 2026-07-26 per PLAN-ch08 + brief-8-5
+     (canon-as-spine; plain-register generation; ③ B-02 form for the elementary-antiderivative
+     paragraph — SCOPE statement only, no Liouville credit; the chapter's credit count stays at
+     two, both elsewhere). Numbering: mints Strategy 8.6, Examples 8.23–8.26. NO Def/Thm/Prop;
+     NO cautions (traps live with their techniques).
+     SEAM GUARD (PLAN-ch08 §8.5 guard + brief-8-5): the strategy box CITES each technique's home
+     (Strategies 8.1–8.5, §6.5), never restates mechanics. Table of standard forms lists ONLY
+     established results, provenance in parentheses (§6.4 table / Prop 8.1 / (8.A) / scaled
+     arcsin verified inline via Ex 3.14 + chain rule Thm 3.3). Solutions may compress standard
+     sub-steps with a cross-ref (recognition is the taught skill — altitude note for auditors).
+     Forward sentences: §8.6 (convergence of ∫e^{-x²} improper) + §8.7 (numerics). Nameless
+     one-clause nod to further conversions (NO Weierstrass name/formula).
+     Counters handed to §8.6: Definition 8.1, Definition 8.2, Proposition 8.2, Theorem 8.3,
+     Example 8.27.
+     Record: PLAN-ch08.md, brief-8-5.md, ch08_ch-direction-codex3-audit.md (B-02). -->
+
+<article class="sec" lang="en">
+
+  <header class="sec-head">
+    <h2 class="sec-title"><span class="sec-no">8.5</span>Strategy for Integration</h2>
+  </header>
+
+  <!-- expansion:intuition — section opener: the collision (four look-alike integrals, four different tools) reframes the chapter's question from "how does each technique work" to "which technique fits" -->
+  <p>Each section so far answered the question “how does this technique work”. Practice asks a different question. An integral arrives unlabeled, and the work is to decide which tool fits, before any tool is applied. The four integrals</p>
+  <p>\[ \int \frac{\tan^{3}x}{\cos^{3}x}\,dx, \qquad \int e^{\sqrt{x}}\,dx, \qquad \int \frac{dx}{x\sqrt{\ln x}}, \qquad \int \sqrt{\frac{1 - x}{1 + x}}\,dx \]</p>
+  <p>look like near relatives: each is a small expression with one awkward feature. They dispatch to four different tools, and none of them is solved by the tool its surface suggests first. Reading form is a skill of its own. It costs seconds, it tolerates failure, and this section trains it.</p>
+
+  <section class="env env-strategy">
+    <p class="env-head"><span class="env-kicker">Strategy</span><span class="env-num">8.6</span><span class="env-name">A four-step strategy</span></p>
+    <div class="env-body">
+      <ol class="steps">
+        <li><em>Simplify the integrand first.</em> Algebra and identities can change the problem’s class entirely: expand or split fractions, rationalize, apply a trigonometric identity. Only then judge what kind of integral it is.</li>
+        <li><em>Look for an obvious substitution.</em> If some inner block \(g(x)\) appears together with its derivative, up to a constant, take \(u = g(x)\) (Strategy 6.2) and finish before reaching for anything heavier.</li>
+        <li><em>Classify by form and dispatch.</em> Powers or products of trigonometric functions go to Strategies 8.2 and 8.3. A radical over a quadratic goes to Strategy 8.4, completing the square first when the quadratic is not centered. A rational function goes to Strategy 8.5. A product of unrelated factors, or a lone logarithm or inverse function, goes to parts by Strategy 8.1.</li>
+        <li><em>If nothing has worked, try again from another angle.</em> Manipulate the integrand into a relative of a known integral, substitute to expose hidden structure, or chain techniques in sequence, as Examples 8.22 and 8.24 do. Several routes may succeed on the same integral; a dead end costs only the time it took.</li>
+      </ol>
+    </div>
+  </section>
+
+  <p>Step 3 leans on a stock of antiderivatives that can be recognized on sight. One scaled form joins the list first: differentiating \(\arcsin\tfrac{x}{a}\) by the chain rule (Theorem 3.3) and Example 3.14 gives \(\tfrac{1}{\sqrt{a^{2} - x^{2}}}\), so \(\int\tfrac{dx}{\sqrt{a^{2} - x^{2}}} = \arcsin\tfrac{x}{a} + C\) for \(a &gt; 0\) on \((-a, a)\). The working table, with each entry’s home in parentheses:</p>
+
+  <p>\[ \begin{aligned}
+    &\int x^{n}\,dx = \frac{x^{n+1}}{n+1} + C \;(n \ne -1), \qquad \int \frac{dx}{x} = \ln\lvert x\rvert + C \quad(\text{§6.4}), \\[2pt]
+    &\int e^{x}\,dx = e^{x} + C, \qquad \int \sin x\,dx = -\cos x + C \quad(\text{§6.4}), \\[2pt]
+    &\int \cos x\,dx = \sin x + C, \qquad \int \sec^{2}x\,dx = \tan x + C \quad(\text{§6.4}), \\[2pt]
+    &\int \tan x\,dx = \ln\lvert\sec x\rvert + C \quad(\text{Prop.\ 8.1}), \\[2pt]
+    &\int \sec x\,dx = \ln\lvert\sec x + \tan x\rvert + C \quad(\text{Prop.\ 8.1}), \\[2pt]
+    &\int \frac{dx}{x^{2} + a^{2}} = \frac{1}{a}\arctan\frac{x}{a} + C \quad(\text{8.A}), \\[2pt]
+    &\int \frac{dx}{\sqrt{a^{2} - x^{2}}} = \arcsin\frac{x}{a} + C \quad(\text{above}).
+  \end{aligned} \]</p>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.23</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int \frac{\tan^{3}x}{\cos^{3}x}\,dx\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>Step 1: since \(\tfrac{1}{\cos x} = \sec x\), the integrand is \(\tan^{3}x\,\sec^{3}x\), a tangent–secant power. Step 3 dispatches it to Strategy 8.3: the power of tangent is odd, so save a factor of \(\sec x\tan x\) and convert the remaining tangents by \(\tan^{2}x = \sec^{2}x - 1\):</p>
+        <p>\[ \int \tan^{3}x\,\sec^{3}x\,dx = \int \bigl(\sec^{2}x - 1\bigr)\sec^{2}x\;\sec x\tan x\,dx. \]</p>
+        <p>With \(u = \sec x\), \(du = \sec x\tan x\,dx\), this is \(\int(u^{4} - u^{2})\,du\), so</p>
+        <p>\[ \int \frac{\tan^{3}x}{\cos^{3}x}\,dx = \frac{\sec^{5}x}{5} - \frac{\sec^{3}x}{3} + C. \]</p>
+        <p>The only decision was the rewrite in step 1; after it, the §8.2 machinery finished the integral with no further choices. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.24</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int e^{\sqrt{x}}\,dx\) for \(x &gt; 0\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>No product, no trigonometry, no rational structure. The awkward feature is the radical in the exponent, and step 4’s advice is to substitute it away even though \(du\) is nowhere in sight. Let \(u = \sqrt{x}\), so \(x = u^{2}\) and \(dx = 2u\,du\):</p>
+        <p>\[ \int e^{\sqrt{x}}\,dx = \int e^{u}\,2u\,du = 2\int u\,e^{u}\,du. \]</p>
+        <p>The substitution has manufactured a product of unrelated factors, which is parts territory. As in Example 8.3, \(\int u e^{u}\,du = (u - 1)e^{u} + C\), so</p>
+        <p>\[ \int e^{\sqrt{x}}\,dx = 2\bigl(\sqrt{x} - 1\bigr)e^{\sqrt{x}} + C. \]</p>
+        <p>Two techniques chained: a substitution to normalize the exponent, then parts to clear the leftover factor. Neither alone finishes the integral. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.25</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int \frac{dx}{x\sqrt{\ln x}}\) for \(x &gt; 1\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>Step 2 settles this one before any classification: the factor \(\tfrac{dx}{x}\) is exactly the derivative of \(\ln x\), so \(u = \ln x\) is the obvious substitution, with \(u &gt; 0\) on the stated domain:</p>
+        <p>\[ \int \frac{dx}{x\sqrt{\ln x}} = \int u^{-1/2}\,du = 2\sqrt{u} + C = 2\sqrt{\ln x} + C. \]</p>
+        <p>An integrand that looks exotic can be two lines long. Checking for the visible \(du\) first is what keeps the heavier tools in reserve. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.26</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int \sqrt{\frac{1 - x}{1 + x}}\,dx\) on \((-1, 1)\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>A rationalizing substitution in the style of Example 8.22 would work, but step 1 offers something faster. Multiply inside the root by \(\tfrac{1 - x}{1 - x}\):</p>
+        <p>\[ \sqrt{\frac{1 - x}{1 + x}} = \sqrt{\frac{(1 - x)^{2}}{1 - x^{2}}} = \frac{1 - x}{\sqrt{1 - x^{2}}}, \]</p>
+        <p>where dropping the absolute value is justified because \(1 - x &gt; 0\) on \((-1, 1)\). The integrand splits into two table entries:</p>
+        <p>\[ \int \frac{dx}{\sqrt{1 - x^{2}}} - \int \frac{x}{\sqrt{1 - x^{2}}}\,dx = \arcsin x + \sqrt{1 - x^{2}} + C, \]</p>
+        <p>the first from the table above with \(a = 1\), the second by the substitution \(w = 1 - x^{2}\), \(dw = -2x\,dx\). One algebraic move changed the problem’s class from “radical of a ratio” to “two standard forms”. That is what step 1 is for. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <h3 class="subsec-head">The limits of the toolkit</h3>
+
+  <!-- expansion:intuition [source: ③ B-02 adjudicated form — scope statement, no nonexistence claim, no Liouville credit; forward hooks to §8.6/§8.7] -->
+  <p>A fair question after five sections of techniques: does every integrand now yield? Try the innocent-looking \(\int e^{-x^{2}}\,dx\). It is not a product, no substitution exposes an inner derivative, it is neither trigonometric nor rational, and no rewriting in this chapter changes that. None of the techniques of this book produces an antiderivative for it built from the functions we have named. Whether <em>any</em> formula of that kind exists is a question this book does not take up; what matters here is practical, and it is twofold. First, antiderivatives are not the only way to a definite integral: the next section shows that \(\int_{1}^{\infty} e^{-x^{2}}\,dx\) is a perfectly well-defined finite number even without a formula for its antiderivative. Second, when a number is what we need, §8.7’s rules compute it to any stated accuracy. The toolkit’s boundary is real, and the chapter’s last two sections are what lie on the far side of it. There are further systematic conversions beyond this book’s needs, including one that turns any rational expression in \(\sin x\) and \(\cos x\) into an ordinary rational function; the four steps above are enough for everything this book asks.</p>
+
+  <!-- expansion:summary — close §8.5: the classification skill; forward to §8.6 with no mechanics -->
+  <p>The strategy is short because the work has already been done: simplify, check for a visible substitution, classify, and dispatch to the section that owns the form, chaining techniques when one hands off to another. The four examples each turned on the step named in their solutions, not on new machinery. What follows next is not another technique but a widening of the integral itself, to infinite intervals and unbounded integrands, where the first question is no longer “which tool” but “does this integral mean anything at all”.</p>
+
+</article>

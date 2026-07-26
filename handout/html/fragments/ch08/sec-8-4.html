@@ -1,0 +1,207 @@
+<!-- §8.4 Integration of Rational Functions by Partial Fractions. section-source: Stewart ET 9e
+     §7.4; cross-checked Thomas 14e §8.5, Rogawski 4e §7.5. Authored 2026-07-26 per PLAN-ch08 +
+     brief-8-4 (canon-as-spine; plain-register generation). Numbering: mints Strategy 8.5,
+     Examples 8.17–8.22, equation tag (8.A). NO Def/Thm/Prop. Cautions UNNUMBERED (two: FTA
+     on-credit fence — SPEC §16.1 unnumbered-Caution vehicle, Ch2 §2.4 precedent, the chapter's
+     FIRST of two credits; irreducibility check p²<4q).
+     SEAM GUARD (PLAN-ch08 D6 + brief-8-4): the ALGEBRA layer is §A.4's — Prop A.7 (decomposition
+     form) + Strategy A.2 (finding constants, incl. cover-up) are imported by cross-ref + one-line
+     recall, NOT re-taught; this section's center of mass is the INTEGRATION of the fragments.
+     (8.A) derived via u = x/a + §6.4's table row ∫du/(1+u²) = arctan u. ln|x−r| cites §6.4's
+     ln|x| export. Completing the square cites §A.5's closing identity (its "Chapter 8" promise
+     discharged in Ex 8.21 — say so). Case IV: form covered by Prop A.7 + one prose sentence, NO
+     worked example (recorded). Rationalizing substitution (Ex 8.22) frames technique chaining.
+     Counters handed to §8.5: Strategy 8.6, Example 8.23 (no other types minted in §8.5).
+     Record: PLAN-ch08.md, brief-8-4.md. Math verified during authoring; sympy at sweep. -->
+
+<article class="sec" lang="en">
+
+  <header class="sec-head">
+    <h2 class="sec-title"><span class="sec-no">8.4</span>Integration of Rational Functions by Partial Fractions</h2>
+  </header>
+
+  <!-- expansion:intuition — section opener: opaque-as-a-whole, transparent-in-fragments; §A.4's banked promise is kept here -->
+  <p>A rational function, a ratio of polynomials, matches nothing in the chapter so far. The integrand \(\dfrac{2x^{2} - x + 4}{x^{3} + 4x}\) offers no product to trade by parts, no trigonometry, and no radical. Yet the smallest rational integrand of all is easy, because §A.4 opened with the identity</p>
+  <p>\[ \frac{1}{x(x + 1)} = \frac{1}{x} - \frac{1}{x + 1}, \]</p>
+  <p>and each piece on the right integrates on sight, to \(\ln\lvert x\rvert - \ln\lvert x + 1\rvert + C\) by §6.4. Appendix A.4 built the whole algebra of such splittings and remarked that its real payoff would come in integration. This section collects that payoff. Every proper rational function is a sum of fragments of a few standard shapes (Proposition A.7), the constants are found by the routine of Strategy A.2, and each fragment shape has a standard antiderivative. Rational integrands, unlike most others, always yield.</p>
+
+  <p>The claim “every proper rational function” rests on one algebraic fact that this book states but does not prove.</p>
+
+  <!-- expansion:caution [source: SPEC §16.1 on-credit fence, unnumbered-Caution vehicle (Ch2 §2.4 precedent); ROADMAP seam-hunt premise "實多項式因式分解 (FTA fact)" — the chapter's first of two credits] -->
+  <section class="env env-caution">
+    <p class="env-head"><span class="env-kicker">Caution</span></p>
+    <div class="env-body">
+      <p>Proposition A.7 begins by factoring the denominator completely into linear and irreducible quadratic factors. That such a factorization always exists is a consequence of the Fundamental Theorem of Algebra, whose proof lies outside this book. We take the factorization fact on credit; it is the first of two results this chapter borrows without proof, and everything else in the section is proved or computed in full.</p>
+    </div>
+  </section>
+
+  <p>One small antiderivative is needed before the fragments can be listed, the scaled version of §6.4’s arctangent row. For \(a &gt; 0\), substitute \(u = x/a\), \(du = dx/a\), in the table entry \(\int\frac{du}{1 + u^{2}} = \arctan u + C\):</p>
+  <p>\[ \int \frac{dx}{x^{2} + a^{2}} = \frac{1}{a^{2}}\int \frac{a\,du}{1 + u^{2}} = \frac{1}{a}\arctan\frac{x}{a} + C. \tag{8.A} \]</p>
+
+  <p>With (8.A) in hand, every fragment shape that Proposition A.7 can produce has a known antiderivative. A constant over a linear factor gives a logarithm, \(\int\frac{A}{x - r}\,dx = A\ln\lvert x - r\rvert + C\). A constant over a power of a linear factor is the power rule, \(\int\frac{A}{(x - r)^{k}}\,dx = \frac{-A}{(k - 1)(x - r)^{k - 1}} + C\) for \(k \ge 2\). A linear numerator over an irreducible quadratic splits in two: a multiple of the quadratic’s derivative, giving a logarithm of the quadratic, plus a constant piece that (8.A) handles once the square is completed. The examples run each shape in turn; the strategy box states the pipeline.</p>
+
+  <section class="env env-strategy">
+    <p class="env-head"><span class="env-kicker">Strategy</span><span class="env-num">8.5</span><span class="env-name">Integrating a rational function</span></p>
+    <div class="env-body">
+      <ol class="steps">
+        <li><em>If the fraction is improper, divide first.</em> Numerator degree at or above denominator degree means polynomial division, leaving a polynomial plus a proper remainder fraction (Strategy A.2, step 1). The polynomial integrates term by term.</li>
+        <li><em>Factor the denominator completely</em> into linear and irreducible quadratic factors. A quadratic \(x^{2} + px + q\) is irreducible exactly when \(p^{2} &lt; 4q\).</li>
+        <li><em>Decompose.</em> Write the template of Proposition A.7 and find the constants by Strategy A.2. The cover-up shortcut reaches the constant over each distinct linear factor at once.</li>
+        <li><em>Integrate fragment by fragment:</em> logarithms from linear factors, the power rule from their powers, and a logarithm plus an arctangent, via completing the square (§A.5) and (8.A), from each irreducible quadratic.</li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.17</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int \frac{x^{3} + x}{x - 1}\,dx\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>The numerator’s degree exceeds the denominator’s, so step 1 applies before anything else. Polynomial division gives</p>
+        <p>\[ \frac{x^{3} + x}{x - 1} = x^{2} + x + 2 + \frac{2}{x - 1}, \]</p>
+        <p>which recombining over the common denominator confirms. Now every piece is standard:</p>
+        <p>\[ \int \frac{x^{3} + x}{x - 1}\,dx = \frac{x^{3}}{3} + \frac{x^{2}}{2} + 2x + 2\ln\lvert x - 1\rvert + C, \]</p>
+        <p>on any interval avoiding \(x = 1\). The division step is not optional. No sum of terms \(\frac{A}{x-1}\) alone could reproduce a numerator that outgrows its denominator, which is the point of §A.4’s closing caution. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.18</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int \frac{x^{2} + 2x - 1}{2x^{3} + 3x^{2} - 2x}\,dx\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>The fraction is proper, so factoring comes first: \(2x^{3} + 3x^{2} - 2x = x(2x^{2} + 3x - 2) = x(2x - 1)(x + 2)\), three distinct linear factors. Proposition A.7’s template reads</p>
+        <p>\[ \frac{x^{2} + 2x - 1}{x(2x - 1)(x + 2)} = \frac{A}{x} + \frac{B}{2x - 1} + \frac{C}{x + 2}. \]</p>
+        <p>Clearing denominators,</p>
+        <p>\[ x^{2} + 2x - 1 = A(2x - 1)(x + 2) + Bx(x + 2) + Cx(2x - 1), \]</p>
+        <p>and the cover-up shortcut of Strategy A.2 evaluates at each factor’s root. Setting \(x = 0\) gives \(-1 = -2A\), so \(A = \tfrac{1}{2}\). Setting \(x = \tfrac{1}{2}\) gives \(\tfrac{1}{4} = \tfrac{5}{4}B\), so \(B = \tfrac{1}{5}\). Setting \(x = -2\) gives \(-1 = 10C\), so \(C = -\tfrac{1}{10}\). Each fragment is a logarithm; for the middle one, the inner substitution \(u = 2x - 1\) contributes the factor \(\tfrac{1}{2}\):</p>
+        <p>\[ \int \frac{x^{2} + 2x - 1}{2x^{3} + 3x^{2} - 2x}\,dx = \frac{1}{2}\ln\lvert x\rvert + \frac{1}{10}\ln\lvert 2x - 1\rvert - \frac{1}{10}\ln\lvert x + 2\rvert + C, \]</p>
+        <p>on any interval avoiding \(0\), \(\tfrac{1}{2}\), and \(-2\). <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.19</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int \frac{x^{4} - 2x^{2} + 4x + 1}{x^{3} - x^{2} - x + 1}\,dx\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>Improper again, so divide: the quotient is \(x + 1\) with remainder \(4x\), so</p>
+        <p>\[ \frac{x^{4} - 2x^{2} + 4x + 1}{x^{3} - x^{2} - x + 1} = x + 1 + \frac{4x}{x^{3} - x^{2} - x + 1}. \]</p>
+        <p>Factoring by grouping, \(x^{3} - x^{2} - x + 1 = x^{2}(x - 1) - (x - 1) = (x - 1)(x^{2} - 1) = (x - 1)^{2}(x + 1)\): a repeated linear factor. The template carries one fragment per power:</p>
+        <p>\[ \frac{4x}{(x - 1)^{2}(x + 1)} = \frac{A}{x - 1} + \frac{B}{(x - 1)^{2}} + \frac{C}{x + 1}. \]</p>
+        <p>Clearing denominators, \(4x = A(x - 1)(x + 1) + B(x + 1) + C(x - 1)^{2}\). Setting \(x = 1\) gives \(4 = 2B\), so \(B = 2\). Setting \(x = -1\) gives \(-4 = 4C\), so \(C = -1\). The cover-up has reached its limit, as Strategy A.2 warns for repeated factors, so match the \(x^{2}\) coefficients: \(0 = A + C\), so \(A = 1\). Integrating fragment by fragment, with the power rule on the middle one,</p>
+        <p>\[ \begin{aligned}
+          \int \frac{x^{4} - 2x^{2} + 4x + 1}{x^{3} - x^{2} - x + 1}\,dx &= \frac{x^{2}}{2} + x + \ln\lvert x - 1\rvert \\
+            &\quad - \frac{2}{x - 1} - \ln\lvert x + 1\rvert + C,
+        \end{aligned} \]</p>
+        <p>on any interval avoiding \(\pm 1\). <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.20</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int \frac{2x^{2} - x + 4}{x^{3} + 4x}\,dx\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>The denominator factors as \(x(x^{2} + 4)\). The quadratic has \(p = 0\) and \(q = 4\), so \(p^{2} &lt; 4q\) and it is irreducible; by Proposition A.7 it carries a linear numerator:</p>
+        <p>\[ \frac{2x^{2} - x + 4}{x(x^{2} + 4)} = \frac{A}{x} + \frac{Bx + C}{x^{2} + 4}. \]</p>
+        <p>Clearing denominators, \(2x^{2} - x + 4 = A(x^{2} + 4) + (Bx + C)x\). The constant term gives \(4 = 4A\), so \(A = 1\); the \(x^{2}\) coefficient gives \(2 = A + B\), so \(B = 1\); the \(x\) coefficient gives \(C = -1\). The quadratic fragment splits into its two standard pieces:</p>
+        <p>\[ \begin{aligned}
+          \int \frac{x - 1}{x^{2} + 4}\,dx &= \frac{1}{2}\int \frac{2x}{x^{2} + 4}\,dx - \int \frac{dx}{x^{2} + 4} \\[2pt]
+            &= \frac{1}{2}\ln\bigl(x^{2} + 4\bigr) - \frac{1}{2}\arctan\frac{x}{2} + C,
+        \end{aligned} \]</p>
+        <p>the first by the substitution \(u = x^{2} + 4\) and the second by (8.A) with \(a = 2\). No absolute value is needed on \(x^{2} + 4\), which is positive for every \(x\). Assembling,</p>
+        <p>\[ \int \frac{2x^{2} - x + 4}{x^{3} + 4x}\,dx = \ln\lvert x\rvert + \frac{1}{2}\ln\bigl(x^{2} + 4\bigr) - \frac{1}{2}\arctan\frac{x}{2} + C, \]</p>
+        <p>on any interval avoiding \(0\). <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <section class="env env-caution">
+    <p class="env-head"><span class="env-kicker">Caution</span></p>
+    <div class="env-body">
+      <p>Check irreducibility before assigning the \(Bx + C\) template: \(x^{2} + px + q\) is irreducible exactly when \(p^{2} &lt; 4q\). A quadratic that looks unfactorable often is not. The factor \(x^{2} - x - 6\) splits as \((x - 3)(x + 2)\), and treating it as irreducible sends the whole decomposition down the wrong template. When in doubt, compute the discriminant first.</p>
+    </div>
+  </section>
+
+  <p>A repeated irreducible quadratic, the last case of Proposition A.7, adds no new integration idea: each power \(\frac{Bx + C}{(x^{2} + px + q)^{k}}\) again splits into a derivative-of-the-quadratic piece and a constant piece, and the constant pieces are handled by completing the square and a short reduction. The bookkeeping is longer, the shapes are the same, and this book leaves that case as stated.</p>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.21</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int \frac{4x^{2} - 3x + 2}{4x^{2} - 4x + 3}\,dx\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>The degrees are equal, so this fraction is improper and step 1 applies. Dividing,</p>
+        <p>\[ \frac{4x^{2} - 3x + 2}{4x^{2} - 4x + 3} = 1 + \frac{x - 1}{4x^{2} - 4x + 3}, \]</p>
+        <p>and the denominator has discriminant \((-4)^{2} - 4\cdot 4\cdot 3 &lt; 0\), so it is irreducible and is its own decomposition. Completing the square, as in §A.5’s closing paragraph, \(4x^{2} - 4x + 3 = (2x - 1)^{2} + 2\). Substitute \(u = 2x - 1\), so \(x = \tfrac{u + 1}{2}\), \(dx = \tfrac{du}{2}\), and \(x - 1 = \tfrac{u - 1}{2}\):</p>
+        <p>\[ \begin{aligned}
+          \int \frac{x - 1}{4x^{2} - 4x + 3}\,dx &= \frac{1}{4}\int \frac{u - 1}{u^{2} + 2}\,du \\[2pt]
+            &= \frac{1}{8}\ln\bigl(u^{2} + 2\bigr) - \frac{1}{4}\cdot\frac{1}{\sqrt{2}}\arctan\frac{u}{\sqrt{2}} + C,
+        \end{aligned} \]</p>
+        <p>splitting as in Example 8.20 and applying (8.A) with \(a = \sqrt{2}\). Returning to \(x\), with \(u^{2} + 2 = 4x^{2} - 4x + 3\) positive everywhere,</p>
+        <p>\[ \begin{aligned}
+          \int \frac{4x^{2} - 3x + 2}{4x^{2} - 4x + 3}\,dx &= x + \frac{1}{8}\ln\bigl(4x^{2} - 4x + 3\bigr) \\
+            &\quad - \frac{1}{4\sqrt{2}}\arctan\frac{2x - 1}{\sqrt{2}} + C,
+        \end{aligned} \]</p>
+        <p>valid on all of \(\mathbb{R}\). This is the integral §A.5 promised: completing the square is the step that brings a general quadratic denominator within reach of (8.A). <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <h3 class="subsec-head">Rationalizing substitutions</h3>
+
+  <p>Some integrands are not rational but can be made so. When a single radical \(\sqrt[n]{g(x)}\) is the obstacle, the substitution \(u = \sqrt[n]{g(x)}\) often converts the whole integrand into a rational function of \(u\), where this section’s pipeline takes over.</p>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.22</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int \frac{\sqrt{x + 4}}{x}\,dx\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>Substitute \(u = \sqrt{x + 4}\), working on the component \(x &gt; 0\), where \(u &gt; 2\). Then \(u^{2} = x + 4\), so \(x = u^{2} - 4\) and \(dx = 2u\,du\):</p>
+        <p>\[ \int \frac{\sqrt{x + 4}}{x}\,dx = \int \frac{u}{u^{2} - 4}\,2u\,du = 2\int \frac{u^{2}}{u^{2} - 4}\,du. \]</p>
+        <p>The integrand is rational and improper, so divide: \(\frac{u^{2}}{u^{2} - 4} = 1 + \frac{4}{u^{2} - 4}\), and \(u^{2} - 4 = (u - 2)(u + 2)\) decomposes by cover-up as \(\frac{4}{(u-2)(u+2)} = \frac{1}{u - 2} - \frac{1}{u + 2}\). So</p>
+        <p>\[ 2\int \frac{u^{2}}{u^{2} - 4}\,du = 2u + 2\ln\lvert u - 2\rvert - 2\ln\lvert u + 2\rvert + C, \]</p>
+        <p>and returning to \(x\),</p>
+        <p>\[ \int \frac{\sqrt{x + 4}}{x}\,dx = 2\sqrt{x + 4} + 2\ln\left\lvert \frac{\sqrt{x + 4} - 2}{\sqrt{x + 4} + 2} \right\rvert + C. \]</p>
+        <p>Differentiating confirms the formula, and the same check shows it also serves on the other component, \(-4 &lt; x &lt; 0\). The solution chained three techniques in order: a substitution to remove the radical, a division to make the fraction proper, and partial fractions to finish. That chaining is the normal condition of integration practice, and the next section is about choosing such chains deliberately. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <!-- expansion:summary — close §8.4: the pipeline + the honest credit; forward to §8.5 with no mechanics -->
+  <p>Rational functions are the best-behaved integrands in this chapter: Strategy 8.5’s four steps, divide, factor, decompose, integrate, always terminate, and the only borrowed ingredient is the factorization fact taken on credit above. Linear factors end in logarithms, their powers in the power rule, and irreducible quadratics in a logarithm plus an arctangent through (8.A). With parts, trigonometric methods, substitution, and partial fractions all in hand, the toolkit is complete. What remains is judgment: given an unfamiliar integral, which tool comes first? That question has a strategy of its own.</p>
+
+</article>

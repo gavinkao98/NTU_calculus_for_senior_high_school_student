@@ -1,0 +1,2421 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Chapter 8 — Print build</title>
+
+<!-- ════════════════════════════════════════════════════════════════
+     圖片寬度控制面板 —— 直接改下面的數字即可（px 固定寬 / % 相對頁寬）
+     並排或多格圖（1.1 / 1.7 / 1.9）控制的是「每一格」的寬度。
+     ════════════════════════════════════════════════════════════════ -->
+<style>
+:root {
+}
+
+</style>
+
+<!-- Google Fonts: Inter for UI -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<!-- New Computer Modern (prose/text faces) — matches MathJax 4 "mathjax-newcm" math font.
+     Source: npm web-computer-modern@1.1.0-new-cm-7-0-2 via jsDelivr. License: GUST Font License.
+     10pt optical size ("Serif 10"). NOTE: filenames contain %20-encoded spaces — keep them. -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<style>
+@font-face {
+  font-family: "New Computer Modern";
+  font-style: normal; font-weight: 400; font-display: swap;
+  src: url("https://cdn.jsdelivr.net/npm/web-computer-modern@1.1.0-new-cm-7-0-2/woff2/WebCM%20Serif%2010%20Regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "New Computer Modern";
+  font-style: italic; font-weight: 400; font-display: swap;
+  src: url("https://cdn.jsdelivr.net/npm/web-computer-modern@1.1.0-new-cm-7-0-2/woff2/WebCM%20Serif%2010%20Italic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "New Computer Modern";
+  font-style: normal; font-weight: 700; font-display: swap;
+  src: url("https://cdn.jsdelivr.net/npm/web-computer-modern@1.1.0-new-cm-7-0-2/woff2/WebCM%20Serif%2010%20Bold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "New Computer Modern";
+  font-style: italic; font-weight: 700; font-display: swap;
+  src: url("https://cdn.jsdelivr.net/npm/web-computer-modern@1.1.0-new-cm-7-0-2/woff2/WebCM%20Serif%2010%20BoldItalic.woff2") format("woff2");
+}
+</style>
+
+<!-- MathJax 4 (CHTML output with inline line-breaking) -->
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']],
+    macros: {
+      arccsc: '\\operatorname{arccsc}',
+      arcsec: '\\operatorname{arcsec}',
+      arccot: '\\operatorname{arccot}'
+    }
+  },
+  chtml: {
+    mtextInheritFont: true,
+    matchFontHeight: true
+  },
+  output: {
+    displayOverflow: 'linebreak',
+    linebreaks: {
+      inline: true,
+      width: '100%',
+      lineleading: 0.2
+    }
+  },
+  startup: { typeset: false }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js"></script>
+
+<style>
+/* ============================================================
+   skin-hs.css — inlined + modified: Times New Roman + MathJax
+   ============================================================ */
+.paper {
+  --c-primary: oklch(0.50 0.13 245);
+  --c-caution: oklch(0.50 0.155 25);
+  --c-aux: oklch(0.55 0.01 260);
+  --c-axis: #474b54;
+  --ink: #1b1c1f;
+  --ink-soft: #565a63;
+  --ink-faint: #8a8e98;
+  --paper: #ffffff;
+  --rule: #e5e7eb;
+  --fig-w-pair: 250px;     /* 並排(pair)圖每張的預設寬度（整體一次調） */
+  --fig-w-single: 100%;    /* 單張/triple/grid 圖的預設最大寬度（整體一次調） */
+  /* 個別覆寫：在任一 <figure> 標籤加 style="--fig-w: 320px" 即可只改那一張 */
+  --serif: "New Computer Modern", "Latin Modern Roman", "Times New Roman", Times, Georgia, serif;
+  --ui: "Inter", -apple-system, system-ui, sans-serif;
+  --a-concept:  oklch(0.50 0.13 55);
+  --a-result:   oklch(0.50 0.13 245);
+  --a-practice: oklch(0.50 0.13 152);
+  --a-aside:    oklch(0.50 0.02 260);
+  --a-caution:  oklch(0.50 0.155 25);
+  --a-strategy: oklch(0.50 0.13 290);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: var(--fs-base, 17.5px);
+  line-height: var(--lh-base, 1.62);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  box-sizing: border-box;
+}
+.paper *, .paper *::before, .paper *::after { box-sizing: border-box; }
+.paper .page { padding: 52px 58px 64px; max-width: 760px; margin: 0 auto; }
+.skin-hs .page { hyphens: auto; -webkit-hyphens: auto; }
+.skin-hs p, .skin-hs li { text-align: justify; text-justify: inter-word; }
+.paper p { margin: 0 0 .85em; text-wrap: pretty; }
+.paper em { font-style: italic; }
+.paper .informal { font-style: italic; color: var(--ink-soft); }
+.paper ol { margin: .2em 0 .9em; padding-left: 1.5em; }
+.paper li { margin: .35em 0; text-wrap: pretty; }
+.paper .warmup { counter-reset: wu; list-style: none; padding-left: 0; }
+.paper .warmup > li { counter-increment: wu; position: relative; padding-left: 2.1em; }
+.paper .warmup > li::before {
+  content: "(" counter(wu, lower-alpha) ")";
+  position: absolute; left: 0; top: 0;
+  font-family: var(--ui); font-size: .82em; color: var(--ink-faint); line-height: 1.85;
+}
+.paper mjx-container[display="true"] { margin: .55em 0 !important; overflow-x: auto; overflow-y: hidden; }
+.paper mjx-container[display="true"]::-webkit-scrollbar { display: none; }
+.paper .qed { display: block; text-align: right; margin: -1.62em 0 0; height: 1.62em; pointer-events: none; }
+.paper .qed::after {
+  content: ""; display: inline-block; width: .56em; height: .56em;
+  border: 1.3px solid var(--ink-soft);
+}
+.paper .env-body > :has(+ .qed) { margin-bottom: 0; display: flow-root; }
+.paper .env-body::after { content: ""; display: block; clear: both; }
+.paper .sec-head {
+  margin-top: 2.7em; padding-top: 1.35em;
+  border-top: 1px solid var(--rule); margin-bottom: 1.5em;
+}
+.sheet-body > .sec-head:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+.paper .sec-kicker {
+  font-family: var(--ui); font-size: .7rem; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--c-primary); font-weight: 700; margin-bottom: .55em;
+}
+.paper .sec-title { font-weight: 600; font-size: 2rem; line-height: 1.12; letter-spacing: -.012em; margin: 0; }
+.paper .sec-no { color: var(--c-primary); margin-right: .5em; font-weight: 600; }
+.paper .subsec-head {
+  font-family: var(--ui); font-weight: 600; font-size: 1.08rem; margin: 1.9em 0 .65em;
+  display: flex; align-items: center; gap: .55em; color: var(--ink);
+}
+.paper .subsec-head::before { content: ""; width: 18px; height: 3px; background: var(--c-primary); border-radius: 2px; }
+.paper .figure { margin: 1.7em 0; text-align: center; }
+.paper .figure-art { display: flex; justify-content: center; }
+.paper .figure-art--pair { gap: 26px; }
+.paper .fig-svg { width: 100%; max-width: var(--fig-w, var(--fig-w-pair)); height: auto; }
+.paper .figure-art:not(.figure-art--pair) .fig-svg { max-width: var(--fig-w, var(--fig-w-single)); }
+.paper figcaption {
+  font-family: var(--ui); font-size: .8em; line-height: 1.5;
+  color: var(--ink-soft); margin-top: .7em; text-wrap: pretty;
+  max-width: none; text-align: left; display: table; margin-inline: auto;
+}
+.paper .fig-no { font-weight: 600; color: var(--ink); margin-right: .4em; }
+.paper figcaption mjx-container { font-size: .95em; }
+.paper .axis { stroke: var(--c-axis); stroke-width: 1.25; fill: none; stroke-linecap: round; }
+.paper .curve { stroke: var(--c-primary); stroke-width: 2.2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.paper .refline { stroke: var(--c-caution); stroke-width: 1.3; stroke-dasharray: 4.5 3.5; fill: none; stroke-linecap: round; opacity: .85; }
+.paper .secant { stroke: var(--c-aux); stroke-width: 1.6; stroke-dasharray: 5 3.5; fill: none; stroke-linecap: round; }
+.paper .tangent { stroke: var(--c-caution); stroke-width: 2; fill: none; stroke-linecap: round; }
+/* fill primitives (ch6 M2: rect + area items in buildPlot) */
+.paper .fill-area { fill: color-mix(in srgb, var(--c-primary) 15%, transparent); stroke: none; }
+.paper .fill-pos  { fill: color-mix(in srgb, var(--c-primary) 17%, transparent); stroke: none; }
+.paper .fill-neg  { fill: color-mix(in srgb, var(--c-caution) 22%, transparent); stroke: none; }
+.paper .rect-lo   { fill: color-mix(in srgb, var(--ink) 9%, transparent); stroke: var(--c-primary); stroke-width: 1.1; }
+.paper .rect-hi   { fill: none; stroke: var(--c-primary); stroke-width: 1.4; stroke-dasharray: 4 2.5; }
+.paper .rect-sum  { fill: color-mix(in srgb, var(--c-primary) 13%, transparent); stroke: var(--c-primary); stroke-width: 1.1; }
+.paper .curve-log { stroke: var(--c-caution); stroke-width: 2.2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.paper .idline { stroke: var(--c-aux); stroke-width: 1.3; stroke-dasharray: 4.5 3.5; fill: none; stroke-linecap: round; opacity: .85; }
+.paper .dot { fill: var(--ink); }
+.paper .bubble { stroke: var(--c-aux); stroke-width: 1.4; fill: none; }
+.paper .arrow-fwd { stroke: var(--c-primary); stroke-width: 2; fill: none; }
+.paper .arrow-bwd { stroke: var(--c-caution); stroke-width: 2; fill: none; }
+.paper .fig-svg text { font-family: var(--ui); font-size: 13px; }
+.paper .axlab { fill: var(--c-aux); font-style: italic; }
+.paper .lab-curve { fill: var(--c-primary); font-style: italic; }
+.paper .lab-ref, .paper .lab-ref-b { fill: var(--c-caution); }
+.paper .ptlab { fill: var(--ink-soft); font-size: 12px; }
+.paper .setlab { fill: var(--ink); font-weight: 600; font-size: 14.5px; text-anchor: middle; }
+
+/* env blocks */
+.skin-hs .env {
+  --accent: var(--a-aside);
+  margin: 1.2em 0; padding-left: 16px;
+  border-left: 2.5px solid color-mix(in srgb, var(--accent) 38%, var(--paper));
+}
+.skin-hs .env-definition  { --accent: var(--a-concept); }
+.skin-hs .env-theorem, .skin-hs .env-proposition, .skin-hs .env-corollary { --accent: var(--a-result); }
+.skin-hs .env-example, .skin-hs .env-solution, .skin-hs .env-exercise { --accent: var(--a-practice); }
+.skin-hs .env-remark { --accent: var(--a-aside); }
+.skin-hs .env-head {
+  display: flex; align-items: baseline; gap: .5em; flex-wrap: wrap;
+  margin: 0 0 .55em; font-family: var(--ui);
+}
+.skin-hs .env-kicker {
+  font-size: .62rem; letter-spacing: .07em; text-transform: uppercase; font-weight: 700;
+  color: var(--paper); background: var(--accent); padding: 3px 10px; border-radius: 999px; line-height: 1.5;
+}
+.skin-hs .env-num { font-weight: 700; color: var(--accent); font-size: .94em; }
+.skin-hs .env-name { font-style: italic; font-weight: 400; color: var(--ink-soft); font-family: var(--serif); font-size: 1em; }
+.skin-hs .env-body > p:first-child { margin-top: 0; }
+.skin-hs .env-body > :last-child { margin-bottom: 0; }
+.skin-hs .env-theorem .env-body, .skin-hs .env-proposition .env-body { font-style: italic; }
+.skin-hs .env-theorem .env-body mjx-container, .skin-hs .env-proposition .env-body mjx-container { font-style: normal; }
+.skin-hs .env-definition em { font-style: italic; }
+.skin-hs .env-remark { color: var(--ink-soft); font-size: .97em; }
+.skin-hs .env-remark .env-kicker { background: transparent; color: var(--a-aside); border: 1px solid color-mix(in srgb, var(--a-aside) 45%, var(--paper)); }
+.skin-hs .env-proof { --accent: var(--a-result); }
+.skin-hs .env-proof .env-kicker {
+  background: transparent; color: var(--a-result); font-style: italic; letter-spacing: .04em;
+  border: 1px solid color-mix(in srgb, var(--a-result) 45%, var(--paper));
+}
+.skin-hs .qed-proof::after { border-color: var(--ink); }
+.skin-hs .workedexample {
+  margin: 1.6em 0; padding-left: 16px;
+  border-left: 2.5px solid color-mix(in srgb, var(--a-practice) 38%, var(--paper));
+  display: flow-root;
+}
+.skin-hs .workedexample .env { margin: .7em 0; padding-left: 0; border-left: 0; }
+.skin-hs .env-solution .env-kicker { background: transparent; color: var(--a-practice); border: 1px solid color-mix(in srgb, var(--a-practice) 45%, var(--paper)); }
+.skin-hs > .env-cont { margin-top: 0; padding-top: .82em; }
+.skin-hs > .env:has(+ .env-cont) { margin-bottom: 0; display: flow-root; }
+.skin-hs > .env-example:has(+ .env-solution) { margin-bottom: 0; }
+.skin-hs > .env-example + .env-solution { margin-top: 0; padding-top: .72em; }
+.skin-hs > .env-cont, .skin-hs > .env-example, .skin-hs > .env-solution { display: flow-root; }
+.skin-hs .env-exercise .env-kicker { background: transparent; color: var(--a-practice); border: 1px solid var(--a-practice); }
+.skin-hs .env-caution, .skin-hs .env-strategy {
+  padding: 15px 20px; border-radius: 8px; margin: 1.4em 0;
+  border-left-width: 4px; border-left-style: solid;
+}
+.skin-hs .env-caution {
+  --accent: var(--a-caution);
+  background: color-mix(in srgb, var(--a-caution) 7%, var(--paper));
+  border: 1px solid color-mix(in srgb, var(--a-caution) 22%, var(--paper));
+  border-left-color: var(--a-caution);
+}
+.skin-hs .env-strategy {
+  --accent: var(--a-strategy);
+  background: color-mix(in srgb, var(--a-strategy) 7%, var(--paper));
+  border: 1px solid color-mix(in srgb, var(--a-strategy) 22%, var(--paper));
+  border-left-color: var(--a-strategy);
+}
+.skin-hs .env-caution .env-name, .skin-hs .env-strategy .env-name { color: var(--ink-soft); }
+.skin-hs .env-strategy .steps { margin-bottom: 0; }
+.skin-hs.vivid .env { border-left-color: color-mix(in srgb, var(--accent) 70%, var(--paper)); border-left-width: 3px; }
+.skin-hs.vivid .workedexample { border-left-color: color-mix(in srgb, var(--a-practice) 70%, var(--paper)); border-left-width: 3px; }
+.skin-hs.vivid .env-kicker { font-size: .64rem; padding: 3.5px 11px; }
+
+/* ============================================================
+   figs.css — inlined + modified for MathJax
+   ============================================================ */
+.paper .fig-svg { height: auto; max-width: 100%; overflow: visible; }
+.paper .figure-art { display: flex; justify-content: center; align-items: flex-start; gap: 24px; flex-wrap: wrap; }
+.paper .figure-art--pair { gap: 24px; }
+.paper .figure-art--pair .fig-panel { flex: 1 1 220px; max-width: 300px; }
+.paper .figure-art--triple { gap: 18px; }
+.paper .figure-art--triple .fig-panel { flex: 1 1 190px; max-width: 240px; }
+.paper .figure-art--grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; justify-items: center; }
+.paper .figure-art--grid .fig-panel { max-width: 240px; }
+.paper .fig-panel { display: flex; flex-direction: column; align-items: center; }
+.paper .fig-note {
+  font-family: var(--ui); font-size: .8em; line-height: 1.45;
+  color: var(--ink-soft); margin-top: .55em; text-align: center; text-wrap: pretty;
+}
+.paper .fig-note mjx-container { font-size: .98em; }
+.paper .fig-fo { overflow: visible; }
+.paper .fig-lyr { position: relative; width: 100%; height: 100%; font-family: var(--serif); }
+.paper .fig-lbl {
+  position: absolute; white-space: nowrap; line-height: 1; font-size: 15px;
+  text-shadow: 0 0 2px var(--paper), 0 0 2px var(--paper), 0 0 1px var(--paper);
+}
+.paper .fig-lbl mjx-container { font-size: 1em; }
+.paper .fig-lbl.a-curve { color: var(--c-primary); }
+.paper .fig-lbl.a-ref   { color: var(--c-caution); }
+.paper .fig-lbl.a-ax    { color: var(--ink-soft); }
+.paper .fig-lbl.a-pt    { color: var(--ink); }
+.paper .tbl-wrap { overflow-x: auto; overflow-y: hidden; margin: 1em 0; }
+.paper table.tbl {
+  border-collapse: collapse; margin: 0 auto; font-family: var(--ui); font-size: .96em;
+  border-top: 1.7px solid var(--ink); border-bottom: 1.7px solid var(--ink);
+}
+.paper table.tbl th, .paper table.tbl td { padding: .3em .8em; text-align: center; white-space: nowrap; }
+.paper table.tbl thead th { border-bottom: 1.1px solid var(--ink-soft); font-weight: 500; }
+.paper table.tbl .rowlab { text-align: right; padding-right: 1em; color: var(--ink-soft); }
+.paper table.tbl mjx-container { font-size: .98em; }
+.paper .sec + .sec { margin-top: 2.6em; padding-top: 2.2em; border-top: 1px solid var(--rule); }
+.paper .para-head { font-weight: 600; margin: 1.1em 0 .4em; }
+.paper ul { margin: .3em 0 .95em; padding-left: 1.3em; }
+.paper ul li { margin: .35em 0; text-align: justify; }
+.paper ul li::marker { color: var(--a-result); }
+.paper .chapter-head { margin-bottom: 1.6em; }
+.paper .chapter-head .ch-kicker {
+  font-family: var(--ui); font-size: .72rem; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--a-result); font-weight: 700; margin-bottom: .6em;
+}
+.paper .chapter-head .ch-title { font-weight: 600; font-size: 2.5rem; line-height: 1.08; letter-spacing: -.02em; margin: 0; }
+.paper .lead { font-size: 1.05em; }
+
+/* ============================================================
+   print.css — inlined (A4 sheet layout + paginator)
+   ============================================================ */
+@page { size: A4; margin: 0; }
+.sheet {
+  position: relative; box-sizing: border-box;
+  width: 210mm; height: 297mm;
+  padding: 20mm 28mm 20mm 32mm;
+  background: #fff; overflow: hidden;
+}
+.sheet-header {
+  position: absolute; top: 11mm; left: 32mm; right: 28mm;
+  font: 500 8.5pt "Inter", sans-serif; color: #9aa0ac; letter-spacing: .02em;
+}
+.sheet-footer {
+  position: absolute; bottom: 8.5mm; left: 0; right: 0;
+  text-align: center; font: 500 9pt "Inter", sans-serif; color: #82868f;
+}
+.sheet-body { height: 100%; --accent: oklch(0.50 0.13 245); }
+.sheet-body.paper { box-shadow: none; border-radius: 0; max-width: none; background: #fff; }
+.sheet-body .page { padding: 0; max-width: none; margin: 0; }
+.sheet-body.paper { font-size: 12pt; line-height: 1.55; }
+.sheet, .sheet * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.sheet-body > :first-child { margin-top: 0 !important; }
+.sheet-body .sec + .sec { border-top: 0; margin-top: 0; padding-top: 0; }
+.sheet-body .qed { margin-top: -1.55em; height: 1.55em; }
+.sheet-body .env-body::after { display: none; content: none; }
+.sheet-body .env-cont { margin-top: 0; }
+.sheet-body .env-cont > .env-body > :first-child { margin-top: 0; }
+@media screen {
+  body { background: #6f727b; margin: 0; }
+  .sheet { box-shadow: 0 3px 18px rgba(0,0,0,.3); margin: 9mm auto; }
+}
+@media print {
+  body { background: #fff; margin: 0; }
+  .sheet { box-shadow: none; margin: 0; break-after: page; }
+  .sheet:last-child { break-after: auto; }
+  .print-toolbar, #boot { display: none !important; }
+}
+
+/* ============================================================
+   page-level
+   ============================================================ */
+.print-toolbar {
+  position: fixed; top: 14px; right: 16px; z-index: 1000;
+  display: flex; align-items: center; gap: 10px; font-family: "Inter", system-ui, sans-serif;
+}
+.print-toolbar button {
+  font: 600 13px "Inter", sans-serif; color: #fff; background: oklch(0.50 0.13 245);
+  border: 0; padding: 9px 16px; border-radius: 8px; cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0,0,0,.25);
+}
+.print-toolbar button:disabled { opacity: .5; cursor: default; }
+.print-toolbar button:not(:disabled):hover { background: oklch(0.45 0.13 245); }
+.print-toolbar .status {
+  font-size: 12px; color: #e8eaf0; background: rgba(0,0,0,.4);
+  padding: 6px 11px; border-radius: 999px; backdrop-filter: blur(6px);
+}
+#boot {
+  position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: "Inter", system-ui, sans-serif; color: #cdd2dc; background: #6f727b; z-index: 900;
+}
+#source { position: absolute; left: -10000px; top: 0; width: 683px; }
+</style>
+</head>
+<body>
+
+<div id="boot">Preparing …</div>
+
+<div class="print-toolbar">
+  <span class="status" id="status">Preparing …</span>
+  <button id="printBtn" disabled>Print / Save as PDF</button>
+</div>
+
+<div id="source"><div class="paper skin-hs vivid"><div class="page" id="page"></div></div></div>
+<div id="pages"></div>
+
+<!-- Section fragments (inlined) -->
+
+<!-- BEGIN-CONTENT-FRAGMENTS -->
+<template id="frag-sec-8-1">
+<!-- Chapter 8 opener + §8.1 Integration by Parts.
+     FOURTH manuscript-free chapter; FIRST chapter generated under CONTENT_SPEC §3 plain-register RC
+     (single-arm generation-side validation, kickoff 2026-07-26). section-source: Stewart ET 9e §7.1
+     (Integration by Parts); cross-checked Thomas 14e §8.2, Rogawski 4e §7.1. Authored 2026-07-26 per
+     PLAN-ch08 + brief-8-1 (canon-as-spine, full-gate tier; Codex at ③/⑤ per user 2026-07-06 grant +
+     2026-07-26 session grant, user away — decisions recorded in PLAN-ch08).
+     §8.1 carries the Chapter 8 opener (first <article>: chapter-head + lead + "By the end"),
+     mirroring ch01–ch07. Numbering fresh for Ch8: §8.1 mints Theorem 8.1 (Integration by Parts,
+     PROVED from product rule Thm 2.6), Theorem 8.2 (parts for definite integrals, PROVED via
+     accumulation antiderivative + FTC-1 Thm 6.3 + Cor 4.4 — NOT via FTC-2, whose shipped
+     statement requires an antiderivative on an OPEN interval containing [a,b], which
+     §7.6-smoothness does not supply; ⑤ 8.1-A1 fix), Strategy 8.1, Examples 8.1–8.6. Cautions
+     UNNUMBERED (Ch1–7 convention).
+     SEAM GUARD (PLAN-ch08 D3 + brief-8-1): product rule cited as Thm 2.6, NOT re-derived; the
+     indefinite identity's antiderivative-family meaning stated honestly; "smooth on [a,b]" reused
+     from §7.6 with inline restatement; (ln x)' cited to Thm 4.14; arctan' to Ex 3.16; definite
+     substitution to Thm 6.7. The Ex 7.12 washer↔shell deferral ("tools arrive with integration by
+     parts in Chapter 8…") IS discharged here, scoped (③ B-01 adjudication 2026-07-26): closing
+     subsection, unnumbered prose derivation, hypotheses f strictly decreasing + smooth + smooth
+     inverse; general case stays with Ch15, said explicitly. No tabular-method shortcut. §6.5's
+     summary promise ("products of unrelated functions… the subject of Chapter 8") is discharged
+     by the opener naming parts.
+     Counters handed to §8.2: Proposition 8.1, Strategy 8.2, Example 8.7 (no Def/Thm/Cor minted in
+     §8.2; next Theorem is 8.3 in §8.6).
+     Record: PLAN-ch08.md, brief-8-1.md; CONTENT_ROADMAP.md Ch8 skeleton + seam ledger. -->
+
+<article class="sec" lang="en">
+  <header class="chapter-head">
+    <div class="ch-kicker">Chapter 8</div>
+    <h1 class="ch-title">Techniques of Integration</h1>
+  </header>
+
+  <p class="lead">The Fundamental Theorem of Calculus reduced the evaluation of a definite integral to a single task: find an antiderivative. Chapter 6 supplied one tool for that task, substitution, and Chapter 7 showed how much geometry and physics the integral can carry. But substitution alone reaches only integrands with a visible inner function. Products such as \(x\cos x\), powers such as \(\sin^4 x\), and rational functions such as \(\tfrac{x+1}{x(x^2+1)}\) all resist it, and §6.5 promised that their techniques would arrive here. This chapter completes the symbolic toolkit: integration by parts, trigonometric methods, and partial fractions, followed by training in how to choose among them. The chapter then widens the integral itself to unbounded intervals and unbounded integrands, and closes with numerical rules, with error control, for the integrals that no formula reaches.</p>
+
+  <p class="para-head">By the end of this chapter, you will be able to:</p>
+  <ul>
+    <li>integrate products, logarithms, and inverse trigonometric functions by parts;</li>
+    <li>evaluate trigonometric integrals with the standard identities, and integrals containing quadratic radicals by trigonometric substitution;</li>
+    <li>integrate rational functions by partial fractions, and choose an attack for an unfamiliar integral;</li>
+    <li>decide whether an improper integral converges, by evaluation or by comparison, and evaluate it when it does;</li>
+    <li>approximate a definite integral with the Midpoint, Trapezoidal, and Simpson’s rules, and bound the error.</li>
+  </ul>
+</article>
+
+<article class="sec" lang="en">
+
+  <header class="sec-head">
+    <h2 class="sec-title"><span class="sec-no">8.1</span>Integration by Parts</h2>
+  </header>
+
+  <!-- expansion:intuition — section opener: the collision (substitution needs an inner function; x cos x has none) motivates running the product rule backwards; "trade, not solve" framing -->
+  <p>Try to compute \(\int x\cos x\,dx\) by substitution. The method needs an inner function whose derivative is also present, and this integrand has neither: \(x\) and \(\cos x\) are unrelated factors, and no choice of \(u\) makes the rest of the integrand equal \(du\). Substitution reverses the chain rule, so it applies when the integrand looks like the output of the chain rule. The integrand \(x \cos x\) does not. It looks instead like one term in the output of the <em>product rule</em>, and the product rule is the one differentiation rule we have not yet run backwards. Running it backwards gives the second technique of integration, and the subject of this section.</p>
+
+  <p>Start from the product rule itself. If \(f\) and \(g\) are differentiable, then by Theorem 2.6,</p>
+  <p>\[ \bigl[f(x)\,g(x)\bigr]' = f'(x)\,g(x) + f(x)\,g'(x). \]</p>
+  <p>Read as a statement about antiderivatives (Definition 6.3), this says that \(fg\) is an antiderivative of the sum \(f'g + fg'\). Solving for the term we want turns the rule into a tool.</p>
+
+  <section class="env env-theorem">
+    <p class="env-head"><span class="env-kicker">Theorem</span><span class="env-num">8.1</span><span class="env-name">Integration by Parts</span></p>
+    <div class="env-body">
+      <p>Let \(f\) and \(g\) be differentiable on an open interval \(I\). Then, on \(I\),</p>
+      <p>\[ \int f(x)\,g'(x)\,dx = f(x)\,g(x) - \int f'(x)\,g(x)\,dx. \]</p>
+      <p>Precisely: if \(G\) is any antiderivative of \(f'g\) on \(I\), then \(fg - G\) is an antiderivative of \(fg'\) on \(I\).</p>
+    </div>
+  </section>
+
+  <section class="env env-proof">
+    <p class="env-head"><span class="env-kicker">Proof</span></p>
+    <div class="env-body">
+      <p>Differentiate \(fg - G\). By the product rule (Theorem 2.6) and the definition of \(G\),</p>
+      <p>\[ (fg - G)' = \bigl(f'g + fg'\bigr) - f'g = fg'. \]</p>
+      <p>So \(fg - G\) is an antiderivative of \(fg'\), which is what the displayed identity asserts. <span class="qed qed-proof"></span></p>
+    </div>
+  </section>
+
+  <p>An equation between indefinite integrals is an equation between families of functions, and the constant of integration is shared: it appears once, when the remaining integral on the right is finally evaluated. The identity trades one integral for another. That is all it does, and that is its value: the trade is progress whenever the new integrand \(f'g\) is easier than the old one \(fg'\).</p>
+
+  <p>In practice the formula is applied through the differential notation of §5.3, in the same way substitution was in §6.5. Set \(u = f(x)\) and \(v = g(x)\), so that \(du = f'(x)\,dx\) and \(dv = g'(x)\,dx\). The formula then reads:</p>
+  <p>\[ \int u\,dv = uv - \int v\,du. \]</p>
+  <p>To use it, split the given integrand into two parts, a function \(u\) and a differential \(dv\); the name of the technique records that split. From \(u\) we compute \(du\) by differentiating, and from \(dv\) we compute \(v\) by antidifferentiating. Any antiderivative serves for \(v\), so we take the one with zero constant.</p>
+
+  <!-- [FIGURE-OPPORTUNITY] 描述：uv-rectangle diagram — for increasing u=f(x), v=g(x), the rectangle [0,u]×[0,v] is split by the parametric curve (u,v) into the region ∫u dv (below the curve) and ∫v du (beside it); the formula is the picture's area bookkeeping. Domain fact: requires a monotone parametrization (both u and v increasing) — say so in the caption or the drawing lies.
+       類型：diagram
+       理由：the only visual reading of the parts formula; makes uv − ∫v du memorable as area subtraction rather than symbol shuffling. Optional tier (algebraic section; the technique itself needs no picture). -->
+
+  <section class="env env-strategy">
+    <p class="env-head"><span class="env-kicker">Strategy</span><span class="env-num">8.1</span><span class="env-name">Choosing \(u\) and \(dv\)</span></p>
+    <div class="env-body">
+      <ol class="steps">
+        <li><em>Pick \(u\) to get simpler when differentiated.</em> A power of \(x\) drops degree; a logarithm or inverse trigonometric function turns algebraic. Pick \(dv\) as the rest of the integrand, and check that you can antidifferentiate \(dv\) on its own.</li>
+        <li><em>Logarithms and inverse trigonometric functions go into \(u\).</em> Their derivatives are algebraic, and they have no elementary \(dv\)-role: taking \(dv = \ln x\,dx\) would require the very antiderivative we are seeking. When the integrand is nothing but \(\ln x\) or \(\arctan x\), take \(dv = dx\) (Examples 8.2 and 8.5).</li>
+        <li><em>If the integrand reproduces itself, solve for the integral.</em> When two applications of parts return the original integral, as with \(e^{x}\sin x\), collect that integral on one side of the equation and divide (Example 8.4).</li>
+        <li><em>If every choice makes the integral worse, parts is the wrong tool.</em> Return to substitution, or to the methods of §8.2 through §8.4.</li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.1</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int x\cos x\,dx\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>Following step 1 of Strategy 8.1, take \(u = x\), since differentiation lowers its degree, and \(dv = \cos x\,dx\), which we can antidifferentiate. Then \(du = dx\) and \(v = \sin x\), and the formula gives</p>
+        <p>\[ \int x\cos x\,dx = x\sin x - \int \sin x\,dx = x\sin x + \cos x + C. \]</p>
+        <p>Differentiating the answer confirms it: \((x\sin x + \cos x)' = \sin x + x\cos x - \sin x = x\cos x\).</p>
+        <p>The choice of parts matters. Had we taken \(u = \cos x\) and \(dv = x\,dx\), so that \(du = -\sin x\,dx\) and \(v = \tfrac{x^{2}}{2}\), the trade would read</p>
+        <p>\[ \int x\cos x\,dx = \frac{x^{2}}{2}\cos x + \frac{1}{2}\int x^{2}\sin x\,dx, \]</p>
+        <p>which is true but worse: the power of \(x\) went up. A trade should simplify, and step 1 is the test to apply before trading. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.2</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int \ln x\,dx\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>The integrand does not look like a product, but step 2 of Strategy 8.1 supplies the split: take \(u = \ln x\) and let \(dv = dx\) be the invisible factor. Then \(du = \tfrac{1}{x}\,dx\) by Theorem 4.14, and \(v = x\). For \(x &gt; 0\), where \(\ln x\) is defined,</p>
+        <p>\[ \int \ln x\,dx = x\ln x - \int x\cdot\frac{1}{x}\,dx = x\ln x - \int 1\,dx = x\ln x - x + C. \]</p>
+        <p>The trade turned a logarithm into the constant integrand \(1\). This is the pattern of step 2 in action: the logarithm left \(u\) as an algebraic derivative, and nothing was asked of \(dv\) at all. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.3</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int t^{2}e^{t}\,dt\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>Take \(u = t^{2}\) and \(dv = e^{t}\,dt\), so \(du = 2t\,dt\) and \(v = e^{t}\):</p>
+        <p>\[ \int t^{2}e^{t}\,dt = t^{2}e^{t} - 2\int t e^{t}\,dt. \]</p>
+        <p>The degree dropped from \(2\) to \(1\), and one more round of parts finishes the job. In the remaining integral take \(u = t\), \(dv = e^{t}\,dt\), so \(du = dt\), \(v = e^{t}\):</p>
+        <p>\[ \int t e^{t}\,dt = t e^{t} - \int e^{t}\,dt = t e^{t} - e^{t} + C_1. \]</p>
+        <p>Substituting back,</p>
+        <p>\[ \int t^{2}e^{t}\,dt = t^{2}e^{t} - 2\bigl(t e^{t} - e^{t}\bigr) + C = \bigl(t^{2} - 2t + 2\bigr)e^{t} + C. \]</p>
+        <p>Each application of parts lowers the power by one, so an integrand \(t^{n}e^{t}\) yields to \(n\) rounds. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.4</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int e^{x}\sin x\,dx\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>Neither factor gets simpler under differentiation: \(e^{x}\) reproduces itself and \(\sin x\) cycles. Parts will not simplify this integral, but by step 3 of Strategy 8.1 it can still close it. Write \(J = \int e^{x}\sin x\,dx\) for the unknown integral. Take \(u = \sin x\), \(dv = e^{x}\,dx\), so \(du = \cos x\,dx\), \(v = e^{x}\):</p>
+        <p>\[ J = e^{x}\sin x - \int e^{x}\cos x\,dx. \]</p>
+        <p>Apply parts once more to the new integral, with \(u = \cos x\), \(dv = e^{x}\,dx\), so \(du = -\sin x\,dx\), \(v = e^{x}\):</p>
+        <p>\[ \int e^{x}\cos x\,dx = e^{x}\cos x + \int e^{x}\sin x\,dx = e^{x}\cos x + J. \]</p>
+        <p>Substituting back,</p>
+        <p>\[ J = e^{x}\sin x - e^{x}\cos x - J, \]</p>
+        <p>and solving for \(J\) gives \(2J = e^{x}(\sin x - \cos x)\), so</p>
+        <p>\[ \int e^{x}\sin x\,dx = \frac{e^{x}\bigl(\sin x - \cos x\bigr)}{2} + C. \]</p>
+        <p>Here we treated the unknown integral as a single quantity and solved for it; the constant of integration is restored at the end, since the equation holds for antiderivative families. Differentiating the answer confirms it: \(\tfrac{1}{2}\bigl[e^{x}(\sin x - \cos x) + e^{x}(\cos x + \sin x)\bigr] = e^{x}\sin x\). <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <p>For definite integrals, the parts formula carries the evaluation bar along with it. The hypotheses match those of the Fundamental Theorem: we use the term <em>smooth on \([a, b]\)</em> from §7.6, meaning that \(f\) is differentiable with \(f'\) continuous on \([a, b]\), one-sided at the endpoints.</p>
+
+  <section class="env env-theorem">
+    <p class="env-head"><span class="env-kicker">Theorem</span><span class="env-num">8.2</span><span class="env-name">Integration by Parts for Definite Integrals</span></p>
+    <div class="env-body">
+      <p>Let \(f\) and \(g\) be smooth on \([a, b]\). Then</p>
+      <p>\[ \int_{a}^{b} f(x)\,g'(x)\,dx = \Bigl[f(x)\,g(x)\Bigr]_{a}^{b} - \int_{a}^{b} f'(x)\,g(x)\,dx. \]</p>
+    </div>
+  </section>
+
+  <section class="env env-proof">
+    <p class="env-head"><span class="env-kicker">Proof</span></p>
+    <div class="env-body">
+      <p>The sum \(f'g + fg'\) is continuous on \([a, b]\), since \(f, g, f', g'\) all are, so it has the accumulation antiderivative \(H(x) = \int_{a}^{x} \bigl[f'(t)\,g(t) + f(t)\,g'(t)\bigr]\,dt\): by the Fundamental Theorem of Calculus, Part 1 (Theorem 6.3), \(H\) is continuous on \([a, b]\) with \(H' = f'g + fg'\) on \((a, b)\). The product \(fg\) has the same derivative there, by the product rule (Theorem 2.6). The difference \(fg - H\) is therefore continuous on \([a, b]\) with zero derivative on \((a, b)\), hence constant (Corollary 4.4). Evaluating at \(b\) and at \(a\), where \(H(a) = 0\), gives</p>
+      <p>\[ \int_{a}^{b} \bigl[f'(x)\,g(x) + f(x)\,g'(x)\bigr]\,dx = f(b)\,g(b) - f(a)\,g(a). \]</p>
+      <p>Splitting the left side by linearity (Theorem 6.2, part 2) and moving \(\int_{a}^{b} f'g\) to the right side gives the formula. <span class="qed qed-proof"></span></p>
+    </div>
+  </section>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.5</span></p>
+      <div class="env-body">
+        <p>Evaluate \(\displaystyle\int_{0}^{1} \arctan x\,dx\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>As in Example 8.2, the integrand is a lone function whose derivative is algebraic, so take \(u = \arctan x\) and \(dv = dx\). Then \(du = \tfrac{1}{1+x^{2}}\,dx\), by Example 3.16, and \(v = x\). Both \(\arctan x\) and \(x\) are smooth on \([0, 1]\), so Theorem 8.2 applies:</p>
+        <p>\[ \int_{0}^{1} \arctan x\,dx = \Bigl[x\arctan x\Bigr]_{0}^{1} - \int_{0}^{1} \frac{x}{1+x^{2}}\,dx = \frac{\pi}{4} - \int_{0}^{1} \frac{x}{1+x^{2}}\,dx, \]</p>
+        <p>since \(\arctan 1 = \tfrac{\pi}{4}\) and the \(x = 0\) term vanishes. The remaining integral is a substitution: with \(w = 1 + x^{2}\), \(dw = 2x\,dx\), and the limits transform by Theorem 6.7 from \(x \in [0, 1]\) to \(w \in [1, 2]\):</p>
+        <p>\[ \int_{0}^{1} \frac{x}{1+x^{2}}\,dx = \frac{1}{2}\int_{1}^{2} \frac{dw}{w} = \frac{1}{2}\Bigl[\ln w\Bigr]_{1}^{2} = \frac{\ln 2}{2}. \]</p>
+        <p>Therefore</p>
+        <p>\[ \int_{0}^{1} \arctan x\,dx = \frac{\pi}{4} - \frac{\ln 2}{2}. \]</p>
+        <p>One integral, two techniques: parts opened it, substitution finished it. That division of labor is common, and §8.5 trains the choices. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <section class="env env-caution">
+    <p class="env-head"><span class="env-kicker">Caution</span></p>
+    <div class="env-body">
+      <p>The minus sign in \(uv - \int v\,du\) applies to the <em>entire</em> remaining integral. When \(\int v\,du\) is itself evaluated by another round of parts, as in Examples 8.3 and 8.4, enclose its whole result in parentheses before distributing the sign. Dropped parentheses at this step are the most common error in multi-round parts.</p>
+    </div>
+  </section>
+
+  <h3 class="subsec-head">Reduction formulas</h3>
+
+  <p>Parts can lower an exponent by a fixed step even when it cannot remove it outright. Applied once to \(\int\sin^{n}x\,dx\), the formula relates the integral to the one two exponents down. The result is worth recording once, in general, so that any particular power is a chain of lookups rather than a fresh computation.</p>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.6</span></p>
+      <div class="env-body">
+        <p>Let \(n \ge 2\) be an integer. Show that</p>
+        <p>\[ \int \sin^{n}x\,dx = -\frac{1}{n}\cos x\,\sin^{n-1}x + \frac{n-1}{n}\int \sin^{n-2}x\,dx. \]</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>Split off one factor of \(\sin x\) to serve as \(dv\): take \(u = \sin^{n-1}x\) and \(dv = \sin x\,dx\), so that \(du = (n-1)\sin^{n-2}x\cos x\,dx\) by the chain rule and \(v = -\cos x\). Parts gives</p>
+        <p>\[ \int \sin^{n}x\,dx = -\cos x\,\sin^{n-1}x + (n-1)\int \sin^{n-2}x\,\cos^{2}x\,dx. \]</p>
+        <p>Now \(\cos^{2}x = 1 - \sin^{2}x\), so the right-hand integral splits:</p>
+        <p>\[ \begin{aligned}
+          \int \sin^{n}x\,dx &= -\cos x\,\sin^{n-1}x + (n-1)\int \sin^{n-2}x\,dx \\
+            &\quad - (n-1)\int \sin^{n}x\,dx.
+        \end{aligned} \]</p>
+        <p>The original integral has reappeared on the right, and as in Example 8.4 we solve for it. Adding \((n-1)\int\sin^{n}x\,dx\) to both sides and dividing by \(n\):</p>
+        <p>\[ \int \sin^{n}x\,dx = -\frac{1}{n}\cos x\,\sin^{n-1}x + \frac{n-1}{n}\int \sin^{n-2}x\,dx. \]</p>
+        <!-- expansion:formula — consistency spot-check of the reduction formula at n=2 against the §A.2 power-reduction route; also the §8.2 preview hook -->
+        <p>As a check, set \(n = 2\). The formula gives \(\int\sin^{2}x\,dx = -\tfrac{1}{2}\cos x\sin x + \tfrac{1}{2}x + C\), and since \(\sin x\cos x = \tfrac{1}{2}\sin 2x\), this is \(\tfrac{x}{2} - \tfrac{\sin 2x}{4} + C\): the same antiderivative that the power-reduction identity \(\sin^{2}x = \tfrac{1 - \cos 2x}{2}\) of §A.2 produces by direct integration. Repeated powers of sine and cosine are the opening business of the next section, which uses both routes. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <h3 class="subsec-head">Settling the shell–washer question</h3>
+
+  <!-- expansion:formula [source: ch07 sec-7-3 Example 7.12 closing remark (promise: "the tools arrive with integration by parts in Chapter 8 and change of variables in Chapter 15"); ③ B-01 adjudication 2026-07-26, reworked per ⑤ 8.1-B1 + chapter review CH-B1 — strictly INCREASING smooth case with merely CONTINUOUS inverse, which covers Ex 7.12's solid (f = x², g = √y — note √y is not differentiable at 0, so a smooth-inverse hypothesis would have missed the exemplar); decreasing case = mirror note; nonmonotone case explicitly left to Ch15] -->
+  <p>Section 7.3 computed one solid’s volume by shells and by washers, found the answers equal, and recorded a promise: the tools to explain the agreement would arrive with integration by parts in Chapter 8 and with change of variables in Chapter 15. Parts has now arrived, and it settles the question for the solid §7.3 actually compared, and for every solid of that monotone kind. Let \(f\) be strictly increasing and smooth on \([a, b]\), with \(0 \le a\) and \(f \ge 0\), and suppose its inverse \(g\) is continuous on \([c, d]\), where \(c = f(a)\) and \(d = f(b)\). Rotate the region under \(y = f(x)\) about the \(y\)-axis. In §7.3’s Example 7.12 this is the case \(f(x) = x^{2}\) on \([0, 1]\), with \(g(y) = \sqrt{y}\). The shell method (Theorem 7.1) gives the volume as \(\int_a^b 2\pi x\,f(x)\,dx\). The washer reading slices horizontally instead. Below height \(c\) every slice is the full annulus from \(x = a\) to \(x = b\); at height \(y\) between \(c\) and \(d\), the region contains exactly the points with \(f(x) \ge y\), so the slice runs from \(x = g(y)\) out to \(x = b\). Applying the cross-section definition (Definition 7.2) on each of \([0, c]\) and \([c, d]\) and adding, the washer volume is</p>
+  <p>\[ V_{\text{washer}} = \pi c\,\bigl(b^{2} - a^{2}\bigr) + \pi\int_{c}^{d} \bigl[b^{2} - g(y)^{2}\bigr]\,dy. \]</p>
+  <p>Now transform the shell integral. Parts (Theorem 8.2) with \(u = f(x)\) and \(dv = 2x\,dx\), so \(v = x^{2}\), gives</p>
+  <p>\[ \int_{a}^{b} 2x\,f(x)\,dx = \Bigl[x^{2}f(x)\Bigr]_{a}^{b} - \int_{a}^{b} x^{2}f'(x)\,dx = b^{2}d - a^{2}c - \int_{a}^{b} x^{2}f'(x)\,dx. \]</p>
+  <p>In the remaining integral, \(x^{2} = g(f(x))^{2}\), since \(g\) inverts \(f\). Substitution in a definite integral (Theorem 6.7), applied with the continuous outer function \(g(y)^{2}\) and with \(y = f(x)\), converts it to</p>
+  <p>\[ \int_{a}^{b} g\bigl(f(x)\bigr)^{2}\,f'(x)\,dx = \int_{c}^{d} g(y)^{2}\,dy. \]</p>
+  <p>Assembling the pieces, the shell volume equals \(\pi\bigl(b^{2}d - a^{2}c - \int_{c}^{d} g(y)^{2}\,dy\bigr)\), and expanding \(V_{\text{washer}}\) gives \(\pi\bigl(b^{2}c - a^{2}c + b^{2}(d - c) - \int_{c}^{d} g(y)^{2}\,dy\bigr)\), which is the same number. The two methods agree, and the agreement is a computation with parts, exactly as promised. In Example 7.12’s case the common value is \(\pi\bigl(1 - 0 - \int_{0}^{1} y\,dy\bigr) = \tfrac{\pi}{2}\), the number §7.3 found twice. A strictly decreasing boundary is the mirror computation, with the annulus and the graph trading roles. For a solid whose boundary is not monotone, as in several of §7.3’s other examples, the argument above does not apply; the general statement belongs to the change of variables of Chapter 15, as §7.3 recorded.</p>
+
+  <!-- expansion:summary — close §8.1: what the technique is, when it applies, what was minted; forward to §8.2 with no mechanics -->
+  <p>Integration by parts is the product rule read backwards: it trades \(\int u\,dv\) for \(\int v\,du\) at the cost of the boundary product \(uv\). The trade pays when \(u\) simplifies under differentiation, and Strategy 8.1 makes that test explicit. Theorem 8.1 states the identity for antiderivatives, Theorem 8.2 carries it to definite integrals, and the examples display its three working patterns: a power times an integrable factor, a lone logarithm or inverse function with \(dv = dx\), and a self-reproducing integrand solved for algebraically. The same trade settled last chapter’s shell–washer question. The next section turns to integrands built entirely from trigonometric functions, where the tools are identities rather than trades, and where the reduction formula of Example 8.6 finds its regular use.</p>
+
+</article>
+</template>
+
+<template id="frag-sec-8-2">
+<!-- §8.2 Trigonometric Integrals. section-source: Stewart ET 9e §7.2; cross-checked Thomas 14e
+     §8.3, Rogawski 4e §7.2. Authored 2026-07-26 per PLAN-ch08 + brief-8-2 (canon-as-spine;
+     plain-register generation). Numbering: mints Proposition 8.1 (antiderivatives of tan/cot/
+     sec/csc, PROVED — tan/cot by u-sub, sec by the labeled device + verification by
+     differentiation, csc by differentiation), Strategy 8.2, Strategy 8.3, Examples 8.7–8.11.
+     Cautions UNNUMBERED.
+     SEAM GUARD (PLAN-ch08 D4 + brief-8-2): every identity used is restated inline AND cited —
+     Prop A.1 (1+tan²=sec²), Prop A.2 (product-to-sum, first line), §A.2 power-reduction display
+     (unnumbered there; its "when the techniques of integration arrive" promise is discharged
+     here), Def A.1 (sec/csc/cot are B-class; recall-in-one-clause at first use). tan′/sec′ cited
+     to Example 3.2; substitution to Thm 6.6; ln|x| antiderivative to §6.4; parts to Thm 8.1;
+     solve-back pattern to Ex 8.4; reduction formula cross-check to Ex 8.6. ln|·| domain: one
+     blanket sentence at Prop 8.1. Do NOT work sin·sin / cos·cos examples (identity named, method
+     identical — one clause); no sec^n/tan^n reduction formulas (one clause); no Weierstrass sub
+     (§8.5 mention only); no csc³ (mirror named).
+     Counters handed to §8.3: Strategy 8.4, Example 8.12 (no Def/Thm/Prop minted in §8.3; next
+     Proposition is 8.2 in §8.6; next Theorem is 8.3 in §8.6).
+     Record: PLAN-ch08.md, brief-8-2.md. -->
+
+<article class="sec" lang="en">
+
+  <header class="sec-head">
+    <h2 class="sec-title"><span class="sec-no">8.2</span>Trigonometric Integrals</h2>
+  </header>
+
+  <!-- expansion:intuition — section opener: the collision (sin³ has no visible du) and the section's one move: spend a factor as du, convert the rest by an identity -->
+  <p>Consider \(\int \sin^{3}x\,dx\). No derivative sits beside an inner function, so no substitution presents itself, and the integrand is not a product of unrelated factors either, so parts does not simplify it. The way forward is a property specific to trigonometric functions. They convert into one another. Split off one factor of sine and rewrite the rest by the Pythagorean identity \(\sin^{2}x = 1 - \cos^{2}x\):</p>
+  <p>\[ \sin^{3}x = \bigl(1 - \cos^{2}x\bigr)\sin x. \]</p>
+  <p>The right-hand side is a polynomial in \(\cos x\) times \(\sin x\,dx\), and \(\sin x\,dx\) is exactly \(-du\) for \(u = \cos x\). The substitution that seemed absent has been <em>manufactured</em>: one factor was spent as the differential, and an identity converted everything that remained into the new variable. That single move, spend a factor and convert the rest, runs through this whole section. When no factor can be spared, a second family of identities lowers the powers instead. The identities themselves were assembled in Appendix A.2, which promised they would be needed when the techniques of integration arrived. They are needed now.</p>
+
+  <h3 class="subsec-head">Powers of sine and cosine</h3>
+
+  <p>For an integrand \(\sin^{m}x\cos^{n}x\), the parity of the exponents decides the move.</p>
+
+  <section class="env env-strategy">
+    <p class="env-head"><span class="env-kicker">Strategy</span><span class="env-num">8.2</span><span class="env-name">Integrating \(\sin^m x\,\cos^n x\)</span></p>
+    <div class="env-body">
+      <ol class="steps">
+        <li><em>If the power of sine is odd,</em> save one factor of \(\sin x\) for the differential and convert the remaining even power by \(\sin^{2}x = 1 - \cos^{2}x\). Then substitute \(u = \cos x\), \(du = -\sin x\,dx\).</li>
+        <li><em>If the power of cosine is odd,</em> save one factor of \(\cos x\) and convert the rest by \(\cos^{2}x = 1 - \sin^{2}x\). Then substitute \(u = \sin x\), \(du = \cos x\,dx\).</li>
+        <li><em>If both powers are even,</em> no factor can be spared. Lower the degree with the power-reduction identities of §A.2, \(\sin^{2}x = \tfrac{1}{2}(1 - \cos 2x)\) and \(\cos^{2}x = \tfrac{1}{2}(1 + \cos 2x)\), and repeat as needed.</li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.7</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int \sin^{3}x\,\cos^{2}x\,dx\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>The power of sine is odd. Save one factor of \(\sin x\) and convert the remaining \(\sin^{2}x\):</p>
+        <p>\[ \int \sin^{3}x\,\cos^{2}x\,dx = \int \bigl(1 - \cos^{2}x\bigr)\cos^{2}x\,\sin x\,dx. \]</p>
+        <p>Substitute \(u = \cos x\), so that \(du = -\sin x\,dx\) and \(\sin x\,dx = -du\) (Theorem 6.6):</p>
+        <p>\[ \int \bigl(1 - u^{2}\bigr)u^{2}\,(-du) = \int \bigl(u^{4} - u^{2}\bigr)\,du = \frac{u^{5}}{5} - \frac{u^{3}}{3} + C. \]</p>
+        <p>Substituting \(u = \cos x\) back,</p>
+        <p>\[ \int \sin^{3}x\,\cos^{2}x\,dx = \frac{\cos^{5}x}{5} - \frac{\cos^{3}x}{3} + C. \]</p>
+        <p>Splitting off the odd power is what made this work: one factor of sine became the differential, and everything else became a polynomial, which integrates term by term. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <section class="env env-caution">
+    <p class="env-head"><span class="env-kicker">Caution</span></p>
+    <div class="env-body">
+      <p>The substitution \(u = \cos x\) gives \(du = -\sin x\,dx\). The minus sign is the most commonly dropped symbol in this section. Write the line \(\sin x\,dx = -du\) explicitly before substituting, and the sign survives.</p>
+    </div>
+  </section>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.8</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int \sin^{4}x\,dx\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>The power is even, so no factor can be spared and step 3 of Strategy 8.2 applies. Using \(\sin^{2}x = \tfrac{1}{2}(1 - \cos 2x)\) from §A.2 and squaring,</p>
+        <p>\[ \sin^{4}x = \Bigl(\frac{1 - \cos 2x}{2}\Bigr)^{2} = \frac{1}{4}\bigl(1 - 2\cos 2x + \cos^{2}2x\bigr). \]</p>
+        <p>The last term is again an even power, and the companion identity \(\cos^{2}\theta = \tfrac{1}{2}(1 + \cos 2\theta)\), applied with \(\theta = 2x\), lowers it too:</p>
+        <p>\[ \sin^{4}x = \frac{1}{4}\Bigl(1 - 2\cos 2x + \frac{1 + \cos 4x}{2}\Bigr) = \frac{3}{8} - \frac{\cos 2x}{2} + \frac{\cos 4x}{8}. \]</p>
+        <p>Every term is now a plain cosine, and integration is immediate:</p>
+        <p>\[ \int \sin^{4}x\,dx = \frac{3x}{8} - \frac{\sin 2x}{4} + \frac{\sin 4x}{32} + C. \]</p>
+        <!-- expansion:formula — agreement check against the §8.1 reduction-formula route; ties Ex 8.6 into its promised regular use -->
+        <p>The reduction formula of Example 8.6 reaches the same answer by a different route. It expresses \(\int\sin^{4}x\,dx\) in terms of \(\int\sin^{2}x\,dx\), and the two results agree after the double-angle identity is applied. When several powers must be integrated in sequence, the reduction formula is the more systematic tool; for a single even power, power reduction is the shorter one. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <!-- [FIGURE-OPPORTUNITY] 描述：y = sin²x on [0, 2π] with its midline y = 1/2 drawn dashed — the power-reduction identity as a picture: sin²x oscillates about 1/2 with period π (NOT 2π — the drawing must reflect the halved period), so the area over [0, 2π] is that of the rectangle of height 1/2, i.e. π. Domain facts: max 1 at x = π/2, 3π/2; zeros at 0, π, 2π; midline crossings at odd multiples of π/4.
+       類型：graph
+       理由：makes "the average of sin² is 1/2" visible; the identity's constant term IS the midline. Supporting tier. -->
+
+  <h3 class="subsec-head">Tangents and secants</h3>
+
+  <p>Recall from Definition A.1 that \(\sec x = \tfrac{1}{\cos x}\), \(\csc x = \tfrac{1}{\sin x}\), and \(\cot x = \tfrac{\cos x}{\sin x}\). For integration, tangent and secant form a closed pair. Their derivatives stay in the pair, since \(\tfrac{d}{dx}\tan x = \sec^{2}x\) and \(\tfrac{d}{dx}\sec x = \sec x\tan x\) (Example 3.2), and the Pythagorean companion \(1 + \tan^{2}x = \sec^{2}x\) (Proposition A.1) converts between them. So the same manufacturing move applies. Spend \(\sec^{2}x\,dx\) as the differential of \(\tan x\), or spend \(\sec x\tan x\,dx\) as the differential of \(\sec x\), and convert what remains.</p>
+
+  <section class="env env-strategy">
+    <p class="env-head"><span class="env-kicker">Strategy</span><span class="env-num">8.3</span><span class="env-name">Integrating \(\tan^m x\,\sec^n x\)</span></p>
+    <div class="env-body">
+      <ol class="steps">
+        <li><em>If the power of secant is even</em> (\(n \ge 2\)), save a factor of \(\sec^{2}x\) and convert the remaining secants by \(\sec^{2}x = 1 + \tan^{2}x\). Then substitute \(u = \tan x\), \(du = \sec^{2}x\,dx\).</li>
+        <li><em>If the power of tangent is odd</em> (and \(n \ge 1\)), save a factor of \(\sec x\tan x\) and convert the remaining tangents by \(\tan^{2}x = \sec^{2}x - 1\). Then substitute \(u = \sec x\), \(du = \sec x\tan x\,dx\).</li>
+        <li><em>If neither case applies,</em> convert tangents by \(\tan^{2}x = \sec^{2}x - 1\) and fall back on parts and the basic antiderivatives of Proposition 8.1 below, as in Example 8.10. A lone even power of tangent splits this way into lower powers plus a constant; a lone odd power reduces the same way to \(\int\tan x\,dx\) itself, which Proposition 8.1 supplies.</li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.9</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int \tan^{6}x\,\sec^{4}x\,dx\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>The power of secant is even. Save one factor of \(\sec^{2}x\) and convert the other by \(\sec^{2}x = 1 + \tan^{2}x\):</p>
+        <p>\[ \int \tan^{6}x\,\sec^{4}x\,dx = \int \tan^{6}x\,\bigl(1 + \tan^{2}x\bigr)\,\sec^{2}x\,dx. \]</p>
+        <p>Substitute \(u = \tan x\), \(du = \sec^{2}x\,dx\):</p>
+        <p>\[ \int u^{6}\bigl(1 + u^{2}\bigr)\,du = \int \bigl(u^{6} + u^{8}\bigr)\,du = \frac{u^{7}}{7} + \frac{u^{9}}{9} + C. \]</p>
+        <p>Substituting back,</p>
+        <p>\[ \int \tan^{6}x\,\sec^{4}x\,dx = \frac{\tan^{7}x}{7} + \frac{\tan^{9}x}{9} + C, \]</p>
+        <p>valid on any interval where \(\tan x\) and \(\sec x\) are defined. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <p>Strategy 8.3 stands on two basic antiderivatives that its case analysis cannot produce. Its third step reduces leftover tangents to \(\int\tan x\,dx\) itself, and the route of Example 8.10 runs through \(\int\sec x\,dx\). The antiderivative table of §6.4 has neither: its trigonometric rows are the Chapter 3 derivatives read backwards, so \(\sec^{2}x\) appears there but \(\tan x\) itself does not. The next proposition supplies both, together with their two companions.</p>
+
+  <section class="env env-proposition">
+    <p class="env-head"><span class="env-kicker">Proposition</span><span class="env-num">8.1</span><span class="env-name">Antiderivatives of the remaining trigonometric functions</span></p>
+    <div class="env-body">
+      <p>On any interval where the integrand is continuous,</p>
+      <p>\[ \begin{aligned}
+        \int \tan x\,dx &= \ln\lvert\sec x\rvert + C, \\[2pt]
+        \int \cot x\,dx &= \ln\lvert\sin x\rvert + C, \\[2pt]
+        \int \sec x\,dx &= \ln\lvert\sec x + \tan x\rvert + C, \\[2pt]
+        \int \csc x\,dx &= -\ln\lvert\csc x + \cot x\rvert + C.
+      \end{aligned} \]</p>
+    </div>
+  </section>
+
+  <section class="env env-proof">
+    <p class="env-head"><span class="env-kicker">Proof</span></p>
+    <div class="env-body">
+      <p>For the tangent, write \(\tan x = \tfrac{\sin x}{\cos x}\) and substitute \(u = \cos x\), \(du = -\sin x\,dx\) (Theorem 6.6). Using the antiderivative \(\int\tfrac{du}{u} = \ln\lvert u\rvert + C\) from §6.4,</p>
+      <p>\[ \int \tan x\,dx = \int \frac{\sin x}{\cos x}\,dx = -\int \frac{du}{u} = -\ln\lvert\cos x\rvert + C = \ln\lvert\sec x\rvert + C, \]</p>
+      <p>where the last step uses \(-\ln t = \ln\tfrac{1}{t}\) for \(t &gt; 0\). The cotangent line is the same computation with \(u = \sin x\), this time without the minus sign.</p>
+      <p>For the secant no substitution presents itself, and the standard route is a device that was found by trial, not derived: multiply and divide by \(\sec x + \tan x\). Then</p>
+      <p>\[ \int \sec x\,dx = \int \frac{\sec^{2}x + \sec x\tan x}{\sec x + \tan x}\,dx, \]</p>
+      <p>and the numerator is exactly the derivative of the denominator, by Example 3.2. With \(u = \sec x + \tan x\) the integral is \(\int\tfrac{du}{u} = \ln\lvert u\rvert + C\), which is the stated formula. Whatever one thinks of the trick, the result is verified honestly by differentiating:</p>
+      <p>\[ \begin{aligned}
+        \frac{d}{dx}\,\ln\lvert\sec x + \tan x\rvert &= \frac{\sec x\tan x + \sec^{2}x}{\sec x + \tan x} \\[2pt]
+          &= \frac{\sec x\,\bigl(\tan x + \sec x\bigr)}{\sec x + \tan x} = \sec x.
+      \end{aligned} \]</p>
+      <p>The cosecant line follows by the same verification, differentiating \(-\ln\lvert\csc x + \cot x\rvert\) and simplifying with \(\tfrac{d}{dx}\csc x = -\csc x\cot x\) and \(\tfrac{d}{dx}\cot x = -\csc^{2}x\). <span class="qed qed-proof"></span></p>
+    </div>
+  </section>
+
+  <p>Each formula holds on every interval avoiding the integrand’s singularities, and the constant \(C\) may differ from interval to interval, as with \(\ln\lvert x\rvert\) in §6.4.</p>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.10</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int \sec^{3}x\,dx\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>The power of secant is odd and no tangent is present, so neither case of Strategy 8.3 applies. Following its third step, we use parts (Theorem 8.1). Take \(u = \sec x\) and \(dv = \sec^{2}x\,dx\), so that \(du = \sec x\tan x\,dx\) by Example 3.2 and \(v = \tan x\):</p>
+        <p>\[ \int \sec^{3}x\,dx = \sec x\tan x - \int \sec x\tan^{2}x\,dx. \]</p>
+        <p>Convert the tangents by \(\tan^{2}x = \sec^{2}x - 1\) (Proposition A.1):</p>
+        <p>\[ \int \sec^{3}x\,dx = \sec x\tan x - \int \sec^{3}x\,dx + \int \sec x\,dx. \]</p>
+        <p>The original integral has reappeared, and we solve for it as in Example 8.4. Adding \(\int\sec^{3}x\,dx\) to both sides, dividing by \(2\), and evaluating \(\int\sec x\,dx\) by Proposition 8.1:</p>
+        <p>\[ \int \sec^{3}x\,dx = \frac{1}{2}\Bigl(\sec x\tan x + \ln\lvert\sec x + \tan x\rvert\Bigr) + C. \]</p>
+        <p>This integral is the workhorse of the next section, where substitutions of the form \(x = a\tan\theta\) produce it repeatedly. The mirror integral \(\int\csc^{3}x\,dx\) is computed by the same two moves, parts and then Proposition 8.1’s cosecant formula. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <h3 class="subsec-head">Products with different frequencies</h3>
+
+  <p>The last family is \(\int\sin mx\cos nx\,dx\) and its siblings, where the two factors oscillate at different rates. No substitution connects them. Here the product-to-sum identities do all the work in one line, by replacing the product with a sum of single trigonometric functions. Proposition A.2’s first line is the one needed for a sine times a cosine:</p>
+  <p>\[ \sin u\cos v = \tfrac{1}{2}\bigl[\sin(u + v) + \sin(u - v)\bigr]. \]</p>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.11</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int \sin 4x\,\cos 5x\,dx\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>Apply the identity with \(u = 4x\) and \(v = 5x\):</p>
+        <p>\[ \sin 4x\,\cos 5x = \tfrac{1}{2}\bigl[\sin 9x + \sin(-x)\bigr] = \tfrac{1}{2}\bigl[\sin 9x - \sin x\bigr], \]</p>
+        <p>since sine is an odd function, \(\sin(-x) = -\sin x\). The product has become a sum of two sines at fixed frequencies, and each integrates on sight:</p>
+        <p>\[ \int \sin 4x\,\cos 5x\,dx = \frac{1}{2}\Bigl(-\frac{\cos 9x}{9} + \cos x\Bigr) + C = \frac{\cos x}{2} - \frac{\cos 9x}{18} + C. \]</p>
+        <p>For a product of two sines, or of two cosines, the other two lines of Proposition A.2 convert the product the same way. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <!-- expansion:summary — close §8.2: the manufacturing idea + what was minted; forward to §8.3 with no mechanics -->
+  <p>This section added no new integration principle. Its engine is still substitution, fed by identities: an odd power donates a factor to the differential, the Pythagorean identities convert what remains, power reduction lowers even powers, and product-to-sum splits mixed frequencies. The four antiderivatives of Proposition 8.1 fill the last gaps in the basic trigonometric table, and Example 8.10’s \(\int\sec^{3}x\,dx\) is recorded for immediate reuse. The next section turns this machinery outward, onto integrands that contain no trigonometry at all: radicals such as \(\sqrt{9 - x^{2}}\), which a well-chosen trigonometric substitution converts into exactly the integrals this section taught.</p>
+
+</article>
+</template>
+
+<template id="frag-sec-8-3">
+<!-- §8.3 Trigonometric Substitution. section-source: Stewart ET 9e §7.3; cross-checked Thomas 14e
+     §8.4, Rogawski 4e §7.3. Authored 2026-07-26 per PLAN-ch08 + brief-8-3 (canon-as-spine;
+     plain-register generation; ③ A-01 hygiene: positive parameters, named connected components,
+     sec-branch rule in caution). Numbering: mints Strategy 8.4, Examples 8.12–8.16. NO
+     Def/Thm/Prop minted here. Cautions UNNUMBERED (two).
+     SEAM GUARD (PLAN-ch08 D5 + brief-8-3): inverse-substitution legitimacy = ONE prose paragraph
+     before Strategy 8.4 (Thm 6.6 read right-to-left; restricted range ⇒ one-to-one ⇒ arcsin/
+     arctan back-substitution well defined; range ⇒ definite radical sign). Every solution opens
+     by naming pattern + range + sign resolution. a>0 convention sentence before the table.
+     Imports: §1.2 principal ranges; Prop A.1 (Pythagorean companions); §A.2 power reduction
+     (restated); §A.5 completing-the-square identity (restated; its "Chapter 8" promise is
+     discharged in Ex 8.16); Prop 8.1 (∫sec); Ex 8.10 (sec³ named as the tan-sub workhorse, no
+     rerun); Thm 6.7 (definite limits transform); Thm 6.8 (even symmetry, Ex 8.13). Ellipse
+     perimeter forward clause → §8.7 (no elliptic vocabulary). NO hyperbolic subs (D2); NO full
+     √(x²±a²) worked runs (one clause to Ex 8.10's sec³).
+     Counters handed to §8.4: Strategy 8.5, Example 8.17; §8.4 mints equation tag (8.A).
+     Record: PLAN-ch08.md, brief-8-3.md, ch08_ch-direction-codex3-audit.md (A-01).
+     Math verified during authoring; sympy recompute at chapter sweep. -->
+
+<article class="sec" lang="en">
+
+  <header class="sec-head">
+    <h2 class="sec-title"><span class="sec-no">8.3</span>Trigonometric Substitution</h2>
+  </header>
+
+  <!-- expansion:intuition — section opener: the collision (no visible du removes a radical over a sum/difference of squares) + the Pythagorean reparametrization idea -->
+  <p>The radical \(\sqrt{9 - x^{2}}\) appeared in §8.2’s closing sentence as the next target, and it resists every method so far. No substitution of the form \(u = 9 - x^{2}\) helps unless a stray factor of \(x\) happens to sit in the integrand to supply \(du\). When it does not, the root over a sum or difference of squares blocks every algebraic move. What removes it is a change of viewpoint. The Pythagorean identity is itself a statement about sums of squares: setting \(x = 3\sin\theta\) turns \(9 - x^{2}\) into \(9\cos^{2}\theta\), a perfect square, and the root falls away. The substitution changes the variable, so a return step waits at the end; what is gained is an integrand made of trigonometric functions, which §8.2 taught us to handle.</p>
+
+  <p>One point of honesty before the machinery. In Chapter 6 we substituted \(u = g(x)\), replacing the variable by an expression. Here we run the Substitution Rule (Theorem 6.6) in the other direction, replacing the variable \(x\) by a formula \(x = g(\theta)\) in a new variable. For this to be reversible, \(g\) must be one-to-one, and that is what the restricted ranges in the table below arrange: on \([-\tfrac{\pi}{2}, \tfrac{\pi}{2}]\) the function \(a\sin\theta\) passes each value once, so \(\theta = \arcsin\tfrac{x}{a}\) is well defined, exactly as in §1.2. The same restriction settles a second question. A square root such as \(\sqrt{9\cos^{2}\theta}\) equals \(3\lvert\cos\theta\rvert\), and on \([-\tfrac{\pi}{2}, \tfrac{\pi}{2}]\) the cosine is nonnegative, so the absolute value can be dropped with justification rather than by hope. Every solution in this section begins by naming its substitution, its \(\theta\)-range, and the sign that the range fixes.</p>
+
+  <p>Throughout, \(a\) denotes a positive constant. Three radical patterns cover the standard cases, one for each rearrangement of the Pythagorean identity (Proposition A.1).</p>
+
+  <section class="env env-strategy">
+    <p class="env-head"><span class="env-kicker">Strategy</span><span class="env-num">8.4</span><span class="env-name">Trigonometric substitution</span></p>
+    <div class="env-body">
+      <p>First check for an ordinary substitution: if the integrand carries a spare factor of \(x\), as in \(\int x\sqrt{1 - x^{2}}\,dx\), then \(u = 1 - x^{2}\) finishes without trigonometry. The same check returns as step 2 of §8.5’s four-step strategy. Otherwise, match the radical to a row:</p>
+      <ol class="steps">
+        <li>\(\sqrt{a^{2} - x^{2}}\): substitute \(x = a\sin\theta\), \(\theta \in \bigl[-\tfrac{\pi}{2}, \tfrac{\pi}{2}\bigr]\). Then \(1 - \sin^{2}\theta = \cos^{2}\theta\) gives \(\sqrt{a^{2} - x^{2}} = a\cos\theta\), with \(\cos\theta \ge 0\) on the range.</li>
+        <li>\(\sqrt{a^{2} + x^{2}}\): substitute \(x = a\tan\theta\), \(\theta \in \bigl(-\tfrac{\pi}{2}, \tfrac{\pi}{2}\bigr)\). Then \(1 + \tan^{2}\theta = \sec^{2}\theta\) gives \(\sqrt{a^{2} + x^{2}} = a\sec\theta\), with \(\sec\theta &gt; 0\) on the range.</li>
+        <li>\(\sqrt{x^{2} - a^{2}}\): substitute \(x = a\sec\theta\), \(\theta \in \bigl[0, \tfrac{\pi}{2}\bigr)\) for the component \(x \ge a\). Then \(\sec^{2}\theta - 1 = \tan^{2}\theta\) gives \(\sqrt{x^{2} - a^{2}} = a\tan\theta\), with \(\tan\theta \ge 0\) on the range. (For the component \(x \le -a\), see the caution at the end of the section.)</li>
+      </ol>
+      <p class="informal">To return to \(x\), draw a right triangle that realizes the substitution: mark the angle \(\theta\), and label the sides so that the substitution’s ratio holds. The remaining side, by the Pythagorean theorem, is the radical. Every trigonometric function of \(\theta\) can then be read off as a ratio of labeled sides. The triangle is a mnemonic for identities that the \(\theta\)-range makes valid.</p>
+    </div>
+  </section>
+
+  <!-- [FIGURE-OPPORTUNITY] 描述：the three reference right triangles, one per Strategy 8.4 row, θ marked at the a-adjacent vertex. Panel 1 (sin): hypotenuse a, opposite x, adjacent √(a²−x²). Panel 2 (tan): opposite x, adjacent a, hypotenuse √(a²+x²). Panel 3 (sec): hypotenuse x, adjacent a, opposite √(x²−a²). Domain facts: labels must match the substitutions exactly; θ acute in all panels (primary ranges).
+       類型：multi-panel
+       理由：the back-substitution device drawn once beats re-deriving ratios in every solution; essential tier. -->
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.12</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int \frac{\sqrt{9 - x^{2}}}{x^{2}}\,dx\) for \(0 &lt; x &lt; 3\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>The radical matches row 1 with \(a = 3\). Substitute \(x = 3\sin\theta\); on the component \(0 &lt; x &lt; 3\) the range narrows to \(\theta \in \bigl(0, \tfrac{\pi}{2}\bigr)\), where \(\cos\theta &gt; 0\), so \(\sqrt{9 - x^{2}} = 3\cos\theta\) and \(dx = 3\cos\theta\,d\theta\). The integral becomes</p>
+        <p>\[ \int \frac{3\cos\theta}{9\sin^{2}\theta}\,3\cos\theta\,d\theta = \int \frac{\cos^{2}\theta}{\sin^{2}\theta}\,d\theta = \int \cot^{2}\theta\,d\theta. \]</p>
+        <p>By the Pythagorean companion \(1 + \cot^{2}\theta = \csc^{2}\theta\) (Proposition A.1), the integrand is \(\csc^{2}\theta - 1\), and \(\int\csc^{2}\theta\,d\theta = -\cot\theta + C\) since \(\tfrac{d}{d\theta}\cot\theta = -\csc^{2}\theta\). So</p>
+        <p>\[ \int \cot^{2}\theta\,d\theta = -\cot\theta - \theta + C. \]</p>
+        <p>Now return to \(x\). In the right triangle for \(\sin\theta = \tfrac{x}{3}\), the hypotenuse is \(3\), the side opposite \(\theta\) is \(x\), and the remaining side is \(\sqrt{9 - x^{2}}\). Reading off the ratio, \(\cot\theta = \tfrac{\sqrt{9 - x^{2}}}{x}\), and \(\theta = \arcsin\tfrac{x}{3}\) directly. Therefore</p>
+        <p>\[ \int \frac{\sqrt{9 - x^{2}}}{x^{2}}\,dx = -\frac{\sqrt{9 - x^{2}}}{x} - \arcsin\frac{x}{3} + C \qquad\text{on } (0, 3). \]</p>
+        <p>The same computation serves on \((-3, 0)\), where \(\theta \in \bigl(-\tfrac{\pi}{2}, 0\bigr)\) and the cosine is still positive; only the component changes. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.13</span></p>
+      <div class="env-body">
+        <p>Find the area enclosed by the ellipse \(\dfrac{x^{2}}{a^{2}} + \dfrac{y^{2}}{b^{2}} = 1\), where \(a, b &gt; 0\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>Solving for the upper half gives \(y = \tfrac{b}{a}\sqrt{a^{2} - x^{2}}\) for \(-a \le x \le a\), so the enclosed area is twice the integral of that height:</p>
+        <p>\[ A = 2\,\frac{b}{a}\int_{-a}^{a} \sqrt{a^{2} - x^{2}}\,dx = 4\,\frac{b}{a}\int_{0}^{a} \sqrt{a^{2} - x^{2}}\,dx, \]</p>
+        <p>where the second equality uses the evenness of the integrand (Theorem 6.8). The radical matches row 1. Substitute \(x = a\sin\theta\), \(dx = a\cos\theta\,d\theta\), and transform the limits by Theorem 6.7: \(x = 0\) gives \(\theta = 0\) and \(x = a\) gives \(\theta = \tfrac{\pi}{2}\). On \(\bigl[0, \tfrac{\pi}{2}\bigr]\), \(\sqrt{a^{2} - x^{2}} = a\cos\theta\), so</p>
+        <p>\[ \begin{aligned}
+          \int_{0}^{a} \sqrt{a^{2} - x^{2}}\,dx &= \int_{0}^{\pi/2} a^{2}\cos^{2}\theta\,d\theta = a^{2}\int_{0}^{\pi/2} \frac{1 + \cos 2\theta}{2}\,d\theta \\[2pt]
+            &= a^{2}\left[\frac{\theta}{2} + \frac{\sin 2\theta}{4}\right]_{0}^{\pi/2} = \frac{\pi a^{2}}{4},
+        \end{aligned} \]</p>
+        <p>using the power-reduction identity \(\cos^{2}\theta = \tfrac{1}{2}(1 + \cos 2\theta)\) of §A.2. Therefore</p>
+        <p>\[ A = 4\,\frac{b}{a}\cdot\frac{\pi a^{2}}{4} = \pi a b. \]</p>
+        <p>For \(a = b = r\) the ellipse is a circle and the formula returns \(\pi r^{2}\), as it must. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <!-- expansion:intuition [source: §7.6 forward promise ("Chapter 8 will widen the toolkit… its numerical methods take over") — the perimeter contrast sets up §8.7's motivation] -->
+  <p>The ellipse’s area is now settled; its boundary length is not. For \(a \ne b\), the arc length integral of §7.6 for this curve contains a radical that no row of Strategy 8.4, and no other technique of this chapter, converts to an elementary antiderivative. (The circle \(a = b = r\) is the exception: there the integrand reduces to a constant times \(1/\sqrt{r^{2} - x^{2}}\), which row 1 converts in one line.) The area took four lines; the perimeter sits outside this chapter’s reach. Section 8.7 returns to exactly this kind of integral with numerical rules.</p>
+
+  <!-- [FIGURE-OPPORTUNITY] 描述：quarter-ellipse region shaded in the first quadrant, curve from (0,b) to (a,0), a and b marked on the axes; the ×4 symmetry visible by ghosting the other three quadrants lightly. Domain facts: intercepts exactly (a,0),(0,b); a>b drawn (major axis horizontal) to match Ex 8.13's generic read.
+       類型：graph
+       理由：the symmetry-times-four step is one glance as a picture; supporting tier. -->
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.14</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int \frac{dx}{x^{2}\sqrt{x^{2} + 4}}\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>The radical matches row 2 with \(a = 2\). Substitute \(x = 2\tan\theta\), \(\theta \in \bigl(-\tfrac{\pi}{2}, \tfrac{\pi}{2}\bigr)\); we work on the component \(x &gt; 0\), where \(\theta \in \bigl(0, \tfrac{\pi}{2}\bigr)\). Then \(dx = 2\sec^{2}\theta\,d\theta\), and since \(\sec\theta &gt; 0\) on the range, \(\sqrt{x^{2} + 4} = 2\sec\theta\). The integral becomes</p>
+        <p>\[ \int \frac{2\sec^{2}\theta}{4\tan^{2}\theta\cdot 2\sec\theta}\,d\theta = \frac{1}{4}\int \frac{\sec\theta}{\tan^{2}\theta}\,d\theta = \frac{1}{4}\int \frac{\cos\theta}{\sin^{2}\theta}\,d\theta, \]</p>
+        <p>after writing everything in sines and cosines. With \(u = \sin\theta\), \(du = \cos\theta\,d\theta\), this is \(\tfrac{1}{4}\int u^{-2}\,du = -\tfrac{1}{4u} + C = -\tfrac{1}{4}\csc\theta + C\). In the triangle for \(\tan\theta = \tfrac{x}{2}\), the side opposite \(\theta\) is \(x\), the adjacent side is \(2\), and the hypotenuse is \(\sqrt{x^{2} + 4}\), so \(\csc\theta = \tfrac{\sqrt{x^{2} + 4}}{x}\). Therefore</p>
+        <p>\[ \int \frac{dx}{x^{2}\sqrt{x^{2} + 4}} = -\frac{\sqrt{x^{2} + 4}}{4x} + C. \]</p>
+        <p>Differentiating the answer shows it is an antiderivative on \(x &lt; 0\) as well, so the one formula serves both components. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <p>When the radical stands alone in the integrand, as in \(\int\sqrt{x^{2} + a^{2}}\,dx\), the same tangent substitution leads to \(\int\sec^{3}\theta\,d\theta\), which Example 8.10 supplies; this book leaves that longer run unworked.</p>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.15</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int \frac{dx}{\sqrt{x^{2} - a^{2}}}\) for \(x &gt; a &gt; 0\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>The radical matches row 3. Substitute \(x = a\sec\theta\), \(\theta \in \bigl(0, \tfrac{\pi}{2}\bigr)\) on this component; then \(dx = a\sec\theta\tan\theta\,d\theta\), and since \(\tan\theta &gt; 0\) on the range, \(\sqrt{x^{2} - a^{2}} = a\tan\theta\). The integral collapses:</p>
+        <p>\[ \int \frac{a\sec\theta\tan\theta}{a\tan\theta}\,d\theta = \int \sec\theta\,d\theta = \ln\lvert\sec\theta + \tan\theta\rvert + C, \]</p>
+        <p>by Proposition 8.1. In the triangle for \(\sec\theta = \tfrac{x}{a}\), the hypotenuse is \(x\), the adjacent side is \(a\), and the opposite side is \(\sqrt{x^{2} - a^{2}}\), so</p>
+        <p>\[ \int \frac{dx}{\sqrt{x^{2} - a^{2}}} = \ln\left\lvert \frac{x}{a} + \frac{\sqrt{x^{2} - a^{2}}}{a} \right\rvert + C = \ln\bigl(x + \sqrt{x^{2} - a^{2}}\bigr) + C_{1}, \]</p>
+        <p>where \(\ln a\) was absorbed into the constant, and the absolute value was dropped because \(x &gt; a &gt; 0\) makes the argument positive on this component. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <section class="env env-caution">
+    <p class="env-head"><span class="env-kicker">Caution</span></p>
+    <div class="env-body">
+      <p>The domain of \(\sqrt{x^{2} - a^{2}}\) has two components, and row 3’s range covers only \(x \ge a\). On the other component, \(x \le -a\), use the alternate range \(\theta \in \bigl(\tfrac{\pi}{2}, \pi\bigr]\): there \(\tan\theta \le 0\), so the resolved radical is \(\sqrt{x^{2} - a^{2}} = -a\tan\theta\), and the extra sign travels through the computation. The shortcut is to check the final formula directly. Differentiating \(\ln\bigl\lvert x + \sqrt{x^{2} - a^{2}}\bigr\rvert\) gives \(\tfrac{1}{\sqrt{x^{2} - a^{2}}}\) on <em>both</em> components, so Example 8.15’s answer, with the absolute value restored, serves everywhere. An antiderivative claimed across a two-component domain must be checked on each component.</p>
+    </div>
+  </section>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.16</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int \frac{x}{\sqrt{3 - 2x - x^{2}}}\,dx\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>No row of Strategy 8.4 matches until the quadratic under the root is recentred. Completing the square, as in the closing paragraph of §A.5, with \(x^{2} + 2x = (x + 1)^{2} - 1\):</p>
+        <p>\[ 3 - 2x - x^{2} = 4 - (x + 1)^{2}, \]</p>
+        <p>which is positive exactly for \(-3 &lt; x &lt; 1\), the domain of the integrand. The shift \(u = x + 1\), \(du = dx\), \(x = u - 1\) turns the integral into row-1 form:</p>
+        <p>\[ \int \frac{u - 1}{\sqrt{4 - u^{2}}}\,du = \int \frac{u}{\sqrt{4 - u^{2}}}\,du - \int \frac{du}{\sqrt{4 - u^{2}}}. \]</p>
+        <p>The first piece has the spare factor that Strategy 8.4’s lead-in asks about: \(w = 4 - u^{2}\), \(dw = -2u\,du\) gives \(-\tfrac{1}{2}\int w^{-1/2}\,dw = -\sqrt{4 - u^{2}}\). The second piece is row 1 with \(a = 2\) and nothing else in the integrand: with \(u = 2\sin\varphi\), \(\varphi \in \bigl(-\tfrac{\pi}{2}, \tfrac{\pi}{2}\bigr)\), both \(du = 2\cos\varphi\,d\varphi\) and \(\sqrt{4 - u^{2}} = 2\cos\varphi\) reduce it to \(\int d\varphi = \varphi = \arcsin\tfrac{u}{2}\). Assembling and returning to \(x\):</p>
+        <p>\[ \int \frac{x}{\sqrt{3 - 2x - x^{2}}}\,dx = -\sqrt{3 - 2x - x^{2}} - \arcsin\frac{x + 1}{2} + C, \]</p>
+        <p>valid on \((-3, 1)\). Completing the square is what §A.5 promised it would be here: the one algebraic step that brings a general quadratic radical within reach of the table. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <section class="env env-caution">
+    <p class="env-head"><span class="env-kicker">Caution</span></p>
+    <div class="env-body">
+      <p>For a definite integral, either transform the limits along with the variable (Theorem 6.7), as in Example 8.13, or back-substitute to \(x\) first and then apply the original limits. Do not mix the two: evaluating a \(\theta\)-antiderivative at \(x\)-limits is the classic error of this method.</p>
+    </div>
+  </section>
+
+  <!-- expansion:summary — close §8.3: what the method is + hygiene recap; forward to §8.4 with no mechanics -->
+  <p>Trigonometric substitution reparametrizes the variable so that a Pythagorean identity collapses a quadratic radical into a perfect square. The discipline is in the ranges: each substitution is one-to-one on its stated interval, the interval fixes the radical’s sign, and the labeled triangle carries the answer back to \(x\). With completing the square, the method reaches any \(\sqrt{px^{2} + qx + r}\). What it does not touch is the other standard shape built from polynomials: a ratio of two of them, with no radical in sight. Integrating rational functions is the next section’s business, and the algebra for it is already waiting in Appendix A.4.</p>
+
+</article>
+</template>
+
+<template id="frag-sec-8-4">
+<!-- §8.4 Integration of Rational Functions by Partial Fractions. section-source: Stewart ET 9e
+     §7.4; cross-checked Thomas 14e §8.5, Rogawski 4e §7.5. Authored 2026-07-26 per PLAN-ch08 +
+     brief-8-4 (canon-as-spine; plain-register generation). Numbering: mints Strategy 8.5,
+     Examples 8.17–8.22, equation tag (8.A). NO Def/Thm/Prop. Cautions UNNUMBERED (two: FTA
+     on-credit fence — SPEC §16.1 unnumbered-Caution vehicle, Ch2 §2.4 precedent, the chapter's
+     FIRST of two credits; irreducibility check p²<4q).
+     SEAM GUARD (PLAN-ch08 D6 + brief-8-4): the ALGEBRA layer is §A.4's — Prop A.7 (decomposition
+     form) + Strategy A.2 (finding constants, incl. cover-up) are imported by cross-ref + one-line
+     recall, NOT re-taught; this section's center of mass is the INTEGRATION of the fragments.
+     (8.A) derived via u = x/a + §6.4's table row ∫du/(1+u²) = arctan u. ln|x−r| cites §6.4's
+     ln|x| export. Completing the square cites §A.5's closing identity (its "Chapter 8" promise
+     discharged in Ex 8.21 — say so). Case IV: form covered by Prop A.7 + one prose sentence, NO
+     worked example (recorded). Rationalizing substitution (Ex 8.22) frames technique chaining.
+     Counters handed to §8.5: Strategy 8.6, Example 8.23 (no other types minted in §8.5).
+     Record: PLAN-ch08.md, brief-8-4.md. Math verified during authoring; sympy at sweep. -->
+
+<article class="sec" lang="en">
+
+  <header class="sec-head">
+    <h2 class="sec-title"><span class="sec-no">8.4</span>Integration of Rational Functions by Partial Fractions</h2>
+  </header>
+
+  <!-- expansion:intuition — section opener: opaque-as-a-whole, transparent-in-fragments; §A.4's banked promise is kept here -->
+  <p>A rational function, a ratio of polynomials, matches nothing in the chapter so far. The integrand \(\dfrac{2x^{2} - x + 4}{x^{3} + 4x}\) offers no product to trade by parts, no trigonometry, and no radical. Yet the smallest rational integrand of all is easy, because §A.4 opened with the identity</p>
+  <p>\[ \frac{1}{x(x + 1)} = \frac{1}{x} - \frac{1}{x + 1}, \]</p>
+  <p>and each piece on the right integrates on sight, to \(\ln\lvert x\rvert - \ln\lvert x + 1\rvert + C\) by §6.4. Appendix A.4 built the whole algebra of such splittings and remarked that its real payoff would come in integration. This section collects that payoff. Every proper rational function is a sum of fragments of a few standard shapes (Proposition A.7), the constants are found by the routine of Strategy A.2, and each fragment shape has a standard antiderivative. Rational integrands, unlike most others, always yield.</p>
+
+  <p>The claim “every proper rational function” rests on one algebraic fact that this book states but does not prove.</p>
+
+  <!-- expansion:caution [source: SPEC §16.1 on-credit fence, unnumbered-Caution vehicle (Ch2 §2.4 precedent); ROADMAP seam-hunt premise "實多項式因式分解 (FTA fact)" — the chapter's first of two credits] -->
+  <section class="env env-caution">
+    <p class="env-head"><span class="env-kicker">Caution</span></p>
+    <div class="env-body">
+      <p>Proposition A.7 begins by factoring the denominator completely into linear and irreducible quadratic factors. That such a factorization always exists is a consequence of the Fundamental Theorem of Algebra, whose proof lies outside this book. We take the factorization fact on credit; it is the first of two results this chapter borrows without proof, and everything else in the section is proved or computed in full.</p>
+    </div>
+  </section>
+
+  <p>One small antiderivative is needed before the fragments can be listed, the scaled version of §6.4’s arctangent row. For \(a &gt; 0\), substitute \(u = x/a\), \(du = dx/a\), in the table entry \(\int\frac{du}{1 + u^{2}} = \arctan u + C\):</p>
+  <p>\[ \int \frac{dx}{x^{2} + a^{2}} = \frac{1}{a^{2}}\int \frac{a\,du}{1 + u^{2}} = \frac{1}{a}\arctan\frac{x}{a} + C. \tag{8.A} \]</p>
+
+  <p>With (8.A) in hand, every fragment shape that Proposition A.7 can produce has a known antiderivative. A constant over a linear factor gives a logarithm, \(\int\frac{A}{x - r}\,dx = A\ln\lvert x - r\rvert + C\). A constant over a power of a linear factor is the power rule, \(\int\frac{A}{(x - r)^{k}}\,dx = \frac{-A}{(k - 1)(x - r)^{k - 1}} + C\) for \(k \ge 2\). A linear numerator over an irreducible quadratic splits in two: a multiple of the quadratic’s derivative, giving a logarithm of the quadratic, plus a constant piece that (8.A) handles once the square is completed. The examples run each shape in turn; the strategy box states the pipeline.</p>
+
+  <section class="env env-strategy">
+    <p class="env-head"><span class="env-kicker">Strategy</span><span class="env-num">8.5</span><span class="env-name">Integrating a rational function</span></p>
+    <div class="env-body">
+      <ol class="steps">
+        <li><em>If the fraction is improper, divide first.</em> Numerator degree at or above denominator degree means polynomial division, leaving a polynomial plus a proper remainder fraction (Strategy A.2, step 1). The polynomial integrates term by term.</li>
+        <li><em>Factor the denominator completely</em> into linear and irreducible quadratic factors. A quadratic \(x^{2} + px + q\) is irreducible exactly when \(p^{2} &lt; 4q\).</li>
+        <li><em>Decompose.</em> Write the template of Proposition A.7 and find the constants by Strategy A.2. The cover-up shortcut reaches the constant over each distinct linear factor at once.</li>
+        <li><em>Integrate fragment by fragment:</em> logarithms from linear factors, the power rule from their powers, and a logarithm plus an arctangent, via completing the square (§A.5) and (8.A), from each irreducible quadratic.</li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.17</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int \frac{x^{3} + x}{x - 1}\,dx\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>The numerator’s degree exceeds the denominator’s, so step 1 applies before anything else. Polynomial division gives</p>
+        <p>\[ \frac{x^{3} + x}{x - 1} = x^{2} + x + 2 + \frac{2}{x - 1}, \]</p>
+        <p>which recombining over the common denominator confirms. Now every piece is standard:</p>
+        <p>\[ \int \frac{x^{3} + x}{x - 1}\,dx = \frac{x^{3}}{3} + \frac{x^{2}}{2} + 2x + 2\ln\lvert x - 1\rvert + C, \]</p>
+        <p>on any interval avoiding \(x = 1\). The division step is not optional. No sum of terms \(\frac{A}{x-1}\) alone could reproduce a numerator that outgrows its denominator, which is the point of §A.4’s closing caution. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.18</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int \frac{x^{2} + 2x - 1}{2x^{3} + 3x^{2} - 2x}\,dx\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>The fraction is proper, so factoring comes first: \(2x^{3} + 3x^{2} - 2x = x(2x^{2} + 3x - 2) = x(2x - 1)(x + 2)\), three distinct linear factors. Proposition A.7’s template reads</p>
+        <p>\[ \frac{x^{2} + 2x - 1}{x(2x - 1)(x + 2)} = \frac{A}{x} + \frac{B}{2x - 1} + \frac{C}{x + 2}. \]</p>
+        <p>Clearing denominators,</p>
+        <p>\[ x^{2} + 2x - 1 = A(2x - 1)(x + 2) + Bx(x + 2) + Cx(2x - 1), \]</p>
+        <p>and the cover-up shortcut of Strategy A.2 evaluates at each factor’s root. Setting \(x = 0\) gives \(-1 = -2A\), so \(A = \tfrac{1}{2}\). Setting \(x = \tfrac{1}{2}\) gives \(\tfrac{1}{4} = \tfrac{5}{4}B\), so \(B = \tfrac{1}{5}\). Setting \(x = -2\) gives \(-1 = 10C\), so \(C = -\tfrac{1}{10}\). Each fragment is a logarithm; for the middle one, the inner substitution \(u = 2x - 1\) contributes the factor \(\tfrac{1}{2}\):</p>
+        <p>\[ \int \frac{x^{2} + 2x - 1}{2x^{3} + 3x^{2} - 2x}\,dx = \frac{1}{2}\ln\lvert x\rvert + \frac{1}{10}\ln\lvert 2x - 1\rvert - \frac{1}{10}\ln\lvert x + 2\rvert + C, \]</p>
+        <p>on any interval avoiding \(0\), \(\tfrac{1}{2}\), and \(-2\). <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.19</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int \frac{x^{4} - 2x^{2} + 4x + 1}{x^{3} - x^{2} - x + 1}\,dx\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>Improper again, so divide: the quotient is \(x + 1\) with remainder \(4x\), so</p>
+        <p>\[ \frac{x^{4} - 2x^{2} + 4x + 1}{x^{3} - x^{2} - x + 1} = x + 1 + \frac{4x}{x^{3} - x^{2} - x + 1}. \]</p>
+        <p>Factoring by grouping, \(x^{3} - x^{2} - x + 1 = x^{2}(x - 1) - (x - 1) = (x - 1)(x^{2} - 1) = (x - 1)^{2}(x + 1)\): a repeated linear factor. The template carries one fragment per power:</p>
+        <p>\[ \frac{4x}{(x - 1)^{2}(x + 1)} = \frac{A}{x - 1} + \frac{B}{(x - 1)^{2}} + \frac{C}{x + 1}. \]</p>
+        <p>Clearing denominators, \(4x = A(x - 1)(x + 1) + B(x + 1) + C(x - 1)^{2}\). Setting \(x = 1\) gives \(4 = 2B\), so \(B = 2\). Setting \(x = -1\) gives \(-4 = 4C\), so \(C = -1\). The cover-up has reached its limit, as Strategy A.2 warns for repeated factors, so match the \(x^{2}\) coefficients: \(0 = A + C\), so \(A = 1\). Integrating fragment by fragment, with the power rule on the middle one,</p>
+        <p>\[ \begin{aligned}
+          \int \frac{x^{4} - 2x^{2} + 4x + 1}{x^{3} - x^{2} - x + 1}\,dx &= \frac{x^{2}}{2} + x + \ln\lvert x - 1\rvert \\
+            &\quad - \frac{2}{x - 1} - \ln\lvert x + 1\rvert + C,
+        \end{aligned} \]</p>
+        <p>on any interval avoiding \(\pm 1\). <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.20</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int \frac{2x^{2} - x + 4}{x^{3} + 4x}\,dx\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>The denominator factors as \(x(x^{2} + 4)\). The quadratic has \(p = 0\) and \(q = 4\), so \(p^{2} &lt; 4q\) and it is irreducible; by Proposition A.7 it carries a linear numerator:</p>
+        <p>\[ \frac{2x^{2} - x + 4}{x(x^{2} + 4)} = \frac{A}{x} + \frac{Bx + C}{x^{2} + 4}. \]</p>
+        <p>Clearing denominators, \(2x^{2} - x + 4 = A(x^{2} + 4) + (Bx + C)x\). The constant term gives \(4 = 4A\), so \(A = 1\); the \(x^{2}\) coefficient gives \(2 = A + B\), so \(B = 1\); the \(x\) coefficient gives \(C = -1\). The quadratic fragment splits into its two standard pieces:</p>
+        <p>\[ \begin{aligned}
+          \int \frac{x - 1}{x^{2} + 4}\,dx &= \frac{1}{2}\int \frac{2x}{x^{2} + 4}\,dx - \int \frac{dx}{x^{2} + 4} \\[2pt]
+            &= \frac{1}{2}\ln\bigl(x^{2} + 4\bigr) - \frac{1}{2}\arctan\frac{x}{2} + C,
+        \end{aligned} \]</p>
+        <p>the first by the substitution \(u = x^{2} + 4\) and the second by (8.A) with \(a = 2\). No absolute value is needed on \(x^{2} + 4\), which is positive for every \(x\). Assembling,</p>
+        <p>\[ \int \frac{2x^{2} - x + 4}{x^{3} + 4x}\,dx = \ln\lvert x\rvert + \frac{1}{2}\ln\bigl(x^{2} + 4\bigr) - \frac{1}{2}\arctan\frac{x}{2} + C, \]</p>
+        <p>on any interval avoiding \(0\). <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <section class="env env-caution">
+    <p class="env-head"><span class="env-kicker">Caution</span></p>
+    <div class="env-body">
+      <p>Check irreducibility before assigning the \(Bx + C\) template: \(x^{2} + px + q\) is irreducible exactly when \(p^{2} &lt; 4q\). A quadratic that looks unfactorable often is not. The factor \(x^{2} - x - 6\) splits as \((x - 3)(x + 2)\), and treating it as irreducible sends the whole decomposition down the wrong template. When in doubt, compute the discriminant first.</p>
+    </div>
+  </section>
+
+  <p>A repeated irreducible quadratic, the last case of Proposition A.7, adds no new integration idea: each power \(\frac{Bx + C}{(x^{2} + px + q)^{k}}\) again splits into a derivative-of-the-quadratic piece and a constant piece, and the constant pieces are handled by completing the square and a short reduction. The bookkeeping is longer, the shapes are the same, and this book leaves that case as stated.</p>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.21</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int \frac{4x^{2} - 3x + 2}{4x^{2} - 4x + 3}\,dx\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>The degrees are equal, so this fraction is improper and step 1 applies. Dividing,</p>
+        <p>\[ \frac{4x^{2} - 3x + 2}{4x^{2} - 4x + 3} = 1 + \frac{x - 1}{4x^{2} - 4x + 3}, \]</p>
+        <p>and the denominator has discriminant \((-4)^{2} - 4\cdot 4\cdot 3 &lt; 0\), so it is irreducible and is its own decomposition. Completing the square, as in §A.5’s closing paragraph, \(4x^{2} - 4x + 3 = (2x - 1)^{2} + 2\). Substitute \(u = 2x - 1\), so \(x = \tfrac{u + 1}{2}\), \(dx = \tfrac{du}{2}\), and \(x - 1 = \tfrac{u - 1}{2}\):</p>
+        <p>\[ \begin{aligned}
+          \int \frac{x - 1}{4x^{2} - 4x + 3}\,dx &= \frac{1}{4}\int \frac{u - 1}{u^{2} + 2}\,du \\[2pt]
+            &= \frac{1}{8}\ln\bigl(u^{2} + 2\bigr) - \frac{1}{4}\cdot\frac{1}{\sqrt{2}}\arctan\frac{u}{\sqrt{2}} + C,
+        \end{aligned} \]</p>
+        <p>splitting as in Example 8.20 and applying (8.A) with \(a = \sqrt{2}\). Returning to \(x\), with \(u^{2} + 2 = 4x^{2} - 4x + 3\) positive everywhere,</p>
+        <p>\[ \begin{aligned}
+          \int \frac{4x^{2} - 3x + 2}{4x^{2} - 4x + 3}\,dx &= x + \frac{1}{8}\ln\bigl(4x^{2} - 4x + 3\bigr) \\
+            &\quad - \frac{1}{4\sqrt{2}}\arctan\frac{2x - 1}{\sqrt{2}} + C,
+        \end{aligned} \]</p>
+        <p>valid on all of \(\mathbb{R}\). This is the integral §A.5 promised: completing the square is the step that brings a general quadratic denominator within reach of (8.A). <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <h3 class="subsec-head">Rationalizing substitutions</h3>
+
+  <p>Some integrands are not rational but can be made so. When a single radical \(\sqrt[n]{g(x)}\) is the obstacle, the substitution \(u = \sqrt[n]{g(x)}\) often converts the whole integrand into a rational function of \(u\), where this section’s pipeline takes over.</p>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.22</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int \frac{\sqrt{x + 4}}{x}\,dx\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>Substitute \(u = \sqrt{x + 4}\), working on the component \(x &gt; 0\), where \(u &gt; 2\). Then \(u^{2} = x + 4\), so \(x = u^{2} - 4\) and \(dx = 2u\,du\):</p>
+        <p>\[ \int \frac{\sqrt{x + 4}}{x}\,dx = \int \frac{u}{u^{2} - 4}\,2u\,du = 2\int \frac{u^{2}}{u^{2} - 4}\,du. \]</p>
+        <p>The integrand is rational and improper, so divide: \(\frac{u^{2}}{u^{2} - 4} = 1 + \frac{4}{u^{2} - 4}\), and \(u^{2} - 4 = (u - 2)(u + 2)\) decomposes by cover-up as \(\frac{4}{(u-2)(u+2)} = \frac{1}{u - 2} - \frac{1}{u + 2}\). So</p>
+        <p>\[ 2\int \frac{u^{2}}{u^{2} - 4}\,du = 2u + 2\ln\lvert u - 2\rvert - 2\ln\lvert u + 2\rvert + C, \]</p>
+        <p>and returning to \(x\),</p>
+        <p>\[ \int \frac{\sqrt{x + 4}}{x}\,dx = 2\sqrt{x + 4} + 2\ln\left\lvert \frac{\sqrt{x + 4} - 2}{\sqrt{x + 4} + 2} \right\rvert + C. \]</p>
+        <p>Differentiating confirms the formula, and the same check shows it also serves on the other component, \(-4 &lt; x &lt; 0\). The solution chained three techniques in order: a substitution to remove the radical, a division to make the fraction proper, and partial fractions to finish. That chaining is the normal condition of integration practice, and the next section is about choosing such chains deliberately. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <!-- expansion:summary — close §8.4: the pipeline + the honest credit; forward to §8.5 with no mechanics -->
+  <p>Rational functions are the best-behaved integrands in this chapter: Strategy 8.5’s four steps, divide, factor, decompose, integrate, always terminate, and the only borrowed ingredient is the factorization fact taken on credit above. Linear factors end in logarithms, their powers in the power rule, and irreducible quadratics in a logarithm plus an arctangent through (8.A). With parts, trigonometric methods, substitution, and partial fractions all in hand, the toolkit is complete. What remains is judgment: given an unfamiliar integral, which tool comes first? That question has a strategy of its own.</p>
+
+</article>
+</template>
+
+<template id="frag-sec-8-5">
+<!-- §8.5 Strategy for Integration. section-source: Stewart ET 9e §7.5; cross-checked Thomas 14e
+     §8.6 intro, Rogawski 4e Ch7 framing. Authored 2026-07-26 per PLAN-ch08 + brief-8-5
+     (canon-as-spine; plain-register generation; ③ B-02 form for the elementary-antiderivative
+     paragraph — SCOPE statement only, no Liouville credit; the chapter's credit count stays at
+     two, both elsewhere). Numbering: mints Strategy 8.6, Examples 8.23–8.26. NO Def/Thm/Prop;
+     NO cautions (traps live with their techniques).
+     SEAM GUARD (PLAN-ch08 §8.5 guard + brief-8-5): the strategy box CITES each technique's home
+     (Strategies 8.1–8.5, §6.5), never restates mechanics. Table of standard forms lists ONLY
+     established results, provenance in parentheses (§6.4 table / Prop 8.1 / (8.A) / scaled
+     arcsin verified inline via Ex 3.14 + chain rule Thm 3.3). Solutions may compress standard
+     sub-steps with a cross-ref (recognition is the taught skill — altitude note for auditors).
+     Forward sentences: §8.6 (convergence of ∫e^{-x²} improper) + §8.7 (numerics). Nameless
+     one-clause nod to further conversions (NO Weierstrass name/formula).
+     Counters handed to §8.6: Definition 8.1, Definition 8.2, Proposition 8.2, Theorem 8.3,
+     Example 8.27.
+     Record: PLAN-ch08.md, brief-8-5.md, ch08_ch-direction-codex3-audit.md (B-02). -->
+
+<article class="sec" lang="en">
+
+  <header class="sec-head">
+    <h2 class="sec-title"><span class="sec-no">8.5</span>Strategy for Integration</h2>
+  </header>
+
+  <!-- expansion:intuition — section opener: the collision (four look-alike integrals, four different tools) reframes the chapter's question from "how does each technique work" to "which technique fits" -->
+  <p>Each section so far answered the question “how does this technique work”. Practice asks a different question. An integral arrives unlabeled, and the work is to decide which tool fits, before any tool is applied. The four integrals</p>
+  <p>\[ \int \frac{\tan^{3}x}{\cos^{3}x}\,dx, \qquad \int e^{\sqrt{x}}\,dx, \qquad \int \frac{dx}{x\sqrt{\ln x}}, \qquad \int \sqrt{\frac{1 - x}{1 + x}}\,dx \]</p>
+  <p>look like near relatives: each is a small expression with one awkward feature. They dispatch to four different tools, and none of them is solved by the tool its surface suggests first. Reading form is a skill of its own. It costs seconds, it tolerates failure, and this section trains it.</p>
+
+  <section class="env env-strategy">
+    <p class="env-head"><span class="env-kicker">Strategy</span><span class="env-num">8.6</span><span class="env-name">A four-step strategy</span></p>
+    <div class="env-body">
+      <ol class="steps">
+        <li><em>Simplify the integrand first.</em> Algebra and identities can change the problem’s class entirely: expand or split fractions, rationalize, apply a trigonometric identity. Only then judge what kind of integral it is.</li>
+        <li><em>Look for an obvious substitution.</em> If some inner block \(g(x)\) appears together with its derivative, up to a constant, take \(u = g(x)\) (Strategy 6.2) and finish before reaching for anything heavier.</li>
+        <li><em>Classify by form and dispatch.</em> Powers or products of trigonometric functions go to Strategies 8.2 and 8.3. A radical over a quadratic goes to Strategy 8.4, completing the square first when the quadratic is not centered. A rational function goes to Strategy 8.5. A product of unrelated factors, or a lone logarithm or inverse function, goes to parts by Strategy 8.1.</li>
+        <li><em>If nothing has worked, try again from another angle.</em> Manipulate the integrand into a relative of a known integral, substitute to expose hidden structure, or chain techniques in sequence, as Examples 8.22 and 8.24 do. Several routes may succeed on the same integral; a dead end costs only the time it took.</li>
+      </ol>
+    </div>
+  </section>
+
+  <p>Step 3 leans on a stock of antiderivatives that can be recognized on sight. One scaled form joins the list first: differentiating \(\arcsin\tfrac{x}{a}\) by the chain rule (Theorem 3.3) and Example 3.14 gives \(\tfrac{1}{\sqrt{a^{2} - x^{2}}}\), so \(\int\tfrac{dx}{\sqrt{a^{2} - x^{2}}} = \arcsin\tfrac{x}{a} + C\) for \(a &gt; 0\) on \((-a, a)\). The working table, with each entry’s home in parentheses:</p>
+
+  <p>\[ \begin{aligned}
+    &\int x^{n}\,dx = \frac{x^{n+1}}{n+1} + C \;(n \ne -1), \qquad \int \frac{dx}{x} = \ln\lvert x\rvert + C \quad(\text{§6.4}), \\[2pt]
+    &\int e^{x}\,dx = e^{x} + C, \qquad \int \sin x\,dx = -\cos x + C \quad(\text{§6.4}), \\[2pt]
+    &\int \cos x\,dx = \sin x + C, \qquad \int \sec^{2}x\,dx = \tan x + C \quad(\text{§6.4}), \\[2pt]
+    &\int \tan x\,dx = \ln\lvert\sec x\rvert + C \quad(\text{Prop.\ 8.1}), \\[2pt]
+    &\int \sec x\,dx = \ln\lvert\sec x + \tan x\rvert + C \quad(\text{Prop.\ 8.1}), \\[2pt]
+    &\int \frac{dx}{x^{2} + a^{2}} = \frac{1}{a}\arctan\frac{x}{a} + C \quad(\text{8.A}), \\[2pt]
+    &\int \frac{dx}{\sqrt{a^{2} - x^{2}}} = \arcsin\frac{x}{a} + C \quad(\text{above}).
+  \end{aligned} \]</p>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.23</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int \frac{\tan^{3}x}{\cos^{3}x}\,dx\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>Step 1: since \(\tfrac{1}{\cos x} = \sec x\), the integrand is \(\tan^{3}x\,\sec^{3}x\), a tangent–secant power. Step 3 dispatches it to Strategy 8.3: the power of tangent is odd, so save a factor of \(\sec x\tan x\) and convert the remaining tangents by \(\tan^{2}x = \sec^{2}x - 1\):</p>
+        <p>\[ \int \tan^{3}x\,\sec^{3}x\,dx = \int \bigl(\sec^{2}x - 1\bigr)\sec^{2}x\;\sec x\tan x\,dx. \]</p>
+        <p>With \(u = \sec x\), \(du = \sec x\tan x\,dx\), this is \(\int(u^{4} - u^{2})\,du\), so</p>
+        <p>\[ \int \frac{\tan^{3}x}{\cos^{3}x}\,dx = \frac{\sec^{5}x}{5} - \frac{\sec^{3}x}{3} + C. \]</p>
+        <p>The only decision was the rewrite in step 1; after it, the §8.2 machinery finished the integral with no further choices. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.24</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int e^{\sqrt{x}}\,dx\) for \(x &gt; 0\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>No product, no trigonometry, no rational structure. The awkward feature is the radical in the exponent, and step 4’s advice is to substitute it away even though \(du\) is nowhere in sight. Let \(u = \sqrt{x}\), so \(x = u^{2}\) and \(dx = 2u\,du\):</p>
+        <p>\[ \int e^{\sqrt{x}}\,dx = \int e^{u}\,2u\,du = 2\int u\,e^{u}\,du. \]</p>
+        <p>The substitution has manufactured a product of unrelated factors, which is parts territory. As in Example 8.3, \(\int u e^{u}\,du = (u - 1)e^{u} + C\), so</p>
+        <p>\[ \int e^{\sqrt{x}}\,dx = 2\bigl(\sqrt{x} - 1\bigr)e^{\sqrt{x}} + C. \]</p>
+        <p>Two techniques chained: a substitution to normalize the exponent, then parts to clear the leftover factor. Neither alone finishes the integral. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.25</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int \frac{dx}{x\sqrt{\ln x}}\) for \(x &gt; 1\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>Step 2 settles this one before any classification: the factor \(\tfrac{dx}{x}\) is exactly the derivative of \(\ln x\), so \(u = \ln x\) is the obvious substitution, with \(u &gt; 0\) on the stated domain:</p>
+        <p>\[ \int \frac{dx}{x\sqrt{\ln x}} = \int u^{-1/2}\,du = 2\sqrt{u} + C = 2\sqrt{\ln x} + C. \]</p>
+        <p>An integrand that looks exotic can be two lines long. Checking for the visible \(du\) first is what keeps the heavier tools in reserve. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.26</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int \sqrt{\frac{1 - x}{1 + x}}\,dx\) on \((-1, 1)\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>A rationalizing substitution in the style of Example 8.22 would work, but step 1 offers something faster. Multiply inside the root by \(\tfrac{1 - x}{1 - x}\):</p>
+        <p>\[ \sqrt{\frac{1 - x}{1 + x}} = \sqrt{\frac{(1 - x)^{2}}{1 - x^{2}}} = \frac{1 - x}{\sqrt{1 - x^{2}}}, \]</p>
+        <p>where dropping the absolute value is justified because \(1 - x &gt; 0\) on \((-1, 1)\). The integrand splits into two table entries:</p>
+        <p>\[ \int \frac{dx}{\sqrt{1 - x^{2}}} - \int \frac{x}{\sqrt{1 - x^{2}}}\,dx = \arcsin x + \sqrt{1 - x^{2}} + C, \]</p>
+        <p>the first from the table above with \(a = 1\), the second by the substitution \(w = 1 - x^{2}\), \(dw = -2x\,dx\). One algebraic move changed the problem’s class from “radical of a ratio” to “two standard forms”. That is what step 1 is for. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <h3 class="subsec-head">The limits of the toolkit</h3>
+
+  <!-- expansion:intuition [source: ③ B-02 adjudicated form — scope statement, no nonexistence claim, no Liouville credit; forward hooks to §8.6/§8.7] -->
+  <p>A fair question after five sections of techniques: does every integrand now yield? Try the innocent-looking \(\int e^{-x^{2}}\,dx\). It is not a product, no substitution exposes an inner derivative, it is neither trigonometric nor rational, and no rewriting in this chapter changes that. None of the techniques of this book produces an antiderivative for it built from the functions we have named. Whether <em>any</em> formula of that kind exists is a question this book does not take up; what matters here is practical, and it is twofold. First, antiderivatives are not the only way to a definite integral: the next section shows that \(\int_{1}^{\infty} e^{-x^{2}}\,dx\) is a perfectly well-defined finite number even without a formula for its antiderivative. Second, when a number is what we need, §8.7’s rules compute it to any stated accuracy. The toolkit’s boundary is real, and the chapter’s last two sections are what lie on the far side of it. There are further systematic conversions beyond this book’s needs, including one that turns any rational expression in \(\sin x\) and \(\cos x\) into an ordinary rational function; the four steps above are enough for everything this book asks.</p>
+
+  <!-- expansion:summary — close §8.5: the classification skill; forward to §8.6 with no mechanics -->
+  <p>The strategy is short because the work has already been done: simplify, check for a visible substitution, classify, and dispatch to the section that owns the form, chaining techniques when one hands off to another. The four examples each turned on the step named in their solutions, not on new machinery. What follows next is not another technique but a widening of the integral itself, to infinite intervals and unbounded integrands, where the first question is no longer “which tool” but “does this integral mean anything at all”.</p>
+
+</article>
+</template>
+
+<template id="frag-sec-8-6">
+<!-- §8.6 Improper Integrals. section-source: Stewart ET 9e §7.8; cross-checked Thomas 14e §8.8,
+     Rogawski 4e §7.7. Authored 2026-07-26 per PLAN-ch08 + brief-8-6 (canon-as-spine;
+     plain-register generation; ③ D7 confirmed proof route + A-02 p≤0 branch). Numbering: mints
+     Definition 8.1 (Type 1), Definition 8.2 (Type 2), Proposition 8.2 (p-test, PROVED),
+     Theorem 8.3 (Comparison Theorem, PROVED — the chapter's theory highlight, mainline tools
+     only: Thm 6.2(3)/(4) monotonicity, Thm 4.1 for the integer-indexed sequence, ⌊t−a⌋
+     bracketing glossed inline; ⌊·⌋ precedent §1.5), Examples 8.27–8.32. Cautions UNNUMBERED
+     (two: principal-value trap; hidden-singularity check).
+     SEAM GUARD (PLAN-ch08 D7 + brief-8-6): split-point independence for (c) justified via
+     additivity Thm 6.2(3), one sentence. Every verdict traces to Def 8.1/8.2, Prop 8.2, or
+     Thm 8.3 — no "obviously converges". Limit tools cited: L'Hôpital Thm 5.5 (s e^{−s});
+     arctan → ±π/2 via §1.2's horizontal-asymptote reading. p-test: p=1 by ln; explicit p≤0
+     sentence (integrand ≥ 1, comparison Thm 6.2(4) on finite intervals). Increasing G sits
+     below its limit: one-line contradiction argument, not assumed. NO absolute/conditional
+     convergence vocab, NO Integral Test statement (one forward clause in the summary — Ch11
+     §11.3 cites Def 8.1 + Prop 8.2 + Thm 8.3; EXPORT contract), NO principal-value name, NO
+     Gabriel's horn.
+     Counters handed to §8.7: Theorem 8.4, Example 8.33; §8.7 mints tags (M)/(T)/(S).
+     Record: PLAN-ch08.md, brief-8-6.md, ch08_ch-direction-codex3-audit.md (D7, A-02).
+     Math verified during authoring; sympy at sweep. -->
+
+<article class="sec" lang="en">
+
+  <header class="sec-head">
+    <h2 class="sec-title"><span class="sec-no">8.6</span>Improper Integrals</h2>
+  </header>
+
+  <!-- expansion:intuition — section opener: the collision (Def 6.2 needs a closed interval + continuous integrand; the symbol has no meaning otherwise) and the one extension move: limits of proper integrals -->
+  <p>Every integral so far has lived on a closed interval \([a, b]\): Definition 6.2 builds its Riemann sums from finitely many slices of a bounded interval, and for the continuous integrands this book evaluates, Theorem 6.1 guarantees the sums converge. Two natural questions leave that setting. What is the area under \(y = 1/x^{2}\) from \(x = 1\) all the way out? And what is the area under \(y = 1/\sqrt{x - 2}\) from \(2\) to \(5\), where the integrand blows up at the left end? In both cases the symbol \(\int\) has, as it stands, no meaning: no Riemann sum machinery applies. But the book already owns a device for questions like these. Truncate to a proper integral, and ask what the truncations approach. For the first region, \(\int_{1}^{t} x^{-2}\,dx = 1 - \tfrac{1}{t}\), and as \(t\) grows these values settle toward \(1\). An endless region can hold a finite area, and a limit is how we say so. This section extends the integral by exactly that move, made twice: once for infinite intervals, once for unbounded integrands.</p>
+
+  <h3 class="subsec-head">Type 1: infinite intervals</h3>
+
+  <section class="env env-definition">
+    <p class="env-head"><span class="env-kicker">Definition</span><span class="env-num">8.1</span><span class="env-name">Improper integral of Type 1</span></p>
+    <div class="env-body">
+      <p>(a) If \(f\) is continuous on \([a, \infty)\), then</p>
+      <p>\[ \int_{a}^{\infty} f(x)\,dx = \lim_{t \to \infty} \int_{a}^{t} f(x)\,dx, \]</p>
+      <p>provided the limit exists as a finite number; the improper integral is then called <em>convergent</em>, and <em>divergent</em> otherwise.</p>
+      <p>(b) If \(f\) is continuous on \((-\infty, b]\), then \(\displaystyle\int_{-\infty}^{b} f(x)\,dx = \lim_{t \to -\infty} \int_{t}^{b} f(x)\,dx\), with the same vocabulary.</p>
+      <p>(c) If \(f\) is continuous on \((-\infty, \infty)\), choose any number \(c\) and set</p>
+      <p>\[ \int_{-\infty}^{\infty} f(x)\,dx = \int_{-\infty}^{c} f(x)\,dx + \int_{c}^{\infty} f(x)\,dx, \]</p>
+      <p>provided <em>both</em> integrals on the right converge.</p>
+    </div>
+  </section>
+
+  <p>The choice of \(c\) in part (c) does not matter: additivity (Theorem 6.2, part 3) shifts any finite stretch between the two halves without changing their sum, so one split point gives a convergent sum exactly when another does, with the same value. Note also what part (c) does <em>not</em> say; see the caution below.</p>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.27</span></p>
+      <div class="env-body">
+        <p>Decide whether each integral converges, and evaluate the convergent one:</p>
+        <p>\[ \text{(a)}\ \int_{1}^{\infty} \frac{dx}{x}, \qquad \text{(b)}\ \int_{1}^{\infty} \frac{dx}{x^{2}}. \]</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>(a) For each \(t &gt; 1\),</p>
+        <p>\[ \int_{1}^{t} \frac{dx}{x} = \Bigl[\ln x\Bigr]_{1}^{t} = \ln t, \]</p>
+        <p>and \(\ln t\) grows without bound as \(t \to \infty\). The limit is not a finite number, so \(\int_{1}^{\infty} \tfrac{dx}{x}\) <em>diverges</em>.</p>
+        <p>(b) For each \(t &gt; 1\),</p>
+        <p>\[ \int_{1}^{t} \frac{dx}{x^{2}} = \Bigl[-\frac{1}{x}\Bigr]_{1}^{t} = 1 - \frac{1}{t} \longrightarrow 1, \]</p>
+        <p>so \(\int_{1}^{\infty} \tfrac{dx}{x^{2}}\) <em>converges</em>, with value \(1\).</p>
+        <p>The two curves look alike: both positive, both decreasing to \(0\). The verdicts differ because the tails thin at different rates. The values of \(1/x^{2}\) decay fast enough that the accumulated area stalls at \(1\); the values of \(1/x\) do not, and the area eventually passes any bound. How fast the integrand decays is the entire question, and the \(p\)-test below makes the boundary exact. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <!-- [FIGURE-OPPORTUNITY] 描述：y = 1/x and y = 1/x² on one axis over [1, ∞), 1/x on top (they meet only at x = 1), the region under each shaded up to a cutoff t with the tail beyond t ghosted — the Ex 8.27 contrast drawn: same shape, different tail thickness, finite vs infinite accumulated area. Domain facts: curves meet exactly at (1,1); 1/x > 1/x² for x > 1; both → 0.
+       類型：graph
+       理由：the section's load-bearing intuition (tail speed decides) in a single picture; essential tier. -->
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.28</span></p>
+      <div class="env-body">
+        <p>Evaluate \(\displaystyle\int_{-\infty}^{\infty} \frac{dx}{1 + x^{2}}\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>By Definition 8.1(c), split at \(c = 0\) and treat each half. For the right half,</p>
+        <p>\[ \int_{0}^{t} \frac{dx}{1 + x^{2}} = \Bigl[\arctan x\Bigr]_{0}^{t} = \arctan t \longrightarrow \frac{\pi}{2}, \]</p>
+        <p>since \(y = \tfrac{\pi}{2}\) is the horizontal asymptote of the arctangent (§1.2). By the symmetric computation, \(\int_{-t}^{0} \to \tfrac{\pi}{2}\) as well. Both halves converge, so the integral converges and</p>
+        <p>\[ \int_{-\infty}^{\infty} \frac{dx}{1 + x^{2}} = \frac{\pi}{2} + \frac{\pi}{2} = \pi. \]</p>
+        <p>An unbounded region whose area is exactly \(\pi\): the curve decays like \(1/x^{2}\) in both directions, fast enough for the \(p\)-test’s convergent side. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <section class="env env-caution">
+    <p class="env-head"><span class="env-kicker">Caution</span></p>
+    <div class="env-body">
+      <p>Definition 8.1(c) requires both halves to converge <em>separately</em>. It is not the same as \(\lim_{t \to \infty}\int_{-t}^{t} f(x)\,dx\), and the difference is not pedantry. For \(f(x) = x\), every symmetric truncation gives \(\int_{-t}^{t} x\,dx = 0\), yet each half of \(\int_{-\infty}^{\infty} x\,dx\) diverges, so the integral diverges. Symmetric cancellation of two infinite areas is not convergence.</p>
+    </div>
+  </section>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.29</span></p>
+      <div class="env-body">
+        <p>Evaluate \(\displaystyle\int_{0}^{\infty} t e^{-t}\,dt\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>On each interval \([0, s]\), integrate by parts (Theorem 8.2) with \(u = t\), \(dv = e^{-t}\,dt\), so \(du = dt\) and \(v = -e^{-t}\):</p>
+        <p>\[ \int_{0}^{s} t e^{-t}\,dt = \Bigl[-t e^{-t}\Bigr]_{0}^{s} + \int_{0}^{s} e^{-t}\,dt = -s e^{-s} + \bigl(1 - e^{-s}\bigr). \]</p>
+        <p>As \(s \to \infty\), the exponential term \(e^{-s} \to 0\), and \(s e^{-s} = s/e^{s}\) is an \(\infty/\infty\) form that L’Hôpital’s Rule (Theorem 5.5) settles: \(s/e^{s} \to 1/e^{s} \to 0\). So the truncations approach \(0 + 1 - 0\), and</p>
+        <p>\[ \int_{0}^{\infty} t e^{-t}\,dt = 1. \]</p>
+        <p>The techniques and the extended definition work in series: parts produced the truncated value, and the limit made sense of the infinite interval. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <h3 class="subsec-head">Type 2: unbounded integrands</h3>
+
+  <p>The second violation keeps the interval finite but lets the integrand blow up at an endpoint. The extension move is the same: truncate short of the bad point, and take a limit.</p>
+
+  <section class="env env-definition">
+    <p class="env-head"><span class="env-kicker">Definition</span><span class="env-num">8.2</span><span class="env-name">Improper integral of Type 2</span></p>
+    <div class="env-body">
+      <p>(a) If \(f\) is continuous on \([a, b)\) and unbounded near \(b\), then</p>
+      <p>\[ \int_{a}^{b} f(x)\,dx = \lim_{t \to b^{-}} \int_{a}^{t} f(x)\,dx, \]</p>
+      <p>provided the limit exists as a finite number; the integral is then <em>convergent</em>, and <em>divergent</em> otherwise.</p>
+      <p>(b) If \(f\) is continuous on \((a, b]\) and unbounded near \(a\), then \(\displaystyle\int_{a}^{b} f(x)\,dx = \lim_{t \to a^{+}} \int_{t}^{b} f(x)\,dx\), with the same vocabulary.</p>
+      <p>(c) If \(f\) is unbounded near an interior point \(c\) of \([a, b]\) and continuous elsewhere on the interval, split there: \(\displaystyle\int_{a}^{b} f(x)\,dx = \int_{a}^{c} f(x)\,dx + \int_{c}^{b} f(x)\,dx\), provided <em>both</em> halves converge.</p>
+    </div>
+  </section>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.30</span></p>
+      <div class="env-body">
+        <p>Decide whether each integral converges, and evaluate where possible:</p>
+        <p>\[ \text{(a)}\ \int_{2}^{5} \frac{dx}{\sqrt{x - 2}}, \qquad \text{(b)}\ \int_{0}^{1} \frac{dx}{x^{p}} \ \text{ for } p &gt; 0. \]</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>(a) The integrand is continuous on \((2, 5]\) and unbounded near \(2\), so Definition 8.2(b) applies. For \(2 &lt; t &lt; 5\),</p>
+        <p>\[ \int_{t}^{5} \frac{dx}{\sqrt{x - 2}} = \Bigl[2\sqrt{x - 2}\Bigr]_{t}^{5} = 2\sqrt{3} - 2\sqrt{t - 2} \longrightarrow 2\sqrt{3} \]</p>
+        <p>as \(t \to 2^{+}\). The integral converges to \(2\sqrt{3}\): the spike at \(x = 2\) is tall but thin enough.</p>
+        <p>(b) For \(p \ne 1\) and \(0 &lt; t &lt; 1\),</p>
+        <p>\[ \int_{t}^{1} x^{-p}\,dx = \frac{1 - t^{1 - p}}{1 - p}. \]</p>
+        <p>If \(p &lt; 1\), then \(t^{1-p} \to 0\) as \(t \to 0^{+}\), and the integral converges to \(\tfrac{1}{1 - p}\). If \(p &gt; 1\), then \(t^{1-p}\) grows without bound and the integral diverges; for \(p = 1\), \(\int_{t}^{1} \tfrac{dx}{x} = -\ln t\) also grows without bound. So \(\int_{0}^{1} x^{-p}\,dx\) converges exactly when \(p &lt; 1\). This is the mirror image of the \(p\)-test proved below: at \(0\) the mild powers converge, at \(\infty\) the steep ones do, and \(p = 1\) fails at both ends. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <!-- [FIGURE-OPPORTUNITY] 描述：region under y = 1/√(x−2) on (2,5], vertical asymptote x = 2 dashed red, the truncated region from t to 5 shaded solid and the sliver from 2 to t hatched — Def 8.2(b)'s truncation drawn. Domain facts: curve passes through (3,1) and (5,1/√3); unbounded as x→2⁺; nothing drawn AT x=2 (undefined).
+       類型：graph
+       理由：makes "tall but thin enough" visible and shows exactly what the limit is over; supporting tier. -->
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.31</span></p>
+      <div class="env-body">
+        <p>What is wrong with the computation \(\displaystyle\int_{-1}^{3} \frac{dx}{x^{2}} = \Bigl[-\frac{1}{x}\Bigr]_{-1}^{3} = -\frac{1}{3} - 1 = -\frac{4}{3}\)?</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>The answer refutes itself: the integrand is positive, and a definite integral of a positive function cannot be negative (Theorem 6.2, part 4). The error is upstream. The Fundamental Theorem applies to integrands continuous on the whole interval, and \(1/x^{2}\) is unbounded near the interior point \(0\). The integral is improper, and Definition 8.2(c) requires splitting there:</p>
+        <p>\[ \int_{-1}^{3} \frac{dx}{x^{2}} = \int_{-1}^{0} \frac{dx}{x^{2}} + \int_{0}^{3} \frac{dx}{x^{2}}, \]</p>
+        <p>provided both halves converge. They do not: near \(0\) the integrand is a \(p = 2\) power, and by the computation of Example 8.30(b), read on the interval \((0, 3]\), the right half diverges. So \(\int_{-1}^{3} x^{-2}\,dx\) diverges, and the number \(-\tfrac{4}{3}\) was meaningless. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <section class="env env-caution">
+    <p class="env-head"><span class="env-kicker">Caution</span></p>
+    <div class="env-body">
+      <p>Before applying the Fundamental Theorem on \([a, b]\), check the whole interval for points where the integrand is undefined or unbounded. A singularity in the interior does not announce itself in the limits of integration, and integrating across it, as in Example 8.31, produces a definite-looking number with no meaning. If a singularity is found, split there and test each piece by Definition 8.2.</p>
+    </div>
+  </section>
+
+  <h3 class="subsec-head">The \(p\)-test and the Comparison Theorem</h3>
+
+  <p>Example 8.27’s contrast deserves its exact boundary. The family \(\int_{1}^{\infty} x^{-p}\,dx\) sorts by the exponent, and the result is used often enough to record permanently.</p>
+
+  <section class="env env-proposition">
+    <p class="env-head"><span class="env-kicker">Proposition</span><span class="env-num">8.2</span><span class="env-name">The \(p\)-test</span></p>
+    <div class="env-body">
+      <p>The improper integral</p>
+      <p>\[ \int_{1}^{\infty} \frac{dx}{x^{p}} \]</p>
+      <p>converges if \(p &gt; 1\), with value \(\dfrac{1}{p - 1}\), and diverges if \(p \le 1\).</p>
+    </div>
+  </section>
+
+  <section class="env env-proof">
+    <p class="env-head"><span class="env-kicker">Proof</span></p>
+    <div class="env-body">
+      <p>For \(p \ne 1\), the power rule gives, for \(t &gt; 1\),</p>
+      <p>\[ \int_{1}^{t} x^{-p}\,dx = \frac{t^{1 - p} - 1}{1 - p}. \]</p>
+      <p>If \(p &gt; 1\), the exponent \(1 - p\) is negative, so \(t^{1-p} \to 0\) and the truncations approach \(\tfrac{-1}{1 - p} = \tfrac{1}{p - 1}\): convergence, with the stated value. If \(p &lt; 1\), the exponent is positive, \(t^{1-p}\) grows without bound, and the integral diverges. This already covers \(p \le 0\), where the integrand does not even tend to \(0\): there \(x^{-p} \ge 1\) on \([1, \infty)\), so \(\int_{1}^{t} x^{-p}\,dx \ge t - 1\) by comparison (Theorem 6.2, part 4), and divergence is direct. Finally, for \(p = 1\), Example 8.27(a) showed the truncations equal \(\ln t\), which grows without bound. <span class="qed qed-proof"></span></p>
+    </div>
+  </section>
+
+  <p>The last tool answers a question the \(p\)-test cannot. Section 8.5 met \(\int e^{-x^{2}}\,dx\), an integrand with no antiderivative among our functions, so no truncation can be evaluated in closed form and the definition cannot be applied directly. Yet convergence is a question about <em>size</em>, not about formulas. If a positive integrand sits below one whose improper integral converges, its accumulated area is trapped below a finite ceiling, and it should have nowhere to go but a limit. The next theorem makes that argument honest, and its proof is the section’s one genuinely theoretical moment: everything comes from machinery the book already owns.</p>
+
+  <section class="env env-theorem">
+    <p class="env-head"><span class="env-kicker">Theorem</span><span class="env-num">8.3</span><span class="env-name">Comparison Theorem for Improper Integrals</span></p>
+    <div class="env-body">
+      <p>Let \(f\) and \(g\) be continuous with \(0 \le f(x) \le g(x)\) for \(x \ge a\).</p>
+      <p>(a) If \(\displaystyle\int_{a}^{\infty} g(x)\,dx\) converges, then \(\displaystyle\int_{a}^{\infty} f(x)\,dx\) converges, and its value is at most \(\displaystyle\int_{a}^{\infty} g(x)\,dx\).</p>
+      <p>(b) If \(\displaystyle\int_{a}^{\infty} f(x)\,dx\) diverges, then \(\displaystyle\int_{a}^{\infty} g(x)\,dx\) diverges.</p>
+    </div>
+  </section>
+
+  <section class="env env-proof">
+    <p class="env-head"><span class="env-kicker">Proof</span></p>
+    <div class="env-body">
+      <p>(a) Write \(F(t) = \int_{a}^{t} f(x)\,dx\) and \(G(t) = \int_{a}^{t} g(x)\,dx\), and let \(M = \int_{a}^{\infty} g(x)\,dx\), the finite limit assumed to exist. Three observations set up the argument.</p>
+      <p>First, \(F\) is increasing: for \(t' &gt; t\), additivity (Theorem 6.2, part 3) gives \(F(t') - F(t) = \int_{t}^{t'} f(x)\,dx \ge 0\), since \(f \ge 0\) (Theorem 6.2, part 4). The same reasoning makes \(G\) increasing.</p>
+      <p>Second, \(G(t) \le M\) for every \(t\). An increasing function cannot overshoot its own limit: if some \(G(t_{0})\) exceeded \(M\), then every later \(G(t)\) would be at least \(G(t_{0})\), and the values could not approach \(M\).</p>
+      <p>Third, \(F(t) \le G(t)\) for every \(t\), by comparison on \([a, t]\) (Theorem 6.2, part 4). Combining: \(F\) is increasing and \(F(t) \le M\) for all \(t \ge a\).</p>
+      <p>Now sample \(F\) along the integers. The numbers \(F(a + n)\), for \(n = 1, 2, 3, \dots\), form an increasing sequence bounded above by \(M\), so by the monotone convergence theorem (Theorem 4.1) they converge to some limit \(L \le M\), and, being increasing with limit \(L\), each \(F(a + n) \le L\).</p>
+      <p>Finally, the sampled limit controls the whole function. Given any \(t \ge a + 1\), let \(n\) be the greatest integer not exceeding \(t - a\), so that \(a + n \le t &lt; a + n + 1\). Since \(F\) is increasing,</p>
+      <p>\[ F(a + n) \;\le\; F(t) \;\le\; F(a + n + 1) \;\le\; L. \]</p>
+      <p>As \(t \to \infty\), the index \(n\) grows with it, and \(F(a + n)\) approaches \(L\). Every value \(F(t)\) is thus squeezed between numbers that approach \(L\) and the ceiling \(L\) itself, so \(F(t) \to L\). By Definition 8.1, \(\int_{a}^{\infty} f(x)\,dx\) converges, with value \(L \le M\).</p>
+      <p>(b) This is the contrapositive of (a): if \(\int_{a}^{\infty} g\) converged, then (a) would force \(\int_{a}^{\infty} f\) to converge as well. <span class="qed qed-proof"></span></p>
+    </div>
+  </section>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.32</span></p>
+      <div class="env-body">
+        <p>Show that \(\displaystyle\int_{1}^{\infty} e^{-x^{2}}\,dx\) converges.</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>For \(x \ge 1\) we have \(x^{2} \ge x\), so \(-x^{2} \le -x\), and since the exponential function is increasing, \(0 &lt; e^{-x^{2}} \le e^{-x}\). The larger integrand’s integral converges by direct computation:</p>
+        <p>\[ \int_{1}^{t} e^{-x}\,dx = e^{-1} - e^{-t} \longrightarrow \frac{1}{e}. \]</p>
+        <p>By the Comparison Theorem (Theorem 8.3(a)), \(\int_{1}^{\infty} e^{-x^{2}}\,dx\) converges, with value at most \(\tfrac{1}{e}\). Over \([0, \infty)\) the conclusion extends at once, since \(\int_{0}^{1} e^{-x^{2}}\,dx\) is an ordinary proper integral: the full integral \(\int_{0}^{\infty} e^{-x^{2}}\,dx\) converges too.</p>
+        <p>This closes the loop opened in §8.5. No formula for the antiderivative exists among our functions, yet the improper integral is a definite finite number, pinned down without ever being evaluated. Section 8.7 is about computing such numbers. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <!-- [FIGURE-OPPORTUNITY] 描述：e^{−x} above e^{−x²} on [1, ∞), both decaying, region under the upper curve lightly shaded (finite area 1/e labeled in caption, not on the figure), region under the lower curve darker — the trapping picture of Thm 8.3(a). Domain facts: curves MEET at x = 1 (e^{−1} each) and separate immediately after; e^{−x} on top for x > 1; both → 0 fast.
+       類型：graph
+       理由：comparison is an area-trapping statement; one picture says "below a finite roof". Supporting tier. -->
+
+  <p>Mixed cases reduce to the two types. An integral such as \(\int_{0}^{\infty} \tfrac{dx}{\sqrt{x}(1 + x)}\) is improper twice, at the endpoint \(0\) and along the infinite tail; split it at any interior point, say \(1\), and require each piece to converge by its own definition. In every case the discipline is the same: locate each source of impropriety, isolate it at one end of one integral, and apply the matching definition or the Comparison Theorem.</p>
+
+  <!-- expansion:summary — close §8.6: the extension move + the two tools; forward clause = Ch11 §11.3 export contract; forward to §8.7 -->
+  <p>This section widened the integral without touching its foundations: an improper integral is a limit of proper ones, and <em>convergent</em> is a verdict about that limit. Definitions 8.1 and 8.2 cover the infinite interval and the unbounded integrand, the \(p\)-test (Proposition 8.2) marks the exact boundary between thick and thin tails, and the Comparison Theorem (Theorem 8.3), proved with the monotone-sequence principle of Chapter 4, delivers verdicts when no antiderivative is available. These three results have a second career ahead of them: Chapter 11’s Integral Test for infinite series is built directly on them. What this section does not do is produce numbers for integrals like \(\int_{1}^{\infty} e^{-x^{2}}\,dx\); it only certifies that the numbers exist. Producing them, to any stated accuracy, is the business of the chapter’s final section.</p>
+
+</article>
+</template>
+
+<template id="frag-sec-8-7">
+<!-- §8.7 Approximate Integration + Chapter 8 summary. section-source: Stewart ET 9e §7.7;
+     cross-checked Thomas 14e §8.7, Rogawski 4e §7.8. Authored 2026-07-26 per PLAN-ch08 +
+     brief-8-7 (canon-as-spine; plain-register generation; ③ A-03: C²/C⁴ hypotheses, equal
+     spacing h=(b−a)/n, even n verified in the data example). Numbering: mints Theorem 8.4
+     (Error bounds — STATED ON CREDIT, forward fence → Ch11 §11.9 Taylor; the chapter's SECOND
+     AND LAST credit; unnumbered-Caution fence vehicle per SPEC §16.1, Ch2 §2.4 precedent),
+     Examples 8.33–8.36, equation tags (M)/(T)/(S). Cautions UNNUMBERED (two: even-n; the fence
+     note). Chapter summary (unnumbered h3) closes this fragment per SPEC §4.
+     SEAM GUARD (PLAN-ch08 D8 + brief-8-7): M is a Def 6.2 Riemann sum with midpoint sample
+     points — §6.2's header comment reserved the RULES for §8.7, discharged here in one clause.
+     T derived BOTH ways (average of L/R; trapezoid areas). Simpson's three-point parabola lemma
+     PROVED by direct algebra + shift remark (Thm 6.7); weights summed explicitly. Error sign
+     convention stated (E = exact − approximation). K/K₄ exist by EVT Thm 4.9(a), "any bound
+     serves". Round n UP in planning, say why. NO <table> element (book-wide zero-table
+     invariant — data given as displays). Ex 8.36 is self-authored (readings invented,
+     plausibility-checked; no error bound claimable without derivative information — honesty
+     line). Values recomputed to 6 dp; sympy at sweep.
+     Chapter summary: recaps §8.1–§8.7 arc, embeds parts formula, sec³, (8.A), p-test,
+     comparison, (S); closes the two credits honestly (FTA fact §8.4; Thm 8.4 → Ch11) and the
+     Ch11 §11.3 export contract.
+     Record: PLAN-ch08.md, brief-8-7.md, ch08_ch-direction-codex3-audit.md (D8, A-03). -->
+
+<article class="sec" lang="en">
+
+  <header class="sec-head">
+    <h2 class="sec-title"><span class="sec-no">8.7</span>Approximate Integration</h2>
+  </header>
+
+  <!-- expansion:intuition — section opener: the clients from §8.6/§8.3/§7.6 + the bracketing collision (L over, R under, truth between two computable numbers) -->
+  <p>The chapter has accumulated integrals that no formula reaches: \(\int_{1}^{\infty} e^{-x^{2}}\,dx\), certified finite in §8.6 but never evaluated; the perimeter of an ellipse, which §8.3 flagged; the arc lengths that §7.6 left standing as definite integrals. And in laboratory work the integrand is often not a formula at all, only a column of measured values. For all of these, the practical question is the same: how do we get the <em>number</em>? The answer begins with an observation from §6.1’s first area estimates. For a decreasing integrand, a left-endpoint sum overshoots and a right-endpoint sum undershoots, so the true value sits between two numbers we can compute. Once the target is bracketed, the task is to tighten the bracket, and this section’s three rules tighten it dramatically: each replaces the integrand on every slice by something integrable exactly, first a constant, then a chord, then a parabola.</p>
+
+  <p>Fix the notation once. Divide \([a, b]\) into \(n\) slices of equal width \(h = \tfrac{b - a}{n}\), with nodes \(x_{i} = a + ih\) for \(i = 0, 1, \dots, n\), and write \(y_{i} = f(x_{i})\). For each rule \(R\), the <em>error</em> is \(E_{R} = \int_{a}^{b} f(x)\,dx - R\): exact value minus approximation, so a positive error means the rule fell short.</p>
+
+  <h3 class="subsec-head">The Midpoint and Trapezoidal Rules</h3>
+
+  <p>The first rule needs no new idea. Choose the midpoint \(\bar{x}_{i} = \tfrac{1}{2}(x_{i-1} + x_{i})\) of each slice and replace \(f\) there by the constant \(f(\bar{x}_{i})\):</p>
+  <p>\[ \int_{a}^{b} f(x)\,dx \;\approx\; M_{n} = h\,\bigl[f(\bar{x}_{1}) + f(\bar{x}_{2}) + \cdots + f(\bar{x}_{n})\bigr]. \tag{M} \]</p>
+  <p>This is a Riemann sum in the sense of Definition 6.2, with the sample points taken at midpoints, a choice that section reserved for exactly this use. For continuous \(f\), Theorem 6.1 guarantees that \(M_{n}\) converges to the integral as \(n\) grows; the question this section adds is how fast.</p>
+
+  <p>The second rule replaces \(f\) on each slice by the chord joining \(\bigl(x_{i-1}, y_{i-1}\bigr)\) to \(\bigl(x_{i}, y_{i}\bigr)\). The region under a chord is a trapezoid with parallel sides \(y_{i-1}\) and \(y_{i}\) and width \(h\), so its area is \(h\cdot\tfrac{y_{i-1} + y_{i}}{2}\), and summing over the slices gives</p>
+  <p>\[ \int_{a}^{b} f(x)\,dx \;\approx\; T_{n} = \frac{h}{2}\,\bigl[y_{0} + 2y_{1} + 2y_{2} + \cdots + 2y_{n-1} + y_{n}\bigr]. \tag{T} \]</p>
+  <p>Every interior node is shared by two trapezoids, which is where the repeated factor \(2\) comes from. The same formula arrives by a second route. The left-endpoint and right-endpoint Riemann sums are \(L_{n} = h\sum_{i=1}^{n} y_{i-1}\) and \(R_{n} = h\sum_{i=1}^{n} y_{i}\), and averaging them termwise pairs each interior value with itself:</p>
+  <p>\[ \frac{L_{n} + R_{n}}{2} = \frac{h}{2}\sum_{i=1}^{n}\bigl(y_{i-1} + y_{i}\bigr) = \frac{h}{2}\bigl[y_{0} + 2y_{1} + \cdots + 2y_{n-1} + y_{n}\bigr] = T_{n}. \]</p>
+  <p>The averaging reading connects the rule to the bracketing picture above: for a monotone integrand the integral lies between \(L_{n}\) and \(R_{n}\), and \(T_{n}\) is the bracket’s midpoint, so the trapezoidal error is at most half the bracket’s width.</p>
+
+  <!-- [FIGURE-OPPORTUNITY] 描述：three-panel comparison on the same decreasing arch, same interval, same n=4: panel 1 midpoint rectangles, panel 2 trapezoids (chords), panel 3 a single parabola arc through three nodes shaded over two slices. The parabola hugs but does not coincide with the curve. Domain facts: identical f and nodes across panels; rectangles touch the curve at midpoints; chords at nodes; parabola through three consecutive nodes.
+       類型：multi-panel
+       理由：the three rules ARE three pictures; one glance shows why each upgrade fits the curve better. Essential tier. -->
+
+  <!-- [FIGURE-OPPORTUNITY] 描述：one slice, the midpoint rectangle redrawn as a trapezoid whose top is the TANGENT line at the midpoint — the two shapes have equal area (caption states the equality; the drawing shows the tilt). Explains geometrically why M's error runs about half of T's with opposite sign (Ex 8.33's observation). Domain facts: tangency exactly at the midpoint; rectangle and tangent-trapezoid areas equal.
+       類型：diagram
+       理由：the standard picture behind the 24-vs-12 constants; supporting tier. -->
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.33</span></p>
+      <div class="env-body">
+        <p>Approximate \(\displaystyle\int_{1}^{2} \frac{dx}{x}\) with \(n = 5\) by the Trapezoidal Rule and by the Midpoint Rule, and compare each result with the true value.</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>Here \(h = 0.2\), the nodes are \(1, 1.2, 1.4, 1.6, 1.8, 2\), and the midpoints are \(1.1, 1.3, 1.5, 1.7, 1.9\). The Trapezoidal Rule (T) gives</p>
+        <p>\[ T_{5} = \frac{0.2}{2}\Bigl[\frac{1}{1} + \frac{2}{1.2} + \frac{2}{1.4} + \frac{2}{1.6} + \frac{2}{1.8} + \frac{1}{2}\Bigr] \approx 0.695635, \]</p>
+        <p>and the Midpoint Rule (M) gives</p>
+        <p>\[ M_{5} = 0.2\,\Bigl[\frac{1}{1.1} + \frac{1}{1.3} + \frac{1}{1.5} + \frac{1}{1.7} + \frac{1}{1.9}\Bigr] \approx 0.691908. \]</p>
+        <p>The true value is \(\int_{1}^{2}\tfrac{dx}{x} = \ln 2 \approx 0.693147\), so the errors are</p>
+        <p>\[ E_{T} \approx -0.002488, \qquad E_{M} \approx +0.001239. \]</p>
+        <p>Two patterns are worth noticing, and both persist beyond this example. The midpoint error is about half the trapezoidal error in size, and the two have opposite signs: the chords of a curve that bends upward lie above it, so \(T_{5}\) overshoots, while the midpoint rectangles compensate through the tilt of the tangent. The error bounds below make the sizes unsurprising, since the midpoint bound’s constant is half the trapezoidal bound’s; the bounds control only the errors’ magnitudes, not their signs or their exact ratio. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <h3 class="subsec-head">Simpson’s Rule</h3>
+
+  <p>Chords match the curve’s value at two points but ignore its bending. The next upgrade replaces \(f\), on each <em>pair</em> of adjacent slices, by the parabola through the three nodes the pair provides. One small lemma does all the work: the integral of a quadratic over a symmetric interval is determined by its three equally spaced values. For \(g(x) = Ax^{2} + Bx + C\) on \([-h, h]\),</p>
+  <p>\[ \int_{-h}^{h} g(x)\,dx = \frac{2Ah^{3}}{3} + 2Ch = \frac{h}{3}\bigl(2Ah^{2} + 6C\bigr), \]</p>
+  <p>while the values \(y_{0} = g(-h) = Ah^{2} - Bh + C\), \(y_{1} = g(0) = C\), \(y_{2} = g(h) = Ah^{2} + Bh + C\) combine to \(y_{0} + 4y_{1} + y_{2} = 2Ah^{2} + 6C\). Therefore</p>
+  <p>\[ \int_{-h}^{h} g(x)\,dx = \frac{h}{3}\bigl(y_{0} + 4y_{1} + y_{2}\bigr), \]</p>
+  <p>and \(B\) has dropped out entirely. Shifting the variable does not change an integral (Theorem 6.7 with a linear substitution), so the same weights \(1, 4, 1\) serve on any triple of equally spaced nodes. Now cover \([a, b]\) by \(\tfrac{n}{2}\) such triples, which requires \(n\) to be <em>even</em>, and add: each pair contributes \(\tfrac{h}{3}(y_{i-1} + 4y_{i} + y_{i+1})\), interior even-indexed nodes are shared by two pairs, and the totals assemble into <em>Simpson’s Rule</em>:</p>
+  <p>\[ \begin{aligned}
+    \int_{a}^{b} f(x)\,dx \;\approx\; S_{n} = \frac{h}{3}\,\bigl[y_{0} &+ 4y_{1} + 2y_{2} + 4y_{3} + \cdots \\
+      &+ 2y_{n-2} + 4y_{n-1} + y_{n}\bigr].
+  \end{aligned} \tag{S} \]</p>
+
+  <section class="env env-caution">
+    <p class="env-head"><span class="env-kicker">Caution</span></p>
+    <div class="env-body">
+      <p>Simpson’s Rule pairs the slices, so it needs an even number of them. The weight pattern runs \(1, 4, 2, 4, 2, \dots, 2, 4, 1\): the \(4\)s sit on the odd-indexed nodes, the \(2\)s on the interior even-indexed ones, and only the two endpoints carry weight \(1\). An odd \(n\), or a misaligned weight pattern, silently produces a wrong answer.</p>
+    </div>
+  </section>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.34</span></p>
+      <div class="env-body">
+        <p>Approximate \(\displaystyle\int_{1}^{2} \frac{dx}{x}\) by Simpson’s Rule with \(n = 10\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>Here \(h = 0.1\) and the nodes run \(1, 1.1, 1.2, \dots, 2\). Applying (S) with \(f(x) = 1/x\):</p>
+        <p>\[ \begin{aligned}
+          S_{10} = \frac{0.1}{3}\Bigl[\frac{1}{1} &+ \frac{4}{1.1} + \frac{2}{1.2} + \frac{4}{1.3} + \frac{2}{1.4} + \frac{4}{1.5} \\
+            &+ \frac{2}{1.6} + \frac{4}{1.7} + \frac{2}{1.8} + \frac{4}{1.9} + \frac{1}{2}\Bigr] \approx 0.693150.
+        \end{aligned} \]</p>
+        <p>Against \(\ln 2 \approx 0.693147\), the error is about \(-3 \times 10^{-6}\). Example 8.33’s rules, using half as many nodes, erred in the third decimal place; Simpson’s Rule with these ten slices is already correct to five. The jump matches the scales recorded in the bounds below: the trapezoidal bound shrinks like \(1/n^{2}\), the Simpson bound like \(1/n^{4}\), and the errors observed here behave accordingly. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <h3 class="subsec-head">Error bounds</h3>
+
+  <p>An estimate is useful only when its error is controlled. The bending of \(f\) is what defeats chords and rectangles, so it is the size of the second derivative, and for Simpson’s Rule the fourth, that governs the error. Bounds for all three rules follow; each \(K\) exists whenever the named derivative is continuous, by the Extreme Value Theorem (Theorem 4.9(a)), and any valid bound serves in place of the exact maximum.</p>
+
+  <section class="env env-theorem">
+    <p class="env-head"><span class="env-kicker">Theorem</span><span class="env-num">8.4</span><span class="env-name">Error Bounds for Numerical Integration</span></p>
+    <div class="env-body">
+      <p>Suppose \(f''\) is continuous on \([a, b]\) and \(\lvert f''(x)\rvert \le K\) for all \(x\) in \([a, b]\). Then</p>
+      <p>\[ \lvert E_{T}\rvert \le \frac{K\,(b - a)^{3}}{12\,n^{2}} \qquad\text{and}\qquad \lvert E_{M}\rvert \le \frac{K\,(b - a)^{3}}{24\,n^{2}}. \]</p>
+      <p>If moreover \(f^{(4)}\) is continuous on \([a, b]\) and \(\lvert f^{(4)}(x)\rvert \le K_{4}\) there, then for even \(n\)</p>
+      <p>\[ \lvert E_{S}\rvert \le \frac{K_{4}\,(b - a)^{5}}{180\,n^{4}}. \]</p>
+    </div>
+  </section>
+
+  <!-- expansion:caution [source: SPEC §16.1 on-credit fence, unnumbered-Caution vehicle (Ch2 §2.4 precedent); ROADMAP seam-hunt premise "§8.7 誤差界需 Taylor (Ch11)" — the chapter's second and last credit; forward fence to Ch11 §11.9] -->
+  <section class="env env-caution">
+    <p class="env-head"><span class="env-kicker">Caution</span></p>
+    <div class="env-body">
+      <p>Theorem 8.4 is stated without proof. The proofs measure how far a function strays from its chords and parabolas, and the right instrument for that is Taylor’s theorem with remainder, which Chapter 11 establishes; the bounds above are proved there. This is the second of the two results this chapter takes on credit, alongside the factorization fact of §8.4, and the last.</p>
+    </div>
+  </section>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.35</span></p>
+      <div class="env-body">
+        <p>How large must \(n\) be to guarantee that the Trapezoidal Rule approximates \(\displaystyle\int_{1}^{2}\frac{dx}{x}\) with error at most \(10^{-4}\)? How large for the Midpoint Rule?</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>For \(f(x) = 1/x\) we have \(f''(x) = 2/x^{3}\), which is positive and decreasing on \([1, 2]\), so \(\lvert f''(x)\rvert \le f''(1) = 2\), and \(K = 2\) serves. With \(b - a = 1\), Theorem 8.4 gives</p>
+        <p>\[ \lvert E_{T}\rvert \le \frac{2}{12 n^{2}} = \frac{1}{6 n^{2}}, \]</p>
+        <p>and \(\tfrac{1}{6n^{2}} \le 10^{-4}\) holds exactly when \(n^{2} \ge \tfrac{10^{4}}{6}\), that is, \(n \ge \sqrt{10^{4}/6} \approx 40.82\). Since \(n\) is a whole number and the requirement is a guarantee, round <em>up</em>: \(n = 41\) suffices. For the Midpoint Rule the same computation with the constant \(24\) gives \(n^{2} \ge \tfrac{10^{4}}{12}\), so \(n \ge \sqrt{10^{4}/12} \approx 28.87\), and \(n = 29\) suffices. Rounding down would satisfy the arithmetic but not the guarantee, since the bound at \(n = 40\) exceeds the tolerance. The bounds are worst-case: Example 8.33’s actual errors were smaller than Theorem 8.4 predicts, and that is the usual experience. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.36</span></p>
+      <div class="env-body">
+        <p>A car’s speedometer is read every \(30\) seconds during a three-minute drive, giving speeds, in meters per second, of</p>
+        <p>\[ 8, \quad 10, \quad 12, \quad 11, \quad 13, \quad 14, \quad 12 \]</p>
+        <p>at \(t = 0, 30, 60, 90, 120, 150, 180\). Estimate the distance traveled.</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>Distance is the integral of speed (the Net Change Theorem, Theorem 6.5), so the target is \(\int_{0}^{180} v(t)\,dt\) with \(v\) known only at seven equally spaced times. Seven values mean \(n = 6\) slices of width \(h = 30\), and \(6\) is even, so Simpson’s Rule applies:</p>
+        <p>\[ \begin{aligned}
+          S_{6} &= \frac{30}{3}\Bigl[8 + 4(10) + 2(12) + 4(11) + 2(13) + 4(14) + 12\Bigr] \\
+            &= 10 \cdot 210 = 2100.
+        \end{aligned} \]</p>
+        <p>The estimated distance is \(2100\) meters, an average speed of about \(11.7\) m/s, or \(42\) km/h, consistent with the readings. Two honest notes. There is no error bound to quote: Theorem 8.4 needs derivative information, and a data column carries none, so the estimate’s quality rests on the smoothness of the actual speed between readings. And the rule demanded nothing but arithmetic on the data, which is why numerical integration, not antidifferentiation, is what measurement-driven work uses. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <h3 class="subsec-head">Chapter summary</h3>
+
+  <!-- expansion:summary — chapter-closing summary per SPEC §4: named results in order with §-refs, the arc, the two credits, the forward fences (Ch11 §11.3 export; Ch11 §11.9 debt) -->
+  <p>This chapter set out to finish what the Fundamental Theorem started: if evaluation reduces to antidifferentiation, then antidifferentiation needs a toolkit. Section 8.1 built the first tool from the product rule, integration by parts, \(\int u\,dv = uv - \int v\,du\) (Theorems 8.1 and 8.2), with a strategy for choosing the parts (Strategy 8.1) and, as a dividend, the settlement of Chapter 7’s shell-versus-washer question in the monotone case. Section 8.2 turned trigonometric identities into substitutions, filled the elementary table with \(\int\tan x\,dx = \ln\lvert\sec x\rvert + C\) and its companions (Proposition 8.1), and recorded \(\int\sec^{3}x\,dx\) for later use. Section 8.3 reparametrized quadratic radicals away with the three restricted substitutions of Strategy 8.4, and §8.4 dispatched every rational function through the pipeline of Strategy 8.5, dividing, factoring on the credit of the Fundamental Theorem of Algebra, decomposing by Proposition A.7, and integrating fragment by fragment, with \(\int\frac{dx}{x^{2}+a^{2}} = \frac{1}{a}\arctan\frac{x}{a} + C\) as the recurring closer. Section 8.5 compressed the toolkit into a four-step dispatch (Strategy 8.6) and marked its boundary: some integrands, such as \(e^{-x^{2}}\), yield to none of it.</p>
+  <p>The last two sections changed the question. Section 8.6 extended the integral itself to infinite intervals and unbounded integrands (Definitions 8.1 and 8.2), proved the \(p\)-test boundary \(\int_{1}^{\infty} x^{-p}\,dx\) convergent exactly for \(p &gt; 1\) (Proposition 8.2), and proved the Comparison Theorem (Theorem 8.3) with Chapter 4’s monotone-sequence principle, so that convergence can be certified without evaluation. Section 8.7 then produced the numbers: the Midpoint, Trapezoidal, and Simpson’s Rules (M), (T), (S), the last derived from the three-point parabola lemma, with error bounds (Theorem 8.4) that size \(n\) in advance. The chapter closes with exactly two results taken on credit, both named where they were incurred: the real-factorization fact behind §8.4, borrowed permanently from algebra, and the proofs of Theorem 8.4, which Chapter 11’s Taylor theorem delivers. Chapter 11 also draws on this chapter directly: its Integral Test is built on Definition 8.1, Proposition 8.2, and Theorem 8.3. Before the series arrive, Chapter 9 puts the completed toolkit to work on equations whose unknowns are functions, where every solution method begins by asking the questions this chapter taught: what form is this, and which technique fits?</p>
+
+</article>
+</template>
+<!-- END-CONTENT-FRAGMENTS -->
+<!-- plot.js — inlined -->
+<script>
+(function () {
+  var uid = 0;
+  var PI = Math.PI;
+  function piTex(v) {
+    var map = {};
+    map[(-2 * PI).toFixed(4)] = "-2\\pi";
+    map[(-PI).toFixed(4)] = "-\\pi";
+    map[(-PI / 2).toFixed(4)] = "-\\tfrac{\\pi}{2}";
+    map[(PI / 2).toFixed(4)] = "\\tfrac{\\pi}{2}";
+    map[PI.toFixed(4)] = "\\pi";
+    map[(2 * PI).toFixed(4)] = "2\\pi";
+    map[(0).toFixed(4)] = "0";
+    var hit = map[v.toFixed(4)];
+    if (hit != null) return hit;
+    if (Math.abs(v - Math.round(v)) < 1e-9) return String(Math.round(v)); // plain integers
+    return undefined;
+  }
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+  function anchorTransform(anchor, vAnchor) {
+    var tx = anchor === "start" ? "0" : anchor === "end" ? "-100%" : "-50%";
+    var ty = vAnchor === "top" ? "0" : vAnchor === "bottom" ? "-100%" : "-50%";
+    return "translate(" + tx + "," + ty + ")";
+  }
+  function buildPlot(cfg) {
+    var w = cfg.w, h = cfg.h;
+    var pad = Object.assign({ t: 16, r: 18, b: 20, l: 22 }, cfg.pad || {});
+    var xmin = cfg.xmin, xmax = cfg.xmax, ymin = cfg.ymin, ymax = cfg.ymax;
+    var iw = w - pad.l - pad.r, ih = h - pad.t - pad.b;
+    var SX = function(x) { return pad.l + ((x - xmin) / (xmax - xmin)) * iw; };
+    var SY = function(y) { return h - pad.b - ((y - ymin) / (ymax - ymin)) * ih; };
+    var id = "pl" + (++uid);
+    var parts = [], labels = [];
+    function pushLabel(o) { labels.push(o); }
+    parts.push('<svg viewBox="0 0 ' + w + ' ' + h + '" style="width:' + w + 'px" class="fig-svg" role="img" aria-label="' + esc(cfg.aria || "graph") + '" preserveAspectRatio="xMidYMid meet">');
+    parts.push('<defs><marker id="' + id + 'a" markerWidth="8" markerHeight="8" refX="5.4" refY="2.8" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L5.4,2.8 L0,5.6" fill="none" stroke="var(--c-axis)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>');
+    if (cfg.axes !== false) {
+      var x0 = Math.min(Math.max(0, xmin), xmax), y0 = Math.min(Math.max(0, ymin), ymax);
+      var ax0 = SX(xmin), ax1 = SX(xmax), ayBase = SY(y0);
+      parts.push('<path d="M' + ax0.toFixed(1) + ',' + ayBase.toFixed(1) + ' H' + (ax1 - 1).toFixed(1) + '" class="axis" marker-end="url(#' + id + 'a)"/>');
+      var ay0 = SY(ymin), ay1 = SY(ymax), axBase = SX(x0);
+      parts.push('<path d="M' + axBase.toFixed(1) + ',' + ay0.toFixed(1) + ' V' + (ay1 + 1).toFixed(1) + '" class="axis" marker-end="url(#' + id + 'a)"/>');
+      if (cfg.xlabel) pushLabel({ px: ax1 + 1, py: ayBase + 4, tex: cfg.xlabel, anchor: "start", vAnchor: "top", cls: "a-ax", size: 13 });
+      if (cfg.ylabel) pushLabel({ px: axBase - 5, py: ay1 + 1, tex: cfg.ylabel, anchor: "end", vAnchor: "top", cls: "a-ax", size: 13 });
+      (cfg.xticks || []).forEach(function(t) {
+        var px = SX(t.x);
+        parts.push('<line x1="' + px.toFixed(1) + '" y1="' + (ayBase - 3).toFixed(1) + '" x2="' + px.toFixed(1) + '" y2="' + (ayBase + 3).toFixed(1) + '" class="axis"/>');
+        var tex = t.tex != null ? t.tex : (t.label != null ? null : piTex(t.x));
+        if (tex != null) pushLabel({ px: px, py: ayBase + 6, tex: tex, anchor: "middle", vAnchor: "top", cls: "a-pt", size: 12 });
+        else if (t.label != null) pushLabel({ px: px, py: ayBase + 6, text: t.label, anchor: "middle", vAnchor: "top", cls: "a-pt", size: 12 });
+      });
+      (cfg.yticks || []).forEach(function(t) {
+        var py = SY(t.y);
+        parts.push('<line x1="' + (axBase - 3).toFixed(1) + '" y1="' + py.toFixed(1) + '" x2="' + (axBase + 3).toFixed(1) + '" y2="' + py.toFixed(1) + '" class="axis"/>');
+        var tex = t.tex != null ? t.tex : (t.label != null ? null : piTex(t.y));
+        if (tex != null) pushLabel({ px: axBase - 6, py: py, tex: tex, anchor: "end", vAnchor: "middle", cls: "a-pt", size: 12 });
+        else if (t.label != null) pushLabel({ px: axBase - 6, py: py, text: t.label, anchor: "end", vAnchor: "middle", cls: "a-pt", size: 12 });
+      });
+    }
+    (cfg.items || []).forEach(function(it) {
+      if (it.type === "curve") {
+        var cls = it.cls || "curve", n = it.samples || 240, a = it.domain[0], b = it.domain[1];
+        var d = "", pen = false;
+        for (var i = 0; i <= n; i++) {
+          var x = a + (b - a) * (i / n), y = it.fn(x);
+          if (!isFinite(y) || y < ymin - (ymax - ymin) * 0.04 || y > ymax + (ymax - ymin) * 0.04) { pen = false; continue; }
+          var px = SX(x).toFixed(2), py = SY(y).toFixed(2);
+          d += (pen ? "L" : "M") + px + "," + py + " "; pen = true;
+        }
+        if (d) parts.push('<path d="' + d.trim() + '" class="' + cls + '"/>');
+      } else if (it.type === "vline") {
+        parts.push('<line x1="' + SX(it.x).toFixed(1) + '" y1="' + SY(ymin).toFixed(1) + '" x2="' + SX(it.x).toFixed(1) + '" y2="' + SY(ymax).toFixed(1) + '" class="' + (it.cls || "refline") + '"/>');
+      } else if (it.type === "hline") {
+        var ha = it.from != null ? it.from : xmin, hb = it.to != null ? it.to : xmax;
+        parts.push('<line x1="' + SX(ha).toFixed(1) + '" y1="' + SY(it.y).toFixed(1) + '" x2="' + SX(hb).toFixed(1) + '" y2="' + SY(it.y).toFixed(1) + '" class="' + (it.cls || "refline") + '"/>');
+      } else if (it.type === "seg") {
+        parts.push('<line x1="' + SX(it.x1).toFixed(1) + '" y1="' + SY(it.y1).toFixed(1) + '" x2="' + SX(it.x2).toFixed(1) + '" y2="' + SY(it.y2).toFixed(1) + '" class="' + (it.cls || "curve") + '"/>');
+      } else if (it.type === "dot") {
+        var r = it.r || 3.0;
+        if (it.hollow) parts.push('<circle cx="' + SX(it.x).toFixed(1) + '" cy="' + SY(it.y).toFixed(1) + '" r="' + r + '" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.5"/>');
+        else parts.push('<circle cx="' + SX(it.x).toFixed(1) + '" cy="' + SY(it.y).toFixed(1) + '" r="' + r + '" class="dot"/>');
+      } else if (it.type === "rect") {
+        var rTop = SY(it.y1), rBot = SY(it.y0 != null ? it.y0 : 0), rL = SX(it.x1), rR = SX(it.x2);
+        parts.push('<rect x="' + Math.min(rL, rR).toFixed(1) + '" y="' + Math.min(rTop, rBot).toFixed(1) + '" width="' + Math.abs(rR - rL).toFixed(1) + '" height="' + Math.abs(rBot - rTop).toFixed(1) + '" class="' + (it.cls || "fill-area") + '"/>');
+      } else if (it.type === "area") {
+        var aN = it.samples || 160, aA = it.domain[0], aB = it.domain[1], aBase = (it.base != null ? it.base : 0);
+        var aD = "M" + SX(aA).toFixed(2) + "," + SY(aBase).toFixed(2) + " ";
+        for (var aI = 0; aI <= aN; aI++) { var aX = aA + (aB - aA) * (aI / aN); aD += "L" + SX(aX).toFixed(2) + "," + SY(it.fn(aX)).toFixed(2) + " "; }
+        aD += "L" + SX(aB).toFixed(2) + "," + SY(aBase).toFixed(2) + " Z";
+        parts.push('<path d="' + aD.trim() + '" class="' + (it.cls || "fill-area") + '"/>');
+      } else if (it.type === "areaBetween") {
+        /* ch7 extension (M2 figure batch): fill between two curves y=fnTop(x), y=fnBot(x) over domain.
+           Same one-off-kit-extension move as ch06's rect/area (see PLAN-ch06 "M2 figure batch"). */
+        var bN = it.samples || 160, bA = it.domain[0], bB = it.domain[1], bD = "";
+        for (var bI = 0; bI <= bN; bI++) { var bX = bA + (bB - bA) * (bI / bN); bD += (bI ? "L" : "M") + SX(bX).toFixed(2) + "," + SY(it.fnTop(bX)).toFixed(2) + " "; }
+        for (var bJ = bN; bJ >= 0; bJ--) { var bX2 = bA + (bB - bA) * (bJ / bN); bD += "L" + SX(bX2).toFixed(2) + "," + SY(it.fnBot(bX2)).toFixed(2) + " "; }
+        parts.push('<path d="' + bD.trim() + ' Z" class="' + (it.cls || "fill-area") + '"/>');
+      } else if (it.type === "arrow") {
+        parts.push('<line x1="' + SX(it.x1).toFixed(1) + '" y1="' + SY(it.y1).toFixed(1) + '" x2="' + SX(it.x2).toFixed(1) + '" y2="' + SY(it.y2).toFixed(1) + '" class="axis" marker-end="url(#' + id + 'a)"/>');
+      } else if (it.type === "text") {
+        pushLabel({ px: SX(it.x), py: SY(it.y), tex: it.tex, text: it.tex == null ? it.text : null, anchor: it.anchor || "middle", vAnchor: it.vAnchor || "middle", dx: it.dx || 0, dy: it.dy || 0, cls: it.cls || "a-pt", size: it.size });
+      }
+    });
+    if (labels.length) {
+      var M = 52;
+      var spans = labels.map(function(L) {
+        var left = (L.px + (L.dx || 0) + M).toFixed(1);
+        var top = (L.py + (L.dy || 0) + M).toFixed(1);
+        var tf = anchorTransform(L.anchor, L.vAnchor);
+        var fs = L.size ? "font-size:" + L.size + "px;" : "";
+        var body = L.tex != null ? "\\(" + L.tex + "\\)" : esc(L.text == null ? "" : L.text);
+        return '<span class="fig-lbl ' + (L.cls || "") + '" style="left:' + left + 'px;top:' + top + 'px;transform:' + tf + ';' + fs + '">' + body + '</span>';
+      }).join("");
+      parts.push('<foreignObject x="' + (-M) + '" y="' + (-M) + '" width="' + (w + 2 * M) + '" height="' + (h + 2 * M) + '" class="fig-fo" requiredExtensions="http://www.w3.org/1999/xhtml"><div xmlns="http://www.w3.org/1999/xhtml" class="fig-lyr">' + spans + '</div></foreignObject>');
+    }
+    parts.push('</svg>');
+    return parts.join("");
+  }
+  window.buildPlot = buildPlot;
+  window.PIVAL = PI;
+})();
+</script>
+
+<!-- ============================================================
+     figures.js — inlined (Chapter 7 figure registry)
+     ============================================================ -->
+<script>
+/* ============================================================
+   figures.js — Chapter 7 figure registry.
+   Each entry returns { layout, panels:[{svg, note}] }.
+   Most chapter figures use buildPlot() (shared/plot.js) for
+   function graphs. buildPlot has NO fill/sector primitive, so
+   region-area schematics (e.g. the §3.1 sector inequality) are
+   hand-built raw SVG here, inheriting the figure vocabulary
+   (.fig-svg, .ptlab, var(--c-primary)/--ink…) from skin-hs.css.
+   Labels are kept to single symbols (O, A, B, C, θ, 1); the
+   areas and the inequality live in the caption and body prose
+   (CONTENT_SPEC §10 "Label economy").
+   Appended across sections — never overwrite.
+   ============================================================ */
+(function () {
+
+  /* ---- tiny helpers for the few hand-built raw-SVG schematics ----
+     (labels replicate buildPlot's foreignObject/MathJax span mechanism) */
+  var FO_M = 52;
+  function svgOpen(w, h, aria) {
+    return '<svg viewBox="0 0 ' + w + ' ' + h + '" style="width:' + w + 'px" class="fig-svg" role="img" aria-label="' + aria + '" preserveAspectRatio="xMidYMid meet">';
+  }
+  function texLbl(px, py, tex, anchor, size) {
+    var tf = anchor === "start" ? "translate(0,-50%)" : anchor === "end" ? "translate(-100%,-50%)" : "translate(-50%,-50%)";
+    var fs = size ? "font-size:" + size + "px;" : "font-size:12px;";
+    return '<span class="fig-lbl a-pt" style="left:' + (px + FO_M).toFixed(1) + 'px;top:' + (py + FO_M).toFixed(1) + 'px;transform:' + tf + ';' + fs + '">\\(' + tex + '\\)</span>';
+  }
+  function txtLbl(px, py, text, anchor, size) {
+    var tf = anchor === "start" ? "translate(0,-50%)" : anchor === "end" ? "translate(-100%,-50%)" : "translate(-50%,-50%)";
+    var fs = size ? "font-size:" + size + "px;" : "font-size:12px;";
+    return '<span class="fig-lbl a-pt" style="left:' + (px + FO_M).toFixed(1) + 'px;top:' + (py + FO_M).toFixed(1) + 'px;transform:' + tf + ';' + fs + '">' + text + '</span>';
+  }
+  function foWrap(w, h, spans) {
+    return '<foreignObject x="' + (-FO_M) + '" y="' + (-FO_M) + '" width="' + (w + 2 * FO_M) + '" height="' + (h + 2 * FO_M) + '" class="fig-fo" requiredExtensions="http://www.w3.org/1999/xhtml"><div xmlns="http://www.w3.org/1999/xhtml" class="fig-lyr">' + spans + '</div></foreignObject>';
+  }
+
+  const FIGS = {
+    /* ch08 figures land at M2; empty at M1 (markers only) */
+  };
+
+  /* ---- hydrateFigures: fills every <figure data-fig="id"> ---- */
+  function hydrateFigures(root) {
+    (root || document).querySelectorAll("[data-fig]").forEach(function (el) {
+      var def = FIGS[el.dataset.fig];
+      if (!def || el.dataset.figDone) return;
+      var r = def();
+      var layout = r.layout, panels = r.panels;
+      var html;
+      if (layout === "single" && panels.length === 1 && !panels[0].note) {
+        html = '<div class="figure-art">' + panels[0].svg + '</div>';
+      } else {
+        var cls = { pair: "figure-art--pair", triple: "figure-art--triple", grid: "figure-art--grid" }[layout] || "";
+        html = '<div class="figure-art ' + cls + '">' +
+          panels.map(function (p) {
+            return '<div class="fig-panel">' + p.svg + (p.note ? '<div class="fig-note">' + p.note + '</div>' : '') + '</div>';
+          }).join("") + '</div>';
+      }
+      el.insertAdjacentHTML("afterbegin", html);
+      el.dataset.figDone = "1";
+    });
+  }
+  window.hydrateFigures = hydrateFigures;
+})();
+</script>
+
+<!-- Main build script (paginator + MathJax) -->
+<script>
+var CHAPTER = {
+  brand: "Chapter 8 — Techniques of Integration",
+  runningHead: "Chapter 8 · Techniques of Integration",
+  fragments: ["sec-8-1", "sec-8-2", "sec-8-3", "sec-8-4", "sec-8-5", "sec-8-6", "sec-8-7"],
+};
+var FRAGMENTS = CHAPTER.fragments;
+var RUNNING_HEAD = CHAPTER.runningHead;
+
+function renderMath(root) {
+  if (!root) return Promise.resolve();
+  if (window.MathJax && window.MathJax.typesetPromise) {
+    return MathJax.typesetPromise([root]).catch(function(e) { console.warn("mathjax", e); });
+  }
+  return Promise.resolve();
+}
+
+function waitFor(test, tries) {
+  return new Promise(function(resolve) {
+    var n = 0;
+    var tick = function() {
+      if (test()) return resolve(true);
+      if (n++ > (tries || 100)) return resolve(false);
+      setTimeout(tick, 50);
+    };
+    tick();
+  });
+}
+
+var isHeading = function(el) {
+  return el.matches && el.matches(".chapter-head, .sec-head, .subsec-head, .para-head, .env-head");
+};
+
+function isDisplayChild(n) {
+  if (n.nodeType !== 1) return false;
+  var tag = n.tagName && n.tagName.toLowerCase();
+  if (tag === "mjx-container" && n.getAttribute("display") === "true") return true;
+  if (n.querySelector && n.querySelector('mjx-container[display="true"]')) return true;
+  return false;
+}
+
+var SPLIT_ENVS = ".env-example, .env-solution, .env-proof, .env-definition, .env-theorem, .env-proposition, .env-corollary";
+var DISP_SEL = 'mjx-container[display="true"]';
+
+function liCount(el) { return [].filter.call(el.children, function(x) { return x.tagName === "LI"; }).length; }
+
+function countBodyUnits(bodyEl) {
+  var n = 0;
+  [].forEach.call(bodyEl.children, function(ch) {
+    if (ch.tagName === "P" && ch.querySelector(DISP_SEL)) n += explodeParagraph2(ch);
+    else if ((ch.tagName === "OL" || ch.tagName === "UL") && liCount(ch) >= 2) n += liCount(ch);
+    else n++;
+  });
+  return n;
+}
+
+function isSplittable(block) {
+  if (!block.classList) return false;
+  if (block.classList.contains("workedexample")) return block.children.length >= 2;
+  if (block.matches(SPLIT_ENVS)) {
+    var b = block.querySelector(":scope > .env-body");
+    return !!b && countBodyUnits(b) > 1;
+  }
+  if (block.tagName === "P" && block.querySelector(DISP_SEL)) {
+    return explodeParagraph2(block) > 1;
+  }
+  return false;
+}
+
+function onlyLists(bodyEl) {
+  var els = contentKids(bodyEl);
+  return els.length > 0 && els.every(function(c) { return c.tagName === "OL" || c.tagName === "UL"; });
+}
+
+function contentKids(bodyEl) {
+  return [].filter.call(bodyEl.children, function(c) {
+    return !(c.classList && c.classList.contains("qed")) && (c.textContent.trim() || c.querySelector("*"));
+  });
+}
+
+function splitMode(block) {
+  if (!block.classList) return "none";
+  if (block.classList.contains("workedexample")) return block.children.length >= 2 ? "free" : "none";
+  if (block.matches(SPLIT_ENVS)) {
+    var b = block.querySelector(":scope > .env-body");
+    if (!b || countBodyUnits(b) <= 1) return "none";
+    var kids = contentKids(b);
+    var hasPara = kids.some(function(c) {
+      return c.tagName === "P" && c.querySelector(DISP_SEL) && explodeParagraph2(c) > 1;
+    });
+    if (hasPara || (kids.length >= 2 && !kids.every(function(c) { return c.tagName === "OL" || c.tagName === "UL"; }))) return "free";
+    return "list";
+  }
+  if (block.tagName === "P" && block.querySelector(DISP_SEL) && explodeParagraph2(block) > 1) return "free";
+  return "none";
+}
+
+function explodeParagraph2(p) {
+  var n = 0, hasBuf = false;
+  [].forEach.call(p.childNodes, function(node) {
+    if (isDisplayChild(node)) {
+      if (hasBuf) { n++; hasBuf = false; }
+      n++;
+    } else if ((node.textContent && node.textContent.trim()) || node.nodeType === 1) {
+      hasBuf = true;
+    }
+  });
+  if (hasBuf) n++;
+  return n;
+}
+
+function explodeParagraph(p) {
+  var parts = [], buf = [];
+  var flush = function() {
+    var hasContent = buf.some(function(n) { return (n.textContent && n.textContent.trim()) || n.nodeType === 1; });
+    if (hasContent) {
+      var np = document.createElement("p");
+      np.className = p.className;
+      buf.forEach(function(n) { np.appendChild(n); });
+      parts.push(np);
+    } else {
+      buf.forEach(function(n) { if (n.parentNode) n.parentNode.removeChild(n); });
+    }
+    buf = [];
+  };
+  [].slice.call(p.childNodes).forEach(function(node) {
+    if (isDisplayChild(node)) { flush(); var np = document.createElement("p"); np.className = p.className; np.appendChild(node); parts.push(np); }
+    else { buf.push(node); }
+  });
+  flush();
+  return parts;
+}
+
+function listToUnits(listEl) {
+  var items = [].filter.call(listEl.children, function(x) { return x.tagName === "LI"; });
+  if (items.length < 2) return [listEl];
+  var tag = listEl.tagName.toLowerCase();
+  return items.map(function(li, i) {
+    var nl = document.createElement(tag);
+    nl.className = listEl.className;
+    if (tag === "ol") nl.setAttribute("start", String(i + 1));
+    nl.appendChild(li);
+    return nl;
+  });
+}
+
+function bodyToUnits(bodyEl) {
+  var units = [];
+  [].forEach.call(bodyEl.children, function(ch) {
+    if (ch.tagName === "P" && ch.querySelector(DISP_SEL) && explodeParagraph2(ch) > 1) {
+      explodeParagraph(ch).forEach(function(u) { units.push(u); });
+    } else if ((ch.tagName === "OL" || ch.tagName === "UL") && liCount(ch) >= 2) {
+      listToUnits(ch).forEach(function(u) { units.push(u); });
+    } else { units.push(ch); }
+  });
+  return units;
+}
+
+function splitEnvOverflow(env) {
+  var bodyEl = env.querySelector(":scope > .env-body");
+  if (!bodyEl) return null;
+  var kids = bodyToUnits(bodyEl);
+  if (kids.length < 2) return null;
+  bodyEl.innerHTML = "";
+  bodyEl.appendChild(kids.shift());
+  var parts = [env];
+  kids.forEach(function(k) {
+    if (k.classList && k.classList.contains("qed") && parts.length > 0) {
+      var prev = parts[parts.length - 1];
+      var prevBody = prev.querySelector(":scope > .env-body") || prev.querySelector(".env-body");
+      if (prevBody) { prevBody.appendChild(k); return; }
+    }
+    var cont = document.createElement("section");
+    cont.className = env.className + " env-cont";
+    var b = document.createElement("div");
+    b.className = "env-body";
+    b.appendChild(k);
+    cont.appendChild(b);
+    parts.push(cont);
+  });
+  return parts;
+}
+
+function splitParts(block) {
+  if (block.classList.contains("workedexample")) return [].slice.call(block.children);
+  if (block.matches(SPLIT_ENVS)) return splitEnvOverflow(block) || [block];
+  if (block.tagName === "P") { var ex = explodeParagraph(block); return ex.length > 1 ? ex : [block]; }
+  return [block];
+}
+
+function paginate(blocks) {
+  var pagesEl = document.getElementById("pages");
+  pagesEl.innerHTML = "";
+  var idx = 0, body = null;
+  var newSheet = function() {
+    var sheet = document.createElement("div");
+    sheet.className = "sheet";
+    var header = document.createElement("div");
+    header.className = "sheet-header";
+    header.textContent = idx === 0 ? "" : RUNNING_HEAD;
+    body = document.createElement("div");
+    body.className = "sheet-body paper skin-hs vivid";
+    var footer = document.createElement("div");
+    footer.className = "sheet-footer";
+    footer.textContent = String(idx + 1);
+    sheet.append(header, body, footer);
+    pagesEl.appendChild(sheet);
+    idx++;
+  };
+  newSheet();
+  var fits = function() { return body.scrollHeight <= body.clientHeight + 1; };
+  var FREE_THRESHOLD = 130;
+  var moveToFreshPage = function(block) {
+    var carry = null;
+    if (body.childElementCount > 0) {
+      var last = body.lastElementChild;
+      if (last && isHeading(last)) { carry = last; body.removeChild(last); }
+      newSheet();
+      if (carry) body.appendChild(carry);
+    }
+    body.appendChild(block);
+  };
+  var place = function(block) {
+    body.appendChild(block);
+    if (fits()) {
+      if (isHeading(block) && body.childElementCount > 1) {
+        var _bRect = block.getBoundingClientRect();
+        var _bodyRect = body.getBoundingClientRect();
+        var _rem = (_bodyRect.top + body.clientHeight) - _bRect.bottom;
+        var _threshold = block.matches(".sec-head, .chapter-head") ? 160 : 100;
+        if (_rem < _threshold) {
+          body.removeChild(block);
+          newSheet();
+          body.appendChild(block);
+        }
+      }
+      return;
+    }
+    var blockH = block.getBoundingClientRect().height;
+
+    var isFigure = block.tagName === "FIGURE" || (block.classList && block.classList.contains("figure"));
+    var _figArt = isFigure ? block.querySelector(".figure-art") : null;
+    var _artH = 0, _capH = 0;
+    if (_figArt) {
+      _artH = _figArt.getBoundingClientRect().height;
+      var _figCap = block.querySelector("figcaption");
+      _capH = _figCap ? _figCap.getBoundingClientRect().height : 0;
+    }
+
+    body.removeChild(block);
+
+    if (_figArt && _artH > 0) {
+      var _probe = document.createElement("div");
+      _probe.style.height = "0"; _probe.style.margin = "0"; _probe.style.padding = "0";
+      body.appendChild(_probe);
+      var _remaining = body.clientHeight - (_probe.getBoundingClientRect().top - body.getBoundingClientRect().top);
+      body.removeChild(_probe);
+      var FIG_MIN_SCALE = 0.55;
+      var _figMargin = blockH - _artH - _capH;
+      var _availForArt = _remaining - _capH - _figMargin;
+      var neededScale = _availForArt / _artH;
+      if (_availForArt > 60 && neededScale >= FIG_MIN_SCALE && neededScale < 1) {
+        var _oZ = _figArt.style.zoom;
+        var _oMt = block.style.marginTop, _oMb = block.style.marginBottom;
+        _figArt.style.zoom = neededScale;
+        block.style.marginTop = "0.3em"; block.style.marginBottom = "0";
+        body.appendChild(block);
+        if (fits()) return;
+        body.removeChild(block);
+        _figArt.style.zoom = _oZ;
+        block.style.marginTop = _oMt; block.style.marginBottom = _oMb;
+      }
+    }
+
+    if (block.classList.contains && block.classList.contains("workedexample") && block.children.length >= 2) {
+      var lastEl = body.lastElementChild;
+      var used = lastEl ? lastEl.getBoundingClientRect().bottom - body.getBoundingClientRect().top : 0;
+      var remaining = body.clientHeight - used;
+      if (remaining < FREE_THRESHOLD && blockH <= body.clientHeight) {
+        moveToFreshPage(block);
+        if (fits()) return;
+        body.removeChild(block);
+      }
+      var kids = [].slice.call(block.children);
+      var ex = kids[0], sol = kids[1], extra = kids.slice(2);
+      block.removeChild(ex);
+      var solParts = splitParts(sol);
+      body.appendChild(ex);
+      if (!fits()) { body.removeChild(ex); moveToFreshPage(ex); }
+      var first = solParts[0];
+      body.appendChild(first);
+      if (!fits()) {
+        body.removeChild(first);
+        body.removeChild(ex);
+        moveToFreshPage(ex);
+        body.appendChild(first);
+        if (!fits()) { body.removeChild(first); place(first); }
+      }
+      for (var i = 1; i < solParts.length; i++) place(solParts[i]);
+      extra.forEach(place);
+      return;
+    }
+    var mode = splitMode(block);
+    var remainingAtInsert = 0;
+    if (mode !== "none") {
+      var splitProbe = document.createElement("div");
+      splitProbe.style.height = "0"; splitProbe.style.margin = "0"; splitProbe.style.padding = "0";
+      body.appendChild(splitProbe);
+      remainingAtInsert = body.clientHeight - (splitProbe.getBoundingClientRect().top - body.getBoundingClientRect().top);
+      body.removeChild(splitProbe);
+    }
+    var want = (mode !== "none" && (blockH > body.clientHeight || remainingAtInsert >= FREE_THRESHOLD));
+    if (want) { var parts = splitParts(block); if (parts.length > 1) { parts.forEach(place); return; } }
+    moveToFreshPage(block);
+    if (!fits() && mode !== "none") {
+      var parts2 = splitParts(block);
+      if (parts2.length > 1) { body.removeChild(block); parts2.forEach(place); }
+    }
+  };
+  blocks.forEach(place);
+  return idx;
+}
+
+function build() {
+  var status = document.getElementById("status");
+
+  /* Load section fragments from inline <template> elements */
+  var page = document.getElementById("page");
+  var parts = FRAGMENTS.map(function(id) {
+    var tpl = document.getElementById("frag-" + id);
+    return tpl ? tpl.innerHTML : "";
+  });
+  page.innerHTML = parts.join("\n");
+
+  if (window.hydrateFigures) window.hydrateFigures(page);
+
+  /* Wait for MathJax to load, then typeset */
+  waitFor(function() { return window.MathJax && window.MathJax.typesetPromise; }, 200).then(function(ok) {
+    if (!ok) { status.textContent = "MathJax load timeout"; return; }
+    return renderMath(page);
+  }).then(function() {
+    var fontsReady = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+    return fontsReady;
+  }).then(function() {
+    status.textContent = "Paginating …";
+    return new Promise(function(r) { setTimeout(r, 60); });
+  }).then(function() {
+    var blocks = [];
+    page.querySelectorAll(":scope > .sec").forEach(function(sec) {
+      [].forEach.call(sec.children, function(ch) { blocks.push(ch); });
+    });
+
+    var n = paginate(blocks);
+    var src = document.getElementById("source");
+    if (src) src.remove();
+
+    status.textContent = n + " page" + (n === 1 ? "" : "s") + " · A4";
+    var btn = document.getElementById("printBtn");
+    btn.disabled = false;
+    btn.addEventListener("click", function() { window.print(); });
+
+    var boot = document.getElementById("boot");
+    if (boot) boot.remove();
+  });
+}
+
+window.addEventListener("DOMContentLoaded", build);
+</script>
+</body>
+</html>

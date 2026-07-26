@@ -1,0 +1,218 @@
+<!-- §8.2 Trigonometric Integrals. section-source: Stewart ET 9e §7.2; cross-checked Thomas 14e
+     §8.3, Rogawski 4e §7.2. Authored 2026-07-26 per PLAN-ch08 + brief-8-2 (canon-as-spine;
+     plain-register generation). Numbering: mints Proposition 8.1 (antiderivatives of tan/cot/
+     sec/csc, PROVED — tan/cot by u-sub, sec by the labeled device + verification by
+     differentiation, csc by differentiation), Strategy 8.2, Strategy 8.3, Examples 8.7–8.11.
+     Cautions UNNUMBERED.
+     SEAM GUARD (PLAN-ch08 D4 + brief-8-2): every identity used is restated inline AND cited —
+     Prop A.1 (1+tan²=sec²), Prop A.2 (product-to-sum, first line), §A.2 power-reduction display
+     (unnumbered there; its "when the techniques of integration arrive" promise is discharged
+     here), Def A.1 (sec/csc/cot are B-class; recall-in-one-clause at first use). tan′/sec′ cited
+     to Example 3.2; substitution to Thm 6.6; ln|x| antiderivative to §6.4; parts to Thm 8.1;
+     solve-back pattern to Ex 8.4; reduction formula cross-check to Ex 8.6. ln|·| domain: one
+     blanket sentence at Prop 8.1. Do NOT work sin·sin / cos·cos examples (identity named, method
+     identical — one clause); no sec^n/tan^n reduction formulas (one clause); no Weierstrass sub
+     (§8.5 mention only); no csc³ (mirror named).
+     Counters handed to §8.3: Strategy 8.4, Example 8.12 (no Def/Thm/Prop minted in §8.3; next
+     Proposition is 8.2 in §8.6; next Theorem is 8.3 in §8.6).
+     Record: PLAN-ch08.md, brief-8-2.md. -->
+
+<article class="sec" lang="en">
+
+  <header class="sec-head">
+    <h2 class="sec-title"><span class="sec-no">8.2</span>Trigonometric Integrals</h2>
+  </header>
+
+  <!-- expansion:intuition — section opener: the collision (sin³ has no visible du) and the section's one move: spend a factor as du, convert the rest by an identity -->
+  <p>Consider \(\int \sin^{3}x\,dx\). No derivative sits beside an inner function, so no substitution presents itself, and the integrand is not a product of unrelated factors either, so parts does not simplify it. The way forward is a property specific to trigonometric functions. They convert into one another. Split off one factor of sine and rewrite the rest by the Pythagorean identity \(\sin^{2}x = 1 - \cos^{2}x\):</p>
+  <p>\[ \sin^{3}x = \bigl(1 - \cos^{2}x\bigr)\sin x. \]</p>
+  <p>The right-hand side is a polynomial in \(\cos x\) times \(\sin x\,dx\), and \(\sin x\,dx\) is exactly \(-du\) for \(u = \cos x\). The substitution that seemed absent has been <em>manufactured</em>: one factor was spent as the differential, and an identity converted everything that remained into the new variable. That single move, spend a factor and convert the rest, runs through this whole section. When no factor can be spared, a second family of identities lowers the powers instead. The identities themselves were assembled in Appendix A.2, which promised they would be needed when the techniques of integration arrived. They are needed now.</p>
+
+  <h3 class="subsec-head">Powers of sine and cosine</h3>
+
+  <p>For an integrand \(\sin^{m}x\cos^{n}x\), the parity of the exponents decides the move.</p>
+
+  <section class="env env-strategy">
+    <p class="env-head"><span class="env-kicker">Strategy</span><span class="env-num">8.2</span><span class="env-name">Integrating \(\sin^m x\,\cos^n x\)</span></p>
+    <div class="env-body">
+      <ol class="steps">
+        <li><em>If the power of sine is odd,</em> save one factor of \(\sin x\) for the differential and convert the remaining even power by \(\sin^{2}x = 1 - \cos^{2}x\). Then substitute \(u = \cos x\), \(du = -\sin x\,dx\).</li>
+        <li><em>If the power of cosine is odd,</em> save one factor of \(\cos x\) and convert the rest by \(\cos^{2}x = 1 - \sin^{2}x\). Then substitute \(u = \sin x\), \(du = \cos x\,dx\).</li>
+        <li><em>If both powers are even,</em> no factor can be spared. Lower the degree with the power-reduction identities of §A.2, \(\sin^{2}x = \tfrac{1}{2}(1 - \cos 2x)\) and \(\cos^{2}x = \tfrac{1}{2}(1 + \cos 2x)\), and repeat as needed.</li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.7</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int \sin^{3}x\,\cos^{2}x\,dx\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>The power of sine is odd. Save one factor of \(\sin x\) and convert the remaining \(\sin^{2}x\):</p>
+        <p>\[ \int \sin^{3}x\,\cos^{2}x\,dx = \int \bigl(1 - \cos^{2}x\bigr)\cos^{2}x\,\sin x\,dx. \]</p>
+        <p>Substitute \(u = \cos x\), so that \(du = -\sin x\,dx\) and \(\sin x\,dx = -du\) (Theorem 6.6):</p>
+        <p>\[ \int \bigl(1 - u^{2}\bigr)u^{2}\,(-du) = \int \bigl(u^{4} - u^{2}\bigr)\,du = \frac{u^{5}}{5} - \frac{u^{3}}{3} + C. \]</p>
+        <p>Substituting \(u = \cos x\) back,</p>
+        <p>\[ \int \sin^{3}x\,\cos^{2}x\,dx = \frac{\cos^{5}x}{5} - \frac{\cos^{3}x}{3} + C. \]</p>
+        <p>Splitting off the odd power is what made this work: one factor of sine became the differential, and everything else became a polynomial, which integrates term by term. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <section class="env env-caution">
+    <p class="env-head"><span class="env-kicker">Caution</span></p>
+    <div class="env-body">
+      <p>The substitution \(u = \cos x\) gives \(du = -\sin x\,dx\). The minus sign is the most commonly dropped symbol in this section. Write the line \(\sin x\,dx = -du\) explicitly before substituting, and the sign survives.</p>
+    </div>
+  </section>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.8</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int \sin^{4}x\,dx\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>The power is even, so no factor can be spared and step 3 of Strategy 8.2 applies. Using \(\sin^{2}x = \tfrac{1}{2}(1 - \cos 2x)\) from §A.2 and squaring,</p>
+        <p>\[ \sin^{4}x = \Bigl(\frac{1 - \cos 2x}{2}\Bigr)^{2} = \frac{1}{4}\bigl(1 - 2\cos 2x + \cos^{2}2x\bigr). \]</p>
+        <p>The last term is again an even power, and the companion identity \(\cos^{2}\theta = \tfrac{1}{2}(1 + \cos 2\theta)\), applied with \(\theta = 2x\), lowers it too:</p>
+        <p>\[ \sin^{4}x = \frac{1}{4}\Bigl(1 - 2\cos 2x + \frac{1 + \cos 4x}{2}\Bigr) = \frac{3}{8} - \frac{\cos 2x}{2} + \frac{\cos 4x}{8}. \]</p>
+        <p>Every term is now a plain cosine, and integration is immediate:</p>
+        <p>\[ \int \sin^{4}x\,dx = \frac{3x}{8} - \frac{\sin 2x}{4} + \frac{\sin 4x}{32} + C. \]</p>
+        <!-- expansion:formula — agreement check against the §8.1 reduction-formula route; ties Ex 8.6 into its promised regular use -->
+        <p>The reduction formula of Example 8.6 reaches the same answer by a different route. It expresses \(\int\sin^{4}x\,dx\) in terms of \(\int\sin^{2}x\,dx\), and the two results agree after the double-angle identity is applied. When several powers must be integrated in sequence, the reduction formula is the more systematic tool; for a single even power, power reduction is the shorter one. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <!-- [FIGURE-OPPORTUNITY] 描述：y = sin²x on [0, 2π] with its midline y = 1/2 drawn dashed — the power-reduction identity as a picture: sin²x oscillates about 1/2 with period π (NOT 2π — the drawing must reflect the halved period), so the area over [0, 2π] is that of the rectangle of height 1/2, i.e. π. Domain facts: max 1 at x = π/2, 3π/2; zeros at 0, π, 2π; midline crossings at odd multiples of π/4.
+       類型：graph
+       理由：makes "the average of sin² is 1/2" visible; the identity's constant term IS the midline. Supporting tier. -->
+
+  <h3 class="subsec-head">Tangents and secants</h3>
+
+  <p>Recall from Definition A.1 that \(\sec x = \tfrac{1}{\cos x}\), \(\csc x = \tfrac{1}{\sin x}\), and \(\cot x = \tfrac{\cos x}{\sin x}\). For integration, tangent and secant form a closed pair. Their derivatives stay in the pair, since \(\tfrac{d}{dx}\tan x = \sec^{2}x\) and \(\tfrac{d}{dx}\sec x = \sec x\tan x\) (Example 3.2), and the Pythagorean companion \(1 + \tan^{2}x = \sec^{2}x\) (Proposition A.1) converts between them. So the same manufacturing move applies. Spend \(\sec^{2}x\,dx\) as the differential of \(\tan x\), or spend \(\sec x\tan x\,dx\) as the differential of \(\sec x\), and convert what remains.</p>
+
+  <section class="env env-strategy">
+    <p class="env-head"><span class="env-kicker">Strategy</span><span class="env-num">8.3</span><span class="env-name">Integrating \(\tan^m x\,\sec^n x\)</span></p>
+    <div class="env-body">
+      <ol class="steps">
+        <li><em>If the power of secant is even</em> (\(n \ge 2\)), save a factor of \(\sec^{2}x\) and convert the remaining secants by \(\sec^{2}x = 1 + \tan^{2}x\). Then substitute \(u = \tan x\), \(du = \sec^{2}x\,dx\).</li>
+        <li><em>If the power of tangent is odd</em> (and \(n \ge 1\)), save a factor of \(\sec x\tan x\) and convert the remaining tangents by \(\tan^{2}x = \sec^{2}x - 1\). Then substitute \(u = \sec x\), \(du = \sec x\tan x\,dx\).</li>
+        <li><em>If neither case applies,</em> convert tangents by \(\tan^{2}x = \sec^{2}x - 1\) and fall back on parts and the basic antiderivatives of Proposition 8.1 below, as in Example 8.10. A lone even power of tangent splits this way into lower powers plus a constant; a lone odd power reduces the same way to \(\int\tan x\,dx\) itself, which Proposition 8.1 supplies.</li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.9</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int \tan^{6}x\,\sec^{4}x\,dx\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>The power of secant is even. Save one factor of \(\sec^{2}x\) and convert the other by \(\sec^{2}x = 1 + \tan^{2}x\):</p>
+        <p>\[ \int \tan^{6}x\,\sec^{4}x\,dx = \int \tan^{6}x\,\bigl(1 + \tan^{2}x\bigr)\,\sec^{2}x\,dx. \]</p>
+        <p>Substitute \(u = \tan x\), \(du = \sec^{2}x\,dx\):</p>
+        <p>\[ \int u^{6}\bigl(1 + u^{2}\bigr)\,du = \int \bigl(u^{6} + u^{8}\bigr)\,du = \frac{u^{7}}{7} + \frac{u^{9}}{9} + C. \]</p>
+        <p>Substituting back,</p>
+        <p>\[ \int \tan^{6}x\,\sec^{4}x\,dx = \frac{\tan^{7}x}{7} + \frac{\tan^{9}x}{9} + C, \]</p>
+        <p>valid on any interval where \(\tan x\) and \(\sec x\) are defined. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <p>Strategy 8.3 stands on two basic antiderivatives that its case analysis cannot produce. Its third step reduces leftover tangents to \(\int\tan x\,dx\) itself, and the route of Example 8.10 runs through \(\int\sec x\,dx\). The antiderivative table of §6.4 has neither: its trigonometric rows are the Chapter 3 derivatives read backwards, so \(\sec^{2}x\) appears there but \(\tan x\) itself does not. The next proposition supplies both, together with their two companions.</p>
+
+  <section class="env env-proposition">
+    <p class="env-head"><span class="env-kicker">Proposition</span><span class="env-num">8.1</span><span class="env-name">Antiderivatives of the remaining trigonometric functions</span></p>
+    <div class="env-body">
+      <p>On any interval where the integrand is continuous,</p>
+      <p>\[ \begin{aligned}
+        \int \tan x\,dx &= \ln\lvert\sec x\rvert + C, \\[2pt]
+        \int \cot x\,dx &= \ln\lvert\sin x\rvert + C, \\[2pt]
+        \int \sec x\,dx &= \ln\lvert\sec x + \tan x\rvert + C, \\[2pt]
+        \int \csc x\,dx &= -\ln\lvert\csc x + \cot x\rvert + C.
+      \end{aligned} \]</p>
+    </div>
+  </section>
+
+  <section class="env env-proof">
+    <p class="env-head"><span class="env-kicker">Proof</span></p>
+    <div class="env-body">
+      <p>For the tangent, write \(\tan x = \tfrac{\sin x}{\cos x}\) and substitute \(u = \cos x\), \(du = -\sin x\,dx\) (Theorem 6.6). Using the antiderivative \(\int\tfrac{du}{u} = \ln\lvert u\rvert + C\) from §6.4,</p>
+      <p>\[ \int \tan x\,dx = \int \frac{\sin x}{\cos x}\,dx = -\int \frac{du}{u} = -\ln\lvert\cos x\rvert + C = \ln\lvert\sec x\rvert + C, \]</p>
+      <p>where the last step uses \(-\ln t = \ln\tfrac{1}{t}\) for \(t &gt; 0\). The cotangent line is the same computation with \(u = \sin x\), this time without the minus sign.</p>
+      <p>For the secant no substitution presents itself, and the standard route is a device that was found by trial, not derived: multiply and divide by \(\sec x + \tan x\). Then</p>
+      <p>\[ \int \sec x\,dx = \int \frac{\sec^{2}x + \sec x\tan x}{\sec x + \tan x}\,dx, \]</p>
+      <p>and the numerator is exactly the derivative of the denominator, by Example 3.2. With \(u = \sec x + \tan x\) the integral is \(\int\tfrac{du}{u} = \ln\lvert u\rvert + C\), which is the stated formula. Whatever one thinks of the trick, the result is verified honestly by differentiating:</p>
+      <p>\[ \begin{aligned}
+        \frac{d}{dx}\,\ln\lvert\sec x + \tan x\rvert &= \frac{\sec x\tan x + \sec^{2}x}{\sec x + \tan x} \\[2pt]
+          &= \frac{\sec x\,\bigl(\tan x + \sec x\bigr)}{\sec x + \tan x} = \sec x.
+      \end{aligned} \]</p>
+      <p>The cosecant line follows by the same verification, differentiating \(-\ln\lvert\csc x + \cot x\rvert\) and simplifying with \(\tfrac{d}{dx}\csc x = -\csc x\cot x\) and \(\tfrac{d}{dx}\cot x = -\csc^{2}x\). <span class="qed qed-proof"></span></p>
+    </div>
+  </section>
+
+  <p>Each formula holds on every interval avoiding the integrand’s singularities, and the constant \(C\) may differ from interval to interval, as with \(\ln\lvert x\rvert\) in §6.4.</p>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.10</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int \sec^{3}x\,dx\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>The power of secant is odd and no tangent is present, so neither case of Strategy 8.3 applies. Following its third step, we use parts (Theorem 8.1). Take \(u = \sec x\) and \(dv = \sec^{2}x\,dx\), so that \(du = \sec x\tan x\,dx\) by Example 3.2 and \(v = \tan x\):</p>
+        <p>\[ \int \sec^{3}x\,dx = \sec x\tan x - \int \sec x\tan^{2}x\,dx. \]</p>
+        <p>Convert the tangents by \(\tan^{2}x = \sec^{2}x - 1\) (Proposition A.1):</p>
+        <p>\[ \int \sec^{3}x\,dx = \sec x\tan x - \int \sec^{3}x\,dx + \int \sec x\,dx. \]</p>
+        <p>The original integral has reappeared, and we solve for it as in Example 8.4. Adding \(\int\sec^{3}x\,dx\) to both sides, dividing by \(2\), and evaluating \(\int\sec x\,dx\) by Proposition 8.1:</p>
+        <p>\[ \int \sec^{3}x\,dx = \frac{1}{2}\Bigl(\sec x\tan x + \ln\lvert\sec x + \tan x\rvert\Bigr) + C. \]</p>
+        <p>This integral is the workhorse of the next section, where substitutions of the form \(x = a\tan\theta\) produce it repeatedly. The mirror integral \(\int\csc^{3}x\,dx\) is computed by the same two moves, parts and then Proposition 8.1’s cosecant formula. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <h3 class="subsec-head">Products with different frequencies</h3>
+
+  <p>The last family is \(\int\sin mx\cos nx\,dx\) and its siblings, where the two factors oscillate at different rates. No substitution connects them. Here the product-to-sum identities do all the work in one line, by replacing the product with a sum of single trigonometric functions. Proposition A.2’s first line is the one needed for a sine times a cosine:</p>
+  <p>\[ \sin u\cos v = \tfrac{1}{2}\bigl[\sin(u + v) + \sin(u - v)\bigr]. \]</p>
+
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.11</span></p>
+      <div class="env-body">
+        <p>Find \(\displaystyle\int \sin 4x\,\cos 5x\,dx\).</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>Apply the identity with \(u = 4x\) and \(v = 5x\):</p>
+        <p>\[ \sin 4x\,\cos 5x = \tfrac{1}{2}\bigl[\sin 9x + \sin(-x)\bigr] = \tfrac{1}{2}\bigl[\sin 9x - \sin x\bigr], \]</p>
+        <p>since sine is an odd function, \(\sin(-x) = -\sin x\). The product has become a sum of two sines at fixed frequencies, and each integrates on sight:</p>
+        <p>\[ \int \sin 4x\,\cos 5x\,dx = \frac{1}{2}\Bigl(-\frac{\cos 9x}{9} + \cos x\Bigr) + C = \frac{\cos x}{2} - \frac{\cos 9x}{18} + C. \]</p>
+        <p>For a product of two sines, or of two cosines, the other two lines of Proposition A.2 convert the product the same way. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <!-- expansion:summary — close §8.2: the manufacturing idea + what was minted; forward to §8.3 with no mechanics -->
+  <p>This section added no new integration principle. Its engine is still substitution, fed by identities: an odd power donates a factor to the differential, the Pythagorean identities convert what remains, power reduction lowers even powers, and product-to-sum splits mixed frequencies. The four antiderivatives of Proposition 8.1 fill the last gaps in the basic trigonometric table, and Example 8.10’s \(\int\sec^{3}x\,dx\) is recorded for immediate reuse. The next section turns this machinery outward, onto integrands that contain no trigonometry at all: radicals such as \(\sqrt{9 - x^{2}}\), which a well-chosen trigonometric substitution converts into exactly the integrals this section taught.</p>
+
+</article>

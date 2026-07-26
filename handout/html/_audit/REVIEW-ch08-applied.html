@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REVIEW — Ch8 M1 applied（canon 草擬・整章一次生成＋生成端驗證）</title>
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] }, svg: { fontCache: 'global' } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+<style>
+  :root { --ink:#1a2230; --soft:#5a6675; --line:#dfe4ea; --bg:#f6f8fa; --card:#fff;
+          --blue:#1f4e79; --red:#c0392b; --green:#1e7a46; --gold:#8a6d00; --amber:#b06f00; }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:30px 18px 90px; background:var(--bg); color:var(--ink);
+         font-family:-apple-system,"Segoe UI",Roboto,"Noto Sans TC","Microsoft JhengHei",sans-serif; line-height:1.7; }
+  .wrap { max-width:980px; margin:0 auto; }
+  h1 { font-size:1.5rem; margin:0 0 .15em; }
+  h2 { font-size:1.15rem; margin:1.6em 0 .5em; padding-bottom:.25em; border-bottom:2px solid var(--line); }
+  h3 { font-size:1rem; margin:1.1em 0 .4em; color:var(--blue); }
+  .sub { color:var(--soft); font-size:.9rem; margin:0 0 1.2em; }
+  .banner { background:#e7f4ec; border:1px solid #bfe3cd; border-radius:12px; padding:16px 20px; margin-bottom:8px; }
+  .banner .big { font-size:1.12rem; font-weight:700; color:var(--green); }
+  .banner .lede { font-size:.92rem; margin-top:.3em; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px 20px; margin-bottom:16px; box-shadow:0 1px 2px rgba(0,0,0,.04); }
+  table { border-collapse:collapse; width:100%; font-size:.87rem; margin:.4em 0; }
+  th,td { border:1px solid var(--line); padding:6px 9px; text-align:left; vertical-align:top; }
+  th { background:#f0f3f6; font-weight:600; }
+  code { font-family:"SF Mono",Consolas,monospace; font-size:.85em; background:#eef1f5; padding:1px 5px; border-radius:4px; }
+  .tag { display:inline-block; font-size:.72rem; font-weight:700; padding:1px 8px; border-radius:999px; }
+  .tag.ok { background:#e7f4ec; color:var(--green); }
+  .tag.warn { background:#fdf3e3; color:var(--amber); }
+  .tag.info { background:#e8f0fa; color:var(--blue); }
+  .small { font-size:.85rem; color:var(--soft); }
+  ul { margin:.3em 0 .6em 1.3em; padding:0; }
+</style>
+</head>
+<body><div class="wrap">
+
+<h1>Ch8 Techniques of Integration — M1 applied 報告</h1>
+<p class="sub">2026-07-26 · canon 草擬（整章一次生成）＋ SPEC §3 平實英文條款「生成端驗證」（單臂）· 依 <code>KICKOFF-ch08-m1.md</code> v3 執行 · 本輪兩個 ⛳ 停點依使用者授權（「最後的決定權交給你」＋授權本對話自行呼叫 Codex）改為記錄裁決，全數列於本報告與 <code>PLAN-ch08.md</code></p>
+
+<div class="banner">
+  <div class="big">⛳ 生成端驗證裁決（本輪核心交付）：達標 —「生成端就受約束」成立</div>
+  <div class="lede">全章 7,751 詞散文 <b>em-dash raw 0 → 0.0/1000</b>（目標 T_can ≤ 3.0；歷史無條款 canon 初稿：ch05 = 14.4）。詞彙家族命中 15 件 ≈ <b>1.9/1000</b>（ch05 水位 18.8 的約十分之一），且全數在章收尾自檢時就地平實化（不修不記之外，前後值均如實記錄於 PLAN §Generation-side verification）。建議：回填輪對新章正式退役，此結果作為條款升 v1.0 的證據。</div>
+</div>
+
+<div class="card">
+<h2 style="margin-top:.2em">0. 本輪範圍與裁決模式</h2>
+<p>依 kickoff 兩筆使用者裁決（2026-07-26）：<b>取消兩臂對照</b>（單臂：全章直接掛 SPEC §3 生成、完稿後驗收）＋<b>整章一次生成</b>（§8.1–§8.7 連續、節間僅免費自檢、Codex ⑤ 改為生成後批次）。使用者離席並授權：本對話內自行呼叫 Codex（read-only）、與其收斂後自行裁決執行。因此原「初稿包過目」與「最終 GO」兩個 ⛳ 由「Claude ⇄ Codex 收斂＋全程記錄」替代；所有裁決可在本報告、<code>PLAN-ch08.md</code>、<code>ch08_ch-direction-codex3-audit.md</code> 與各 <code>ch08_s8-N-codex5-audit.md</code> 追溯，供使用者回來覆核。</p>
+</div>
+
+<div class="card">
+<h2>1. 生成端驗證（kickoff §2；單臂）</h2>
+<table>
+<tr><th>指標</th><th>ch08（生成端掛條款）</th><th>歷史無條款水位</th><th>判定</th></tr>
+<tr><td>em-dash 密度（canonical stream）</td><td><b>0 raw → 0.0/1000</b>（N=7,751；副表 639 詞亦 0）</td><td>ch05 初稿 14.4/1000（108 支）；appB 定稿後 2.2；真人教材 CLP1 3.1</td><td><span class="tag ok">達標</span> 目標 ≤3.0</td></tr>
+<tr><td>詞彙家族命中（R1：擬人／交易隱喻／不透明慣用語／低頻文學詞）</td><td>初稿洩漏 15 件 ≈ <b>1.9/1000</b>，收尾自檢全數平實化；殘留僅 SPEC §16.1 保護的機制語（on credit／borrowed）與 §8.2 已就地字面化的 spend/manufacture 手法命名</td><td>ch05 18.8/1000；ch06 §6.2 14.7；手稿章 ≈0</td><td><span class="tag ok">約 10× 低於無條款水位</span></td></tr>
+<tr><td>tic guard（不換 tic 護欄）</td><td>冒號接子句 100（12.9/1000）｜分號 34（4.4）｜括號 84（10.8）｜成對逗號 62（8.0）</td><td>house 帶：ch06/ch07/appB 冒號 7.1–12.7、分號 4.0–5.7、括號 6.2–9.1</td><td><span class="tag warn">冒號與括號在 house 帶上緣</span>——成因為 worked-solution 的引式冒號與 (Theorem N.M, part k) 引用括號，非 dash 轉嫁（dash 為 0，無可轉嫁）；如實記錄供條款層觀察，未做機械再平衡</td></tr>
+<tr><td>段落觸發器</td><td>無段落 ≥150 詞</td><td>—</td><td><span class="tag ok">clean</span></td></tr>
+</table>
+<p class="small">逐節累計數字與 15 件家族命中之逐條清單（含改法）見 <code>PLAN-ch08.md</code> §Generation-side verification record。量測：<code>tools/prose_metrics.py --unit ch08</code>（canonical stream 唯一真實來源）。</p>
+</div>
+
+<div class="card">
+<h2>2. 章層方向閘 ③（Codex 一輪，動筆前）</h2>
+<p>對 <code>PLAN-ch08.md</code> 跑一輪對抗式方向審（gpt-5.6-terra/max、read-only、schema 輸出）：<b>2 blocking＋3 advisory，16 條 cross-ref 全 VERIFIED</b>；D1–D8 判 ADOPT×3／MODIFY×5。裁決與修訂（全落 PLAN）：</p>
+<ul>
+<li><b>[B-01] washer↔shell 承諾</b>：Ch7 已定版 fragment 的 Ex 7.12 活承諾「工具隨 Ch8 分部積分到來」，PLAN 原判不兌現＝斷 seam。裁決採 (a)：§8.1 新增收尾小節，在「嚴格遞減＋smooth＋光滑反函數」假設下以 Thm 8.2（parts）＋Thm 6.7（定積分代換）完整證明 shell＝washer；一般情形明文留給 Ch15。零新增編號物件。（另修 PLAN 誤引的舊號 Ex 7.11→7.12。）</li>
+<li><b>[B-02] §8.5 第三筆 credit</b>：原規劃的「e^{−x²} 無初等反導函數（Liouville，on credit）」是計畫外第三筆借據且無償還地址。裁決：主線改純範圍陳述（本章技巧產不出；存在性問題本書不處理），指向 §8.6 收斂＋§8.7 數值。全章 credit 維持恰兩筆。</li>
+<li><b>[A-01]</b> trig-sub 參數 a&gt;0、逐例具名連通分量、x≤−a 秒支的 θ∈(π/2,π] 規則入 caution——已全數落地 §8.3。<b>[A-02]</b> p-test 補 p≤0 顯式分支（integrand ≥1、Thm 6.2(4) 比較）——已落地 Prop 8.2 證明。<b>[A-03]</b> §8.7 補 C²/C⁴ 假設、等距 h=(b−a)/n、資料例等距＋偶數 n 驗證——已全數落地。</li>
+</ul>
+<p class="small">全文：<code>handout/html/_dev-archive/ch08/ch08_ch-direction-codex3-audit.md</code></p>
+</div>
+
+<div class="card">
+<h2>3. 逐節內容（as-built；fragment＝唯一內容源）</h2>
+<table>
+<tr><th>§</th><th>鑄造物件</th><th>重點與 [source:]／溯源</th></tr>
+<tr><td><b>8.1</b> Integration by Parts<br><span class="small">sec-8-1.html（含章開場）</span></td><td>Thm 8.1（proved：product rule Thm 2.6＋Def 6.3）、Thm 8.2（proved：FTC-2 Thm 6.4）、Strategy 8.1、Ex 8.1–8.6</td><td>章開場（lead＋5 outcome bullets）接 §6.5 的三類承諾；Ex 8.6 sin^n 化簡公式＋n=2 對 §A.2 幂降的 consistency check（expansion:formula）；<b>收尾小節「Settling the shell–washer question」</b>兌現 Ex 7.12 承諾（expansion:formula，source 註明 ③ B-01 裁決＋scope）；uv-面積圖標 1 個 figure 機會（optional）</td></tr>
+<tr><td><b>8.2</b> Trigonometric Integrals<br><span class="small">sec-8-2.html</span></td><td>Prop 8.1（∫tan/cot/sec/csc，proved——sec 的 trick 誠實標示「found device」＋微分驗證）、Strategy 8.2、8.3、Ex 8.7–8.11</td><td>恆等式全部「就地重述＋引 Prop A.1/A.2/§A.2」（B 類衛生）；§A.2「techniques of integration 到來時」的預告句在開場兌現；Ex 8.10 sec³＝§8.3 的工作馬（parts 跨技巧）；sin² midline 圖機會 ×1</td></tr>
+<tr><td><b>8.3</b> Trigonometric Substitution<br><span class="small">sec-8-3.html</span></td><td>Strategy 8.4（三代換表＋θ-range＋sign）、Ex 8.12–8.16</td><td>「inverse substitution＝Thm 6.6 反著讀」誠實段＝本節 hypothesis-hygiene 錨；逐例開頭具名 pattern＋range＋sign；Ex 8.13 橢圓面積 πab（＋周長 forward 句→§8.7）；Ex 8.16 兌現 §A.5 完全平方的「Chapter 8」承諾；秒支 caution（θ∈(π/2,π]／微分驗證）；三三角形 3-panel 圖機會（essential）＋橢圓 ×1</td></tr>
+<tr><td><b>8.4</b> Partial Fractions<br><span class="small">sec-8-4.html</span></td><td>Strategy 8.5、Ex 8.17–8.22、tag (8.A)、<b>FTA on-credit fence</b>（不編號 Caution，SPEC §16.1 載具；本章第一筆 credit）</td><td>代數層全引 §A.4（Prop A.7＋Strategy A.2＋cover-up 一句召回），本節重心＝積分層；(8.A) 兩行推導（u=x/a＋§6.4 表列）；case IV 敘明不作例（記錄於 brief）；Ex 8.22 rationalizing sub＝技巧鏈（sub→divide→partial fractions）</td></tr>
+<tr><td><b>8.5</b> Strategy for Integration<br><span class="small">sec-8-5.html</span></td><td>Strategy 8.6（四步）、Ex 8.23–8.26</td><td>標準式總表逐條標出處（§6.4／Prop 8.1／(8.A)／就地驗證的 arcsin 縮放式）；「工具箱邊界」段採 ③ B-02 形＝純範圍陳述、零 credit；四例各示範一個步驟（rewrite／chain／visible du／algebra first）</td></tr>
+<tr><td><b>8.6</b> Improper Integrals<br><span class="small">sec-8-6.html</span></td><td>Def 8.1、Def 8.2、Prop 8.2（p-test，proved 含 p≤0）、<b>Thm 8.3（Comparison，全證）</b>、Ex 8.27–8.32</td><td>本章理論亮點：Comparison 用主線工具全證（Thm 6.2(3)(4) 單調性＋Thm 4.1 整數取樣＋⌊t−a⌋ 夾擠，⌊·⌋ 前例 §1.5）——零新 fence、不動用 appD 的 LUB scaffolding；split-point 獨立性一句話論證（Thm 6.2(3)）；主值陷阱與內點奇異兩 caution；Ex 8.32 收 §8.5 的 e^{−x²} 弧線；export 契約：Def 8.1＋Prop 8.2＋Thm 8.3 → Ch11 §11.3；圖機會 ×3（tails essential 等）</td></tr>
+<tr><td><b>8.7</b> Approximate Integration<br><span class="small">sec-8-7.html（含章總結）</span></td><td>tags (M)(T)(S)、Simpson 三點拋物線引理（proved by algebra）、<b>Thm 8.4（誤差界，on credit → Ch11 §11.9 Taylor；本章第二筆也是最後一筆 credit，不編號 Caution 載具）</b>、Ex 8.33–8.36</td><td>M＝Def 6.2 中點取樣 Riemann 和（兌現 §6.2 header 的保留）；T 兩路推導；n 偶數 caution；Ex 8.33/8.34 數值全部 6 位重算（sympy 驗）；Ex 8.35 進位向上說理；Ex 8.36 自撰資料例（等距＋n=6 偶＋「無導數資訊即無誤差界」誠實句；全書零 &lt;table&gt; 不變量維持——讀數以 display 呈現）；章總結依 SPEC §4（散文弧線＋兩筆 credit＋Ch11 進出口）</td></tr>
+</table>
+<p class="small">36 例全數落地＝PLAN ledger 原規劃（cap 38 未觸及）；expansion 標記 21 個；figure 機會標記 9 個（M2 批次裁決繪製）。刻意省略清單逐節載於 brief-8-N.md 的「Deliberately omit」。</p>
+</div>
+
+<div class="card">
+<h2>4. 免費驗收批次終值</h2>
+<ul>
+<li><code>python handout/html/build.py ch08</code> ✔（registry 已含 ch08；shell 由 chapter7 依 7-loci 配方複製）</li>
+<li><code>quote_lint</code>：clean ×7（初稿 78 處 ASCII 引號以 <code>--fix</code> 全轉彎引號後復檢乾淨）</li>
+<li><code>linebreak-gate</code>：<b>0 自動斷行</b>（初檢 13 條過寬顯示式全數手動斷行：aligned 重排／§8.5 總表改 7 行 2 欄內／(S) 式兩行）＋ 0 渲染錯誤</li>
+<li><code>shot.mjs</code> render：<b>math=979、katex-errors=0</b>、ready=true</li>
+<li><b>sympy 全例重算 64/64 PASS</b>（36 worked examples＋Prop 8.1 四式＋(8.A)＋p-test 各分支＋Simpson 引理＋shell–washer 具體實例）</li>
+<li>編號 ledger：Def×2／Thm×4／Prop×2／Strategy×6／Ex 8.1–8.36 各型連續、與 PLAN 鎖定表逐一相符、無計畫外鑄造；cross-ref 48 條 <b>0 dangling</b>（含跨章：Thm 2.6/4.1/4.9/4.14/5.5/6.2/6.4/6.6/6.7/6.8、Ex 3.2/3.14/3.16、Prop A.1/A.2/A.7、Strategy A.2、§A.5、§6.4）</li>
+<li>hypothesis ledger 覆核：θ-range／ln|·| 分量常數／連通分量具名／收斂裁決全部回定義／K 為界非值／n 偶——逐節 SEAM GUARD 註解均載明</li>
+</ul>
+</div>
+
+<div class="card">
+<h2>5. Codex 批次稽核（逐節 ⑤ ×7＋章層 review M1–M8 ×1）＋修補</h2>
+<p>批次於 18:37–19:46 連跑 8 call（每 call 7–10 分鐘），共 <b>15 blocking＋3 advisory</b>；全數裁決並處置。章層 review 依 PIPELINE 要求<b>逐維明列 M1–M8</b>：M1/M2/M3/M4/M5/M6/M8 clean，M7 唯一 blocking＝CH-B1（與 ⑤ 8.1-B1 同根）；另 Ledger／Credit（恰兩筆）／Seams 全 clean。</p>
+<table>
+<tr><th>Finding</th><th>類別</th><th>要旨</th><th>處置</th></tr>
+<tr><td>8.1-B1＋CH-B1</td><td>hygiene/M7</td><td>shell–washer 塊原假設「嚴格遞減＋smooth 反函數」——連承諾現場 Ex 7.12 的 \(f=x^2\)（遞增、\(g=\sqrt y\) 在 0 不可微）都蓋不住，卻宣稱「covers every example of §7.3」</td><td><span class="tag ok">重寫</span> 改遞增情形＋反函數只需連續（每一步實際只用連續性）；就地代入 Ex 7.12 得共同值 \(\pi/2\)；scope 句誠實化；遞減＝鏡像註；非單調→Ch15</td></tr>
+<tr><td>8.1-A1</td><td>hygiene</td><td>Thm 8.2 證明引 FTC-2，但出貨版 Thm 6.4 要求反導函數在「包含 [a,b] 的開區間」上——§7.6-smooth 給不出</td><td><span class="tag ok">改證</span> 累積反導 \(H\)＋FTC-1（Thm 6.3）＋Cor 4.4，引用假設全數吻合</td></tr>
+<tr><td>8.2-B1</td><td>math</td><td>寫成 \(\cot x = 1/\tan x\)，與 Def A.1（\(\cos/\sin\)）衝突且在 \(x=\pi/2\) 為假</td><td><span class="tag ok">修</span> 改 \(\cos x/\sin x\)</td></tr>
+<tr><td>8.2-B2</td><td>math</td><td>Strategy 8.3 第 3 步「改寫成純 sec 幂」對 \(\int\tan x\) 做不到，且與下段「策略沒講 \(\int\tan\)」自相矛盾</td><td><span class="tag ok">重寫</span> 第 3 步改「\(\tan^2=\sec^2-1\) 轉換＋回落 parts＋Prop 8.1」；橋段同步改寫</td></tr>
+<tr><td>8.2-B3</td><td>direction</td><td>brief 指定的 \(\int\csc^3\) 鏡像一句話遺漏</td><td><span class="tag ok">補</span> Ex 8.10 收尾加句</td></tr>
+<tr><td>8.3-B1</td><td>math</td><td>「橢圓周長 resists the entire toolkit」在自例允許的 \(a=b\)（圓）情形為假——圓的弧長 integrand 化成 arcsin 型</td><td><span class="tag ok">修</span> 界定 \(a\ne b\)＋圓例外一句（row 1 一行解）</td></tr>
+<tr><td>8.3-A1</td><td>direction</td><td>brief 承諾的兩個橋接（lead-in→Strategy 8.6 step 2；\(\sqrt{x^2\pm a^2}\)→sec³/Ex 8.10）缺席</td><td><span class="tag ok">補</span> 兩句均加</td></tr>
+<tr><td>8.4-B1</td><td>direction</td><td>ledger 載明兩個不編號 Caution，實際只有 FTA 一個（不可約判別只藏在 Strategy 條列）</td><td><span class="tag ok">補</span> Ex 8.20 後加不可約判別 Caution（含 \(x^2-x-6\) 陷阱例）</td></tr>
+<tr><td>8.5-B1</td><td>direction</td><td>brief 把 Ex 8.24 的 \(u=\sqrt x\) 標成 step 2；草稿寫 step 4——語義上草稿才對（step 2＝可見 du）</td><td><span class="tag warn">裁決＝brief 錯</span> brief-8-5 修正並附裁決註；fragment 不動</td></tr>
+<tr><td>8.6-B1</td><td>direction</td><td>PLAN guard「兩定義先行」與 as-built 交錯結構不符</td><td><span class="tag warn">裁決＝guard 過度指定</span> PLAN 修為「各型定義先於其例」（as-built 即 canon 標準結構、且逐例皆在其定義之後）；fragment 不動</td></tr>
+<tr><td>8.6-B2</td><td>math (M7)</td><td>開場把「integrand 連續」誤植為 Def 6.2 的 standing assumption（出貨版 Def 6.2 只需 f defined；Thm 6.1 且涵蓋有界有限斷點）</td><td><span class="tag ok">重寫</span> 歸因改正</td></tr>
+<tr><td>8.7-B1</td><td>math</td><td>「平均把兩種誤差大多抵銷」為無條件過度宣稱</td><td><span class="tag ok">修</span> 改誠實括號語句（單調 integrand：積分夾在 \(L_n,R_n\) 之間、\(T_n\)＝中點、誤差 ≤ 半括寬）</td></tr>
+<tr><td>8.7-B2</td><td>math</td><td>Ex 8.33/8.34 收尾把「界」說成保證實際誤差的符號／比值／除 4 除 16</td><td><span class="tag ok">修</span> 兩處改談 bound 常數與 \(1/n^2\) vs \(1/n^4\) 尺度＋「界只管大小」明示</td></tr>
+<tr><td>8.7-B3</td><td>math</td><td>Ex 8.35 門檻寫 \(n\ge 40.9\)／\(28.9\)，與前式不等價（真值 40.82…／28.87…）</td><td><span class="tag ok">修</span> \(\sqrt{10^4/6}\approx 40.82\)／\(\sqrt{10^4/12}\approx 28.87\)；結論 41/29 不變</td></tr>
+<tr><td>8.7-B4</td><td>direction</td><td>brief 要求梯形法「兩路推導各一 display」，平均路只用一句帶過</td><td><span class="tag ok">補</span> \(\tfrac12(L_n+R_n)\) 逐項平均 display 加入</td></tr>
+<tr><td>8.7-B5</td><td>direction</td><td>brief 指定的 ≈42 km/h sanity 句缺</td><td><span class="tag ok">補</span> 「or 42 km/h」</td></tr>
+</table>
+<p class="small">13 條修在 fragment、2 條裁決為治理文檔自身缺陷（brief-8-5／PLAN guard，均已修訂並附裁決註——使用者可還原文檔修訂並要求改動 fragment 來推翻此兩筆裁決）。逐節詳錄：<code>ch08_s8-N-codex5-audit.md</code> ×7＋<code>ch08_chapter-sweep-audit.md</code>。修補後機械閘全數重跑：build ✔／quote_lint clean ×7／linebreak 0／render <b>math=1007、katex-errors=0</b>／<b>sympy 65/65</b>（shell–washer 檢核改遞增實例 \(f=x^2\to\pi/2\)）／prose N=8002、em-dash 仍 <b>0.0/1000</b>。</p>
+<p><span class="tag ok">REGRESSION CLEAN</span> scoped 回歸 call（R1–R15 逐項覆核全部修補）：<b>0 blocking／0 advisory，R1–R15 全數 "clean"</b>——含 R1 遞增情形代數與 \(\pi/2\) 對 Ex 7.12 的吻合、R2 FTC-1＋Cor 4.4 引用假設逐一檢核。<b>M1 收尾 sweep 收案：⑤ ×7＋章層 review＋回歸全程 0 blocking 殘留。</b></p>
+</div>
+
+<div class="card">
+<h2>6. Open questions（交使用者回來裁決）</h2>
+<ul>
+<li><b>inverse hyperbolic functions</b>：依 kickoff 預設不收，已記錄；若要收＝章末追加 §8.8（零 cascade）。</li>
+<li><b>例題預算 36（cap 38）</b>＞Ch7 的 23：D1 理由（技巧章、例題即內容、Stewart Ch7 約 60 例）＋Codex ③ 判 defensible；提請知悉。</li>
+<li><b>Thm 8.4 誤差界 fence 指向 Ch11 §11.9</b>（非 appD）：D8 理由＝證明真的會在主線 Ch11 到貨（Ch2§2.4→Ch4 前例）；Ch11 開章時必須 discharge（已寫入 PLAN EXPORT 段）。</li>
+<li>tic guard 冒號／括號在 house 帶上緣（§1 表）：屬 worked-solution 文體效應，建議條款層持續觀察、不機械壓。</li>
+</ul>
+</div>
+
+<div class="card">
+<h2>7. 本輪 Codex 用量（授權範圍內，實際）</h2>
+<p><b>共 10 個 call</b>：章層方向閘 ③ ×1＋逐節 ⑤ ×7＋章層 review ×1＋scoped 回歸 ×1。全部 <code>codex exec -s read-only</code>、gpt-5.6-terra/max、schema 輸出；⑤＋review 批次 8 call 連跑 18:37–19:46（每 call 7–10 分）。估計總用量 ~1.2–1.5M tokens（對照 Ch7 M1＝1.41M/9 calls）。raw JSON 落 gitignored scratchpad；摘要與裁決均已轉錄版控（<code>ch08_*-audit.md</code>）。</p>
+</div>
+
+</div></body>
+</html>
