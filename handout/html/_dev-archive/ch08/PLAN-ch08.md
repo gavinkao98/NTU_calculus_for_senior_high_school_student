@@ -77,10 +77,11 @@ integrals (Ch:none — \(e^{-x^2}\) appears only as convergence/comparison clien
   cap 38** (6+5+5+6+4+6+4). More than Ch7's 23 because this chapter's examples ARE the content
   (every technique needs its worked instances; Stewart Ch7 carries ~60), still capped to keep the
   audit surface finite.
-- **[D2 inverse hyperbolic — default NOT collected]** Per kickoff §1: not included, recorded as
-  open question for the user; if later wanted, lands as appended §8.8 (no cascade). Rationale: Ch7
-  選材節制 precedent; the three radical patterns are fully served by trig substitution; NTU 甲
-  syllabus does not require the hyperbolic-substitution track.
+- **[D2 inverse hyperbolic — NOT collected; CLOSED 2026-07-27 by user decision]** Per kickoff §1:
+  not included. Rationale: Ch7 選材節制 precedent; the three radical patterns are fully served by
+  trig substitution; NTU 甲 syllabus does not require the hyperbolic-substitution track. **The user
+  confirmed at chapter close (2026-07-27) that these are not collected**, so the provisional
+  "appended §8.8, zero cascade" escape hatch is withdrawn and the chapter is 7 sections, final.
 - **[D3 parts]** **Theorem 8.1 (Integration by Parts)**: for \(f, g\) differentiable on an open
   interval, \(\int f(x)g'(x)\,dx = f(x)g(x) - \int f'(x)g(x)\,dx\), read as an identity between
   antiderivative families; proof = product rule (Thm 2.6) + Def 6.3, three lines, honest statement
@@ -483,8 +484,12 @@ cross-ref dangling 0／prose N=10502、em-dash 0.0/1000。
 
 ## Open questions (for the user, at chapter close)
 
-1. **Inverse hyperbolic functions**: default NOT collected (D2). If wanted: appended §8.8, zero
-   cascade. (kickoff §1 default; awaiting user.)
+1. **Inverse hyperbolic functions**: ~~default NOT collected (D2); awaiting user~~ →
+   **RESOLVED 2026-07-27 (user): NOT collected. Closed.** The kickoff default stands, no §8.8 is
+   appended, and the chapter ends at §8.7. Rationale unchanged from D2: the Ch7 選材節制 precedent,
+   the three radical patterns being fully served by trigonometric substitution (Strategy 8.4), and
+   the NTU 甲 syllabus not requiring the hyperbolic-substitution track. **This question is now
+   closed, not deferred** — a future round that wants the material must reopen D2 first.
 2. **Example budget: M4 closed the chapter at 38/38, the hard cap** (was 36 at M1). Both slots went
    to Layer-1 gaps where a numbered result had been stated and never exercised: Thm 8.4's Simpson
    clause (Ex 8.37) and Thm 8.3(b) (Ex 8.33). A third Layer-1 gap of the same kind (Ex 8.6's
@@ -501,11 +506,23 @@ cross-ref dangling 0／prose N=10502、em-dash 0.0/1000。
    「章內不留 gate-2 債」。Ch5/6/7 皆已如此定版；**Ch8 是第一個在 gate-2 前就停下的 canon 章**，
    所以 dashboard 與本表都標「尚未定版」，勿誤讀為全閘完成。開跑時的輸入＝
    `ch08_modec-gapcheck-audit.md` §8 的 7 條既有內容發現。
-5. **【M5 新增】§8.4 的部分分式就地 bridge**：M4 的 3 份盲測有 2 份把「Prop A.7 的模板與 cover-up
-   整個外包給 Appendix A.4」列為全章最該修的一項（其一稱「換個讀者就會變 blocking」），第 3 份則
-   明確判**不算 B 類違規**（每個例題都把自己的模板寫出來了）。合計 **0 B 類違規**，難度閘 PASS 不受
-   影響，故未擅自增補。若要補一段「從因式分解怎麼寫出模板」的就地 bridge，屬**新的 Mode C 增補**，
-   需使用者裁決。
+5. **【M5 新增】§8.4 的部分分式就地 bridge** → **RESOLVED 2026-07-27（使用者：補）。已落地。**
+   緣起：M4 的 3 份盲測有 2 份把「Prop A.7 的模板與 cover-up 整個外包給 Appendix A.4」列為全章最該
+   修的一項（其一稱「換個讀者就會變 blocking」），第 3 份則明確判不算 B 類違規（每個例題都把自己的
+   模板寫出來了）；合計 0 B 類違規、難度閘 PASS，故 M4 當下未擅自增補。使用者裁決後以一段
+   `expansion:intuition [pass: enrichment]` 落在 (8.A) 之後，就地陳述 **Prop A.7 的模板規則**
+   （因式 → 該配哪些 fragment，四種情形），用本章記號 \(r,k\)（附錄用 \(a,m\)，而 \(a\) 在本節已被
+   (8.A) 佔用為 arctan 尺度參數）。**scoped 盲測驗收通過**：讀者對新分母
+   \((x-2)^3(x^2+1)(x^2+4)^2\) 完整寫出模板，並指認「**課文直接給的**，就是這一段」，不再是從例題反推。
+   `sec-8-4.html` header 的 SEAM GUARD 依 8.6-B1 先例同批修訂並記明 CONTENT_SPEC §16.2 依據。
+   **範圍守住**：不重教存在性／唯一性（留 §A.4）、不教求常數（留 Strategy A.2 與 Strategy 8.5 step 3）、
+   不重教 cover-up。**未做、且為相鄰但不同的缺口**：求常數本身在 §8.4 仍只有例題示範、沒有規則陳述
+   （scoped 盲測 F2），以及 cover-up 一詞出現三次卻從未解釋——這兩項不在本次裁決範圍，見下方 6。
+6. **【新增·未決】§8.4「求常數」與 cover-up 一詞仍無就地陳述**：scoped 盲測（2026-07-27）指出，
+   §8.4 兩度把求常數外包給 Strategy A.2，讀者只能從 Ex 8.18／8.19／8.20 反推「通分清分母 → 代根
+   或比係數」；且 *cover-up* 在本節出現三次卻從未解釋它為何叫 cover-up。該盲測**不判 blocking**
+   （三個例題把整套動作做完了，無需外援），但依 §16.2 字面是否算「就地建立」它自陳判斷不了。
+   與上一項是相鄰但不同的缺口，需另行裁決。
 
 ## Scaffolding notes
 

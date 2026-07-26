@@ -154,16 +154,95 @@ Edward Wright 1599（*Certaine Errors in Navigation*）以逐段求和造表；H
    Thm 6.5 的「verbatim」就是超額宣稱（它缺的那一步正是 §8.1 做的建構）；若 Thm 6.5 站得住，§8.1 大可一行引用它。
    判讀：**§8.1 是嚴謹的一邊，§6.4 的「verbatim」是超額宣稱。** 不在 M4 權限內（跨章、動既有證明），
    且 Ch6 已定版（含 LaTeX 出版線）→ **交數學 gate-2**（PIPELINE 排在 M4 後、M5 前）由第二個模型獨立判過再決定是否動 Ch6。
-2. **§8.4 把 Prop A.7 的模板與 cover-up 整個外包給 Appendix A.4**：3 份盲測中 2 份列為全章最該修的一項
+2. **§8.4 把 Prop A.7 的模板與 cover-up 整個外包給 Appendix A.4** → **模板側已於 2026-07-27 補上
+   就地 bridge（使用者裁決），見 §9；求常數側與 cover-up 一詞仍未處理，見本節第 6 條。** 原始判讀：
+   3 份盲測中 2 份列為全章最該修的一項
    （其一稱「換個讀者就會變 blocking」），第 3 份明確判**不算 B 類違規**（每個例題都把自己的模板寫出來了）。
    合計仍是 **0 B 類違規**，難度閘 PASS 不受影響。若要補「從因式分解怎麼寫出模板」的就地 bridge，
    屬**新的 Mode C 增補**，不在本輪使用者裁決的清單內，未自行加入。
 3. **§8.3 節末 summary 的壓縮**：「With completing the square, the method reaches any \(\sqrt{px^2+qx+r}\)」
    未計入本輪補上的「前導係數要先提出來」那一步。既有 Mode A 內容，Mode C 不得重構，交 gate-2。
-4. **§8.4 不可約判準口徑**：Strategy 8.5 step 2 與節末 Caution 用首一形式 \(p^2<4q\)，Ex 8.21 對
-   \(4x^2-4x+3\) 改用一般判別式。3 份盲測有 2 份提出。既有內容，交 gate-2。
-5. **§8.7 Ex 8.35／8.36 兩次以「the bounds below」解釋當下現象**，而 Thm 8.4 尚未登場；2 份盲測列為 slowdown。既有內容。
-6. **§8.6 Ex 8.31 引 Theorem 6.2 part 4 反駁自己**，但 Thm 6.2 的前提是連續性，而該例壞掉的正是連續性
+4. **§8.4 不可約判準口徑（升級：現累計 3 份盲測命中，且會讓讀者得出相反結論）**：Strategy 8.5
+   step 2 與節末 Caution 都只寫首一形式「\(x^2+px+q\) is irreducible exactly when \(p^2<4q\)」，
+   Ex 8.21 卻對非首一的 \(4x^2-4x+3\) 改用一般判別式 \((-4)^2-4\cdot4\cdot3<0\)。**2026-07-27 的
+   scoped §8.4 盲測示範了實害**：讀者照 Strategy 8.5 背下的規則代入 \(p=-4,q=3\) 得 \(16<12\) 不成立
+   → 結論「可分解」，與課文**相反**；且課文從未提醒該式僅適用首一二次式，Caution 末句
+   「When in doubt, compute the discriminant first」等於在同一頁混用兩種形式。既有內容，交 gate-2。
+5. **§8.4「方法必成功」與 case IV 刻意省略的正面衝突（M4 後續輪新發現，且我方增補提高了它的暴露度）**：
+   三處無條件宣稱——L41「For rational integrands … **the method always succeeds**」、L49 FTA Caution
+   「**everything else in the section is proved or computed in full**」、L241 收尾「Strategy 8.5's four
+   steps … **always terminate**, and the only borrowed ingredient is the factorization fact」，
+   以及 Strategy 8.5 step 4 本身也是無條件寫的——對上 L184 的「this book **leaves that case as
+   stated**」（重根不可約二次式）。scoped 盲測具體示範：拿到 \((x^2+4)^2\) 它能寫模板、能求常數、
+   能積前五個碎片，**第六個積不出來**。**注意**：2026-07-27 補的模板 bridge 讓 case IV 的模板首次
+   「寫得出來」，因此把這個既有衝突從「讀者碰不到」變成「讀者會撞上」；bridge 已在自己那句就地補上
+   scope 註記（與 L184 同性質、非新 credit）作為緩解，但三處無條件宣稱本身是既有 Mode A 內容，
+   Mode C 不得重構，交 gate-2 定奪。
+6. **§8.4 求常數無就地規則、cover-up 一詞未解釋**：兩度外包給 Strategy A.2，讀者只能從
+   Ex 8.18/8.19/8.20 反推；*cover-up* 在本節出現三次卻從未說明它為何叫 cover-up（課文示範的動作是
+   「通分後代入各因式的根」，並沒有「掩蓋」任何東西）。scoped 盲測不判 blocking（三個例題把整套
+   動作做完了），但依 §16.2 字面是否算「就地建立」該盲測自陳判斷不了。與已補的模板 bridge 是
+   **相鄰但不同**的缺口，未在本輪裁決範圍內；記為 PLAN open question #6。
+7. **§8.7 Ex 8.35／8.36 兩次以「the bounds below」解釋當下現象**，而 Thm 8.4 尚未登場；2 份盲測列為 slowdown。既有內容。
+8. **§8.6 Ex 8.31 引 Theorem 6.2 part 4 反駁自己**，但 Thm 6.2 的前提是連續性，而該例壞掉的正是連續性
    （課文下一句「The error is upstream」有救回）。scoped 盲測提出，屬 smell-test 的自我踩線，交 gate-2。
-7. **Strategy 編號比其所在節號多一**（Strategy 8.4 在 §8.3、8.5 在 §8.4、8.6 在 §8.5）：3 份盲測都因此翻錯頁。
+9. **Strategy 編號比其所在節號多一**（Strategy 8.4 在 §8.3、8.5 在 §8.4、8.6 在 §8.5）：4 份盲測都因此翻錯頁。
+
+## 9. M4 後續輪 — §8.4 部分分式模板的就地 bridge（2026-07-27，使用者裁決後追加）
+
+上節第 2 條的模板側。使用者於 M5 收尾時裁決「補那段 bridge」，遂以一段
+`expansion:intuition [pass: enrichment]` 落在 (8.A) 之後、「With (8.A) in hand…」之前。
+
+**內容**：就地陳述 Prop A.7 的模板規則（因式 → 該配哪些 fragment，四種情形），用本章記號 \(r,k\)
+（附錄用 \(a,m\)；\(a\) 在本節已被 (8.A) 佔為 arctan 尺度參數，沿用會當場撞車）。
+**刻意不做**：不重教存在性／唯一性（留 §A.4）、不教求常數（留 Strategy A.2／Strategy 8.5 step 3）、
+不重教 cover-up。`sec-8-4.html` header 的 SEAM GUARD 依 **8.6-B1 先例**同批修訂：原「Prop A.7 …
+imported by cross-ref + one-line recall, NOT re-taught」在 M1 被讀成「完全不必就地陳述模板形式」，
+而 CONTENT_SPEC §16.2 的處置慣例是「就地保留最短 bridge 並 cross-ref 附錄，**不因附錄存在而省去**」；
+guard 修訂後仍完整保護它真正要保護的（why 與常數兩層）。
+
+**scoped 盲測（設定：讀者沒讀過附錄）— 0 blocking／6 slowdown，難度 4/5**（讀者自陳其中約一半來自
+「沒讀過附錄」的設定，讀過的話給 3/5；前三份全章盲測給 §8.4 的是 3／3.5／3）。
+**驗收命中**：理解測驗要它對新分母 \((x-2)^3(x^2+1)(x^2+4)^2\) 寫模板，它完整寫出並指認
+「**課文直接給的**，就是這一段」，不再是從 Ex 8.18/8.19/8.20 反推——這正是原缺口的定義。
+
+**盲測驅動的修補（含我方自查）**：
+- 通則句「numerator sits one degree below its own **denominator**」對 \(A_2/(x-r)^2\) **字面為假**
+  （分母二次、分子零次）。我自查先修為「below that of the **factor it sits over**」；盲測獨立指出
+  同一條並給出**逐字相同**的正確說法（「比那個因式本身低一次」）。
+- 同類殘留「the numerator now linear because the **denominator** is quadratic」→ 改 `factor`。
+- 模板只寫 \(x-r\)，Ex 8.18 卻用 \(\frac{B}{2x-1}\)，讀者停頓 → 補一句非首一線性因式同樣處理。
+- 我寫的「those are **the next step**」讓讀者期待下一段講求常數，但下一段講積分 → 改為精確指向
+  Strategy 8.5 step 3。
+- §8.3 我在 M4 寫的「such as \(u=2x\) … as in Example 8.21」與該例實際用的 \(u=2x-1\) 不符 → 改寫。
+- **主動加的 scope 子句**：bridge 讓 case IV 的模板首次「寫得出來」，於是把上節第 5 條的既有衝突
+  從「讀者碰不到」變成「讀者會撞上」；在 bridge 自己那句就地補 scope 註記（與 L184 同性質、非新 credit）。
+
+**scoped Mode B（第一輪）：0 blocking／5 advisory 全採**——通則句仍有「factor＝\(x-r\) 或 \((x-r)^k\)」
+的歧義（還原 Prop A.7 的兩項 gloss 修正）；「**every example** … carries that step out in full」是可查核的
+過度宣稱（Ex 8.17／8.21／8.22 都沒完整做 step 3）→ 改「Examples 8.18 through 8.20」；31 詞＋分號黏住
+Case III 與 Case IV 且 \((x^2+px+q)^k\) 從未寫在紙上 → 拆句並寫出該形式；`fixes` 撞書內既有的
+「固定住」義 → `determines`；**既有句因插入而失效**——「Before the fragments can be **listed**」插入後
+指向一段完全沒用到 (8.A) 的文字 → 一詞修為 `integrated`（清理自己造成的破壞，非重構）。
+新段分號由 3 降回 1，章層分號 47→45。
+
+**回歸複核（第二輪，對重寫版）：0 blocking／2 tighten／1 voice** — 三條全採。
+① 通則句尾的 gloss「a linear \(Bx+C\) over a **quadratic**」未加限定，而 \((x-r)^2\) 字面上也是 quadratic，
+留了最後一條側路 → 加 **irreducible**（這是對 Prop A.7 的嚴格細化，A.7 的 bullet 本就只把 \(Bx+C\) 配給
+irreducible）；順手把「the power **that factor** is raised to」改為「the power **it** is raised to」，
+免除 *that* 被先讀成關係代詞的 garden-path。② 31 詞句把**物件層規則**（case IV 模板）與**書層 scope 聲明**
+黏在同一句 → 拆為兩句。③〔voice〕開場補導航「Once the denominator is factored, …」（factoring 的討論隔了
+(8.A) 一段），並把「its rule」拆成獨立短句以免同句內 it／its 指向兩個不同先行詞。
+
+**該輪逐一驗證且值得記下的兩點**：(a) 歧義**確實歸零**——複核者拿 \(A_2/(x-r)^2\) 與
+\((Bx+C)/(x^2+px+q)^k\) 逐一套新句，兩條推理路徑同結論，舊句可推出的「分母二次⇒分子一次」已被字面封死；
+(b) 新加的 scope 子句**不逾越**——不是新 credit（未主張任何未證命題，只是覆蓋範圍揭示，性質同 L184）、
+不是新 fence、與 L184 一致且相隔約 120 行功能不同，故章層「恰兩筆 credit」的口徑不變。
+另確認 `listed`→`integrated` 後依賴鏈成 A–B–A′：L56 立承諾 → (8.A) 交付 → bridge 回答另一個問題
+（有哪些碎片，不消費 (8.A)）→ L64「With (8.A) in hand, every fragment shape…」兌現承諾，且**正好量化
+bridge 剛列出的那組形狀**（沒有 bridge 時「every fragment shape」是欠指定的）。
+
+**終值**：build ✔／quote_lint clean ×7／linebreak 0／prose **N=10651、em-dash 仍 0.0/1000**（章層分號 45、
+冒號 134）／render **math 1389、MathJax err 0、未渲染 `\(` 0、Example 連續 8.1–8.38、13/13 圖、
+cross-ref dangling 0、渲染後散文 em-dash 0**。**三輪散文閘（首輪＋兩輪回歸）blocking 全 0。**
    結構性、無法在本輪處理，記錄備查。

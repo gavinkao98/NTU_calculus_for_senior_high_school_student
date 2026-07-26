@@ -125,6 +125,50 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\
     </div>
   </div>
 
+  <div class="card" style="border-left:4px solid var(--blue);background:#f5f8fd;">
+    <b>追加 2026-07-27 — M4 後續輪：§8.4 部分分式模板的就地 bridge（使用者裁決「補」）</b>
+    <div style="margin-top:.5em">
+      上表「交 gate-2 的既有內容發現」第 2 條的<b>模板側</b>。M4 的 3 份盲測有 2 份把「Prop A.7 的模板與
+      cover-up 整個外包給 Appendix A.4」列為全章最該修的一項（其一稱「換個讀者就會變 blocking」），
+      第 3 份判不算 B 類違規（每個例題都寫出自己的模板），合計 <b>0 B 類違規、難度閘 PASS</b>，
+      故 M4 當下未擅自增補；使用者於 M5 收尾時裁決補上。
+    </div>
+    <div style="margin-top:.5em">
+      <b>落地：</b>一段 <code>expansion:intuition [pass: enrichment]</code> 置於 (8.A) 之後，就地陳述
+      Prop A.7 的模板規則（因式 → 該配哪些 fragment，四種情形），用本章記號 \(r,k\)
+      （附錄用 \(a,m\)，而 \(a\) 在本節已被 (8.A) 佔為 arctan 尺度參數）。<code>sec-8-4.html</code> 的
+      SEAM GUARD 依 <b>8.6-B1 先例</b>同批修訂並記明 CONTENT_SPEC §16.2 依據
+      （「不因附錄存在而省去就地 bridge」）。<b>範圍守住</b>：不重教存在性／唯一性（留 §A.4）、
+      不教求常數（留 Strategy A.2 與 Strategy 8.5 step 3）、不重教 cover-up。
+    </div>
+    <div style="margin-top:.5em">
+      <b>驗收（scoped 盲測，設定讀者未讀過附錄）：</b><span class="ok">0 blocking／6 slowdown</span>、難度 4/5
+      （讀者自陳約一半來自「未讀附錄」設定，讀過則 3/5）。<b>命中原缺口的定義</b>：理解測驗要它對新分母
+      \((x-2)^{3}(x^{2}+1)(x^{2}+4)^{2}\) 寫模板，它完整寫出並指認「<b>課文直接給的，就是這一段</b>」，
+      不再是從 Ex 8.18/8.19/8.20 反推。
+    </div>
+    <div style="margin-top:.5em">
+      <b>三輪散文閘 blocking 全 0</b>（首輪 5 advisory＋回歸 2 tighten/1 voice，全採）。修掉的包含
+      三處我自己引入的缺陷：通則句「one degree below its own <b>denominator</b>」對 \(A_{2}/(x-r)^{2}\)
+      <b>字面為假</b>（盲測獨立指出、與我自查逐字同解）、「<b>every example</b> … in full」是可查核的過度宣稱
+      （Ex 8.17/8.21/8.22 都沒完整做 step 3）→ 改「Examples 8.18 through 8.20」、以及
+      \((x^{2}+px+q)^{k}\) 這個形式從未寫在紙上。另一詞修既有句
+      「Before the fragments can be <b>listed</b>」→ <code>integrated</code>（插入後它指向一段完全沒用到
+      (8.A) 的文字，是清理自己造成的破壞）。
+    </div>
+    <div style="margin-top:.5em">
+      <b>副作用，已記入 gate-2 清單：</b>bridge 讓 case IV 的模板<b>首次寫得出來</b>，於是把既有的
+      「the method always succeeds／always terminate」對上「this book leaves that case as stated」的衝突，
+      從「讀者碰不到」變成「讀者會撞上」（盲測示範：能寫模板、能求常數、積前五個碎片，第六個碰壁）。
+      已在 bridge 自己那句就地補 scope 註記緩解（複核確認非新 credit、非新 fence、與 L184 一致）；
+      三處無條件宣稱本身是既有 Mode A 內容，Mode C 不得重構，交 gate-2。
+    </div>
+    <div style="margin-top:.5em">
+      <b>終值：</b>build ✔ · quote_lint clean ×7 · linebreak 0 · prose <b>N=10651、em-dash 仍 0.0/1000</b> ·
+      render <b>math 1389、MathJax err 0、Example 連續 8.1–8.38、13/13 圖、dangling 0</b>。
+    </div>
+  </div>
+
   <div class="strong"><b>怎麼裁：</b>最省事的方式是回「照建議套用」。要調整就點 ID（如「①波只採 8.7-E1」「②波再加 8.4-b、8.4-c」
     「8.6-f 也寫」）。三個我認為真的該由你決定、不該由我代決的品味題：
     <b>(i)</b> ①波要不要用滿 38/38 的硬上限；
