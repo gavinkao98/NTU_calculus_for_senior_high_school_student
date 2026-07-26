@@ -464,6 +464,23 @@ prose **N 8214→10502、em-dash 仍 0.0/1000**（四個 tic guard 密度全部�
 > 並自行建構 \(H\)。已逐字驗證兩章原文；判 §8.1 嚴謹、§6.4 超額宣稱，交數學 gate-2 定奪
 > （Ch6 已定版含 LaTeX 線，動它須二模型確認）。
 
+## 閘家族 checklist（M5 補滿，2026-07-27）
+
+| 閘家族 | 狀態 | 日期／備註 |
+|---|---|---|
+| M1 Mode A′（canon 草擬：brief＋⑤＋sympy＋章層 review） | ✅ | 2026-07-26。整章一次生成（kickoff v3）；③ 章層方向閘 Codex 單輪；逐節 ⑤ 批次 **15B+3A 全修/裁決**；章層 review **M1–M8 逐維**（M7 1B 已修，餘 clean）；scoped 回歸 **R1–R15 全 clean**；**sympy 64/64**（M4 後 → 65/65 的例題基數，M4 另有獨立 sweep 59/59）。**首個 SPEC §3 平實條款生成端章，生成端驗證達標**（em-dash 0.0/1000 vs ch05 初稿 14.4；家族命中 1.9/1000 自修至 ≈0）。`ch08_chapter-sweep-audit.md` |
+| M2 圖批次（機會→繪製→D1–D8） | ✅ gate-1 側 | 2026-07-26。機會覆核 7 subagent（9 標記→13 候選／32 駁回；§8.4/§8.5 刻意零圖經覆核成立）→ 使用者裁 **adopt-all-13** → **Figure 8.1–8.13 全繪**（kit 擴充 fill-ghost/fill-aux＋triple 版面；作者自查修 9 處）→ **D1–D8 gate-1 13/13 blocking 歸零**（4 條 D1 advisory 全修）＋回歸 R1–R4 clean。`ch08_figure-audit.md`；報告 `_audit/REVIEW-ch08-figure-*.html`。**視覺 gate-2 未跑** |
+| M3 散文 S·A·V＋難度 learner-sim（合一輪） | ✅ gate-1 側 | 2026-07-26＋補正輪 07-27。散文 7 節 **0 blocking**（advisory ≈94）；盲測 3/3 **0 stuck／0 B 類**；紅旗 G1-8.6-10 必修。落地 **108 處文字替換**；補正輪把盲測補足為 3 份獨立實例，另抓 **7 條客觀缺陷**全修。`ch08_prose-difficulty-audit.md`。**S·A·V gate-2 未跑** |
+| M4 Mode C gap-check（①②合一） | ✅ | 2026-07-27。見上方 M4 節。落地 26 處；Example 收 **8.1–8.38 ＝ D1 硬上限**；回歸 Mode B ×3 → 4 blocking 全修、複核 ×2 → 0 blocking；盲測 ×3＋scoped ×1 → 0 stuck。sympy **59/59**。`ch08_modec-gapcheck-audit.md` |
+| **三閘 gate-2（數學／散文／圖）** | ⬜ **未跑（使用者 2026-07-27 決定暫緩）** | PIPELINE「gate-2 全跑」政策要求三閘各跑到 0 blocking 該章才**定版**。本章目前**帶 gate-2 債**，**尚未定版**。待跑時的輸入清單＝`ch08_modec-gapcheck-audit.md` §8 的 7 條既有內容發現（首要：Ch6 Thm 6.5 vs Ch8 Thm 8.2 證明的跨章矛盾） |
+| M5 收尾（dashboard＋checklist＋ROADMAP open-q） | ✅ | 2026-07-27。本表補滿＋PIPELINE dashboard Ch8 行更新＋CONTENT_ROADMAP Ch8 entry 收束並回填 as-built＋Ch11 entry 補記 Thm 8.4 的 discharge 義務。**狀態＝M1–M5 完成、gate-2 債未清、尚未定版** |
+
+**as-built 凍結（M5 時點）**：Definition 8.1–8.2／Theorem 8.1–8.4（8.1／8.2／8.3 proved；8.4 on credit → Ch11 §11.9）／
+Proposition 8.1–8.2（both proved）／Strategy 8.1–8.6／**Example 8.1–8.38**／Figure 8.1–8.13／
+不編號 Caution ×17／equation tags (8.A)(M)(T)(S)。恰兩筆 on-credit（§8.4 FTA fact 永久外借；§8.7 Thm 8.4 → Ch11）。
+終值：build ✔／quote_lint clean ×7／linebreak 0／render math 1378、MathJax err 0、13/13 圖／
+cross-ref dangling 0／prose N=10502、em-dash 0.0/1000。
+
 ## Open questions (for the user, at chapter close)
 
 1. **Inverse hyperbolic functions**: default NOT collected (D2). If wanted: appended §8.8, zero
@@ -476,7 +493,19 @@ prose **N 8214→10502、em-dash 仍 0.0/1000**（四個 tic guard 密度全部�
    rationale (this chapter's examples ARE the content). **No headroom remains**: any example that
    the three gate-2 passes turn up must either replace one or go through D1 first.
 3. **Thm 8.4 error bounds fenced forward to Ch11 §11.9** rather than Appendix D (D8 rationale);
-   Ch11 must discharge — recorded in EXPORT section and to be echoed in ROADMAP Ch11 notes at M5.
+   Ch11 must discharge. **RESOLVED at M5 (2026-07-27): echoed into the CONTENT_ROADMAP Ch11 entry**
+   as a named import obligation, alongside the §11.3 Integral Test import (Def 8.1 / Prop 8.2 /
+   Thm 8.3). Both directions of the Ch8↔Ch11 seam are now recorded on the Ch11 side, not only here.
+4. **【M5 新增】三閘 gate-2 未跑 — 本章帶 gate-2 債、尚未定版**（使用者 2026-07-27 決定暫緩）。
+   PIPELINE 的「gate-2 全跑」政策（2026-07-10 拍板）明訂三閘各跑到 0 blocking 該章才定版，理由正是
+   「章內不留 gate-2 債」。Ch5/6/7 皆已如此定版；**Ch8 是第一個在 gate-2 前就停下的 canon 章**，
+   所以 dashboard 與本表都標「尚未定版」，勿誤讀為全閘完成。開跑時的輸入＝
+   `ch08_modec-gapcheck-audit.md` §8 的 7 條既有內容發現。
+5. **【M5 新增】§8.4 的部分分式就地 bridge**：M4 的 3 份盲測有 2 份把「Prop A.7 的模板與 cover-up
+   整個外包給 Appendix A.4」列為全章最該修的一項（其一稱「換個讀者就會變 blocking」），第 3 份則
+   明確判**不算 B 類違規**（每個例題都把自己的模板寫出來了）。合計 **0 B 類違規**，難度閘 PASS 不受
+   影響，故未擅自增補。若要補一段「從因式分解怎麼寫出模板」的就地 bridge，屬**新的 Mode C 增補**，
+   需使用者裁決。
 
 ## Scaffolding notes
 
