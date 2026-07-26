@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REVIEW — Ch8 圖機會裁決稿（M2 ①機會覆核）</title>
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] }, svg: { fontCache: 'global' } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+<style>
+  :root { --ink:#1a2230; --soft:#5a6675; --line:#dfe4ea; --bg:#f6f8fa; --card:#fff;
+          --blue:#1f4e79; --red:#c0392b; --green:#1e7a46; --amber:#b06f00; }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:30px 18px 90px; background:var(--bg); color:var(--ink);
+         font-family:-apple-system,"Segoe UI",Roboto,"Noto Sans TC","Microsoft JhengHei",sans-serif; line-height:1.7; }
+  .wrap { max-width:980px; margin:0 auto; }
+  h1 { font-size:1.45rem; margin:0 0 .15em; }
+  h2 { font-size:1.12rem; margin:1.5em 0 .5em; padding-bottom:.25em; border-bottom:2px solid var(--line); }
+  .sub { color:var(--soft); font-size:.9rem; margin:0 0 1.2em; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 18px; margin-bottom:14px; box-shadow:0 1px 2px rgba(0,0,0,.04); }
+  table { border-collapse:collapse; width:100%; font-size:.86rem; margin:.4em 0; }
+  th,td { border:1px solid var(--line); padding:5px 8px; text-align:left; vertical-align:top; }
+  th { background:#f0f3f6; font-weight:600; }
+  code { font-family:Consolas,monospace; font-size:.85em; background:#eef1f5; padding:1px 5px; border-radius:4px; }
+  .tag { display:inline-block; font-size:.72rem; font-weight:700; padding:1px 8px; border-radius:999px; }
+  .tag.hi { background:#fdecea; color:var(--red); }
+  .tag.med { background:#e8f0fa; color:var(--blue); }
+  .tag.new { background:#fdf3e3; color:var(--amber); }
+  .tag.ok { background:#e7f4ec; color:var(--green); }
+  .small { font-size:.85rem; color:var(--soft); }
+  ul { margin:.3em 0 .6em 1.3em; padding:0; }
+  .drop { color:var(--soft); font-size:.86rem; }
+</style>
+</head>
+<body><div class="wrap">
+
+<div style="background:#e7f4ec;border:1px solid #bfe3cd;border-radius:12px;padding:12px 18px;margin-bottom:14px"><b style="color:#1e7a46">APPLIED（2026-07-26）</b>：使用者裁決「全採 13 張」→ Figure 8.1–8.13 已全數繪製（fragment＋FIGS 兩處、依文序編號）→ D1–D8 gate-1 稽核 <b>13/13 視覺 blocking 歸零</b>；4 條 D1 advisory 已修，scoped 回歸 R1–R4 全 clean。成品與逐圖稽核：<code>REVIEW-ch08-figure-audit.html</code>；紀錄：<code>_dev-archive/ch08/ch08_figure-audit.md</code>。</div>
+<h1>Ch8 圖機會裁決稿 — M2 ①機會覆核</h1>
+<p class="sub">2026-07-26 · 7 個 <code>handout-figure-opportunity-audit</code> subagent 平行（每節一個，依 FIGURE-OPPORTUNITY-RUBRIC 雙鏡頭＋D1–D6 預設駁回）· 覆核 M1 的 9 個 <code>[FIGURE-OPPORTUNITY]</code> 標記＋雙鏡頭掃漏 · 全章現況 0 張已繪圖 · ⛳ 本稿交裁決「畫哪些」；核可後繪製 → D1–D8 correctness gate-1；視覺 gate-2 依三閘規則留 M4 後批次</p>
+
+<div class="card">
+<h2 style="margin-top:.2em">裁決總表 — 13 候選（high 3／medium 10；其中掃漏新增 4）；駁回 32</h2>
+<table>
+<tr><th>#</th><th>§</th><th>data-fig id</th><th>tier</th><th>型別</th><th>教什麼（一句）</th><th>覆核裁決</th></tr>
+<tr><td>1</td><td>8.1</td><td><code>parts-uv-rectangle</code></td><td><span class="tag med">medium</span></td><td>diagram</td><td>\(uv-\int v\,du\)＝矩形面積簿記（單調參數曲線切兩塊）</td><td>MODIFY——標記原文兩塊面積標籤依其自宣告軸向<b>寫反</b>（曲線下方＝\(\int v\,du\)、曲線與 \(v\) 軸之間＝\(\int u\,dv\)）；照修正版畫；曲線起於原點＋caption 註特例；以「面積讀法」呈現、不自稱第二證明</td></tr>
+<tr><td>2</td><td>8.1</td><td><code>washer-split-monotone</code></td><td><span class="tag med">medium</span> <span class="tag new">NEW</span></td><td>graph</td><td>shell–washer 小節的兩段切分：高度 \(c\) 下全環帶、\(c\)–\(d\) 間 \([g(y),b]\)</td><td>新增（D3 override 有據：該小節晚於 brief sparsity 裁定、是本節唯一非代數區塊；ch07 Fig 7.12 只畫了 \(a=c=0\) 退化例）；<b>必畫 \(a&gt;0\)</b>；caption 不得把反函數寫成 smooth（⑤ 8.1-B1 弱化是刻意）</td></tr>
+<tr><td>3</td><td>8.2</td><td><code>sin-squared-midline</code></td><td><span class="tag med">medium</span></td><td>graph</td><td>\(\sin^2 x\) 繞 midline \(y=\tfrac12\) 對稱振盪；降冪常數項＝平均高度</td><td>KEEP 原樣；週期 \(\pi\)（非 \(2\pi\)）、切觸零點、\(y=\tfrac12\) 刻度顯式 <code>tex</code>；caption 用幾何語言、勿引 average-value 定理語彙</td></tr>
+<tr><td>4</td><td>8.3</td><td><code>trig-sub-triangles</code></td><td><span class="tag hi">high</span></td><td>multi-panel ×3</td><td>三代換的參考直角三角形（back-substitution device 一次畫定）</td><td>KEEP 原樣；三 panel 邊長配置經逐項核對＝Strategy 8.4 三行＝Ex 8.12/8.14/8.15 散文讀法；每 panel in-panel label 用代換式；caption 循「mnemonic」措辭、勿把銳角畫法宣稱為完整 θ-range</td></tr>
+<tr><td>5</td><td>8.3</td><td><code>ellipse-quarter-area</code></td><td><span class="tag med">medium</span></td><td>graph</td><td>quarter-ellipse 積分區域＋「×2×2＝×4」對稱化簡</td><td>KEEP 原樣；\(a&gt;b\) 橫長軸；具名刻度 \(a,b\) 顯式 <code>tex</code>；其餘三象限 ghost；圖上不標 \(\pi ab\)</td></tr>
+<tr><td>6</td><td>8.6</td><td><code>tail-comparison</code></td><td><span class="tag hi">high</span></td><td>graph</td><td>\(1/x\) vs \(1/x^2\) 尾巴厚度＝verdict 相反（本節承重直覺）</td><td>KEEP；巢狀著色（\(1/x^2\) 下深、兩曲線間淺）、cutoff \(t\approx4\) 後 ghost 尾；建議窗 \([1,6]\times[0,1.1]\)；需新增一個淡色 fill class</td></tr>
+<tr><td>7</td><td>8.6</td><td><code>type2-truncation</code></td><td><span class="tag med">medium</span></td><td>graph</td><td>Def 8.2(b) 截斷：\(1/\sqrt{x-2}\) 沿 \(x=2\) 紅虛漸近線上竄、極限吃掉 sliver</td><td>MODIFY——sliver 由 hatch 改 ghost-fill（kit-native、與 #6 同一視覺語言）；\(x=2\) 處不畫任何點；\((3,1)\)、\((5,1/\sqrt3)\) 錨點</td></tr>
+<tr><td>8</td><td>8.6</td><td><code>comparison-trap</code></td><td><span class="tag med">medium</span></td><td>graph</td><td>Thm 8.3(a)：\(e^{-x^2}\) 整個裝進 \(e^{-x}\) 的有限屋頂下</td><td>MODIFY——domain facts 補強：\(x=1\) 交會是<b>橫截非相切</b>（斜率 \(-e^{-1}\) vs \(-2e^{-1}\)，以可見夾角分開）；窗嚴格起於 \(x=1\)、建議 \([1,3.2]\times[0,0.45]\)</td></tr>
+<tr><td>9</td><td>8.6</td><td><code>interior-singularity</code></td><td><span class="tag med">medium</span> <span class="tag new">NEW</span></td><td>graph</td><td>Ex 8.31：深淵藏在區間內部（\(1/x^2\) 兩支背靠背、上下限 −1 與 3 看似無害）</td><td>新增；<b>D6 硬約束：必置於 solution／caution 之後</b>（診斷題，先看圖即洩底）；\(x=0\) 無點、漸近線與 y 軸重合的 render 事實；著色不得暗示面積有限</td></tr>
+<tr><td>10</td><td>8.6</td><td><code>monotone-sampling</code></td><td><span class="tag med">medium</span> <span class="tag new">NEW</span></td><td>graph</td><td>Thm 8.3 證明架構：\(F(t)\) 飽和向 \(L\)、整數步點階梯、\(t\) 被 \([a+n,a+n+1]\) 夾住</td><td>新增（全章唯一真證明的 L1 證明圖）；覆核員自註 <b>D1 張力最大、要收斂圖量時最合理的降級對象</b>；\(F(a)=0\)、\(F\not&gt;L\)、\(L&lt;M\) generic＋caption 註 schematic</td></tr>
+<tr><td>11</td><td>8.7</td><td><code>three-rules-panel</code></td><td><span class="tag hi">high</span></td><td>multi-panel ×3</td><td>三規則＝三張圖：中點矩形／梯形弦／拋物線（同 \(f\)、同 interval、同 \(n=4\)）</td><td>MODIFY——釘死 <b>concave-up decreasing、建議 \(f=1/x\) on \([1,2]\)</b>（弦在曲線上方＝Ex 8.33 的 \(T_5\) overshoot 敘述一致；拱形會打架）；拋物線貼近不重合；可選 ghost 第二對弧</td></tr>
+<tr><td>12</td><td>8.7</td><td><code>midpoint-tangent-trap</code></td><td><span class="tag med">medium</span></td><td>diagram</td><td>中點矩形＝切線梯形等積（24-vs-12 常數背後的標準圖）</td><td>MODIFY——<b>移位至 Ex 8.33 之後</b>（緊貼它註解的句子）；concave-up ⇒ 切線在下（M 低估、\(E_M&gt;0\)）＋可選灰弦在上（T 高估）；caption 勿宣稱比值恰 ½</td></tr>
+<tr><td>13</td><td>8.7</td><td><code>simpson-data-speed</code></td><td><span class="tag med">medium</span> <span class="tag new">NEW</span></td><td>graph</td><td>Ex 8.36：七顆讀數＋三段 Simpson 插值弧；<b>不畫底層曲線</b>＝「無導數資訊」的圖示</td><td>新增；t–v 座標圖非表格（零表格不變量不觸）；弧於 \(t=60,120\) 相接可有角；與 ch06 Fig 6.3 成呼應對</td></tr>
+</table>
+<p class="small">§8.4／§8.5：0 候選——兩節「刻意零圖」判斷經覆核成立（各以 4–5 個對抗式構造候選全數 D1/D2/D3/D4/D6 駁回證明掃描非空轉）。編號預定（依文序）：採納後 Figure 8.1–8.N 依上表順序即文序（#1→8.1、#2→8.2、…）。</p>
+</div>
+
+<div class="card">
+<h2>駁回清單（32 條，逐節）</h2>
+<p class="drop"><b>§8.1（4）</b>：substitution-vs-parts 模式對照（D1）；wrong-choice ladder（D1）；solve-back 迴圈箭頭（D1）；sin^n 下降鏈（D1）。<br>
+<b>§8.2（4）</b>：parity 決策樹（D1）；ln|sec| 分支圖（D1/D3）；Ex 8.11 波形 two-panel（D1/D4/D3）；sin⁴ midline 3/8（D2——併入 #3 caption 一子句）。<br>
+<b>§8.3（4）</b>：Ex 8.16 半圓 recentre（D4/D1/D3）；sec 負支範圍圖（D1/D3）；inverse-substitution mapping（D1/D3）；Ex 8.12 單獨三角形（D2＝#4 panel 1）。<br>
+<b>§8.4（4）</b>：Strategy 8.5 流程圖（D1）；1/(x(x+1)) 曲線疊加（D1+D3）；Ex 8.22 雙 component 域圖（D1）；(8.A) arctan 配圖（D1/D2）。<br>
+<b>§8.5（5）</b>：Strategy 8.6 dispatch 流程圖（D1+D3）；四積分 mapping 箭頭（D6+D1 洩題）；e^{−x²} bell（D2 歸 §8.6）；Ex 8.24 鏈接箭頭（D1）；Ex 8.26 行為圖（D4+D1）。<br>
+<b>§8.6（6）</b>：Ex 8.28 鐘形（D1+D2；唯一值得日後復活的 low）；主值陷阱對稱抵銷圖（D1+D4——畫一半誤導、畫全套越界進本書刻意排除的 principal-value 機制）；p-test 鏡像雙域（D2 組合覆蓋）；p≤0 矩形比較（D1）；mixed-cases 雙重瑕積分（D1+D2）；Ex 8.29 te^{−t} 曲線（非機會）。<br>
+<b>§8.7（5）</b>：L/R 括號圖（D2＝ch06 Fig 6.1）；L–T–R 數線（D1）；Simpson 引理單獨圖（D2＝#11 panel 3）；權重 stencil（D1）；誤差 vs n 收斂階（D4+D5）。</p>
+</div>
+
+<div class="card">
+<h2>裁決選項（⛳）</h2>
+<ul>
+<li><b>(A) 全採 13 張</b>——§8.6 五張為本章最幾何節的 Stewart 密度；#10 為全章唯一真證明的證明圖。</li>
+<li><b>(B) 採 12 張＝A − #10</b>——covering 覆核員自註的 D1 張力（證明散文已極清楚）。</li>
+<li><b>(C) 只畫 3 張 essential</b>（#4、#6、#11）——最小可行。</li>
+<li><b>(D) 逐條勾選。</b></li>
+</ul>
+<p class="small">核可後：繪製（fragment `figure data-fig`＋standalone `FIGS` 兩處同改、Figure 8.N 依文序、`--fig-8-*` 寬度變數）→ build → `shot.mjs figures` 逐圖 PNG → `handout-figure-audit` D1–D8 gate-1 → 修補回歸 → `REVIEW-ch08-figure-audit.html`。</p>
+</div>
+
+</div></body>
+</html>

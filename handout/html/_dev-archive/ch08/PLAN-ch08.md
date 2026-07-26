@@ -280,7 +280,7 @@ addition goes through this table first (kickoff hard guardrail).
 | Corollary | — | — | — | — | — | — | — | 0 |
 | Strategy | **8.1** (Choosing \(u\) and \(dv\)) | **8.2** (\(\sin^m\cos^n\)) · **8.3** (\(\tan^m\sec^n\)) | **8.4** (Trigonometric substitution) | **8.5** (Integrating a rational function) | **8.6** (A four-step strategy) | — | — | 6 |
 | Example | **8.1–8.6** | **8.7–8.11** | **8.12–8.16** | **8.17–8.22** | **8.23–8.26** | **8.27–8.32** | **8.33–8.36** | 36 (cap 38) |
-| Figure | — (markers only at M1; M2 draws) | — | — | — | — | — | — | 0 |
+| Figure | **8.1** parts-uv-rectangle · **8.2** washer-split-monotone | **8.3** sin-squared-midline | **8.4** trig-sub-triangles (triple) · **8.5** ellipse-quarter-area | — | — | **8.6** tail-comparison · **8.7** type2-truncation · **8.8** interior-singularity · **8.9** monotone-sampling · **8.10** comparison-trap | **8.11** three-rules-panel (triple) · **8.12** midpoint-tangent-trap · **8.13** simpson-data-speed | **13**（M2 adopt-all-13 使用者裁決 2026-07-26；§8.4/§8.5 刻意零圖經 gate 覆核成立） |
 | Equation tags | — | — | — | one tagged display for \(\int\frac{dx}{x^2+a^2}\) (tag **(8.A)**) | — | — | **(M)**, **(T)**, **(S)** | 4 tags |
 
 Per-section example allocation (planned): §8.1 ×6 (x cos x · ln x · t²eᵗ · eˣ sin x · ∫₀¹ arctan ·
@@ -378,6 +378,16 @@ triggers: no paragraph ≥150 words. **Recommendation carried to the applied rep
 | 8.7 Approximate Integration (+ch summary) | ✅ draft | Thm 8.4 (on credit → Ch11); Ex 8.33–8.36; tags (M)(T)(S); fence caution | **CLOSED 0 blocking**（r1: 5B——括號語句、兩處 bound 過度宣稱、門檻數字、L/R display、42 km/h；回歸 R12–R15 clean）`ch08_s8-7-codex5-audit.md` |
 
 > **章層 review（M1–M8 逐維明列）＋回歸**：M1/M2/M3/M4/M5/M6/M8 clean、M7＝CH-B1（＝8.1-B1，已修）；Ledger／Credit（恰兩筆）／Seams 全 clean；scoped 回歸 R1–R15 全 clean。`ch08_chapter-sweep-audit.md`
+
+## M2 圖批次（2026-07-26，gate-1 側 CLOSED）
+
+使用者指令開 M2、裁決 **adopt-all-13**（機會覆核 7 subagent：9 標記→13 候選／32 駁回；
+§8.4/§8.5 刻意零圖成立）。Figure 8.1–8.13 全繪（ledger 表已回填；kit 擴充 fill-ghost／
+fill-aux＋triple 版面 3×176px；作者自查修 9 處——含 Fig 8.11 區間 [1,3] 對機會閘 [1,2] 的
+記錄性偏離）。**D1–D8 gate-1：13/13 視覺 blocking 歸零**（4 條 D1 advisory 全修：3× vline
+越軸擦 tick 字同根因＋1× label 擦線）＋ **scoped 回歸 R1–R4 全 clean**。紀錄
+`ch08_figure-audit.md`；報告 `_audit/REVIEW-ch08-figure-opportunity.html`（applied banner）＋
+`_audit/REVIEW-ch08-figure-audit.html`（13 圖內嵌）。視覺 gate-2 依三閘規則留 M4 後批次。
 
 > Free-gate terminal values at M1 draft close (2026-07-26): build ✔ · quote_lint clean ×7 ·
 > linebreak-gate **0** auto-breaks (13 wide displays hand-broken) · render **math=979,

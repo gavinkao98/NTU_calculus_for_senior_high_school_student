@@ -184,6 +184,20 @@ window.MathJax = {
 .paper .fig-svg text { font-family: var(--ui); font-size: 13px; }
 .paper .axlab { fill: var(--c-aux); font-style: italic; }
 .paper .lab-curve { fill: var(--c-primary); font-style: italic; }
+/* ch08 M2: light fills (ghost tails / auxiliary mass) + per-figure widths */
+.paper .fill-ghost { fill: color-mix(in srgb, var(--c-primary) 6%, transparent); stroke: none; }
+.paper .fill-aux { fill: color-mix(in srgb, var(--ink) 10%, transparent); stroke: none; }
+.paper figure[data-fig="parts-uv-rectangle"] { --fig-w: 300px; }
+.paper figure[data-fig="washer-split-monotone"] { --fig-w: 430px; }
+.paper figure[data-fig="sin-squared-midline"] { --fig-w: 460px; }
+.paper figure[data-fig="ellipse-quarter-area"] { --fig-w: 380px; }
+.paper figure[data-fig="tail-comparison"] { --fig-w: 460px; }
+.paper figure[data-fig="type2-truncation"] { --fig-w: 430px; }
+.paper figure[data-fig="interior-singularity"] { --fig-w: 450px; }
+.paper figure[data-fig="monotone-sampling"] { --fig-w: 460px; }
+.paper figure[data-fig="comparison-trap"] { --fig-w: 440px; }
+.paper figure[data-fig="midpoint-tangent-trap"] { --fig-w: 340px; }
+.paper figure[data-fig="simpson-data-speed"] { --fig-w: 470px; }
 .paper .lab-ref, .paper .lab-ref-b { fill: var(--c-caution); }
 .paper .ptlab { fill: var(--ink-soft); font-size: 12px; }
 .paper .setlab { fill: var(--ink); font-weight: 600; font-size: 14.5px; text-anchor: middle; }
@@ -264,7 +278,7 @@ window.MathJax = {
 .paper .figure-art--pair { gap: 24px; }
 .paper .figure-art--pair .fig-panel { flex: 1 1 220px; max-width: 300px; }
 .paper .figure-art--triple { gap: 18px; }
-.paper .figure-art--triple .fig-panel { flex: 1 1 190px; max-width: 240px; }
+.paper .figure-art--triple .fig-panel { flex: 1 1 165px; max-width: 176px; } /* ch08: 3*176+2*18 <= 567 */
 .paper .figure-art--grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; justify-items: center; }
 .paper .figure-art--grid .fig-panel { max-width: 240px; }
 .paper .fig-panel { display: flex; flex-direction: column; align-items: center; }
@@ -468,9 +482,10 @@ window.MathJax = {
   <p>\[ \int u\,dv = uv - \int v\,du. \]</p>
   <p>To use it, split the given integrand into two parts, a function \(u\) and a differential \(dv\); the name of the technique records that split. From \(u\) we compute \(du\) by differentiating, and from \(dv\) we compute \(v\) by antidifferentiating. Any antiderivative serves for \(v\), so we take the one with zero constant.</p>
 
-  <!-- [FIGURE-OPPORTUNITY] 描述：uv-rectangle diagram — for increasing u=f(x), v=g(x), the rectangle [0,u]×[0,v] is split by the parametric curve (u,v) into the region ∫u dv (below the curve) and ∫v du (beside it); the formula is the picture's area bookkeeping. Domain fact: requires a monotone parametrization (both u and v increasing) — say so in the caption or the drawing lies.
-       類型：diagram
-       理由：the only visual reading of the parts formula; makes uv − ∫v du memorable as area subtraction rather than symbol shuffling. Optional tier (algebraic section; the technique itself needs no picture). -->
+    <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 tier-medium — uv-rectangle bookkeeping, region labels corrected at gate (below-curve = ∫v du); origin-start special case stated in caption; adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "parts-uv-rectangle"] -->
+  <figure class="figure" data-fig="parts-uv-rectangle">
+    <figcaption><span class="fig-no">Figure 8.1</span> The parts formula as area bookkeeping. For a curve climbing from the origin to \((u_{1}, v_{1})\) with \(u\) and \(v\) increasing together, the rectangle of area \(u_{1}v_{1}\) splits into \(\int v\,du\), below the curve, and \(\int u\,dv\), beside it; subtracting either from the rectangle leaves the other. The picture reads the formula, and the proof remains Theorem 8.1’s.</figcaption>
+  </figure>
 
   <section class="env env-strategy">
     <p class="env-head"><span class="env-kicker">Strategy</span><span class="env-num">8.1</span><span class="env-name">Choosing \(u\) and \(dv\)</span></p>
@@ -647,6 +662,10 @@ window.MathJax = {
   <!-- expansion:formula [source: ch07 sec-7-3 Example 7.12 closing remark (promise: "the tools arrive with integration by parts in Chapter 8 and change of variables in Chapter 15"); ③ B-01 adjudication 2026-07-26, reworked per ⑤ 8.1-B1 + chapter review CH-B1 — strictly INCREASING smooth case with merely CONTINUOUS inverse, which covers Ex 7.12's solid (f = x², g = √y — note √y is not differentiable at 0, so a smooth-inverse hypothesis would have missed the exemplar); decreasing case = mirror note; nonmonotone case explicitly left to Ch15] -->
   <p>Section 7.3 computed one solid’s volume by shells and by washers, found the answers equal, and recorded a promise: the tools to explain the agreement would arrive with integration by parts in Chapter 8 and with change of variables in Chapter 15. Parts has now arrived, and it settles the question for the solid §7.3 actually compared, and for every solid of that monotone kind. Let \(f\) be strictly increasing and smooth on \([a, b]\), with \(0 \le a\) and \(f \ge 0\), and suppose its inverse \(g\) is continuous on \([c, d]\), where \(c = f(a)\) and \(d = f(b)\). Rotate the region under \(y = f(x)\) about the \(y\)-axis. In §7.3’s Example 7.12 this is the case \(f(x) = x^{2}\) on \([0, 1]\), with \(g(y) = \sqrt{y}\). The shell method (Theorem 7.1) gives the volume as \(\int_a^b 2\pi x\,f(x)\,dx\). The washer reading slices horizontally instead. Below height \(c\) every slice is the full annulus from \(x = a\) to \(x = b\); at height \(y\) between \(c\) and \(d\), the region contains exactly the points with \(f(x) \ge y\), so the slice runs from \(x = g(y)\) out to \(x = b\). Applying the cross-section definition (Definition 7.2) on each of \([0, c]\) and \([c, d]\) and adding, the washer volume is</p>
   <p>\[ V_{\text{washer}} = \pi c\,\bigl(b^{2} - a^{2}\bigr) + \pi\int_{c}^{d} \bigl[b^{2} - g(y)^{2}\bigr]\,dy. \]</p>
+  <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 — gate-added candidate (D3 override recorded: subsection postdates the brief’s sparsity note); MUST draw a>0 so the full-annulus band exists; caption must not strengthen the continuous-inverse hypothesis; adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "washer-split-monotone"] -->
+  <figure class="figure" data-fig="washer-split-monotone">
+    <figcaption><span class="fig-no">Figure 8.2</span> The washer reading of the shell–washer comparison, for \(f\) strictly increasing with \(0 &lt; a\). Below \(y = c = f(a)\) every horizontal slice is the full annulus from \(a\) to \(b\); between \(c\) and \(d = f(b)\) the slice runs from \(x = g(y)\) out to \(b\). The two bands are the two terms of \(V_{\text{washer}}\).</figcaption>
+  </figure>
   <p>Now transform the shell integral. Parts (Theorem 8.2) with \(u = f(x)\) and \(dv = 2x\,dx\), so \(v = x^{2}\), gives</p>
   <p>\[ \int_{a}^{b} 2x\,f(x)\,dx = \Bigl[x^{2}f(x)\Bigr]_{a}^{b} - \int_{a}^{b} x^{2}f'(x)\,dx = b^{2}d - a^{2}c - \int_{a}^{b} x^{2}f'(x)\,dx. \]</p>
   <p>In the remaining integral, \(x^{2} = g(f(x))^{2}\), since \(g\) inverts \(f\). Substitution in a definite integral (Theorem 6.7), applied with the continuous outer function \(g(y)^{2}\) and with \(y = f(x)\), converts it to</p>
@@ -755,9 +774,10 @@ window.MathJax = {
     </section>
   </div>
 
-  <!-- [FIGURE-OPPORTUNITY] 描述：y = sin²x on [0, 2π] with its midline y = 1/2 drawn dashed — the power-reduction identity as a picture: sin²x oscillates about 1/2 with period π (NOT 2π — the drawing must reflect the halved period), so the area over [0, 2π] is that of the rectangle of height 1/2, i.e. π. Domain facts: max 1 at x = π/2, 3π/2; zeros at 0, π, 2π; midline crossings at odd multiples of π/4.
-       類型：graph
-       理由：makes "the average of sin² is 1/2" visible; the identity's constant term IS the midline. Supporting tier. -->
+    <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 tier-medium — power-reduction identity as a picture (constant term = midline); period π halved, touching zeros; geometric caption only, no average-value theorem vocabulary; adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "sin-squared-midline"] -->
+  <figure class="figure" data-fig="sin-squared-midline">
+    <figcaption><span class="fig-no">Figure 8.3</span> The graph of \(\sin^{2}x\) oscillates about the midline \(y = \tfrac{1}{2}\) with period \(\pi\): the identity’s constant term is the average height, and each valley exactly fills a peak. The zeros touch the axis without crossing it.</figcaption>
+  </figure>
 
   <h3 class="subsec-head">Tangents and secants</h3>
 
@@ -926,9 +946,10 @@ window.MathJax = {
     </div>
   </section>
 
-  <!-- [FIGURE-OPPORTUNITY] 描述：the three reference right triangles, one per Strategy 8.4 row, θ marked at the a-adjacent vertex. Panel 1 (sin): hypotenuse a, opposite x, adjacent √(a²−x²). Panel 2 (tan): opposite x, adjacent a, hypotenuse √(a²+x²). Panel 3 (sec): hypotenuse x, adjacent a, opposite √(x²−a²). Domain facts: labels must match the substitutions exactly; θ acute in all panels (primary ranges).
-       類型：multi-panel
-       理由：the back-substitution device drawn once beats re-deriving ratios in every solution; essential tier. -->
+    <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 tier-essential — back-substitution device; side assignments verified against Strategy 8.4 rows and Ex 8.12/8.14/8.15 readings; θ acute = mnemonic convention, caption keeps "mnemonic" wording; adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "trig-sub-triangles"] -->
+  <figure class="figure" data-fig="trig-sub-triangles">
+    <figcaption><span class="fig-no">Figure 8.4</span> The three reference triangles of Strategy 8.4, one per substitution. Label the sides so that the substitution’s ratio holds; the remaining side, by the Pythagorean theorem, is the radical, and every trigonometric function of \(\theta\) can be read off as a ratio of sides. The triangles are a mnemonic for identities that the stated \(\theta\)-ranges make valid.</figcaption>
+  </figure>
 
   <div class="workedexample">
     <section class="env env-example">
@@ -978,9 +999,10 @@ window.MathJax = {
   <!-- expansion:intuition [source: §7.6 forward promise ("Chapter 8 will widen the toolkit… its numerical methods take over") — the perimeter contrast sets up §8.7's motivation] -->
   <p>The ellipse’s area is now settled; its boundary length is not. For \(a \ne b\), the arc length integral of §7.6 for this curve contains a radical that no row of Strategy 8.4, and no other technique of this chapter, converts to an elementary antiderivative. (The circle \(a = b = r\) is the exception: there the integrand reduces to a constant times \(1/\sqrt{r^{2} - x^{2}}\), which row 1 converts in one line.) The area took four lines; the perimeter sits outside this chapter’s reach. Section 8.7 returns to exactly this kind of integral with numerical rules.</p>
 
-  <!-- [FIGURE-OPPORTUNITY] 描述：quarter-ellipse region shaded in the first quadrant, curve from (0,b) to (a,0), a and b marked on the axes; the ×4 symmetry visible by ghosting the other three quadrants lightly. Domain facts: intercepts exactly (a,0),(0,b); a>b drawn (major axis horizontal) to match Ex 8.13's generic read.
-       類型：graph
-       理由：the symmetry-times-four step is one glance as a picture; supporting tier. -->
+    <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 tier-medium — integration region + ×2×2 symmetry; a>b horizontal major axis; named ticks a, b with explicit tex; πab kept off the drawing; adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "ellipse-quarter-area"] -->
+  <figure class="figure" data-fig="ellipse-quarter-area">
+    <figcaption><span class="fig-no">Figure 8.5</span> The quarter-ellipse region behind Example 8.13. Solving for the upper half doubles the region once, evenness doubles it again, so the enclosed area is four times the shaded first-quadrant integral. The intercepts sit at \((a, 0)\) and \((0, b)\).</figcaption>
+  </figure>
 
   <div class="workedexample">
     <section class="env env-example">
@@ -1481,9 +1503,10 @@ window.MathJax = {
     </section>
   </div>
 
-  <!-- [FIGURE-OPPORTUNITY] 描述：y = 1/x and y = 1/x² on one axis over [1, ∞), 1/x on top (they meet only at x = 1), the region under each shaded up to a cutoff t with the tail beyond t ghosted — the Ex 8.27 contrast drawn: same shape, different tail thickness, finite vs infinite accumulated area. Domain facts: curves meet exactly at (1,1); 1/x > 1/x² for x > 1; both → 0.
-       類型：graph
-       理由：the section's load-bearing intuition (tail speed decides) in a single picture; essential tier. -->
+    <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 tier-essential — load-bearing intuition of §8.6; nested coding (deep under 1/x², light between curves, ghost past t) per gate render note; adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "tail-comparison"] -->
+  <figure class="figure" data-fig="tail-comparison">
+    <figcaption><span class="fig-no">Figure 8.6</span> The tails of \(y = 1/x\) and \(y = 1/x^{2}\) on \([1, \infty)\). The curves meet only at \((1, 1)\) and both decay to \(0\); the deeper region under \(1/x^{2}\) stalls at total area \(1\), while the region under \(1/x\) keeps growing as the cutoff \(t\) moves right. How fast the tail thins decides the verdict.</figcaption>
+  </figure>
 
   <div class="workedexample">
     <section class="env env-example">
@@ -1566,9 +1589,10 @@ window.MathJax = {
     </section>
   </div>
 
-  <!-- [FIGURE-OPPORTUNITY] 描述：region under y = 1/√(x−2) on (2,5], vertical asymptote x = 2 dashed red, the truncated region from t to 5 shaded solid and the sliver from 2 to t hatched — Def 8.2(b)'s truncation drawn. Domain facts: curve passes through (3,1) and (5,1/√3); unbounded as x→2⁺; nothing drawn AT x=2 (undefined).
-       類型：graph
-       理由：makes "tall but thin enough" visible and shows exactly what the limit is over; supporting tier. -->
+    <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 tier-medium — Def 8.2(b) truncation; gate MODIFY applied: sliver ghost-filled (kit-native), not hatched, matching Fig 8.6’s visual language; nothing drawn at x=2; adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "type2-truncation"] -->
+  <figure class="figure" data-fig="type2-truncation">
+    <figcaption><span class="fig-no">Figure 8.7</span> The truncation of Definition 8.2(b) for \(\int_{2}^{5} dx/\sqrt{x - 2}\): the region from \(t\) to \(5\) is a proper integral, and as \(t \to 2^{+}\) the limit captures the lighter sliver against the asymptote. The spike at \(x = 2\) is tall but thin enough for the limit to stay finite.</figcaption>
+  </figure>
 
   <div class="workedexample">
     <section class="env env-example">
@@ -1593,6 +1617,11 @@ window.MathJax = {
       <p>Before applying the Fundamental Theorem on \([a, b]\), check the whole interval for points where the integrand is undefined or unbounded. A singularity in the interior does not announce itself in the limits of integration, and integrating across it, as in Example 8.31, produces a definite-looking number with no meaning. If a singularity is found, split there and test each piece by Definition 8.2.</p>
     </div>
   </section>
+
+  <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 — gate-added candidate; D6 hard constraint honored: placed AFTER the solution and caution (diagnostic example, figure beside the prompt would give the answer away); light fills only (right half proved divergent); adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "interior-singularity"] -->
+  <figure class="figure" data-fig="interior-singularity">
+    <figcaption><span class="fig-no">Figure 8.8</span> The integrand of Example 8.31: two branches of \(y = 1/x^{2}\) climbing the same vertical asymptote, which coincides with the \(y\)-axis. The limits \(-1\) and \(3\) sit harmlessly on the axis while the singularity waits between them. Scan the whole interval before applying the Fundamental Theorem.</figcaption>
+  </figure>
 
   <h3 class="subsec-head">The \(p\)-test and the Comparison Theorem</h3>
 
@@ -1642,6 +1671,11 @@ window.MathJax = {
     </div>
   </section>
 
+  <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 — gate-added candidate (proof-structure figure for the chapter’s one full theorem proof; gate noted D1 tension and demotability — adopted by user decision); F(a)=0, F never exceeds L, L<M generic; adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "monotone-sampling"] -->
+  <figure class="figure" data-fig="monotone-sampling">
+    <figcaption><span class="fig-no">Figure 8.9</span> The proof of Theorem 8.3(a) in one schematic picture: the increasing accumulation \(F\) stays below its ceiling \(M\), the integer samples \(F(a + n)\) climb to their limit \(L\) (Theorem 4.1), and every \(t\) is bracketed between consecutive samples, so \(F(t)\) is squeezed to \(L\) as well. The curve’s shape is schematic.</figcaption>
+  </figure>
+
   <div class="workedexample">
     <section class="env env-example">
       <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.32</span></p>
@@ -1660,9 +1694,10 @@ window.MathJax = {
     </section>
   </div>
 
-  <!-- [FIGURE-OPPORTUNITY] 描述：e^{−x} above e^{−x²} on [1, ∞), both decaying, region under the upper curve lightly shaded (finite area 1/e labeled in caption, not on the figure), region under the lower curve darker — the trapping picture of Thm 8.3(a). Domain facts: curves MEET at x = 1 (e^{−1} each) and separate immediately after; e^{−x} on top for x > 1; both → 0 fast.
-       類型：graph
-       理由：comparison is an area-trapping statement; one picture says "below a finite roof". Supporting tier. -->
+    <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 tier-medium — area-trapping statement of Thm 8.3(a); gate MODIFY applied: transversal (not tangent) meeting at x=1, slopes −e⁻¹ vs −2e⁻¹, window starts at x=1; adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "comparison-trap"] -->
+  <figure class="figure" data-fig="comparison-trap">
+    <figcaption><span class="fig-no">Figure 8.10</span> The Comparison Theorem’s trap in Example 8.32: on \([1, \infty)\) the graph of \(e^{-x^{2}}\) runs below \(e^{-x}\), whose tail holds the finite area \(1/e\), so the darker region is confined below a finite roof. The curves meet at \(x = 1\) and separate at a visible angle.</figcaption>
+  </figure>
 
   <p>Mixed cases reduce to the two types. An integral such as \(\int_{0}^{\infty} \tfrac{dx}{\sqrt{x}(1 + x)}\) is improper twice, at the endpoint \(0\) and along the infinite tail; split it at any interior point, say \(1\), and require each piece to converge by its own definition. In every case the discipline is the same: locate each source of impropriety, isolate it at one end of one integral, and apply the matching definition or the Comparison Theorem.</p>
 
@@ -1718,15 +1753,12 @@ window.MathJax = {
   <p>\[ \frac{L_{n} + R_{n}}{2} = \frac{h}{2}\sum_{i=1}^{n}\bigl(y_{i-1} + y_{i}\bigr) = \frac{h}{2}\bigl[y_{0} + 2y_{1} + \cdots + 2y_{n-1} + y_{n}\bigr] = T_{n}. \]</p>
   <p>The averaging reading connects the rule to the bracketing picture above: for a monotone integrand the integral lies between \(L_{n}\) and \(R_{n}\), and \(T_{n}\) is the bracket’s midpoint, so the trapezoidal error is at most half the bracket’s width.</p>
 
-  <!-- [FIGURE-OPPORTUNITY] 描述：three-panel comparison on the same decreasing arch, same interval, same n=4: panel 1 midpoint rectangles, panel 2 trapezoids (chords), panel 3 a single parabola arc through three nodes shaded over two slices. The parabola hugs but does not coincide with the curve. Domain facts: identical f and nodes across panels; rectangles touch the curve at midpoints; chords at nodes; parabola through three consecutive nodes.
-       類型：multi-panel
-       理由：the three rules ARE three pictures; one glance shows why each upgrade fits the curve better. Essential tier. -->
+    <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 tier-essential — the three rules as pictures; gate MODIFY applied: pinned concave-up decreasing f = 1/x with n = 4 (chords lie above the curve, consistent with Ex 8.33’s sign story), ghost second parabola pair; DRAW-TIME DEVIATION: interval [1,3] instead of the gate’s suggested [1,2] — at [1,2] the chord–curve gap (≈0.016) is invisible at print size, defeating the panel’s teaching function; n = 4 and f = 1/x kept; adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "three-rules-panel"] -->
+  <figure class="figure" data-fig="three-rules-panel">
+    <figcaption><span class="fig-no">Figure 8.11</span> The three rules on one integrand, \(y = 1/x\) on \([1, 3]\) with \(n = 4\): constants at the midpoints, chords at the nodes, and a parabola through each triple of nodes. The first triple’s arc is shaded; the open dots mark the second triple, whose arc lies too close to the curve to separate by eye, which is the point: each replacement follows the bending of the curve more closely than the last.</figcaption>
+  </figure>
 
-  <!-- [FIGURE-OPPORTUNITY] 描述：one slice, the midpoint rectangle redrawn as a trapezoid whose top is the TANGENT line at the midpoint — the two shapes have equal area (caption states the equality; the drawing shows the tilt). Explains geometrically why M's error runs about half of T's with opposite sign (Ex 8.33's observation). Domain facts: tangency exactly at the midpoint; rectangle and tangent-trapezoid areas equal.
-       類型：diagram
-       理由：the standard picture behind the 24-vs-12 constants; supporting tier. -->
-
-  <div class="workedexample">
+    <div class="workedexample">
     <section class="env env-example">
       <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.33</span></p>
       <div class="env-body">
@@ -1746,6 +1778,11 @@ window.MathJax = {
       </div>
     </section>
   </div>
+
+  <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 tier-medium — the standard picture behind the 24-vs-12 constants; gate MODIFY applied: MOVED after Ex 8.33 (the sentence it annotates), concave-up slice, tangent below / chord above, no exact-half claim in caption; adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "midpoint-tangent-trap"] -->
+  <figure class="figure" data-fig="midpoint-tangent-trap">
+    <figcaption><span class="fig-no">Figure 8.12</span> One slice of Example 8.33’s integrand. Tilting the midpoint rectangle’s lid about the point of tangency onto the tangent line exchanges two equal triangles, so the rectangle and the tangent trapezoid hold the same area. On this upward-bending curve the tangent lies below the curve away from the midpoint while the chord lies above it, which is why the midpoint and trapezoidal errors pull in opposite directions.</figcaption>
+  </figure>
 
   <h3 class="subsec-head">Simpson’s Rule</h3>
 
@@ -1846,6 +1883,11 @@ window.MathJax = {
       </div>
     </section>
   </div>
+
+  <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 — gate-added candidate; t–v coordinate graph (plots, not tabulates — zero-table invariant untouched); no underlying curve = the no-derivative-information honesty line drawn; companion piece to ch06 Fig 6.3; adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "simpson-data-speed"] -->
+  <figure class="figure" data-fig="simpson-data-speed">
+    <figcaption><span class="fig-no">Figure 8.13</span> Example 8.36’s data: seven speedometer readings and the three parabolic arcs that Simpson’s Rule fits through consecutive triples, meeting at the shared nodes \(t = 60\) and \(t = 120\). No curve is drawn between the readings, because none is known; the first triple happens to be collinear, so its arc is a straight segment.</figcaption>
+  </figure>
 
   <h3 class="subsec-head">Chapter summary</h3>
 
@@ -2019,8 +2061,366 @@ window.MathJax = {
     return '<foreignObject x="' + (-FO_M) + '" y="' + (-FO_M) + '" width="' + (w + 2 * FO_M) + '" height="' + (h + 2 * FO_M) + '" class="fig-fo" requiredExtensions="http://www.w3.org/1999/xhtml"><div xmlns="http://www.w3.org/1999/xhtml" class="fig-lyr">' + spans + '</div></foreignObject>';
   }
 
+  /* ch08 M2 helpers: 3-point Lagrange parabola + piecewise-linear interpolant */
+  function lag3(x0, y0, x1, y1, x2, y2) {
+    return function (x) {
+      return y0 * ((x - x1) * (x - x2)) / ((x0 - x1) * (x0 - x2))
+           + y1 * ((x - x0) * (x - x2)) / ((x1 - x0) * (x1 - x2))
+           + y2 * ((x - x0) * (x - x1)) / ((x2 - x0) * (x2 - x1));
+    };
+  }
+  function lerpNodes(xs, ys) {
+    return function (x) {
+      for (var i = 1; i < xs.length; i++) {
+        if (x <= xs[i]) {
+          var t = (x - xs[i - 1]) / (xs[i] - xs[i - 1]);
+          return ys[i - 1] + t * (ys[i] - ys[i - 1]);
+        }
+      }
+      return ys[ys.length - 1];
+    };
+  }
+  /* one right-triangle panel for Fig 8.4 (axes off; θ at the a-adjacent vertex, right angle at B) */
+  function triPanel(labBottom, labRight, labHyp) {
+    return buildPlot({
+      w: 205, h: 158, axes: false, xmin: -0.14, xmax: 1.98, ymin: -0.3, ymax: 1.06,
+      aria: "reference right triangle",
+      items: [
+        { type: "seg", x1: 0, y1: 0, x2: 1.5, y2: 0, cls: "curve" },
+        { type: "seg", x1: 1.5, y1: 0, x2: 1.5, y2: 0.9, cls: "curve" },
+        { type: "seg", x1: 0, y1: 0, x2: 1.5, y2: 0.9, cls: "curve" },
+        { type: "seg", x1: 1.38, y1: 0, x2: 1.38, y2: 0.1, cls: "axis" },
+        { type: "seg", x1: 1.38, y1: 0.1, x2: 1.5, y2: 0.1, cls: "axis" },
+        { type: "text", x: 0.34, y: 0.085, tex: "\\theta", size: 13 },
+        { type: "text", x: 0.75, y: -0.05, tex: labBottom, vAnchor: "top", size: 12 },
+        { type: "text", x: 1.58, y: 0.45, tex: labRight, anchor: "start", size: 12 },
+        { type: "text", x: 0.6, y: 0.56, tex: labHyp, anchor: "end", size: 12 }
+      ]
+    });
+  }
+
   const FIGS = {
-    /* ch08 figures land at M2; empty at M1 (markers only) */
+
+    /* §8.1 Figure 8.1 — uv-rectangle bookkeeping for integration by parts.
+       Orientation per opportunity-gate MODIFY (labels as corrected): u horizontal, v vertical;
+       monotone curve from the ORIGIN to the far corner (u1,v1); region BELOW the curve = ∫v du,
+       region between the curve and the v-axis = ∫u dv. Caption states the origin-start special
+       case and the area reading (not a second proof). */
+    "parts-uv-rectangle": function () {
+      var f = function (x) { return Math.pow(x, 1.7); };
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 300, h: 230, xmin: -0.1, xmax: 1.3, ymin: -0.1, ymax: 1.3,
+        xlabel: "u", ylabel: "v", aria: "uv rectangle split by a monotone curve",
+        xticks: [{ x: 1, tex: "u_1" }], yticks: [{ y: 1, tex: "v_1" }],
+        items: [
+          { type: "areaBetween", fnTop: function (x) { return 1; }, fnBot: f, domain: [0, 1], cls: "fill-aux" },
+          { type: "area", fn: f, domain: [0, 1], cls: "fill-area" },
+          { type: "seg", x1: 0, y1: 1, x2: 1, y2: 1, cls: "idline" },
+          { type: "seg", x1: 1, y1: 0, x2: 1, y2: 1, cls: "idline" },
+          { type: "curve", fn: f, domain: [0, 1], cls: "curve" },
+          { type: "text", x: 0.74, y: 0.26, tex: "\\int v\\,du", size: 13 },
+          { type: "text", x: 0.3, y: 0.72, tex: "\\int u\\,dv", size: 13 }
+        ]
+      }) }] };
+    },
+
+    /* §8.1 Figure 8.2 — the two-regime washer split for the shell–washer subsection.
+       f strictly increasing, a>0 (MUST: a>0 so the full-annulus band exists — the figure's
+       reason to exist); dashed heights c=f(a), d=f(b); two representative slices. */
+    "washer-split-monotone": function () {
+      var f = function (x) { return 0.25 + 0.35 * Math.pow(x, 1.6); };
+      var a = 0.6, b = 2, c = f(0.6), d = f(2), gy = 1.4006, ySlice = 0.85;
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 430, h: 250, xmin: -0.15, xmax: 2.45, ymin: -0.12, ymax: 1.52,
+        xlabel: "x", ylabel: "y", aria: "region under an increasing curve split at height c",
+        xticks: [{ x: a, tex: "a" }, { x: b, tex: "b" }],
+        yticks: [{ y: c, tex: "c" }, { y: d, tex: "d" }],
+        items: [
+          { type: "area", fn: f, domain: [a, b], cls: "fill-area" },
+          { type: "seg", x1: a, y1: 0, x2: a, y2: c, cls: "idline" },
+          { type: "seg", x1: b, y1: 0, x2: b, y2: d, cls: "idline" },
+          { type: "hline", y: c, from: 0, to: b, cls: "idline" },
+          { type: "hline", y: d, from: 0, to: b, cls: "idline" },
+          { type: "curve", fn: f, domain: [a, b], cls: "curve" },
+          { type: "seg", x1: a, y1: 0.22, x2: b, y2: 0.22, cls: "tangent" },
+          { type: "seg", x1: gy, y1: ySlice, x2: b, y2: ySlice, cls: "tangent" },
+          { type: "dot", x: gy, y: ySlice },
+          { type: "text", x: gy - 0.04, y: ySlice + 0.1, tex: "x = g(y)", anchor: "end", size: 12 },
+          { type: "text", x: 2.06, y: 1.44, tex: "y = f(x)", anchor: "start", cls: "lab-curve", size: 12 }
+        ]
+      }) }] };
+    },
+
+    /* §8.2 Figure 8.3 — sin²x with its midline y = 1/2 (power reduction as a picture).
+       Period π (halved!), touching zeros at 0, π, 2π; midline crossings at odd multiples of π/4. */
+    "sin-squared-midline": function () {
+      var f = function (x) { var s = Math.sin(x); return s * s; };
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 460, h: 210, xmin: -0.35, xmax: 6.75, ymin: -0.14, ymax: 1.24,
+        xlabel: "x", ylabel: "y", aria: "sine squared oscillating about the midline one half",
+        xticks: [{ x: Math.PI }, { x: 2 * Math.PI }],
+        yticks: [{ y: 0.5, tex: "\\tfrac{1}{2}" }, { y: 1, tex: "1" }],
+        items: [
+          { type: "hline", y: 0.5, from: -0.1, to: 6.6, cls: "refline" },
+          { type: "curve", fn: f, domain: [-0.15, 6.6], cls: "curve" },
+          { type: "text", x: 2.18, y: 1.1, tex: "y = \\sin^{2}x", anchor: "start", cls: "lab-curve", size: 12 },
+          { type: "text", x: 6.62, y: 0.44, tex: "y = \\tfrac{1}{2}", anchor: "end", vAnchor: "top", size: 12 }
+        ]
+      }) }] };
+    },
+
+    /* §8.3 Figure 8.4 — the three reference right triangles (back-substitution device).
+       Side assignments verified against Strategy 8.4 rows and Ex 8.12/8.14/8.15 readings.
+       θ acute = mnemonic convention; captions keep the "mnemonic" wording. */
+    "trig-sub-triangles": function () {
+      return { layout: "triple", panels: [
+        { svg: triPanel("\\sqrt{a^{2}-x^{2}}", "x", "a"), note: "\\(x = a\\sin\\theta\\)" },
+        { svg: triPanel("a", "x", "\\sqrt{a^{2}+x^{2}}"), note: "\\(x = a\\tan\\theta\\)" },
+        { svg: triPanel("a", "\\sqrt{x^{2}-a^{2}}", "x"), note: "\\(x = a\\sec\\theta\\)" }
+      ] };
+    },
+
+    /* §8.3 Figure 8.5 — quarter-ellipse area region; ×2 (upper half) ×2 (evenness) = ×4.
+       a > b drawn (horizontal major axis); named ticks a, b with explicit tex; ghost quadrants. */
+    "ellipse-quarter-area": function () {
+      var a = 1.1, b = 0.7;
+      var up = function (x) { return b * Math.sqrt(Math.max(0, 1 - (x * x) / (a * a))); };
+      var dn = function (x) { return -up(x); };
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 380, h: 250, xmin: -1.38, xmax: 1.38, ymin: -0.95, ymax: 0.95,
+        xlabel: "x", ylabel: "y", aria: "ellipse with the first-quadrant quarter shaded",
+        xticks: [{ x: a, label: "" }], yticks: [{ y: b, tex: "b" }],
+        items: [
+          { type: "area", fn: up, domain: [0, a], cls: "fill-area" },
+          { type: "curve", fn: up, domain: [-a, -0.001], cls: "idline" },
+          { type: "curve", fn: dn, domain: [-a, a], cls: "idline" },
+          { type: "curve", fn: up, domain: [0, a], cls: "curve" },
+          { type: "text", x: 0.42, y: 0.3, tex: "\\displaystyle\\int_{0}^{a}", size: 13 },
+          { type: "text", x: 1.16, y: -0.13, tex: "a", anchor: "start", cls: "a-pt", size: 12 }
+        ]
+      }) }] };
+    },
+
+    /* §8.6 Figure 8.6 — 1/x vs 1/x² tails: same look, opposite verdicts.
+       Curves meet ONLY at (1,1); 1/x on top for x>1. Nested coding: deep fill under 1/x²,
+       light fill between the curves (the extra divergent mass), ghost beyond the cutoff t. */
+    "tail-comparison": function () {
+      var f1 = function (x) { return 1 / x; };
+      var f2 = function (x) { return 1 / (x * x); };
+      var t = 4;
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 460, h: 235, xmin: 0.45, xmax: 6.55, ymin: -0.12, ymax: 1.22,
+        xlabel: "x", ylabel: "y", aria: "one over x and one over x squared with shaded tails",
+        xticks: [{ x: 1 }, { x: t, tex: "t" }], yticks: [{ y: 1 }],
+        items: [
+          { type: "area", fn: f2, domain: [1, t], cls: "fill-pos" },
+          { type: "areaBetween", fnTop: f1, fnBot: f2, domain: [1, t], cls: "fill-aux" },
+          { type: "area", fn: f1, domain: [t, 6.4], cls: "fill-ghost" },
+          { type: "seg", x1: t, y1: 0, x2: t, y2: 1.18, cls: "idline" },
+          { type: "curve", fn: f1, domain: [0.85, 6.4], cls: "curve-log" },
+          { type: "curve", fn: f2, domain: [0.9, 6.4], cls: "curve" },
+          { type: "dot", x: 1, y: 1 },
+          { type: "text", x: 2.35, y: 0.52, tex: "y = \\tfrac{1}{x}", anchor: "start", size: 12 },
+          { type: "text", x: 1.75, y: 0.14, tex: "y = \\tfrac{1}{x^{2}}", anchor: "start", size: 12 }
+        ]
+      }) }] };
+    },
+
+    /* §8.6 Figure 8.7 — Type 2 truncation for 1/√(x−2) on (2,5]: red dashed asymptote at x=2,
+       solid fill on [t,5], GHOST fill (not hatch — kit-native, matches Fig 8.6's language) on the
+       sliver (2,t) that the limit has not yet captured. Nothing drawn AT x=2. */
+    "type2-truncation": function () {
+      var f = function (x) { return 1 / Math.sqrt(x - 2); };
+      var t = 2.5;
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 430, h: 235, xmin: 1.45, xmax: 5.65, ymin: -0.2, ymax: 3.1,
+        xlabel: "x", ylabel: "y", aria: "unbounded spike at x equals two with truncated region",
+        xticks: [{ x: 2 }, { x: t, tex: "t" }, { x: 3 }, { x: 5 }], yticks: [{ y: 1 }],
+        items: [
+          { type: "area", fn: function (x) { return Math.min(f(x), 3.05); }, domain: [2.02, t], cls: "fill-ghost" },
+          { type: "area", fn: f, domain: [t, 5], cls: "fill-area" },
+          { type: "seg", x1: 2, y1: 0, x2: 2, y2: 3.06, cls: "refline" },
+          { type: "curve", fn: f, domain: [2.045, 5], cls: "curve" },
+          { type: "dot", x: 5, y: f(5) },
+          { type: "text", x: 3.55, y: 1.02, tex: "y = \\tfrac{1}{\\sqrt{x-2}}", anchor: "start", cls: "lab-curve", size: 12 }
+        ]
+      }) }] };
+    },
+
+    /* §8.6 Figure 8.8 — the interior singularity of Ex 8.31: two back-to-back branches of 1/x²,
+       endpoints −1 and 3 look harmless on the axis; the vertical asymptote COINCIDES with the
+       y-axis (render fact: refline overlaid on the axis). Light fills only — the right half is
+       proved divergent, shading must not suggest finite area. Placed AFTER the caution (D6). */
+    "interior-singularity": function () {
+      var f = function (x) { return 1 / (x * x); };
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 450, h: 235, xmin: -1.5, xmax: 3.5, ymin: -0.25, ymax: 4.35,
+        xlabel: "x", ylabel: "y", aria: "one over x squared with an interior singularity at zero",
+        xticks: [{ x: -1 }, { x: 3 }], yticks: [{ y: 1 }],
+        items: [
+          { type: "area", fn: function (x) { return Math.min(f(x), 4.3); }, domain: [-1, -0.15], cls: "fill-ghost" },
+          { type: "area", fn: function (x) { return Math.min(f(x), 4.3); }, domain: [0.15, 3], cls: "fill-ghost" },
+          { type: "vline", x: 0, cls: "refline" },
+          { type: "curve", fn: f, domain: [-1.35, -0.48], cls: "curve" },
+          { type: "curve", fn: f, domain: [0.48, 3.4], cls: "curve" },
+          { type: "dot", x: -1, y: 1 },
+          { type: "dot", x: 3, y: f(3) },
+          { type: "text", x: 1.55, y: 1.3, tex: "y = \\tfrac{1}{x^{2}}", anchor: "start", cls: "lab-curve", size: 12 }
+        ]
+      }) }] };
+    },
+
+    /* §8.6 Figure 8.9 — proof schematic for Thm 8.3: increasing F saturating toward L (below the
+       ceiling M), integer sample points climbing to L, a generic t bracketed in [a+n, a+n+1].
+       Shape is schematic (caption says so); F starts at (a,0), never exceeds L, L < M generic. */
+    "monotone-sampling": function () {
+      var a = 0.5, L = 1, M = 1.15;
+      var F = function (t) { return L * (1 - Math.exp(-0.8 * (t - a))); };
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 460, h: 225, xmin: -0.1, xmax: 5.85, ymin: -0.14, ymax: 1.42,
+        xlabel: "t", ylabel: "y", aria: "increasing saturating accumulation function with integer samples",
+        xticks: [{ x: a, tex: "a" }, { x: a + 3, tex: "a+n" }, { x: 3.9, tex: "t" }, { x: a + 4, tex: "a+n+1" }],
+        yticks: [{ y: L, tex: "L" }, { y: M, tex: "M" }],
+        items: [
+          { type: "hline", y: M, from: 0, to: 5.7, cls: "refline" },
+          { type: "hline", y: L, from: 0, to: 5.7, cls: "idline" },
+          { type: "seg", x1: a + 3, y1: 0, x2: a + 3, y2: 1.3, cls: "idline" },
+          { type: "seg", x1: a + 4, y1: 0, x2: a + 4, y2: 1.3, cls: "idline" },
+          { type: "curve", fn: F, domain: [a, 5.7], cls: "curve" },
+          { type: "dot", x: a + 1, y: F(a + 1) }, { type: "dot", x: a + 2, y: F(a + 2) },
+          { type: "dot", x: a + 3, y: F(a + 3) }, { type: "dot", x: a + 4, y: F(a + 4) },
+          { type: "dot", x: 3.9, y: F(3.9), hollow: true },
+          { type: "text", x: 5.05, y: 0.83, tex: "y = F(t)", anchor: "start", cls: "lab-curve", size: 12 }
+        ]
+      }) }] };
+    },
+
+    /* §8.6 Figure 8.10 — the Comparison Theorem's trap: e^{−x²} under the finite roof of e^{−x}.
+       Meeting at x=1 is TRANSVERSAL, not tangent (slopes −e^{−1} vs −2e^{−1}); window starts
+       exactly at x=1 (curves cross sides for x<1). Ghost fill under the roof, deeper under subject. */
+    "comparison-trap": function () {
+      var roof = function (x) { return Math.exp(-x); };
+      var sub = function (x) { return Math.exp(-x * x); };
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 440, h: 225, xmin: 0.82, xmax: 3.32, ymin: -0.035, ymax: 0.475,
+        xlabel: "x", ylabel: "y", aria: "e to the minus x squared trapped below e to the minus x",
+        xticks: [{ x: 1 }, { x: 2 }, { x: 3 }], yticks: [{ y: Math.exp(-1), tex: "e^{-1}" }],
+        items: [
+          { type: "area", fn: roof, domain: [1, 3.25], cls: "fill-ghost" },
+          { type: "area", fn: sub, domain: [1, 3.25], cls: "fill-pos" },
+          { type: "curve", fn: roof, domain: [1, 3.25], cls: "curve-log" },
+          { type: "curve", fn: sub, domain: [1, 3.25], cls: "curve" },
+          { type: "dot", x: 1, y: Math.exp(-1) },
+          { type: "text", x: 1.62, y: 0.27, tex: "y = e^{-x}", anchor: "start", size: 12 },
+          { type: "text", x: 1.18, y: 0.058, tex: "y = e^{-x^{2}}", anchor: "start", size: 12 }
+        ]
+      }) }] };
+    },
+
+    /* §8.7 Figure 8.11 — the three rules as three pictures: SAME f = 1/x on [1,2], SAME n = 4.
+       Concave-up decreasing (pinned per gate MODIFY): chords lie ABOVE the curve, matching
+       Ex 8.33's sign story. Panel 3: solid parabola through the first node triple (shaded pair),
+       ghost parabola through the second triple. Parabola hugs but does not coincide with 1/x. */
+    "three-rules-panel": function () {
+      /* Interval [1,3] (gate suggested [1,2]; widened so the chord-curve separation is VISIBLE
+         at print size - n = 4 and f = 1/x kept per gate pin; deviation recorded in the fragment
+         source comment). Nodes 1, 1.5, 2, 2.5, 3. */
+      var f = function (x) { return 1 / x; };
+      var xs = [1, 1.5, 2, 2.5, 3], ys = xs.map(f);
+      var mids = [1.25, 1.75, 2.25, 2.75];
+      var lin = lerpNodes(xs, ys);
+      var p1 = lag3(1, f(1), 1.5, f(1.5), 2, f(2));
+      var p2 = lag3(2, f(2), 2.5, f(2.5), 3, f(3));
+      function base(extra) {
+        return {
+          w: 210, h: 175, xmin: 0.78, xmax: 3.3, ymin: -0.1, ymax: 1.2,
+          xlabel: "x", ylabel: "", aria: "approximation rule panel",
+          xticks: [{ x: 1 }, { x: 3 }], yticks: [],
+          items: extra
+        };
+      }
+      var pa = [];
+      for (var i = 0; i < 4; i++) pa.push({ type: "rect", x1: xs[i], x2: xs[i + 1], y0: 0, y1: f(mids[i]), cls: "rect-sum" });
+      pa.push({ type: "curve", fn: f, domain: [0.9, 3.2], cls: "curve" });
+      var pb = [
+        { type: "area", fn: lin, domain: [1, 3], cls: "fill-area" },
+        { type: "seg", x1: 1.5, y1: 0, x2: 1.5, y2: lin(1.5), cls: "idline" },
+        { type: "seg", x1: 2, y1: 0, x2: 2, y2: lin(2), cls: "idline" },
+        { type: "seg", x1: 2.5, y1: 0, x2: 2.5, y2: lin(2.5), cls: "idline" },
+        { type: "seg", x1: 1, y1: 0, x2: 1, y2: 1, cls: "idline" },
+        { type: "seg", x1: 3, y1: 0, x2: 3, y2: f(3), cls: "idline" },
+        { type: "curve", fn: lin, domain: [1, 3], cls: "tangent" },
+        { type: "curve", fn: f, domain: [0.9, 3.2], cls: "curve" }
+      ];
+      var pc = [
+        { type: "area", fn: p1, domain: [1, 2], cls: "fill-pos" },
+        { type: "seg", x1: 1, y1: 0, x2: 1, y2: 1, cls: "idline" },
+        { type: "seg", x1: 2, y1: 0, x2: 2, y2: f(2), cls: "idline" },
+        { type: "curve", fn: p1, domain: [1, 2], cls: "tangent" },
+        { type: "curve", fn: p2, domain: [2, 3], cls: "secant" },
+        { type: "curve", fn: f, domain: [0.9, 3.2], cls: "curve" },
+        { type: "dot", x: 1, y: 1 }, { type: "dot", x: 1.5, y: f(1.5) }, { type: "dot", x: 2, y: f(2) },
+        { type: "dot", x: 2.5, y: f(2.5), hollow: true }, { type: "dot", x: 3, y: f(3), hollow: true }
+      ];
+      return { layout: "triple", panels: [
+        { svg: buildPlot(base(pa)), note: "Constants at the midpoints" },
+        { svg: buildPlot(base(pb)), note: "Chords at the nodes" },
+        { svg: buildPlot(base(pc)), note: "Parabolas through node triples" }
+      ] };
+    },
+
+    /* §8.7 Figure 8.12 — midpoint rectangle = tangent trapezoid (equal areas; the drawing shows
+       the tilt, the caption states the equality). Concave-up slice: tangent below the curve away
+       from the point of tangency (M underestimates, E_M > 0), chord above (T overestimates).
+       Placed AFTER Ex 8.33 per gate MODIFY. */
+    "midpoint-tangent-trap": function () {
+      var f = function (x) { return 1 / x; };
+      var x0 = 1.15, x1 = 1.85, m = 1.5, fm = f(m), sl = -1 / (m * m);
+      var tl = function (x) { return fm + sl * (x - m); };
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 340, h: 235, xmin: 0.98, xmax: 2.1, ymin: -0.06, ymax: 1.05,
+        xlabel: "x", ylabel: "", aria: "midpoint rectangle tilted into the tangent trapezoid",
+        xticks: [{ x: x0, tex: "x_{i-1}" }, { x: m, tex: "\\bar{x}_{i}" }, { x: x1, tex: "x_{i}" }],
+        yticks: [],
+        items: [
+          { type: "rect", x1: x0, x2: x1, y0: 0, y1: fm, cls: "rect-lo" },
+          { type: "areaBetween", fnTop: tl, fnBot: function (x) { return fm; }, domain: [x0, m], cls: "fill-pos" },
+          { type: "areaBetween", fnTop: function (x) { return fm; }, fnBot: tl, domain: [m, x1], cls: "fill-neg" },
+          { type: "seg", x1: x0, y1: tl(x0), x2: x1, y2: tl(x1), cls: "tangent" },
+          { type: "seg", x1: x0, y1: f(x0), x2: x1, y2: f(x1), cls: "secant" },
+          { type: "curve", fn: f, domain: [1.02, 2.04], cls: "curve" },
+          { type: "dot", x: m, y: fm },
+          { type: "text", x: 1.9, y: 0.63, tex: "y = \\tfrac{1}{x}", anchor: "start", cls: "lab-curve", size: 12 }
+        ]
+      }) }] };
+    },
+
+    /* §8.7 Figure 8.13 — Simpson on data (Ex 8.36): seven readings, three interpolating arcs
+       meeting (possibly with corners) at the shared even nodes t = 60, 120; NO underlying curve
+       (the truth between readings is unknown — that is the point). First triple is collinear
+       (8,10,12): its "parabola" is honestly a straight segment. */
+    "simpson-data-speed": function () {
+      var ts = [0, 30, 60, 90, 120, 150, 180], vs = [8, 10, 12, 11, 13, 14, 12];
+      var a1 = lag3(0, 8, 30, 10, 60, 12);
+      var a2 = lag3(60, 12, 90, 11, 120, 13);
+      var a3 = lag3(120, 13, 150, 14, 180, 12);
+      var items = [
+        { type: "area", fn: a1, domain: [0, 60], cls: "fill-area" },
+        { type: "area", fn: a2, domain: [60, 120], cls: "fill-area" },
+        { type: "area", fn: a3, domain: [120, 180], cls: "fill-area" },
+        { type: "curve", fn: a1, domain: [0, 60], cls: "tangent" },
+        { type: "curve", fn: a2, domain: [60, 120], cls: "tangent" },
+        { type: "curve", fn: a3, domain: [120, 180], cls: "tangent" }
+      ];
+      for (var i = 0; i < ts.length; i++) items.push({ type: "dot", x: ts[i], y: vs[i] });
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 470, h: 235, xmin: -14, xmax: 200, ymin: -1.2, ymax: 18,
+        xlabel: "t\\ (\\mathrm{s})", ylabel: "v\\ (\\mathrm{m/s})", aria: "speed readings with Simpson interpolating arcs",
+        xticks: [{ x: 0 }, { x: 30 }, { x: 60 }, { x: 90 }, { x: 120 }, { x: 150 }, { x: 180 }],
+        yticks: [{ y: 5 }, { y: 10 }, { y: 15 }],
+        items: items
+      }) }] };
+    }
   };
 
   /* ---- hydrateFigures: fills every <figure data-fig="id"> ---- */

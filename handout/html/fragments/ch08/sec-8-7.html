@@ -43,15 +43,12 @@
   <p>\[ \frac{L_{n} + R_{n}}{2} = \frac{h}{2}\sum_{i=1}^{n}\bigl(y_{i-1} + y_{i}\bigr) = \frac{h}{2}\bigl[y_{0} + 2y_{1} + \cdots + 2y_{n-1} + y_{n}\bigr] = T_{n}. \]</p>
   <p>The averaging reading connects the rule to the bracketing picture above: for a monotone integrand the integral lies between \(L_{n}\) and \(R_{n}\), and \(T_{n}\) is the bracket’s midpoint, so the trapezoidal error is at most half the bracket’s width.</p>
 
-  <!-- [FIGURE-OPPORTUNITY] 描述：three-panel comparison on the same decreasing arch, same interval, same n=4: panel 1 midpoint rectangles, panel 2 trapezoids (chords), panel 3 a single parabola arc through three nodes shaded over two slices. The parabola hugs but does not coincide with the curve. Domain facts: identical f and nodes across panels; rectangles touch the curve at midpoints; chords at nodes; parabola through three consecutive nodes.
-       類型：multi-panel
-       理由：the three rules ARE three pictures; one glance shows why each upgrade fits the curve better. Essential tier. -->
+    <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 tier-essential — the three rules as pictures; gate MODIFY applied: pinned concave-up decreasing f = 1/x with n = 4 (chords lie above the curve, consistent with Ex 8.33’s sign story), ghost second parabola pair; DRAW-TIME DEVIATION: interval [1,3] instead of the gate’s suggested [1,2] — at [1,2] the chord–curve gap (≈0.016) is invisible at print size, defeating the panel’s teaching function; n = 4 and f = 1/x kept; adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "three-rules-panel"] -->
+  <figure class="figure" data-fig="three-rules-panel">
+    <figcaption><span class="fig-no">Figure 8.11</span> The three rules on one integrand, \(y = 1/x\) on \([1, 3]\) with \(n = 4\): constants at the midpoints, chords at the nodes, and a parabola through each triple of nodes. The first triple’s arc is shaded; the open dots mark the second triple, whose arc lies too close to the curve to separate by eye, which is the point: each replacement follows the bending of the curve more closely than the last.</figcaption>
+  </figure>
 
-  <!-- [FIGURE-OPPORTUNITY] 描述：one slice, the midpoint rectangle redrawn as a trapezoid whose top is the TANGENT line at the midpoint — the two shapes have equal area (caption states the equality; the drawing shows the tilt). Explains geometrically why M's error runs about half of T's with opposite sign (Ex 8.33's observation). Domain facts: tangency exactly at the midpoint; rectangle and tangent-trapezoid areas equal.
-       類型：diagram
-       理由：the standard picture behind the 24-vs-12 constants; supporting tier. -->
-
-  <div class="workedexample">
+    <div class="workedexample">
     <section class="env env-example">
       <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.33</span></p>
       <div class="env-body">
@@ -71,6 +68,11 @@
       </div>
     </section>
   </div>
+
+  <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 tier-medium — the standard picture behind the 24-vs-12 constants; gate MODIFY applied: MOVED after Ex 8.33 (the sentence it annotates), concave-up slice, tangent below / chord above, no exact-half claim in caption; adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "midpoint-tangent-trap"] -->
+  <figure class="figure" data-fig="midpoint-tangent-trap">
+    <figcaption><span class="fig-no">Figure 8.12</span> One slice of Example 8.33’s integrand. Tilting the midpoint rectangle’s lid about the point of tangency onto the tangent line exchanges two equal triangles, so the rectangle and the tangent trapezoid hold the same area. On this upward-bending curve the tangent lies below the curve away from the midpoint while the chord lies above it, which is why the midpoint and trapezoidal errors pull in opposite directions.</figcaption>
+  </figure>
 
   <h3 class="subsec-head">Simpson’s Rule</h3>
 
@@ -171,6 +173,11 @@
       </div>
     </section>
   </div>
+
+  <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 — gate-added candidate; t–v coordinate graph (plots, not tabulates — zero-table invariant untouched); no underlying curve = the no-derivative-information honesty line drawn; companion piece to ch06 Fig 6.3; adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "simpson-data-speed"] -->
+  <figure class="figure" data-fig="simpson-data-speed">
+    <figcaption><span class="fig-no">Figure 8.13</span> Example 8.36’s data: seven speedometer readings and the three parabolic arcs that Simpson’s Rule fits through consecutive triples, meeting at the shared nodes \(t = 60\) and \(t = 120\). No curve is drawn between the readings, because none is known; the first triple happens to be collinear, so its arc is a straight segment.</figcaption>
+  </figure>
 
   <h3 class="subsec-head">Chapter summary</h3>
 
