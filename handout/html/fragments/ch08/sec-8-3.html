@@ -24,11 +24,11 @@
   </header>
 
   <!-- expansion:intuition — section opener: the collision (no visible du removes a radical over a sum/difference of squares) + the Pythagorean reparametrization idea -->
-  <p>The radical \(\sqrt{9 - x^{2}}\) appeared in §8.2’s closing sentence as the next target, and it resists every method so far. No substitution of the form \(u = 9 - x^{2}\) helps unless a stray factor of \(x\) happens to sit in the integrand to supply \(du\). When it does not, the root over a sum or difference of squares blocks every algebraic move. What removes it is a change of viewpoint. The Pythagorean identity is itself a statement about sums of squares: setting \(x = 3\sin\theta\) turns \(9 - x^{2}\) into \(9\cos^{2}\theta\), a perfect square, and the root falls away. The substitution changes the variable, so a return step waits at the end; what is gained is an integrand made of trigonometric functions, which §8.2 taught us to handle.</p>
+  <p>The radical \(\sqrt{9 - x^{2}}\) appeared in §8.2’s closing sentence as the next target, and it resists every method so far. No substitution of the form \(u = 9 - x^{2}\) helps unless a spare factor of \(x\) happens to sit in the integrand to supply \(du\). When it does not, the root over a sum or difference of squares blocks every algebraic move. What removes it is a change of viewpoint. The Pythagorean identity is itself a statement about sums of squares: setting \(x = 3\sin\theta\) turns \(9 - x^{2}\) into \(9\cos^{2}\theta\), a perfect square, and the root falls away. The substitution changes the variable, so a return step waits at the end; what is gained is an integrand made of trigonometric functions, which §8.2 taught us to handle.</p>
 
-  <p>One point of honesty before the machinery. In Chapter 6 we substituted \(u = g(x)\), replacing the variable by an expression. Here we run the Substitution Rule (Theorem 6.6) in the other direction, replacing the variable \(x\) by a formula \(x = g(\theta)\) in a new variable. For this to be reversible, \(g\) must be one-to-one, and that is what the restricted ranges in the table below arrange: on \([-\tfrac{\pi}{2}, \tfrac{\pi}{2}]\) the function \(a\sin\theta\) passes each value once, so \(\theta = \arcsin\tfrac{x}{a}\) is well defined, exactly as in §1.2. The same restriction settles a second question. A square root such as \(\sqrt{9\cos^{2}\theta}\) equals \(3\lvert\cos\theta\rvert\), and on \([-\tfrac{\pi}{2}, \tfrac{\pi}{2}]\) the cosine is nonnegative, so the absolute value can be dropped with justification rather than by hope. Every solution in this section begins by naming its substitution, its \(\theta\)-range, and the sign that the range fixes.</p>
+  <p>One point of honesty before we state the method. In Chapter 6 we substituted \(u = g(x)\), replacing the variable by an expression. Here we run the Substitution Rule (Theorem 6.6) in the other direction, replacing the variable \(x\) by a formula \(x = g(\theta)\) in a new variable. For this to be reversible, \(g\) must be one-to-one. That is what the restricted ranges in the table below arrange: on \([-\tfrac{\pi}{2}, \tfrac{\pi}{2}]\) the function \(a\sin\theta\) takes each value exactly once, so \(\theta = \arcsin\tfrac{x}{a}\) is well defined, just as in §1.2. The same restriction settles a second question. A square root such as \(\sqrt{9\cos^{2}\theta}\) equals \(3\lvert\cos\theta\rvert\), and on \([-\tfrac{\pi}{2}, \tfrac{\pi}{2}]\) the cosine is nonnegative, so the absolute value can be dropped with justification rather than by hope. Every solution in this section begins by naming its substitution, its \(\theta\)-range, and the sign that the range fixes.</p>
 
-  <p>Throughout, \(a\) denotes a positive constant. Three radical patterns cover the standard cases, one for each rearrangement of the Pythagorean identity (Proposition A.1).</p>
+  <p>Throughout, \(a\) denotes a positive constant: the radicals involve only \(a^{2}\), so nothing is lost by taking \(a\) positive. Three radical patterns cover the standard cases, one for each rearrangement of the Pythagorean identity (Proposition A.1).</p>
 
   <section class="env env-strategy">
     <p class="env-head"><span class="env-kicker">Strategy</span><span class="env-num">8.4</span><span class="env-name">Trigonometric substitution</span></p>
@@ -37,9 +37,9 @@
       <ol class="steps">
         <li>\(\sqrt{a^{2} - x^{2}}\): substitute \(x = a\sin\theta\), \(\theta \in \bigl[-\tfrac{\pi}{2}, \tfrac{\pi}{2}\bigr]\). Then \(1 - \sin^{2}\theta = \cos^{2}\theta\) gives \(\sqrt{a^{2} - x^{2}} = a\cos\theta\), with \(\cos\theta \ge 0\) on the range.</li>
         <li>\(\sqrt{a^{2} + x^{2}}\): substitute \(x = a\tan\theta\), \(\theta \in \bigl(-\tfrac{\pi}{2}, \tfrac{\pi}{2}\bigr)\). Then \(1 + \tan^{2}\theta = \sec^{2}\theta\) gives \(\sqrt{a^{2} + x^{2}} = a\sec\theta\), with \(\sec\theta &gt; 0\) on the range.</li>
-        <li>\(\sqrt{x^{2} - a^{2}}\): substitute \(x = a\sec\theta\), \(\theta \in \bigl[0, \tfrac{\pi}{2}\bigr)\) for the component \(x \ge a\). Then \(\sec^{2}\theta - 1 = \tan^{2}\theta\) gives \(\sqrt{x^{2} - a^{2}} = a\tan\theta\), with \(\tan\theta \ge 0\) on the range. (For the component \(x \le -a\), see the caution at the end of the section.)</li>
+        <li>\(\sqrt{x^{2} - a^{2}}\): substitute \(x = a\sec\theta\), \(\theta \in \bigl[0, \tfrac{\pi}{2}\bigr)\) for the component \(x \ge a\) of the domain. Then \(\sec^{2}\theta - 1 = \tan^{2}\theta\) gives \(\sqrt{x^{2} - a^{2}} = a\tan\theta\), with \(\tan\theta \ge 0\) on the range. (For the component \(x \le -a\), see the caution at the end of the section.)</li>
       </ol>
-      <p class="informal">To return to \(x\), draw a right triangle that realizes the substitution: mark the angle \(\theta\), and label the sides so that the substitution’s ratio holds. The remaining side, by the Pythagorean theorem, is the radical. Every trigonometric function of \(\theta\) can then be read off as a ratio of labeled sides. The triangle is a mnemonic for identities that the \(\theta\)-range makes valid.</p>
+      <p class="informal">To return to \(x\), draw a right triangle that matches the substitution: mark the angle \(\theta\), and label the sides so that the substitution’s ratio holds. The remaining side, by the Pythagorean theorem, is the radical. Every trigonometric function of \(\theta\) can then be read off as a ratio of labeled sides. The triangle is a mnemonic for identities that the \(\theta\)-range makes valid.</p>
     </div>
   </section>
 
@@ -81,7 +81,7 @@
       <div class="env-body">
         <p>Solving for the upper half gives \(y = \tfrac{b}{a}\sqrt{a^{2} - x^{2}}\) for \(-a \le x \le a\), so the enclosed area is twice the integral of that height:</p>
         <p>\[ A = 2\,\frac{b}{a}\int_{-a}^{a} \sqrt{a^{2} - x^{2}}\,dx = 4\,\frac{b}{a}\int_{0}^{a} \sqrt{a^{2} - x^{2}}\,dx, \]</p>
-        <p>where the second equality uses the evenness of the integrand (Theorem 6.8). The radical matches row 1. Substitute \(x = a\sin\theta\), \(dx = a\cos\theta\,d\theta\), and transform the limits by Theorem 6.7: \(x = 0\) gives \(\theta = 0\) and \(x = a\) gives \(\theta = \tfrac{\pi}{2}\). On \(\bigl[0, \tfrac{\pi}{2}\bigr]\), \(\sqrt{a^{2} - x^{2}} = a\cos\theta\), so</p>
+        <p>where the second equality uses the evenness of the integrand (Theorem 6.8). The radical matches row 1. Substitute \(x = a\sin\theta\), \(dx = a\cos\theta\,d\theta\), and transform the limits by Theorem 6.7: \(x = 0\) gives \(\theta = 0\) and \(x = a\) gives \(\theta = \tfrac{\pi}{2}\). On \(\bigl[0, \tfrac{\pi}{2}\bigr]\), where \(\cos\theta \ge 0\), \(\sqrt{a^{2} - x^{2}} = a\cos\theta\), so</p>
         <p>\[ \begin{aligned}
           \int_{0}^{a} \sqrt{a^{2} - x^{2}}\,dx &= \int_{0}^{\pi/2} a^{2}\cos^{2}\theta\,d\theta = a^{2}\int_{0}^{\pi/2} \frac{1 + \cos 2\theta}{2}\,d\theta \\[2pt]
             &= a^{2}\left[\frac{\theta}{2} + \frac{\sin 2\theta}{4}\right]_{0}^{\pi/2} = \frac{\pi a^{2}}{4},
@@ -94,7 +94,7 @@
   </div>
 
   <!-- expansion:intuition [source: §7.6 forward promise ("Chapter 8 will widen the toolkit… its numerical methods take over") — the perimeter contrast sets up §8.7's motivation] -->
-  <p>The ellipse’s area is now settled; its boundary length is not. For \(a \ne b\), the arc length integral of §7.6 for this curve contains a radical that no row of Strategy 8.4, and no other technique of this chapter, converts to an elementary antiderivative. (The circle \(a = b = r\) is the exception: there the integrand reduces to a constant times \(1/\sqrt{r^{2} - x^{2}}\), which row 1 converts in one line.) The area took four lines; the perimeter sits outside this chapter’s reach. Section 8.7 returns to exactly this kind of integral with numerical rules.</p>
+  <p>The ellipse’s area is now settled; its boundary length is not. For \(a \ne b\), the arc length integral of §7.6 for this curve contains a radical that no row of Strategy 8.4, and no other technique of this chapter, can turn into an integrand whose antiderivative is built from the functions we have named. (The circle \(a = b = r\) is the exception: there the integrand reduces to a constant times \(1/\sqrt{r^{2} - x^{2}}\), which row 1 converts in one line.) The area took four lines; the perimeter sits outside this chapter’s reach. Section 8.7 returns to exactly this kind of integral with numerical rules.</p>
 
     <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 tier-medium — integration region + ×2×2 symmetry; a>b horizontal major axis; named ticks a, b with explicit tex; πab kept off the drawing; adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "ellipse-quarter-area"] -->
   <figure class="figure" data-fig="ellipse-quarter-area">
@@ -120,7 +120,7 @@
     </section>
   </div>
 
-  <p>When the radical stands alone in the integrand, as in \(\int\sqrt{x^{2} + a^{2}}\,dx\), the same tangent substitution leads to \(\int\sec^{3}\theta\,d\theta\), which Example 8.10 supplies; this book leaves that longer run unworked.</p>
+  <p>When the radical stands alone in the integrand, as in \(\int\sqrt{x^{2} + a^{2}}\,dx\), the same tangent substitution leads to \(\int\sec^{3}\theta\,d\theta\), which Example 8.10 supplies; this book leaves that longer computation unworked.</p>
 
   <div class="workedexample">
     <section class="env env-example">
@@ -162,7 +162,7 @@
         <p>\[ 3 - 2x - x^{2} = 4 - (x + 1)^{2}, \]</p>
         <p>which is positive exactly for \(-3 &lt; x &lt; 1\), the domain of the integrand. The shift \(u = x + 1\), \(du = dx\), \(x = u - 1\) turns the integral into row-1 form:</p>
         <p>\[ \int \frac{u - 1}{\sqrt{4 - u^{2}}}\,du = \int \frac{u}{\sqrt{4 - u^{2}}}\,du - \int \frac{du}{\sqrt{4 - u^{2}}}. \]</p>
-        <p>The first piece has the spare factor that Strategy 8.4’s lead-in asks about: \(w = 4 - u^{2}\), \(dw = -2u\,du\) gives \(-\tfrac{1}{2}\int w^{-1/2}\,dw = -\sqrt{4 - u^{2}}\). The second piece is row 1 with \(a = 2\) and nothing else in the integrand: with \(u = 2\sin\varphi\), \(\varphi \in \bigl(-\tfrac{\pi}{2}, \tfrac{\pi}{2}\bigr)\), both \(du = 2\cos\varphi\,d\varphi\) and \(\sqrt{4 - u^{2}} = 2\cos\varphi\) reduce it to \(\int d\varphi = \varphi = \arcsin\tfrac{u}{2}\). Assembling and returning to \(x\):</p>
+        <p>The first piece has the spare factor that Strategy 8.4’s lead-in asks about: \(w = 4 - u^{2}\), \(dw = -2u\,du\) gives \(-\tfrac{1}{2}\int w^{-1/2}\,dw = -\sqrt{4 - u^{2}}\). The second piece is row 1 with \(a = 2\) and nothing else in the integrand: with \(u = 2\sin\varphi\), \(\varphi \in \bigl(-\tfrac{\pi}{2}, \tfrac{\pi}{2}\bigr)\), where \(\cos\varphi &gt; 0\), both \(du = 2\cos\varphi\,d\varphi\) and \(\sqrt{4 - u^{2}} = 2\cos\varphi\) reduce it to \(\int d\varphi = \varphi = \arcsin\tfrac{u}{2}\). Assembling and returning to \(x\):</p>
         <p>\[ \int \frac{x}{\sqrt{3 - 2x - x^{2}}}\,dx = -\sqrt{3 - 2x - x^{2}} - \arcsin\frac{x + 1}{2} + C, \]</p>
         <p>valid on \((-3, 1)\). Completing the square is what §A.5 promised it would be here: the one algebraic step that brings a general quadratic radical within reach of the table. <span class="qed"></span></p>
       </div>
@@ -177,6 +177,6 @@
   </section>
 
   <!-- expansion:summary — close §8.3: what the method is + hygiene recap; forward to §8.4 with no mechanics -->
-  <p>Trigonometric substitution reparametrizes the variable so that a Pythagorean identity collapses a quadratic radical into a perfect square. The discipline is in the ranges: each substitution is one-to-one on its stated interval, the interval fixes the radical’s sign, and the labeled triangle carries the answer back to \(x\). With completing the square, the method reaches any \(\sqrt{px^{2} + qx + r}\). What it does not touch is the other standard shape built from polynomials: a ratio of two of them, with no radical in sight. Integrating rational functions is the next section’s business, and the algebra for it is already waiting in Appendix A.4.</p>
+  <p>Trigonometric substitution replaces the variable by a trigonometric formula so that a Pythagorean identity turns the quadratic under the root into a perfect square. The discipline is in the ranges: each substitution is one-to-one on its stated interval, the interval fixes the radical’s sign, and the labeled triangle carries the answer back to \(x\). With completing the square, the method reaches any \(\sqrt{px^{2} + qx + r}\). What it does not touch is the other standard shape built from polynomials: a ratio of two of them, with no radical in sight. Integrating rational functions is the next section’s business, and the algebra for it is already waiting in Appendix A.4.</p>
 
 </article>

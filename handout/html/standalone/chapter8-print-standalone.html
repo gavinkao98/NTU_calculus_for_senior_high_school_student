@@ -439,7 +439,7 @@ window.MathJax = {
   <ul>
     <li>integrate products, logarithms, and inverse trigonometric functions by parts;</li>
     <li>evaluate trigonometric integrals with the standard identities, and integrals containing quadratic radicals by trigonometric substitution;</li>
-    <li>integrate rational functions by partial fractions, and choose an attack for an unfamiliar integral;</li>
+    <li>integrate rational functions by partial fractions, and choose an approach for an unfamiliar integral;</li>
     <li>decide whether an improper integral converges, by evaluation or by comparison, and evaluate it when it does;</li>
     <li>approximate a definite integral with the Midpoint, Trapezoidal, and Simpson’s rules, and bound the error.</li>
   </ul>
@@ -452,11 +452,11 @@ window.MathJax = {
   </header>
 
   <!-- expansion:intuition — section opener: the collision (substitution needs an inner function; x cos x has none) motivates running the product rule backwards; "trade, not solve" framing -->
-  <p>Try to compute \(\int x\cos x\,dx\) by substitution. The method needs an inner function whose derivative is also present, and this integrand has neither: \(x\) and \(\cos x\) are unrelated factors, and no choice of \(u\) makes the rest of the integrand equal \(du\). Substitution reverses the chain rule, so it applies when the integrand looks like the output of the chain rule. The integrand \(x \cos x\) does not. It looks instead like one term in the output of the <em>product rule</em>, and the product rule is the one differentiation rule we have not yet run backwards. Running it backwards gives the second technique of integration, and the subject of this section.</p>
+  <p>Try to compute \(\int x\cos x\,dx\) by substitution. The method needs two things, an inner function and its derivative alongside, and this integrand has neither: \(x\) and \(\cos x\) are unrelated factors, and no choice of \(u\) makes the rest of the integrand equal \(du\). Substitution reverses the chain rule, so it applies when the integrand looks like the output of the chain rule. The integrand \(x \cos x\) does not. It looks instead like one term in the output of the <em>product rule</em>, and the product rule is the one differentiation rule we have not yet run backwards. Running it backwards gives the second technique of integration, and the subject of this section.</p>
 
   <p>Start from the product rule itself. If \(f\) and \(g\) are differentiable, then by Theorem 2.6,</p>
   <p>\[ \bigl[f(x)\,g(x)\bigr]' = f'(x)\,g(x) + f(x)\,g'(x). \]</p>
-  <p>Read as a statement about antiderivatives (Definition 6.3), this says that \(fg\) is an antiderivative of the sum \(f'g + fg'\). Solving for the term we want turns the rule into a tool.</p>
+  <p>Read this as a statement about antiderivatives (Definition 6.3): it says that \(fg\) is an antiderivative of the sum \(f'g + fg'\). Solving for the term we want turns the rule into a tool.</p>
 
   <section class="env env-theorem">
     <p class="env-head"><span class="env-kicker">Theorem</span><span class="env-num">8.1</span><span class="env-name">Integration by Parts</span></p>
@@ -476,7 +476,7 @@ window.MathJax = {
     </div>
   </section>
 
-  <p>An equation between indefinite integrals is an equation between families of functions, and the constant of integration is shared: it appears once, when the remaining integral on the right is finally evaluated. The identity trades one integral for another. That is all it does, and that is its value: the trade is progress whenever the new integrand \(f'g\) is easier than the old one \(fg'\).</p>
+  <p>An equation between indefinite integrals is an equation between families of functions. The constant of integration is shared: it appears once, when the remaining integral on the right is finally evaluated. The identity trades one integral for another. That is all it does, and that is its value: the trade is progress whenever the new integrand \(f'g\) is easier than the old one \(fg'\).</p>
 
   <p>In practice the formula is applied through the differential notation of §5.3, in the same way substitution was in §6.5. Set \(u = f(x)\) and \(v = g(x)\), so that \(du = f'(x)\,dx\) and \(dv = g'(x)\,dx\). The formula then reads:</p>
   <p>\[ \int u\,dv = uv - \int v\,du. \]</p>
@@ -484,7 +484,7 @@ window.MathJax = {
 
     <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 tier-medium — uv-rectangle bookkeeping, region labels corrected at gate (below-curve = ∫v du); origin-start special case stated in caption; adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "parts-uv-rectangle"] -->
   <figure class="figure" data-fig="parts-uv-rectangle">
-    <figcaption><span class="fig-no">Figure 8.1</span> The parts formula as area bookkeeping. For a curve climbing from the origin to \((u_{1}, v_{1})\) with \(u\) and \(v\) increasing together, the rectangle of area \(u_{1}v_{1}\) splits into \(\int v\,du\), below the curve, and \(\int u\,dv\), beside it; subtracting either from the rectangle leaves the other. The picture reads the formula, and the proof remains Theorem 8.1’s.</figcaption>
+    <figcaption><span class="fig-no">Figure 8.1</span> The parts formula as area bookkeeping. For a curve in the \(uv\)-plane climbing from the origin to \((u_{1}, v_{1})\) with \(u\) and \(v\) increasing together, the rectangle of area \(u_{1}v_{1}\) splits into \(\int v\,du\), below the curve, and \(\int u\,dv\), beside it; subtracting either from the rectangle leaves the other. The picture illustrates the formula; the proof remains that of Theorem 8.1.</figcaption>
   </figure>
 
   <section class="env env-strategy">
@@ -531,7 +531,7 @@ window.MathJax = {
       <div class="env-body">
         <p>The integrand does not look like a product, but step 2 of Strategy 8.1 supplies the split: take \(u = \ln x\) and let \(dv = dx\) be the invisible factor. Then \(du = \tfrac{1}{x}\,dx\) by Theorem 4.14, and \(v = x\). For \(x &gt; 0\), where \(\ln x\) is defined,</p>
         <p>\[ \int \ln x\,dx = x\ln x - \int x\cdot\frac{1}{x}\,dx = x\ln x - \int 1\,dx = x\ln x - x + C. \]</p>
-        <p>The trade turned a logarithm into the constant integrand \(1\). This is the pattern of step 2 in action: the logarithm left \(u\) as an algebraic derivative, and nothing was asked of \(dv\) at all. <span class="qed"></span></p>
+        <p>The trade turned a logarithm into the constant integrand \(1\). This is the pattern of step 2 in action: placing the logarithm in \(u\) produced the algebraic derivative \(\tfrac{1}{x}\), and \(dv\) was nothing more than \(dx\). <span class="qed"></span></p>
       </div>
     </section>
   </div>
@@ -546,11 +546,11 @@ window.MathJax = {
     <section class="env env-solution">
       <p class="env-head"><span class="env-kicker">Solution</span></p>
       <div class="env-body">
-        <p>Take \(u = t^{2}\) and \(dv = e^{t}\,dt\), so \(du = 2t\,dt\) and \(v = e^{t}\):</p>
+        <p>Take \(u = t^{2}\), whose degree drops under differentiation, and \(dv = e^{t}\,dt\), so \(du = 2t\,dt\) and \(v = e^{t}\):</p>
         <p>\[ \int t^{2}e^{t}\,dt = t^{2}e^{t} - 2\int t e^{t}\,dt. \]</p>
         <p>The degree dropped from \(2\) to \(1\), and one more round of parts finishes the job. In the remaining integral take \(u = t\), \(dv = e^{t}\,dt\), so \(du = dt\), \(v = e^{t}\):</p>
         <p>\[ \int t e^{t}\,dt = t e^{t} - \int e^{t}\,dt = t e^{t} - e^{t} + C_1. \]</p>
-        <p>Substituting back,</p>
+        <p>Substituting back, with the constant \(-2C_{1}\) absorbed into \(C\),</p>
         <p>\[ \int t^{2}e^{t}\,dt = t^{2}e^{t} - 2\bigl(t e^{t} - e^{t}\bigr) + C = \bigl(t^{2} - 2t + 2\bigr)e^{t} + C. \]</p>
         <p>Each application of parts lowers the power by one, so an integrand \(t^{n}e^{t}\) yields to \(n\) rounds. <span class="qed"></span></p>
       </div>
@@ -575,12 +575,12 @@ window.MathJax = {
         <p>\[ J = e^{x}\sin x - e^{x}\cos x - J, \]</p>
         <p>and solving for \(J\) gives \(2J = e^{x}(\sin x - \cos x)\), so</p>
         <p>\[ \int e^{x}\sin x\,dx = \frac{e^{x}\bigl(\sin x - \cos x\bigr)}{2} + C. \]</p>
-        <p>Here we treated the unknown integral as a single quantity and solved for it; the constant of integration is restored at the end, since the equation holds for antiderivative families. Differentiating the answer confirms it: \(\tfrac{1}{2}\bigl[e^{x}(\sin x - \cos x) + e^{x}(\cos x + \sin x)\bigr] = e^{x}\sin x\). <span class="qed"></span></p>
+        <p>Here we treated the unknown integral as a single quantity and solved for it. The constant of integration is restored at the end, since the equation holds for antiderivative families. Differentiating the answer confirms it: \(\tfrac{1}{2}\bigl[e^{x}(\sin x - \cos x) + e^{x}(\cos x + \sin x)\bigr] = e^{x}\sin x\). <span class="qed"></span></p>
       </div>
     </section>
   </div>
 
-  <p>For definite integrals, the parts formula carries the evaluation bar along with it. The hypotheses match those of the Fundamental Theorem: we use the term <em>smooth on \([a, b]\)</em> from §7.6, meaning that \(f\) is differentiable with \(f'\) continuous on \([a, b]\), one-sided at the endpoints.</p>
+  <p>For definite integrals, the term \(uv\) is evaluated between the limits: it becomes \(\bigl[f(x)\,g(x)\bigr]_{a}^{b}\) in the next theorem. The hypotheses match those of the Fundamental Theorem: we use the term <em>smooth on \([a, b]\)</em> from §7.6, meaning that \(f\) is differentiable with \(f'\) continuous on \([a, b]\), one-sided at the endpoints.</p>
 
   <section class="env env-theorem">
     <p class="env-head"><span class="env-kicker">Theorem</span><span class="env-num">8.2</span><span class="env-name">Integration by Parts for Definite Integrals</span></p>
@@ -593,7 +593,7 @@ window.MathJax = {
   <section class="env env-proof">
     <p class="env-head"><span class="env-kicker">Proof</span></p>
     <div class="env-body">
-      <p>The sum \(f'g + fg'\) is continuous on \([a, b]\), since \(f, g, f', g'\) all are, so it has the accumulation antiderivative \(H(x) = \int_{a}^{x} \bigl[f'(t)\,g(t) + f(t)\,g'(t)\bigr]\,dt\): by the Fundamental Theorem of Calculus, Part 1 (Theorem 6.3), \(H\) is continuous on \([a, b]\) with \(H' = f'g + fg'\) on \((a, b)\). The product \(fg\) has the same derivative there, by the product rule (Theorem 2.6). The difference \(fg - H\) is therefore continuous on \([a, b]\) with zero derivative on \((a, b)\), hence constant (Corollary 4.4). Evaluating at \(b\) and at \(a\), where \(H(a) = 0\), gives</p>
+      <p>The sum \(f'g + fg'\) is continuous on \([a, b]\), since \(f, g, f', g'\) all are. Theorem 6.4 cannot be cited directly, because it asks for an antiderivative on an open interval larger than \([a, b]\), and smoothness on \([a, b]\) alone does not provide one; instead we build the antiderivative we need. Let \(H(x) = \int_{a}^{x} \bigl[f'(t)\,g(t) + f(t)\,g'(t)\bigr]\,dt\). By the Fundamental Theorem of Calculus, Part 1 (Theorem 6.3), \(H\) is continuous on \([a, b]\) with \(H' = f'g + fg'\) on \((a, b)\). The product \(fg\) has the same derivative there, by the product rule (Theorem 2.6). The difference \(fg - H\) is therefore continuous on \([a, b]\) with zero derivative on \((a, b)\), hence constant (Corollary 4.4). Evaluating at \(b\) and at \(a\), where \(H(a) = 0\), gives</p>
       <p>\[ \int_{a}^{b} \bigl[f'(x)\,g(x) + f(x)\,g'(x)\bigr]\,dx = f(b)\,g(b) - f(a)\,g(a). \]</p>
       <p>Splitting the left side by linearity (Theorem 6.2, part 2) and moving \(\int_{a}^{b} f'g\) to the right side gives the formula. <span class="qed qed-proof"></span></p>
     </div>
@@ -629,7 +629,7 @@ window.MathJax = {
 
   <h3 class="subsec-head">Reduction formulas</h3>
 
-  <p>Parts can lower an exponent by a fixed step even when it cannot remove it outright. Applied once to \(\int\sin^{n}x\,dx\), the formula relates the integral to the one two exponents down. The result is worth recording once, in general, so that any particular power is a chain of lookups rather than a fresh computation.</p>
+  <p>Parts can lower an exponent by a fixed step even when it cannot remove it outright. Applied once to \(\int\sin^{n}x\,dx\), the formula relates the integral to the integral two exponents down. The result is worth recording once, in general, so that any particular power is a chain of lookups rather than a fresh computation.</p>
 
   <div class="workedexample">
     <section class="env env-example">
@@ -652,7 +652,7 @@ window.MathJax = {
         <p>The original integral has reappeared on the right, and as in Example 8.4 we solve for it. Adding \((n-1)\int\sin^{n}x\,dx\) to both sides and dividing by \(n\):</p>
         <p>\[ \int \sin^{n}x\,dx = -\frac{1}{n}\cos x\,\sin^{n-1}x + \frac{n-1}{n}\int \sin^{n-2}x\,dx. \]</p>
         <!-- expansion:formula — consistency spot-check of the reduction formula at n=2 against the §A.2 power-reduction route; also the §8.2 preview hook -->
-        <p>As a check, set \(n = 2\). The formula gives \(\int\sin^{2}x\,dx = -\tfrac{1}{2}\cos x\sin x + \tfrac{1}{2}x + C\), and since \(\sin x\cos x = \tfrac{1}{2}\sin 2x\), this is \(\tfrac{x}{2} - \tfrac{\sin 2x}{4} + C\): the same antiderivative that the power-reduction identity \(\sin^{2}x = \tfrac{1 - \cos 2x}{2}\) of §A.2 produces by direct integration. Repeated powers of sine and cosine are the opening business of the next section, which uses both routes. <span class="qed"></span></p>
+        <p>As a check, set \(n = 2\). The formula gives \(\int\sin^{2}x\,dx = -\tfrac{1}{2}\cos x\sin x + \tfrac{1}{2}x + C\), and since \(\sin x\cos x = \tfrac{1}{2}\sin 2x\), this is \(\tfrac{x}{2} - \tfrac{\sin 2x}{4} + C\). That is the same antiderivative that the power-reduction identity \(\sin^{2}x = \tfrac{1 - \cos 2x}{2}\) of §A.2 produces by direct integration. Repeated powers of sine and cosine are the opening business of the next section, which uses both routes. <span class="qed"></span></p>
       </div>
     </section>
   </div>
@@ -660,7 +660,9 @@ window.MathJax = {
   <h3 class="subsec-head">Settling the shell–washer question</h3>
 
   <!-- expansion:formula [source: ch07 sec-7-3 Example 7.12 closing remark (promise: "the tools arrive with integration by parts in Chapter 8 and change of variables in Chapter 15"); ③ B-01 adjudication 2026-07-26, reworked per ⑤ 8.1-B1 + chapter review CH-B1 — strictly INCREASING smooth case with merely CONTINUOUS inverse, which covers Ex 7.12's solid (f = x², g = √y — note √y is not differentiable at 0, so a smooth-inverse hypothesis would have missed the exemplar); decreasing case = mirror note; nonmonotone case explicitly left to Ch15] -->
-  <p>Section 7.3 computed one solid’s volume by shells and by washers, found the answers equal, and recorded a promise: the tools to explain the agreement would arrive with integration by parts in Chapter 8 and with change of variables in Chapter 15. Parts has now arrived, and it settles the question for the solid §7.3 actually compared, and for every solid of that monotone kind. Let \(f\) be strictly increasing and smooth on \([a, b]\), with \(0 \le a\) and \(f \ge 0\), and suppose its inverse \(g\) is continuous on \([c, d]\), where \(c = f(a)\) and \(d = f(b)\). Rotate the region under \(y = f(x)\) about the \(y\)-axis. In §7.3’s Example 7.12 this is the case \(f(x) = x^{2}\) on \([0, 1]\), with \(g(y) = \sqrt{y}\). The shell method (Theorem 7.1) gives the volume as \(\int_a^b 2\pi x\,f(x)\,dx\). The washer reading slices horizontally instead. Below height \(c\) every slice is the full annulus from \(x = a\) to \(x = b\); at height \(y\) between \(c\) and \(d\), the region contains exactly the points with \(f(x) \ge y\), so the slice runs from \(x = g(y)\) out to \(x = b\). Applying the cross-section definition (Definition 7.2) on each of \([0, c]\) and \([c, d]\) and adding, the washer volume is</p>
+  <p>Section 7.3 computed one solid’s volume by shells and by washers, found the answers equal, and recorded a promise: the tools to explain the agreement would arrive with integration by parts in Chapter 8 and with change of variables in Chapter 15. Parts has now arrived, and it settles the question for the solid §7.3 actually compared, and for every solid of that monotone kind.</p>
+  <p>Let \(f\) be strictly increasing and smooth on \([a, b]\), with \(0 \le a\) and \(f \ge 0\), and suppose its inverse \(g\) is continuous on \([c, d]\), where \(c = f(a)\) and \(d = f(b)\). Rotate the region under \(y = f(x)\) about the \(y\)-axis. In §7.3’s Example 7.12 this is the case \(f(x) = x^{2}\) on \([0, 1]\), with \(g(y) = \sqrt{y}\). The shell method (Theorem 7.1) gives the volume as \(\int_a^b 2\pi x\,f(x)\,dx\).</p>
+  <p>The washer reading slices horizontally instead. Below height \(c\) every slice is the full annulus from \(x = a\) to \(x = b\); at height \(y\) between \(c\) and \(d\), the region contains exactly the points with \(f(x) \ge y\), so the slice runs from \(x = g(y)\) out to \(x = b\); Figure 8.2 draws the split. Applying the cross-section definition (Definition 7.2) on each of \([0, c]\) and \([c, d]\) and adding, the washer volume is</p>
   <p>\[ V_{\text{washer}} = \pi c\,\bigl(b^{2} - a^{2}\bigr) + \pi\int_{c}^{d} \bigl[b^{2} - g(y)^{2}\bigr]\,dy. \]</p>
   <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 — gate-added candidate (D3 override recorded: subsection postdates the brief’s sparsity note); MUST draw a>0 so the full-annulus band exists; caption must not strengthen the continuous-inverse hypothesis; adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "washer-split-monotone"] -->
   <figure class="figure" data-fig="washer-split-monotone">
@@ -670,7 +672,7 @@ window.MathJax = {
   <p>\[ \int_{a}^{b} 2x\,f(x)\,dx = \Bigl[x^{2}f(x)\Bigr]_{a}^{b} - \int_{a}^{b} x^{2}f'(x)\,dx = b^{2}d - a^{2}c - \int_{a}^{b} x^{2}f'(x)\,dx. \]</p>
   <p>In the remaining integral, \(x^{2} = g(f(x))^{2}\), since \(g\) inverts \(f\). Substitution in a definite integral (Theorem 6.7), applied with the continuous outer function \(g(y)^{2}\) and with \(y = f(x)\), converts it to</p>
   <p>\[ \int_{a}^{b} g\bigl(f(x)\bigr)^{2}\,f'(x)\,dx = \int_{c}^{d} g(y)^{2}\,dy. \]</p>
-  <p>Assembling the pieces, the shell volume equals \(\pi\bigl(b^{2}d - a^{2}c - \int_{c}^{d} g(y)^{2}\,dy\bigr)\), and expanding \(V_{\text{washer}}\) gives \(\pi\bigl(b^{2}c - a^{2}c + b^{2}(d - c) - \int_{c}^{d} g(y)^{2}\,dy\bigr)\), which is the same number. The two methods agree, and the agreement is a computation with parts, exactly as promised. In Example 7.12’s case the common value is \(\pi\bigl(1 - 0 - \int_{0}^{1} y\,dy\bigr) = \tfrac{\pi}{2}\), the number §7.3 found twice. A strictly decreasing boundary is the mirror computation, with the annulus and the graph trading roles. For a solid whose boundary is not monotone, as in several of §7.3’s other examples, the argument above does not apply; the general statement belongs to the change of variables of Chapter 15, as §7.3 recorded.</p>
+  <p>Assembling the pieces, the shell volume equals \(\pi\bigl(b^{2}d - a^{2}c - \int_{c}^{d} g(y)^{2}\,dy\bigr)\). Expanding \(V_{\text{washer}}\) gives \(\pi\bigl(b^{2}c - a^{2}c + b^{2}(d - c) - \int_{c}^{d} g(y)^{2}\,dy\bigr)\), which is the same number. The two methods agree, and the agreement is a computation with parts, exactly as promised. In Example 7.12’s case the common value is \(\pi\bigl(1 - 0 - \int_{0}^{1} y\,dy\bigr) = \tfrac{\pi}{2}\), the number §7.3 found twice. A strictly decreasing boundary is the mirror computation, with the annulus and the graph trading roles. For a solid whose boundary is not monotone, as in several of §7.3’s other examples, the argument above does not apply; the general statement belongs to the change of variables of Chapter 15, as §7.3 recorded.</p>
 
   <!-- expansion:summary — close §8.1: what the technique is, when it applies, what was minted; forward to §8.2 with no mechanics -->
   <p>Integration by parts is the product rule read backwards: it trades \(\int u\,dv\) for \(\int v\,du\) at the cost of the boundary product \(uv\). The trade pays when \(u\) simplifies under differentiation, and Strategy 8.1 makes that test explicit. Theorem 8.1 states the identity for antiderivatives, Theorem 8.2 carries it to definite integrals, and the examples display its three working patterns: a power times an integrable factor, a lone logarithm or inverse function with \(dv = dx\), and a self-reproducing integrand solved for algebraically. The same trade settled last chapter’s shell–washer question. The next section turns to integrands built entirely from trigonometric functions, where the tools are identities rather than trades, and where the reduction formula of Example 8.6 finds its regular use.</p>
@@ -707,11 +709,11 @@ window.MathJax = {
   <!-- expansion:intuition — section opener: the collision (sin³ has no visible du) and the section's one move: spend a factor as du, convert the rest by an identity -->
   <p>Consider \(\int \sin^{3}x\,dx\). No derivative sits beside an inner function, so no substitution presents itself, and the integrand is not a product of unrelated factors either, so parts does not simplify it. The way forward is a property specific to trigonometric functions. They convert into one another. Split off one factor of sine and rewrite the rest by the Pythagorean identity \(\sin^{2}x = 1 - \cos^{2}x\):</p>
   <p>\[ \sin^{3}x = \bigl(1 - \cos^{2}x\bigr)\sin x. \]</p>
-  <p>The right-hand side is a polynomial in \(\cos x\) times \(\sin x\,dx\), and \(\sin x\,dx\) is exactly \(-du\) for \(u = \cos x\). The substitution that seemed absent has been <em>manufactured</em>: one factor was spent as the differential, and an identity converted everything that remained into the new variable. That single move, spend a factor and convert the rest, runs through this whole section. When no factor can be spared, a second family of identities lowers the powers instead. The identities themselves were assembled in Appendix A.2, which promised they would be needed when the techniques of integration arrived. They are needed now.</p>
+  <p>Under the integral sign, the right-hand side becomes a polynomial in \(\cos x\) times \(\sin x\,dx\), and \(\sin x\,dx\) is exactly \(-du\) for \(u = \cos x\). The substitution that seemed absent has been <em>manufactured</em>: one factor was spent as the differential, and an identity converted everything that remained into the new variable. That single move runs through this whole section: spend a factor and convert the rest. When no factor can be spared, a second family of identities lowers the powers instead. The identities themselves were assembled in Appendix A.2, which promised they would be needed when the techniques of integration arrived. They are needed now.</p>
 
   <h3 class="subsec-head">Powers of sine and cosine</h3>
 
-  <p>For an integrand \(\sin^{m}x\cos^{n}x\), the parity of the exponents decides the move.</p>
+  <p>For an integrand \(\sin^{m}x\cos^{n}x\), the parity of the exponents (whether each is odd or even) decides the move.</p>
 
   <section class="env env-strategy">
     <p class="env-head"><span class="env-kicker">Strategy</span><span class="env-num">8.2</span><span class="env-name">Integrating \(\sin^m x\,\cos^n x\)</span></p>
@@ -719,7 +721,7 @@ window.MathJax = {
       <ol class="steps">
         <li><em>If the power of sine is odd,</em> save one factor of \(\sin x\) for the differential and convert the remaining even power by \(\sin^{2}x = 1 - \cos^{2}x\). Then substitute \(u = \cos x\), \(du = -\sin x\,dx\).</li>
         <li><em>If the power of cosine is odd,</em> save one factor of \(\cos x\) and convert the rest by \(\cos^{2}x = 1 - \sin^{2}x\). Then substitute \(u = \sin x\), \(du = \cos x\,dx\).</li>
-        <li><em>If both powers are even,</em> no factor can be spared. Lower the degree with the power-reduction identities of §A.2, \(\sin^{2}x = \tfrac{1}{2}(1 - \cos 2x)\) and \(\cos^{2}x = \tfrac{1}{2}(1 + \cos 2x)\), and repeat as needed.</li>
+        <li><em>If both powers are even,</em> no factor can be spared: setting one aside would leave an odd power, which the Pythagorean identity cannot turn into a polynomial in the other function. Lower the degree with the power-reduction identities of §A.2, \(\sin^{2}x = \tfrac{1}{2}(1 - \cos 2x)\) and \(\cos^{2}x = \tfrac{1}{2}(1 + \cos 2x)\), and repeat as needed.</li>
       </ol>
     </div>
   </section>
@@ -740,7 +742,7 @@ window.MathJax = {
         <p>\[ \int \bigl(1 - u^{2}\bigr)u^{2}\,(-du) = \int \bigl(u^{4} - u^{2}\bigr)\,du = \frac{u^{5}}{5} - \frac{u^{3}}{3} + C. \]</p>
         <p>Substituting \(u = \cos x\) back,</p>
         <p>\[ \int \sin^{3}x\,\cos^{2}x\,dx = \frac{\cos^{5}x}{5} - \frac{\cos^{3}x}{3} + C. \]</p>
-        <p>Splitting off the odd power is what made this work: one factor of sine became the differential, and everything else became a polynomial, which integrates term by term. <span class="qed"></span></p>
+        <p>Splitting one factor off the odd power is what made this work: that factor of sine became the differential, and everything else became a polynomial, which integrates term by term. <span class="qed"></span></p>
       </div>
     </section>
   </div>
@@ -865,7 +867,7 @@ window.MathJax = {
         <p>\[ \int \sec^{3}x\,dx = \sec x\tan x - \int \sec^{3}x\,dx + \int \sec x\,dx. \]</p>
         <p>The original integral has reappeared, and we solve for it as in Example 8.4. Adding \(\int\sec^{3}x\,dx\) to both sides, dividing by \(2\), and evaluating \(\int\sec x\,dx\) by Proposition 8.1:</p>
         <p>\[ \int \sec^{3}x\,dx = \frac{1}{2}\Bigl(\sec x\tan x + \ln\lvert\sec x + \tan x\rvert\Bigr) + C. \]</p>
-        <p>This integral is the workhorse of the next section, where substitutions of the form \(x = a\tan\theta\) produce it repeatedly. The mirror integral \(\int\csc^{3}x\,dx\) is computed by the same two moves, parts and then Proposition 8.1’s cosecant formula. <span class="qed"></span></p>
+        <p>This integral appears throughout the next section, where substitutions of the form \(x = a\tan\theta\) produce it repeatedly. The mirror integral \(\int\csc^{3}x\,dx\) is computed by the same two moves, parts and then Proposition 8.1’s cosecant formula. <span class="qed"></span></p>
       </div>
     </section>
   </div>
@@ -887,7 +889,7 @@ window.MathJax = {
       <div class="env-body">
         <p>Apply the identity with \(u = 4x\) and \(v = 5x\):</p>
         <p>\[ \sin 4x\,\cos 5x = \tfrac{1}{2}\bigl[\sin 9x + \sin(-x)\bigr] = \tfrac{1}{2}\bigl[\sin 9x - \sin x\bigr], \]</p>
-        <p>since sine is an odd function, \(\sin(-x) = -\sin x\). The product has become a sum of two sines at fixed frequencies, and each integrates on sight:</p>
+        <p>since sine is an odd function, \(\sin(-x) = -\sin x\). The product has become a sum of two sines at fixed frequencies, and each integrates immediately:</p>
         <p>\[ \int \sin 4x\,\cos 5x\,dx = \frac{1}{2}\Bigl(-\frac{\cos 9x}{9} + \cos x\Bigr) + C = \frac{\cos x}{2} - \frac{\cos 9x}{18} + C. \]</p>
         <p>For a product of two sines, or of two cosines, the other two lines of Proposition A.2 convert the product the same way. <span class="qed"></span></p>
       </div>
@@ -895,7 +897,7 @@ window.MathJax = {
   </div>
 
   <!-- expansion:summary — close §8.2: the manufacturing idea + what was minted; forward to §8.3 with no mechanics -->
-  <p>This section added no new integration principle. Its engine is still substitution, fed by identities: an odd power donates a factor to the differential, the Pythagorean identities convert what remains, power reduction lowers even powers, and product-to-sum splits mixed frequencies. The four antiderivatives of Proposition 8.1 fill the last gaps in the basic trigonometric table, and Example 8.10’s \(\int\sec^{3}x\,dx\) is recorded for immediate reuse. The next section turns this machinery outward, onto integrands that contain no trigonometry at all: radicals such as \(\sqrt{9 - x^{2}}\), which a well-chosen trigonometric substitution converts into exactly the integrals this section taught.</p>
+  <p>This section added no new integration principle. Its engine is still substitution, fed by identities: one factor of an odd power is spent as the differential, the Pythagorean identities convert what remains, power reduction lowers even powers, and product-to-sum splits mixed frequencies. The four antiderivatives of Proposition 8.1 fill the last gaps in the basic trigonometric table, and Example 8.10’s \(\int\sec^{3}x\,dx\) is recorded for immediate reuse. The next section turns this machinery outward, onto integrands that contain no trigonometry at all: radicals such as \(\sqrt{9 - x^{2}}\), which a well-chosen trigonometric substitution converts into exactly the integrals this section taught.</p>
 
 </article>
 </template>
@@ -927,11 +929,11 @@ window.MathJax = {
   </header>
 
   <!-- expansion:intuition — section opener: the collision (no visible du removes a radical over a sum/difference of squares) + the Pythagorean reparametrization idea -->
-  <p>The radical \(\sqrt{9 - x^{2}}\) appeared in §8.2’s closing sentence as the next target, and it resists every method so far. No substitution of the form \(u = 9 - x^{2}\) helps unless a stray factor of \(x\) happens to sit in the integrand to supply \(du\). When it does not, the root over a sum or difference of squares blocks every algebraic move. What removes it is a change of viewpoint. The Pythagorean identity is itself a statement about sums of squares: setting \(x = 3\sin\theta\) turns \(9 - x^{2}\) into \(9\cos^{2}\theta\), a perfect square, and the root falls away. The substitution changes the variable, so a return step waits at the end; what is gained is an integrand made of trigonometric functions, which §8.2 taught us to handle.</p>
+  <p>The radical \(\sqrt{9 - x^{2}}\) appeared in §8.2’s closing sentence as the next target, and it resists every method so far. No substitution of the form \(u = 9 - x^{2}\) helps unless a spare factor of \(x\) happens to sit in the integrand to supply \(du\). When it does not, the root over a sum or difference of squares blocks every algebraic move. What removes it is a change of viewpoint. The Pythagorean identity is itself a statement about sums of squares: setting \(x = 3\sin\theta\) turns \(9 - x^{2}\) into \(9\cos^{2}\theta\), a perfect square, and the root falls away. The substitution changes the variable, so a return step waits at the end; what is gained is an integrand made of trigonometric functions, which §8.2 taught us to handle.</p>
 
-  <p>One point of honesty before the machinery. In Chapter 6 we substituted \(u = g(x)\), replacing the variable by an expression. Here we run the Substitution Rule (Theorem 6.6) in the other direction, replacing the variable \(x\) by a formula \(x = g(\theta)\) in a new variable. For this to be reversible, \(g\) must be one-to-one, and that is what the restricted ranges in the table below arrange: on \([-\tfrac{\pi}{2}, \tfrac{\pi}{2}]\) the function \(a\sin\theta\) passes each value once, so \(\theta = \arcsin\tfrac{x}{a}\) is well defined, exactly as in §1.2. The same restriction settles a second question. A square root such as \(\sqrt{9\cos^{2}\theta}\) equals \(3\lvert\cos\theta\rvert\), and on \([-\tfrac{\pi}{2}, \tfrac{\pi}{2}]\) the cosine is nonnegative, so the absolute value can be dropped with justification rather than by hope. Every solution in this section begins by naming its substitution, its \(\theta\)-range, and the sign that the range fixes.</p>
+  <p>One point of honesty before we state the method. In Chapter 6 we substituted \(u = g(x)\), replacing the variable by an expression. Here we run the Substitution Rule (Theorem 6.6) in the other direction, replacing the variable \(x\) by a formula \(x = g(\theta)\) in a new variable. For this to be reversible, \(g\) must be one-to-one. That is what the restricted ranges in the table below arrange: on \([-\tfrac{\pi}{2}, \tfrac{\pi}{2}]\) the function \(a\sin\theta\) takes each value exactly once, so \(\theta = \arcsin\tfrac{x}{a}\) is well defined, just as in §1.2. The same restriction settles a second question. A square root such as \(\sqrt{9\cos^{2}\theta}\) equals \(3\lvert\cos\theta\rvert\), and on \([-\tfrac{\pi}{2}, \tfrac{\pi}{2}]\) the cosine is nonnegative, so the absolute value can be dropped with justification rather than by hope. Every solution in this section begins by naming its substitution, its \(\theta\)-range, and the sign that the range fixes.</p>
 
-  <p>Throughout, \(a\) denotes a positive constant. Three radical patterns cover the standard cases, one for each rearrangement of the Pythagorean identity (Proposition A.1).</p>
+  <p>Throughout, \(a\) denotes a positive constant: the radicals involve only \(a^{2}\), so nothing is lost by taking \(a\) positive. Three radical patterns cover the standard cases, one for each rearrangement of the Pythagorean identity (Proposition A.1).</p>
 
   <section class="env env-strategy">
     <p class="env-head"><span class="env-kicker">Strategy</span><span class="env-num">8.4</span><span class="env-name">Trigonometric substitution</span></p>
@@ -940,9 +942,9 @@ window.MathJax = {
       <ol class="steps">
         <li>\(\sqrt{a^{2} - x^{2}}\): substitute \(x = a\sin\theta\), \(\theta \in \bigl[-\tfrac{\pi}{2}, \tfrac{\pi}{2}\bigr]\). Then \(1 - \sin^{2}\theta = \cos^{2}\theta\) gives \(\sqrt{a^{2} - x^{2}} = a\cos\theta\), with \(\cos\theta \ge 0\) on the range.</li>
         <li>\(\sqrt{a^{2} + x^{2}}\): substitute \(x = a\tan\theta\), \(\theta \in \bigl(-\tfrac{\pi}{2}, \tfrac{\pi}{2}\bigr)\). Then \(1 + \tan^{2}\theta = \sec^{2}\theta\) gives \(\sqrt{a^{2} + x^{2}} = a\sec\theta\), with \(\sec\theta &gt; 0\) on the range.</li>
-        <li>\(\sqrt{x^{2} - a^{2}}\): substitute \(x = a\sec\theta\), \(\theta \in \bigl[0, \tfrac{\pi}{2}\bigr)\) for the component \(x \ge a\). Then \(\sec^{2}\theta - 1 = \tan^{2}\theta\) gives \(\sqrt{x^{2} - a^{2}} = a\tan\theta\), with \(\tan\theta \ge 0\) on the range. (For the component \(x \le -a\), see the caution at the end of the section.)</li>
+        <li>\(\sqrt{x^{2} - a^{2}}\): substitute \(x = a\sec\theta\), \(\theta \in \bigl[0, \tfrac{\pi}{2}\bigr)\) for the component \(x \ge a\) of the domain. Then \(\sec^{2}\theta - 1 = \tan^{2}\theta\) gives \(\sqrt{x^{2} - a^{2}} = a\tan\theta\), with \(\tan\theta \ge 0\) on the range. (For the component \(x \le -a\), see the caution at the end of the section.)</li>
       </ol>
-      <p class="informal">To return to \(x\), draw a right triangle that realizes the substitution: mark the angle \(\theta\), and label the sides so that the substitution’s ratio holds. The remaining side, by the Pythagorean theorem, is the radical. Every trigonometric function of \(\theta\) can then be read off as a ratio of labeled sides. The triangle is a mnemonic for identities that the \(\theta\)-range makes valid.</p>
+      <p class="informal">To return to \(x\), draw a right triangle that matches the substitution: mark the angle \(\theta\), and label the sides so that the substitution’s ratio holds. The remaining side, by the Pythagorean theorem, is the radical. Every trigonometric function of \(\theta\) can then be read off as a ratio of labeled sides. The triangle is a mnemonic for identities that the \(\theta\)-range makes valid.</p>
     </div>
   </section>
 
@@ -984,7 +986,7 @@ window.MathJax = {
       <div class="env-body">
         <p>Solving for the upper half gives \(y = \tfrac{b}{a}\sqrt{a^{2} - x^{2}}\) for \(-a \le x \le a\), so the enclosed area is twice the integral of that height:</p>
         <p>\[ A = 2\,\frac{b}{a}\int_{-a}^{a} \sqrt{a^{2} - x^{2}}\,dx = 4\,\frac{b}{a}\int_{0}^{a} \sqrt{a^{2} - x^{2}}\,dx, \]</p>
-        <p>where the second equality uses the evenness of the integrand (Theorem 6.8). The radical matches row 1. Substitute \(x = a\sin\theta\), \(dx = a\cos\theta\,d\theta\), and transform the limits by Theorem 6.7: \(x = 0\) gives \(\theta = 0\) and \(x = a\) gives \(\theta = \tfrac{\pi}{2}\). On \(\bigl[0, \tfrac{\pi}{2}\bigr]\), \(\sqrt{a^{2} - x^{2}} = a\cos\theta\), so</p>
+        <p>where the second equality uses the evenness of the integrand (Theorem 6.8). The radical matches row 1. Substitute \(x = a\sin\theta\), \(dx = a\cos\theta\,d\theta\), and transform the limits by Theorem 6.7: \(x = 0\) gives \(\theta = 0\) and \(x = a\) gives \(\theta = \tfrac{\pi}{2}\). On \(\bigl[0, \tfrac{\pi}{2}\bigr]\), where \(\cos\theta \ge 0\), \(\sqrt{a^{2} - x^{2}} = a\cos\theta\), so</p>
         <p>\[ \begin{aligned}
           \int_{0}^{a} \sqrt{a^{2} - x^{2}}\,dx &= \int_{0}^{\pi/2} a^{2}\cos^{2}\theta\,d\theta = a^{2}\int_{0}^{\pi/2} \frac{1 + \cos 2\theta}{2}\,d\theta \\[2pt]
             &= a^{2}\left[\frac{\theta}{2} + \frac{\sin 2\theta}{4}\right]_{0}^{\pi/2} = \frac{\pi a^{2}}{4},
@@ -997,7 +999,7 @@ window.MathJax = {
   </div>
 
   <!-- expansion:intuition [source: §7.6 forward promise ("Chapter 8 will widen the toolkit… its numerical methods take over") — the perimeter contrast sets up §8.7's motivation] -->
-  <p>The ellipse’s area is now settled; its boundary length is not. For \(a \ne b\), the arc length integral of §7.6 for this curve contains a radical that no row of Strategy 8.4, and no other technique of this chapter, converts to an elementary antiderivative. (The circle \(a = b = r\) is the exception: there the integrand reduces to a constant times \(1/\sqrt{r^{2} - x^{2}}\), which row 1 converts in one line.) The area took four lines; the perimeter sits outside this chapter’s reach. Section 8.7 returns to exactly this kind of integral with numerical rules.</p>
+  <p>The ellipse’s area is now settled; its boundary length is not. For \(a \ne b\), the arc length integral of §7.6 for this curve contains a radical that no row of Strategy 8.4, and no other technique of this chapter, can turn into an integrand whose antiderivative is built from the functions we have named. (The circle \(a = b = r\) is the exception: there the integrand reduces to a constant times \(1/\sqrt{r^{2} - x^{2}}\), which row 1 converts in one line.) The area took four lines; the perimeter sits outside this chapter’s reach. Section 8.7 returns to exactly this kind of integral with numerical rules.</p>
 
     <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 tier-medium — integration region + ×2×2 symmetry; a>b horizontal major axis; named ticks a, b with explicit tex; πab kept off the drawing; adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "ellipse-quarter-area"] -->
   <figure class="figure" data-fig="ellipse-quarter-area">
@@ -1023,7 +1025,7 @@ window.MathJax = {
     </section>
   </div>
 
-  <p>When the radical stands alone in the integrand, as in \(\int\sqrt{x^{2} + a^{2}}\,dx\), the same tangent substitution leads to \(\int\sec^{3}\theta\,d\theta\), which Example 8.10 supplies; this book leaves that longer run unworked.</p>
+  <p>When the radical stands alone in the integrand, as in \(\int\sqrt{x^{2} + a^{2}}\,dx\), the same tangent substitution leads to \(\int\sec^{3}\theta\,d\theta\), which Example 8.10 supplies; this book leaves that longer computation unworked.</p>
 
   <div class="workedexample">
     <section class="env env-example">
@@ -1065,7 +1067,7 @@ window.MathJax = {
         <p>\[ 3 - 2x - x^{2} = 4 - (x + 1)^{2}, \]</p>
         <p>which is positive exactly for \(-3 &lt; x &lt; 1\), the domain of the integrand. The shift \(u = x + 1\), \(du = dx\), \(x = u - 1\) turns the integral into row-1 form:</p>
         <p>\[ \int \frac{u - 1}{\sqrt{4 - u^{2}}}\,du = \int \frac{u}{\sqrt{4 - u^{2}}}\,du - \int \frac{du}{\sqrt{4 - u^{2}}}. \]</p>
-        <p>The first piece has the spare factor that Strategy 8.4’s lead-in asks about: \(w = 4 - u^{2}\), \(dw = -2u\,du\) gives \(-\tfrac{1}{2}\int w^{-1/2}\,dw = -\sqrt{4 - u^{2}}\). The second piece is row 1 with \(a = 2\) and nothing else in the integrand: with \(u = 2\sin\varphi\), \(\varphi \in \bigl(-\tfrac{\pi}{2}, \tfrac{\pi}{2}\bigr)\), both \(du = 2\cos\varphi\,d\varphi\) and \(\sqrt{4 - u^{2}} = 2\cos\varphi\) reduce it to \(\int d\varphi = \varphi = \arcsin\tfrac{u}{2}\). Assembling and returning to \(x\):</p>
+        <p>The first piece has the spare factor that Strategy 8.4’s lead-in asks about: \(w = 4 - u^{2}\), \(dw = -2u\,du\) gives \(-\tfrac{1}{2}\int w^{-1/2}\,dw = -\sqrt{4 - u^{2}}\). The second piece is row 1 with \(a = 2\) and nothing else in the integrand: with \(u = 2\sin\varphi\), \(\varphi \in \bigl(-\tfrac{\pi}{2}, \tfrac{\pi}{2}\bigr)\), where \(\cos\varphi &gt; 0\), both \(du = 2\cos\varphi\,d\varphi\) and \(\sqrt{4 - u^{2}} = 2\cos\varphi\) reduce it to \(\int d\varphi = \varphi = \arcsin\tfrac{u}{2}\). Assembling and returning to \(x\):</p>
         <p>\[ \int \frac{x}{\sqrt{3 - 2x - x^{2}}}\,dx = -\sqrt{3 - 2x - x^{2}} - \arcsin\frac{x + 1}{2} + C, \]</p>
         <p>valid on \((-3, 1)\). Completing the square is what §A.5 promised it would be here: the one algebraic step that brings a general quadratic radical within reach of the table. <span class="qed"></span></p>
       </div>
@@ -1080,7 +1082,7 @@ window.MathJax = {
   </section>
 
   <!-- expansion:summary — close §8.3: what the method is + hygiene recap; forward to §8.4 with no mechanics -->
-  <p>Trigonometric substitution reparametrizes the variable so that a Pythagorean identity collapses a quadratic radical into a perfect square. The discipline is in the ranges: each substitution is one-to-one on its stated interval, the interval fixes the radical’s sign, and the labeled triangle carries the answer back to \(x\). With completing the square, the method reaches any \(\sqrt{px^{2} + qx + r}\). What it does not touch is the other standard shape built from polynomials: a ratio of two of them, with no radical in sight. Integrating rational functions is the next section’s business, and the algebra for it is already waiting in Appendix A.4.</p>
+  <p>Trigonometric substitution replaces the variable by a trigonometric formula so that a Pythagorean identity turns the quadratic under the root into a perfect square. The discipline is in the ranges: each substitution is one-to-one on its stated interval, the interval fixes the radical’s sign, and the labeled triangle carries the answer back to \(x\). With completing the square, the method reaches any \(\sqrt{px^{2} + qx + r}\). What it does not touch is the other standard shape built from polynomials: a ratio of two of them, with no radical in sight. Integrating rational functions is the next section’s business, and the algebra for it is already waiting in Appendix A.4.</p>
 
 </article>
 </template>
@@ -1109,9 +1111,9 @@ window.MathJax = {
   </header>
 
   <!-- expansion:intuition — section opener: opaque-as-a-whole, transparent-in-fragments; §A.4's banked promise is kept here -->
-  <p>A rational function, a ratio of polynomials, matches nothing in the chapter so far. The integrand \(\dfrac{2x^{2} - x + 4}{x^{3} + 4x}\) offers no product to trade by parts, no trigonometry, and no radical. Yet the smallest rational integrand of all is easy, because §A.4 opened with the identity</p>
+  <p>A rational function, a ratio of polynomials, matches nothing in the chapter so far. The integrand \(\dfrac{2x^{2} - x + 4}{x^{3} + 4x}\) offers no product to trade by parts, no trigonometry, and no radical. Yet one of the smallest rational integrands is already easy, because §A.4 opened with the identity</p>
   <p>\[ \frac{1}{x(x + 1)} = \frac{1}{x} - \frac{1}{x + 1}, \]</p>
-  <p>and each piece on the right integrates on sight, to \(\ln\lvert x\rvert - \ln\lvert x + 1\rvert + C\) by §6.4. Appendix A.4 built the whole algebra of such splittings and remarked that its real payoff would come in integration. This section collects that payoff. Every proper rational function is a sum of fragments of a few standard shapes (Proposition A.7), the constants are found by the routine of Strategy A.2, and each fragment shape has a standard antiderivative. Rational integrands, unlike most others, always yield.</p>
+  <p>and each piece on the right integrates on sight, to \(\ln\lvert x\rvert - \ln\lvert x + 1\rvert + C\) by §6.4. Appendix A.4 built the whole algebra of such splittings and remarked that its real payoff would come in integration. This section collects that payoff. Every proper rational function is a sum of fragments of a few standard shapes (Proposition A.7), the constants are found by the routine of Strategy A.2, and each fragment shape has a standard antiderivative. For rational integrands, unlike most others, the method always succeeds.</p>
 
   <p>The claim “every proper rational function” rests on one algebraic fact that this book states but does not prove.</p>
 
@@ -1123,10 +1125,10 @@ window.MathJax = {
     </div>
   </section>
 
-  <p>One small antiderivative is needed before the fragments can be listed, the scaled version of §6.4’s arctangent row. For \(a &gt; 0\), substitute \(u = x/a\), \(du = dx/a\), in the table entry \(\int\frac{du}{1 + u^{2}} = \arctan u + C\):</p>
+  <p>Before the fragments can be listed, one small antiderivative is needed: the scaled version of §6.4’s arctangent row. For \(a &gt; 0\), substitute \(u = x/a\), \(du = dx/a\), in the table entry \(\int\frac{du}{1 + u^{2}} = \arctan u + C\):</p>
   <p>\[ \int \frac{dx}{x^{2} + a^{2}} = \frac{1}{a^{2}}\int \frac{a\,du}{1 + u^{2}} = \frac{1}{a}\arctan\frac{x}{a} + C. \tag{8.A} \]</p>
 
-  <p>With (8.A) in hand, every fragment shape that Proposition A.7 can produce has a known antiderivative. A constant over a linear factor gives a logarithm, \(\int\frac{A}{x - r}\,dx = A\ln\lvert x - r\rvert + C\). A constant over a power of a linear factor is the power rule, \(\int\frac{A}{(x - r)^{k}}\,dx = \frac{-A}{(k - 1)(x - r)^{k - 1}} + C\) for \(k \ge 2\). A linear numerator over an irreducible quadratic splits in two: a multiple of the quadratic’s derivative, giving a logarithm of the quadratic, plus a constant piece that (8.A) handles once the square is completed. The examples run each shape in turn; the strategy box states the pipeline.</p>
+  <p>With (8.A) in hand, every fragment shape that Proposition A.7 can produce has a known antiderivative. A constant over a linear factor gives a logarithm, \(\int\frac{A}{x - r}\,dx = A\ln\lvert x - r\rvert + C\). A constant over a power of a linear factor integrates by the power rule, \(\int\frac{A}{(x - r)^{k}}\,dx = \frac{-A}{(k - 1)(x - r)^{k - 1}} + C\) for \(k \ge 2\). A linear numerator over an irreducible quadratic splits in two: a multiple of the quadratic’s derivative, giving a logarithm of the quadratic, plus a constant piece that (8.A) handles once the square is completed. The examples run each shape in turn; the strategy box states the pipeline.</p>
 
   <section class="env env-strategy">
     <p class="env-head"><span class="env-kicker">Strategy</span><span class="env-num">8.5</span><span class="env-name">Integrating a rational function</span></p>
@@ -1135,7 +1137,7 @@ window.MathJax = {
         <li><em>If the fraction is improper, divide first.</em> Numerator degree at or above denominator degree means polynomial division, leaving a polynomial plus a proper remainder fraction (Strategy A.2, step 1). The polynomial integrates term by term.</li>
         <li><em>Factor the denominator completely</em> into linear and irreducible quadratic factors. A quadratic \(x^{2} + px + q\) is irreducible exactly when \(p^{2} &lt; 4q\).</li>
         <li><em>Decompose.</em> Write the template of Proposition A.7 and find the constants by Strategy A.2. The cover-up shortcut reaches the constant over each distinct linear factor at once.</li>
-        <li><em>Integrate fragment by fragment:</em> logarithms from linear factors, the power rule from their powers, and a logarithm plus an arctangent, via completing the square (§A.5) and (8.A), from each irreducible quadratic.</li>
+        <li><em>Integrate fragment by fragment:</em> logarithms from linear factors, power-rule antiderivatives from their powers, and a logarithm plus an arctangent, via completing the square (§A.5) and (8.A), from each irreducible quadratic.</li>
       </ol>
     </div>
   </section>
@@ -1152,7 +1154,7 @@ window.MathJax = {
       <div class="env-body">
         <p>The numerator’s degree exceeds the denominator’s, so step 1 applies before anything else. Polynomial division gives</p>
         <p>\[ \frac{x^{3} + x}{x - 1} = x^{2} + x + 2 + \frac{2}{x - 1}, \]</p>
-        <p>which recombining over the common denominator confirms. Now every piece is standard:</p>
+        <p>which can be checked by recombining over the common denominator. Now every piece is standard:</p>
         <p>\[ \int \frac{x^{3} + x}{x - 1}\,dx = \frac{x^{3}}{3} + \frac{x^{2}}{2} + 2x + 2\ln\lvert x - 1\rvert + C, \]</p>
         <p>on any interval avoiding \(x = 1\). The division step is not optional. No sum of terms \(\frac{A}{x-1}\) alone could reproduce a numerator that outgrows its denominator, which is the point of §A.4’s closing caution. <span class="qed"></span></p>
       </div>
@@ -1174,7 +1176,7 @@ window.MathJax = {
         <p>Clearing denominators,</p>
         <p>\[ x^{2} + 2x - 1 = A(2x - 1)(x + 2) + Bx(x + 2) + Cx(2x - 1), \]</p>
         <p>and the cover-up shortcut of Strategy A.2 evaluates at each factor’s root. Setting \(x = 0\) gives \(-1 = -2A\), so \(A = \tfrac{1}{2}\). Setting \(x = \tfrac{1}{2}\) gives \(\tfrac{1}{4} = \tfrac{5}{4}B\), so \(B = \tfrac{1}{5}\). Setting \(x = -2\) gives \(-1 = 10C\), so \(C = -\tfrac{1}{10}\). Each fragment is a logarithm; for the middle one, the inner substitution \(u = 2x - 1\) contributes the factor \(\tfrac{1}{2}\):</p>
-        <p>\[ \int \frac{x^{2} + 2x - 1}{2x^{3} + 3x^{2} - 2x}\,dx = \frac{1}{2}\ln\lvert x\rvert + \frac{1}{10}\ln\lvert 2x - 1\rvert - \frac{1}{10}\ln\lvert x + 2\rvert + C, \]</p>
+        <p>\[ \int \frac{x^{2} + 2x - 1}{2x^{3} + 3x^{2} - 2x}\,dx = \frac{1}{2}\ln\lvert x\rvert + \frac{1}{10}\ln\lvert 2x - 1\rvert - \frac{1}{10}\ln\lvert x + 2\rvert + K, \]</p>
         <p>on any interval avoiding \(0\), \(\tfrac{1}{2}\), and \(-2\). <span class="qed"></span></p>
       </div>
     </section>
@@ -1194,10 +1196,10 @@ window.MathJax = {
         <p>\[ \frac{x^{4} - 2x^{2} + 4x + 1}{x^{3} - x^{2} - x + 1} = x + 1 + \frac{4x}{x^{3} - x^{2} - x + 1}. \]</p>
         <p>Factoring by grouping, \(x^{3} - x^{2} - x + 1 = x^{2}(x - 1) - (x - 1) = (x - 1)(x^{2} - 1) = (x - 1)^{2}(x + 1)\): a repeated linear factor. The template carries one fragment per power:</p>
         <p>\[ \frac{4x}{(x - 1)^{2}(x + 1)} = \frac{A}{x - 1} + \frac{B}{(x - 1)^{2}} + \frac{C}{x + 1}. \]</p>
-        <p>Clearing denominators, \(4x = A(x - 1)(x + 1) + B(x + 1) + C(x - 1)^{2}\). Setting \(x = 1\) gives \(4 = 2B\), so \(B = 2\). Setting \(x = -1\) gives \(-4 = 4C\), so \(C = -1\). The cover-up has reached its limit, as Strategy A.2 warns for repeated factors, so match the \(x^{2}\) coefficients: \(0 = A + C\), so \(A = 1\). Integrating fragment by fragment, with the power rule on the middle one,</p>
+        <p>Clearing denominators, \(4x = A(x - 1)(x + 1) + B(x + 1) + C(x - 1)^{2}\). Setting \(x = 1\) gives \(4 = 2B\), so \(B = 2\). Setting \(x = -1\) gives \(-4 = 4C\), so \(C = -1\). The cover-up shortcut cannot reach \(A\), as Strategy A.2 warns for repeated factors, so match the \(x^{2}\) coefficients: \(0 = A + C\), so \(A = 1\). Integrating fragment by fragment, with the power rule on the middle one,</p>
         <p>\[ \begin{aligned}
           \int \frac{x^{4} - 2x^{2} + 4x + 1}{x^{3} - x^{2} - x + 1}\,dx &= \frac{x^{2}}{2} + x + \ln\lvert x - 1\rvert \\
-            &\quad - \frac{2}{x - 1} - \ln\lvert x + 1\rvert + C,
+            &\quad - \frac{2}{x - 1} - \ln\lvert x + 1\rvert + K,
         \end{aligned} \]</p>
         <p>on any interval avoiding \(\pm 1\). <span class="qed"></span></p>
       </div>
@@ -1219,10 +1221,10 @@ window.MathJax = {
         <p>Clearing denominators, \(2x^{2} - x + 4 = A(x^{2} + 4) + (Bx + C)x\). The constant term gives \(4 = 4A\), so \(A = 1\); the \(x^{2}\) coefficient gives \(2 = A + B\), so \(B = 1\); the \(x\) coefficient gives \(C = -1\). The quadratic fragment splits into its two standard pieces:</p>
         <p>\[ \begin{aligned}
           \int \frac{x - 1}{x^{2} + 4}\,dx &= \frac{1}{2}\int \frac{2x}{x^{2} + 4}\,dx - \int \frac{dx}{x^{2} + 4} \\[2pt]
-            &= \frac{1}{2}\ln\bigl(x^{2} + 4\bigr) - \frac{1}{2}\arctan\frac{x}{2} + C,
+            &= \frac{1}{2}\ln\bigl(x^{2} + 4\bigr) - \frac{1}{2}\arctan\frac{x}{2} + K,
         \end{aligned} \]</p>
         <p>the first by the substitution \(u = x^{2} + 4\) and the second by (8.A) with \(a = 2\). No absolute value is needed on \(x^{2} + 4\), which is positive for every \(x\). Assembling,</p>
-        <p>\[ \int \frac{2x^{2} - x + 4}{x^{3} + 4x}\,dx = \ln\lvert x\rvert + \frac{1}{2}\ln\bigl(x^{2} + 4\bigr) - \frac{1}{2}\arctan\frac{x}{2} + C, \]</p>
+        <p>\[ \int \frac{2x^{2} - x + 4}{x^{3} + 4x}\,dx = \ln\lvert x\rvert + \frac{1}{2}\ln\bigl(x^{2} + 4\bigr) - \frac{1}{2}\arctan\frac{x}{2} + K, \]</p>
         <p>on any interval avoiding \(0\). <span class="qed"></span></p>
       </div>
     </section>
@@ -1231,11 +1233,13 @@ window.MathJax = {
   <section class="env env-caution">
     <p class="env-head"><span class="env-kicker">Caution</span></p>
     <div class="env-body">
-      <p>Check irreducibility before assigning the \(Bx + C\) template: \(x^{2} + px + q\) is irreducible exactly when \(p^{2} &lt; 4q\). A quadratic that looks unfactorable often is not. The factor \(x^{2} - x - 6\) splits as \((x - 3)(x + 2)\), and treating it as irreducible sends the whole decomposition down the wrong template. When in doubt, compute the discriminant first.</p>
+      <p>Check irreducibility before assigning the \(Bx + C\) template: \(x^{2} + px + q\) is irreducible exactly when \(p^{2} &lt; 4q\). A quadratic that looks unfactorable often factors after all. The factor \(x^{2} - x - 6\) splits as \((x - 3)(x + 2)\), and treating it as irreducible puts the whole decomposition on the wrong template. When in doubt, compute the discriminant first.</p>
     </div>
   </section>
 
   <p>A repeated irreducible quadratic, the last case of Proposition A.7, adds no new integration idea: each power \(\frac{Bx + C}{(x^{2} + px + q)^{k}}\) again splits into a derivative-of-the-quadratic piece and a constant piece, and the constant pieces are handled by completing the square and a short reduction. The bookkeeping is longer, the shapes are the same, and this book leaves that case as stated.</p>
+
+  <p>One tool from step 4 has not yet appeared in action: completing the square.</p>
 
   <div class="workedexample">
     <section class="env env-example">
@@ -1284,13 +1288,13 @@ window.MathJax = {
         <p>\[ 2\int \frac{u^{2}}{u^{2} - 4}\,du = 2u + 2\ln\lvert u - 2\rvert - 2\ln\lvert u + 2\rvert + C, \]</p>
         <p>and returning to \(x\),</p>
         <p>\[ \int \frac{\sqrt{x + 4}}{x}\,dx = 2\sqrt{x + 4} + 2\ln\left\lvert \frac{\sqrt{x + 4} - 2}{\sqrt{x + 4} + 2} \right\rvert + C. \]</p>
-        <p>Differentiating confirms the formula, and the same check shows it also serves on the other component, \(-4 &lt; x &lt; 0\). The solution chained three techniques in order: a substitution to remove the radical, a division to make the fraction proper, and partial fractions to finish. That chaining is the normal condition of integration practice, and the next section is about choosing such chains deliberately. <span class="qed"></span></p>
+        <p>Differentiating confirms the formula, and the same check shows it also serves on the other component, \(-4 &lt; x &lt; 0\). The solution chained three techniques in order: a substitution to remove the radical, a division to make the fraction proper, and partial fractions to finish. That chaining is how integration usually proceeds in practice, and the next section is about choosing such chains deliberately. <span class="qed"></span></p>
       </div>
     </section>
   </div>
 
   <!-- expansion:summary — close §8.4: the pipeline + the honest credit; forward to §8.5 with no mechanics -->
-  <p>Rational functions are the best-behaved integrands in this chapter: Strategy 8.5’s four steps, divide, factor, decompose, integrate, always terminate, and the only borrowed ingredient is the factorization fact taken on credit above. Linear factors end in logarithms, their powers in the power rule, and irreducible quadratics in a logarithm plus an arctangent through (8.A). With parts, trigonometric methods, substitution, and partial fractions all in hand, the toolkit is complete. What remains is judgment: given an unfamiliar integral, which tool comes first? That question has a strategy of its own.</p>
+  <p>Rational functions are the best-behaved integrands in this chapter: Strategy 8.5’s four steps (divide, factor, decompose, integrate) always terminate, and the only borrowed ingredient is the factorization fact taken on credit above. Linear factors end in logarithms, their powers in power-rule terms, and irreducible quadratics in a logarithm plus an arctangent through (8.A). With parts, trigonometric methods, substitution, and partial fractions all in hand, the toolkit is complete. What remains is judgment: given an unfamiliar integral, which tool comes first? That question has a strategy of its own.</p>
 
 </article>
 </template>
@@ -1322,21 +1326,21 @@ window.MathJax = {
   <!-- expansion:intuition — section opener: the collision (four look-alike integrals, four different tools) reframes the chapter's question from "how does each technique work" to "which technique fits" -->
   <p>Each section so far answered the question “how does this technique work”. Practice asks a different question. An integral arrives unlabeled, and the work is to decide which tool fits, before any tool is applied. The four integrals</p>
   <p>\[ \int \frac{\tan^{3}x}{\cos^{3}x}\,dx, \qquad \int e^{\sqrt{x}}\,dx, \qquad \int \frac{dx}{x\sqrt{\ln x}}, \qquad \int \sqrt{\frac{1 - x}{1 + x}}\,dx \]</p>
-  <p>look like near relatives: each is a small expression with one awkward feature. They dispatch to four different tools, and none of them is solved by the tool its surface suggests first. Reading form is a skill of its own. It costs seconds, it tolerates failure, and this section trains it.</p>
+  <p>look like near relatives: each is a small expression with one awkward feature. They go to four different tools, and none of them is best solved by the tool its form suggests first. Reading form is a skill of its own. It takes only seconds, a wrong guess costs little, and this section trains it.</p>
 
   <section class="env env-strategy">
     <p class="env-head"><span class="env-kicker">Strategy</span><span class="env-num">8.6</span><span class="env-name">A four-step strategy</span></p>
     <div class="env-body">
       <ol class="steps">
         <li><em>Simplify the integrand first.</em> Algebra and identities can change the problem’s class entirely: expand or split fractions, rationalize, apply a trigonometric identity. Only then judge what kind of integral it is.</li>
-        <li><em>Look for an obvious substitution.</em> If some inner block \(g(x)\) appears together with its derivative, up to a constant, take \(u = g(x)\) (Strategy 6.2) and finish before reaching for anything heavier.</li>
+        <li><em>Look for an obvious substitution.</em> If some inner function \(g(x)\) appears together with its derivative, up to a constant factor, take \(u = g(x)\) (Strategy 6.2) and finish before reaching for anything heavier.</li>
         <li><em>Classify by form and dispatch.</em> Powers or products of trigonometric functions go to Strategies 8.2 and 8.3. A radical over a quadratic goes to Strategy 8.4, completing the square first when the quadratic is not centered. A rational function goes to Strategy 8.5. A product of unrelated factors, or a lone logarithm or inverse function, goes to parts by Strategy 8.1.</li>
         <li><em>If nothing has worked, try again from another angle.</em> Manipulate the integrand into a relative of a known integral, substitute to expose hidden structure, or chain techniques in sequence, as Examples 8.22 and 8.24 do. Several routes may succeed on the same integral; a dead end costs only the time it took.</li>
       </ol>
     </div>
   </section>
 
-  <p>Step 3 leans on a stock of antiderivatives that can be recognized on sight. One scaled form joins the list first: differentiating \(\arcsin\tfrac{x}{a}\) by the chain rule (Theorem 3.3) and Example 3.14 gives \(\tfrac{1}{\sqrt{a^{2} - x^{2}}}\), so \(\int\tfrac{dx}{\sqrt{a^{2} - x^{2}}} = \arcsin\tfrac{x}{a} + C\) for \(a &gt; 0\) on \((-a, a)\). The working table, with each entry’s home in parentheses:</p>
+  <p>Step 3 leans on a stock of antiderivatives that can be recognized on sight. One scaled form joins the list first: differentiating \(\arcsin\tfrac{x}{a}\) by the chain rule (Theorem 3.3) and Example 3.14 gives \(\tfrac{1}{\sqrt{a^{2} - x^{2}}}\), so \(\int\tfrac{dx}{\sqrt{a^{2} - x^{2}}} = \arcsin\tfrac{x}{a} + C\) for \(a &gt; 0\) on \((-a, a)\). The working table, with each entry’s source in parentheses:</p>
 
   <p>\[ \begin{aligned}
     &\int x^{n}\,dx = \frac{x^{n+1}}{n+1} + C \;(n \ne -1), \qquad \int \frac{dx}{x} = \ln\lvert x\rvert + C \quad(\text{§6.4}), \\[2pt]
@@ -1347,6 +1351,8 @@ window.MathJax = {
     &\int \frac{dx}{x^{2} + a^{2}} = \frac{1}{a}\arctan\frac{x}{a} + C \quad(\text{8.A}), \\[2pt]
     &\int \frac{dx}{\sqrt{a^{2} - x^{2}}} = \arcsin\frac{x}{a} + C \quad(\text{above}).
   \end{aligned} \]</p>
+
+  <p>We now run the opening’s four integrals through the strategy, in order.</p>
 
   <div class="workedexample">
     <section class="env env-example">
@@ -1362,7 +1368,7 @@ window.MathJax = {
         <p>\[ \int \tan^{3}x\,\sec^{3}x\,dx = \int \bigl(\sec^{2}x - 1\bigr)\sec^{2}x\;\sec x\tan x\,dx. \]</p>
         <p>With \(u = \sec x\), \(du = \sec x\tan x\,dx\), this is \(\int(u^{4} - u^{2})\,du\), so</p>
         <p>\[ \int \frac{\tan^{3}x}{\cos^{3}x}\,dx = \frac{\sec^{5}x}{5} - \frac{\sec^{3}x}{3} + C. \]</p>
-        <p>The only decision was the rewrite in step 1; after it, the §8.2 machinery finished the integral with no further choices. <span class="qed"></span></p>
+        <p>The only decision was the rewrite in step 1; after it, the machinery of Strategy 8.3 finished the integral with no further choices. <span class="qed"></span></p>
       </div>
     </section>
   </div>
@@ -1398,7 +1404,7 @@ window.MathJax = {
       <div class="env-body">
         <p>Step 2 settles this one before any classification: the factor \(\tfrac{dx}{x}\) is exactly the derivative of \(\ln x\), so \(u = \ln x\) is the obvious substitution, with \(u &gt; 0\) on the stated domain:</p>
         <p>\[ \int \frac{dx}{x\sqrt{\ln x}} = \int u^{-1/2}\,du = 2\sqrt{u} + C = 2\sqrt{\ln x} + C. \]</p>
-        <p>An integrand that looks exotic can be two lines long. Checking for the visible \(du\) first is what keeps the heavier tools in reserve. <span class="qed"></span></p>
+        <p>An integrand that looks exotic can have a two-line solution. Checking for the visible \(du\) first is what keeps the heavier tools in reserve. <span class="qed"></span></p>
       </div>
     </section>
   </div>
@@ -1425,10 +1431,12 @@ window.MathJax = {
   <h3 class="subsec-head">The limits of the toolkit</h3>
 
   <!-- expansion:intuition [source: ③ B-02 adjudicated form — scope statement, no nonexistence claim, no Liouville credit; forward hooks to §8.6/§8.7] -->
-  <p>A fair question after five sections of techniques: does every integrand now yield? Try the innocent-looking \(\int e^{-x^{2}}\,dx\). It is not a product, no substitution exposes an inner derivative, it is neither trigonometric nor rational, and no rewriting in this chapter changes that. None of the techniques of this book produces an antiderivative for it built from the functions we have named. Whether <em>any</em> formula of that kind exists is a question this book does not take up; what matters here is practical, and it is twofold. First, antiderivatives are not the only way to a definite integral: the next section shows that \(\int_{1}^{\infty} e^{-x^{2}}\,dx\) is a perfectly well-defined finite number even without a formula for its antiderivative. Second, when a number is what we need, §8.7’s rules compute it to any stated accuracy. The toolkit’s boundary is real, and the chapter’s last two sections are what lie on the far side of it. There are further systematic conversions beyond this book’s needs, including one that turns any rational expression in \(\sin x\) and \(\cos x\) into an ordinary rational function; the four steps above are enough for everything this book asks.</p>
+  <p>A fair question after five sections of techniques: does every integrand now yield to the toolkit? Try the innocent-looking \(\int e^{-x^{2}}\,dx\). It is not a product, no substitution exposes an inner derivative, it is neither trigonometric nor rational, and no rewriting in this chapter changes that. None of the techniques of this book produces an antiderivative for it that is built from the functions we have named. Whether <em>any</em> formula of that kind exists is a question this book does not take up.</p>
+  <p>What matters here is practical, and it is twofold. First, antiderivatives are not the only way to a definite integral: the next section shows that \(\int_{1}^{\infty} e^{-x^{2}}\,dx\) is a perfectly well-defined finite number even without a formula for its antiderivative. Second, when a number is what we need, §8.7’s rules compute it to any stated accuracy. The toolkit’s boundary is real, and the chapter’s last two sections are what lie on the far side of it.</p>
+  <p>There are further systematic conversions beyond this book’s needs, including one that turns any rational expression in \(\sin x\) and \(\cos x\) into an ordinary rational function; the four steps above are enough for everything this book asks.</p>
 
   <!-- expansion:summary — close §8.5: the classification skill; forward to §8.6 with no mechanics -->
-  <p>The strategy is short because the work has already been done: simplify, check for a visible substitution, classify, and dispatch to the section that owns the form, chaining techniques when one hands off to another. The four examples each turned on the step named in their solutions, not on new machinery. What follows next is not another technique but a widening of the integral itself, to infinite intervals and unbounded integrands, where the first question is no longer “which tool” but “does this integral mean anything at all”.</p>
+  <p>The strategy is short because the work was done in the sections it points to: simplify, check for a visible substitution, classify, and dispatch to the section that covers the form, chaining techniques when the first leaves a new form for the second. The four examples were each decided by the step named in their solutions, not by new machinery. What follows next is not another technique but a widening of the integral itself, to infinite intervals and unbounded integrands, where the first question is no longer “which tool” but “does this integral mean anything at all”.</p>
 
 </article>
 </template>
@@ -1462,7 +1470,7 @@ window.MathJax = {
   </header>
 
   <!-- expansion:intuition — section opener: the collision (Def 6.2 needs a closed interval + continuous integrand; the symbol has no meaning otherwise) and the one extension move: limits of proper integrals -->
-  <p>Every integral so far has lived on a closed interval \([a, b]\): Definition 6.2 builds its Riemann sums from finitely many slices of a bounded interval, and for the continuous integrands this book evaluates, Theorem 6.1 guarantees the sums converge. Two natural questions leave that setting. What is the area under \(y = 1/x^{2}\) from \(x = 1\) all the way out? And what is the area under \(y = 1/\sqrt{x - 2}\) from \(2\) to \(5\), where the integrand blows up at the left end? In both cases the symbol \(\int\) has, as it stands, no meaning: no Riemann sum machinery applies. But the book already owns a device for questions like these. Truncate to a proper integral, and ask what the truncations approach. For the first region, \(\int_{1}^{t} x^{-2}\,dx = 1 - \tfrac{1}{t}\), and as \(t\) grows these values settle toward \(1\). An endless region can hold a finite area, and a limit is how we say so. This section extends the integral by exactly that move, made twice: once for infinite intervals, once for unbounded integrands.</p>
+  <p>Every integral so far has lived on a closed interval \([a, b]\): Definition 6.2 builds its Riemann sums from finitely many slices of a bounded interval, and for the continuous integrands this book evaluates, Theorem 6.1 guarantees the sums converge. Two natural questions leave that setting. What is the area under \(y = 1/x^{2}\) from \(x = 1\) out to infinity? And what is the area under \(y = 1/\sqrt{x - 2}\) from \(2\) to \(5\), where the integrand blows up at the left end? In both cases the symbol \(\int\) has, as it stands, no meaning: no Riemann sum machinery applies. But the book already owns a device for questions like these. Truncate to a proper integral, and ask what the truncations approach. For the first region, \(\int_{1}^{t} x^{-2}\,dx = 1 - \tfrac{1}{t}\), and as \(t\) grows these values settle toward \(1\). An endless region can hold a finite area, and a limit is how we say so. This section extends the integral by exactly that move, made twice: once for infinite intervals, once for unbounded integrands.</p>
 
   <h3 class="subsec-head">Type 1: infinite intervals</h3>
 
@@ -1505,7 +1513,7 @@ window.MathJax = {
 
     <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 tier-essential — load-bearing intuition of §8.6; nested coding (deep under 1/x², light between curves, ghost past t) per gate render note; adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "tail-comparison"] -->
   <figure class="figure" data-fig="tail-comparison">
-    <figcaption><span class="fig-no">Figure 8.6</span> The tails of \(y = 1/x\) and \(y = 1/x^{2}\) on \([1, \infty)\). The curves meet only at \((1, 1)\) and both decay to \(0\); the deeper region under \(1/x^{2}\) stalls at total area \(1\), while the region under \(1/x\) keeps growing as the cutoff \(t\) moves right. How fast the tail thins decides the verdict.</figcaption>
+    <figcaption><span class="fig-no">Figure 8.6</span> The tails of \(y = 1/x\) and \(y = 1/x^{2}\) on \([1, \infty)\). The curves meet only at \((1, 1)\) and both decay to \(0\); the darker region under \(1/x^{2}\) stalls at total area \(1\), while the region under \(1/x\) keeps growing as the cutoff \(t\) moves right. How fast the tail thins decides the verdict.</figcaption>
   </figure>
 
   <div class="workedexample">
@@ -1530,7 +1538,7 @@ window.MathJax = {
   <section class="env env-caution">
     <p class="env-head"><span class="env-kicker">Caution</span></p>
     <div class="env-body">
-      <p>Definition 8.1(c) requires both halves to converge <em>separately</em>. It is not the same as \(\lim_{t \to \infty}\int_{-t}^{t} f(x)\,dx\), and the difference is not pedantry. For \(f(x) = x\), every symmetric truncation gives \(\int_{-t}^{t} x\,dx = 0\), yet each half of \(\int_{-\infty}^{\infty} x\,dx\) diverges, so the integral diverges. Symmetric cancellation of two infinite areas is not convergence.</p>
+      <p>Definition 8.1(c) requires both halves to converge <em>separately</em>. It is not the same as \(\lim_{t \to \infty}\int_{-t}^{t} f(x)\,dx\), and the difference matters. For \(f(x) = x\), every symmetric truncation gives \(\int_{-t}^{t} x\,dx = 0\), yet each half of \(\int_{-\infty}^{\infty} x\,dx\) diverges, so the integral diverges. Symmetric cancellation of two infinite areas is not convergence.</p>
     </div>
   </section>
 
@@ -1546,9 +1554,9 @@ window.MathJax = {
       <div class="env-body">
         <p>On each interval \([0, s]\), integrate by parts (Theorem 8.2) with \(u = t\), \(dv = e^{-t}\,dt\), so \(du = dt\) and \(v = -e^{-t}\):</p>
         <p>\[ \int_{0}^{s} t e^{-t}\,dt = \Bigl[-t e^{-t}\Bigr]_{0}^{s} + \int_{0}^{s} e^{-t}\,dt = -s e^{-s} + \bigl(1 - e^{-s}\bigr). \]</p>
-        <p>As \(s \to \infty\), the exponential term \(e^{-s} \to 0\), and \(s e^{-s} = s/e^{s}\) is an \(\infty/\infty\) form that L’Hôpital’s Rule (Theorem 5.5) settles: \(s/e^{s} \to 1/e^{s} \to 0\). So the truncations approach \(0 + 1 - 0\), and</p>
+        <p>As \(s \to \infty\), the exponential term \(e^{-s} \to 0\), and \(s e^{-s} = s/e^{s}\) is an \(\infty/\infty\) form that L’Hôpital’s Rule (Theorem 5.5) settles: the quotient has the same limit as \(1/e^{s}\), namely \(0\). So the truncations approach \(0 + 1 - 0\), and</p>
         <p>\[ \int_{0}^{\infty} t e^{-t}\,dt = 1. \]</p>
-        <p>The techniques and the extended definition work in series: parts produced the truncated value, and the limit made sense of the infinite interval. <span class="qed"></span></p>
+        <p>The techniques and the extended definition worked one after the other: parts produced the truncated value, and the limit made sense of the infinite interval. <span class="qed"></span></p>
       </div>
     </section>
   </div>
@@ -1581,10 +1589,10 @@ window.MathJax = {
       <div class="env-body">
         <p>(a) The integrand is continuous on \((2, 5]\) and unbounded near \(2\), so Definition 8.2(b) applies. For \(2 &lt; t &lt; 5\),</p>
         <p>\[ \int_{t}^{5} \frac{dx}{\sqrt{x - 2}} = \Bigl[2\sqrt{x - 2}\Bigr]_{t}^{5} = 2\sqrt{3} - 2\sqrt{t - 2} \longrightarrow 2\sqrt{3} \]</p>
-        <p>as \(t \to 2^{+}\). The integral converges to \(2\sqrt{3}\): the spike at \(x = 2\) is tall but thin enough.</p>
+        <p>as \(t \to 2^{+}\). This answers the opener’s second question: the integral converges to \(2\sqrt{3}\), because the spike at \(x = 2\) is tall but thin enough.</p>
         <p>(b) For \(p \ne 1\) and \(0 &lt; t &lt; 1\),</p>
         <p>\[ \int_{t}^{1} x^{-p}\,dx = \frac{1 - t^{1 - p}}{1 - p}. \]</p>
-        <p>If \(p &lt; 1\), then \(t^{1-p} \to 0\) as \(t \to 0^{+}\), and the integral converges to \(\tfrac{1}{1 - p}\). If \(p &gt; 1\), then \(t^{1-p}\) grows without bound and the integral diverges; for \(p = 1\), \(\int_{t}^{1} \tfrac{dx}{x} = -\ln t\) also grows without bound. So \(\int_{0}^{1} x^{-p}\,dx\) converges exactly when \(p &lt; 1\). This is the mirror image of the \(p\)-test proved below: at \(0\) the mild powers converge, at \(\infty\) the steep ones do, and \(p = 1\) fails at both ends. <span class="qed"></span></p>
+        <p>If \(p &lt; 1\), then \(t^{1-p} \to 0\) as \(t \to 0^{+}\), and the integral converges to \(\tfrac{1}{1 - p}\). If \(p &gt; 1\), then \(t^{1-p}\) grows without bound and the integral diverges; for \(p = 1\), \(\int_{t}^{1} \tfrac{dx}{x} = -\ln t\) also grows without bound. So \(\int_{0}^{1} x^{-p}\,dx\) converges exactly when \(p &lt; 1\). This is the mirror image of the \(p\)-test proved below: at \(0\) the mild powers \((p &lt; 1)\) converge, at \(\infty\) the steep ones \((p &gt; 1)\) do, and \(p = 1\) fails at both ends. <span class="qed"></span></p>
       </div>
     </section>
   </div>
@@ -1606,7 +1614,7 @@ window.MathJax = {
       <div class="env-body">
         <p>The answer refutes itself: the integrand is positive, and a definite integral of a positive function cannot be negative (Theorem 6.2, part 4). The error is upstream. The Fundamental Theorem applies to integrands continuous on the whole interval, and \(1/x^{2}\) is unbounded near the interior point \(0\). The integral is improper, and Definition 8.2(c) requires splitting there:</p>
         <p>\[ \int_{-1}^{3} \frac{dx}{x^{2}} = \int_{-1}^{0} \frac{dx}{x^{2}} + \int_{0}^{3} \frac{dx}{x^{2}}, \]</p>
-        <p>provided both halves converge. They do not: near \(0\) the integrand is a \(p = 2\) power, and by the computation of Example 8.30(b), read on the interval \((0, 3]\), the right half diverges. So \(\int_{-1}^{3} x^{-2}\,dx\) diverges, and the number \(-\tfrac{4}{3}\) was meaningless. <span class="qed"></span></p>
+        <p>provided both halves converge. They do not: near \(0\) the integrand is a \(p = 2\) power, and by the computation of Example 8.30(b), repeated on the interval \((0, 3]\), the right half diverges. So \(\int_{-1}^{3} x^{-2}\,dx\) diverges, and the number \(-\tfrac{4}{3}\) was meaningless. <span class="qed"></span></p>
       </div>
     </section>
   </div>
@@ -1625,7 +1633,7 @@ window.MathJax = {
 
   <h3 class="subsec-head">The \(p\)-test and the Comparison Theorem</h3>
 
-  <p>Example 8.27’s contrast deserves its exact boundary. The family \(\int_{1}^{\infty} x^{-p}\,dx\) sorts by the exponent, and the result is used often enough to record permanently.</p>
+  <p>Example 8.27’s contrast has an exact boundary, and it is worth finding. The family \(\int_{1}^{\infty} x^{-p}\,dx\) converges or diverges according to the exponent, and the result is used often enough to record permanently.</p>
 
   <section class="env env-proposition">
     <p class="env-head"><span class="env-kicker">Proposition</span><span class="env-num">8.2</span><span class="env-name">The \(p\)-test</span></p>
@@ -1645,7 +1653,7 @@ window.MathJax = {
     </div>
   </section>
 
-  <p>The last tool answers a question the \(p\)-test cannot. Section 8.5 met \(\int e^{-x^{2}}\,dx\), an integrand with no antiderivative among our functions, so no truncation can be evaluated in closed form and the definition cannot be applied directly. Yet convergence is a question about <em>size</em>, not about formulas. If a positive integrand sits below one whose improper integral converges, its accumulated area is trapped below a finite ceiling, and it should have nowhere to go but a limit. The next theorem makes that argument honest, and its proof is the section’s one genuinely theoretical moment: everything comes from machinery the book already owns.</p>
+  <p>The last tool answers a question the \(p\)-test cannot. Section 8.5 met \(\int e^{-x^{2}}\,dx\), an integrand for which none of our techniques produces an antiderivative, so no truncation can be evaluated in closed form and the definition cannot be applied directly. Yet convergence is a question about <em>size</em>, not about formulas. If a positive integrand sits below one whose improper integral converges, its accumulated area is trapped below a finite ceiling, and it should have nowhere to go but a limit. The next theorem makes that argument honest, and its proof is the section’s one genuinely theoretical moment: everything comes from machinery the book already owns.</p>
 
   <section class="env env-theorem">
     <p class="env-head"><span class="env-kicker">Theorem</span><span class="env-num">8.3</span><span class="env-name">Comparison Theorem for Improper Integrals</span></p>
@@ -1663,7 +1671,7 @@ window.MathJax = {
       <p>First, \(F\) is increasing: for \(t' &gt; t\), additivity (Theorem 6.2, part 3) gives \(F(t') - F(t) = \int_{t}^{t'} f(x)\,dx \ge 0\), since \(f \ge 0\) (Theorem 6.2, part 4). The same reasoning makes \(G\) increasing.</p>
       <p>Second, \(G(t) \le M\) for every \(t\). An increasing function cannot overshoot its own limit: if some \(G(t_{0})\) exceeded \(M\), then every later \(G(t)\) would be at least \(G(t_{0})\), and the values could not approach \(M\).</p>
       <p>Third, \(F(t) \le G(t)\) for every \(t\), by comparison on \([a, t]\) (Theorem 6.2, part 4). Combining: \(F\) is increasing and \(F(t) \le M\) for all \(t \ge a\).</p>
-      <p>Now sample \(F\) along the integers. The numbers \(F(a + n)\), for \(n = 1, 2, 3, \dots\), form an increasing sequence bounded above by \(M\), so by the monotone convergence theorem (Theorem 4.1) they converge to some limit \(L \le M\), and, being increasing with limit \(L\), each \(F(a + n) \le L\).</p>
+      <p>Now sample \(F\) along the integers, since Theorem 4.1’s monotone principle speaks of sequences, not of functions of a real variable. The numbers \(F(a + n)\), for \(n = 1, 2, 3, \dots\), form an increasing sequence bounded above by \(M\), so by the monotone convergence theorem (Theorem 4.1) they converge to some limit \(L \le M\). Since an increasing sequence cannot overshoot its own limit, each \(F(a + n) \le L\).</p>
       <p>Finally, the sampled limit controls the whole function. Given any \(t \ge a + 1\), let \(n\) be the greatest integer not exceeding \(t - a\), so that \(a + n \le t &lt; a + n + 1\). Since \(F\) is increasing,</p>
       <p>\[ F(a + n) \;\le\; F(t) \;\le\; F(a + n + 1) \;\le\; L. \]</p>
       <p>As \(t \to \infty\), the index \(n\) grows with it, and \(F(a + n)\) approaches \(L\). Every value \(F(t)\) is thus squeezed between numbers that approach \(L\) and the ceiling \(L\) itself, so \(F(t) \to L\). By Definition 8.1, \(\int_{a}^{\infty} f(x)\,dx\) converges, with value \(L \le M\).</p>
@@ -1689,7 +1697,7 @@ window.MathJax = {
         <p>For \(x \ge 1\) we have \(x^{2} \ge x\), so \(-x^{2} \le -x\), and since the exponential function is increasing, \(0 &lt; e^{-x^{2}} \le e^{-x}\). The larger integrand’s integral converges by direct computation:</p>
         <p>\[ \int_{1}^{t} e^{-x}\,dx = e^{-1} - e^{-t} \longrightarrow \frac{1}{e}. \]</p>
         <p>By the Comparison Theorem (Theorem 8.3(a)), \(\int_{1}^{\infty} e^{-x^{2}}\,dx\) converges, with value at most \(\tfrac{1}{e}\). Over \([0, \infty)\) the conclusion extends at once, since \(\int_{0}^{1} e^{-x^{2}}\,dx\) is an ordinary proper integral: the full integral \(\int_{0}^{\infty} e^{-x^{2}}\,dx\) converges too.</p>
-        <p>This closes the loop opened in §8.5. No formula for the antiderivative exists among our functions, yet the improper integral is a definite finite number, pinned down without ever being evaluated. Section 8.7 is about computing such numbers. <span class="qed"></span></p>
+        <p>This answers the question §8.5 left open. We have no formula for its antiderivative, yet the improper integral is a definite finite number, pinned down without ever being evaluated. Section 8.7 is about computing such numbers. <span class="qed"></span></p>
       </div>
     </section>
   </div>
@@ -1699,10 +1707,10 @@ window.MathJax = {
     <figcaption><span class="fig-no">Figure 8.10</span> The Comparison Theorem’s trap in Example 8.32: on \([1, \infty)\) the graph of \(e^{-x^{2}}\) runs below \(e^{-x}\), whose tail holds the finite area \(1/e\), so the darker region is confined below a finite roof. The curves meet at \(x = 1\) and separate at a visible angle.</figcaption>
   </figure>
 
-  <p>Mixed cases reduce to the two types. An integral such as \(\int_{0}^{\infty} \tfrac{dx}{\sqrt{x}(1 + x)}\) is improper twice, at the endpoint \(0\) and along the infinite tail; split it at any interior point, say \(1\), and require each piece to converge by its own definition. In every case the discipline is the same: locate each source of impropriety, isolate it at one end of one integral, and apply the matching definition or the Comparison Theorem.</p>
+  <p>Mixed cases reduce to the two types. An integral such as \(\int_{0}^{\infty} \tfrac{dx}{\sqrt{x}(1 + x)}\) is improper twice, at the endpoint \(0\) and along the infinite tail; split it at any interior point, say \(1\), and require each piece to converge by its own definition. In every case the procedure is the same: locate each point where the integral is improper, isolate it at one end of one integral, and apply the matching definition or the Comparison Theorem.</p>
 
   <!-- expansion:summary — close §8.6: the extension move + the two tools; forward clause = Ch11 §11.3 export contract; forward to §8.7 -->
-  <p>This section widened the integral without touching its foundations: an improper integral is a limit of proper ones, and <em>convergent</em> is a verdict about that limit. Definitions 8.1 and 8.2 cover the infinite interval and the unbounded integrand, the \(p\)-test (Proposition 8.2) marks the exact boundary between thick and thin tails, and the Comparison Theorem (Theorem 8.3), proved with the monotone-sequence principle of Chapter 4, delivers verdicts when no antiderivative is available. These three results have a second career ahead of them: Chapter 11’s Integral Test for infinite series is built directly on them. What this section does not do is produce numbers for integrals like \(\int_{1}^{\infty} e^{-x^{2}}\,dx\); it only certifies that the numbers exist. Producing them, to any stated accuracy, is the business of the chapter’s final section.</p>
+  <p>This section widened the integral without touching its foundations: an improper integral is a limit of proper ones, and <em>convergent</em> is a verdict about that limit. Definitions 8.1 and 8.2 cover the infinite interval and the unbounded integrand, the \(p\)-test (Proposition 8.2) marks the exact boundary between thick and thin tails, and the Comparison Theorem (Theorem 8.3), proved with the monotone-sequence principle of Chapter 4, delivers verdicts when no antiderivative is available. These three results will be used again: Chapter 11’s Integral Test for infinite series is built directly on them. What this section does not do is produce numbers for integrals like \(\int_{1}^{\infty} e^{-x^{2}}\,dx\); it only certifies that the numbers exist. Producing them, to any stated accuracy, is the business of the chapter’s final section.</p>
 
 </article>
 </template>
@@ -1745,7 +1753,7 @@ window.MathJax = {
 
   <p>The first rule needs no new idea. Choose the midpoint \(\bar{x}_{i} = \tfrac{1}{2}(x_{i-1} + x_{i})\) of each slice and replace \(f\) there by the constant \(f(\bar{x}_{i})\):</p>
   <p>\[ \int_{a}^{b} f(x)\,dx \;\approx\; M_{n} = h\,\bigl[f(\bar{x}_{1}) + f(\bar{x}_{2}) + \cdots + f(\bar{x}_{n})\bigr]. \tag{M} \]</p>
-  <p>This is a Riemann sum in the sense of Definition 6.2, with the sample points taken at midpoints, a choice that section reserved for exactly this use. For continuous \(f\), Theorem 6.1 guarantees that \(M_{n}\) converges to the integral as \(n\) grows; the question this section adds is how fast.</p>
+  <p>This is a Riemann sum in the sense of Definition 6.2, with the sample points taken at midpoints, a choice that §6.2 reserved for exactly this use. For continuous \(f\), Theorem 6.1 guarantees that \(M_{n}\) converges to the integral as \(n\) grows; the question this section adds is how fast.</p>
 
   <p>The second rule replaces \(f\) on each slice by the chord joining \(\bigl(x_{i-1}, y_{i-1}\bigr)\) to \(\bigl(x_{i}, y_{i}\bigr)\). The region under a chord is a trapezoid with parallel sides \(y_{i-1}\) and \(y_{i}\) and width \(h\), so its area is \(h\cdot\tfrac{y_{i-1} + y_{i}}{2}\), and summing over the slices gives</p>
   <p>\[ \int_{a}^{b} f(x)\,dx \;\approx\; T_{n} = \frac{h}{2}\,\bigl[y_{0} + 2y_{1} + 2y_{2} + \cdots + 2y_{n-1} + y_{n}\bigr]. \tag{T} \]</p>
@@ -1774,7 +1782,7 @@ window.MathJax = {
         <p>\[ M_{5} = 0.2\,\Bigl[\frac{1}{1.1} + \frac{1}{1.3} + \frac{1}{1.5} + \frac{1}{1.7} + \frac{1}{1.9}\Bigr] \approx 0.691908. \]</p>
         <p>The true value is \(\int_{1}^{2}\tfrac{dx}{x} = \ln 2 \approx 0.693147\), so the errors are</p>
         <p>\[ E_{T} \approx -0.002488, \qquad E_{M} \approx +0.001239. \]</p>
-        <p>Two patterns are worth noticing, and both persist beyond this example. The midpoint error is about half the trapezoidal error in size, and the two have opposite signs: the chords of a curve that bends upward lie above it, so \(T_{5}\) overshoots, while the midpoint rectangles compensate through the tilt of the tangent. The error bounds below make the sizes unsurprising, since the midpoint bound’s constant is half the trapezoidal bound’s; the bounds control only the errors’ magnitudes, not their signs or their exact ratio. <span class="qed"></span></p>
+        <p>Two patterns are worth noticing, and both persist beyond this example. The midpoint error is about half the trapezoidal error in size, and the two have opposite signs: the chords of a curve that bends upward lie above it, so \(T_{5}\) overshoots, while the midpoint rectangles compensate through the tilt of the tangent, as Figure 8.12 shows. The error bounds below make the sizes unsurprising, since the midpoint bound’s constant is half the trapezoidal bound’s; the bounds control only the errors’ magnitudes, not their signs or their exact ratio. <span class="qed"></span></p>
       </div>
     </section>
   </div>
@@ -1825,7 +1833,7 @@ window.MathJax = {
 
   <h3 class="subsec-head">Error bounds</h3>
 
-  <p>An estimate is useful only when its error is controlled. The bending of \(f\) is what defeats chords and rectangles, so it is the size of the second derivative, and for Simpson’s Rule the fourth, that governs the error. Bounds for all three rules follow; each \(K\) exists whenever the named derivative is continuous, by the Extreme Value Theorem (Theorem 4.9(a)), and any valid bound serves in place of the exact maximum.</p>
+  <p>An estimate is useful only when its error is controlled. The bending of \(f\) is what chords and rectangles cannot follow, so it is the size of the second derivative, and for Simpson’s Rule the fourth, that governs the error. Bounds for all three rules follow; each \(K\) exists whenever the named derivative is continuous, by the Extreme Value Theorem (Theorem 4.9(a)), and any valid bound serves in place of the exact maximum.</p>
 
   <section class="env env-theorem">
     <p class="env-head"><span class="env-kicker">Theorem</span><span class="env-num">8.4</span><span class="env-name">Error Bounds for Numerical Integration</span></p>
@@ -1841,7 +1849,7 @@ window.MathJax = {
   <section class="env env-caution">
     <p class="env-head"><span class="env-kicker">Caution</span></p>
     <div class="env-body">
-      <p>Theorem 8.4 is stated without proof. The proofs measure how far a function strays from its chords and parabolas, and the right instrument for that is Taylor’s theorem with remainder, which Chapter 11 establishes; the bounds above are proved there. This is the second of the two results this chapter takes on credit, alongside the factorization fact of §8.4, and the last.</p>
+      <p>Theorem 8.4 is stated without proof. The proofs measure how far a function strays from its chords and parabolas, and the right instrument for that is Taylor’s theorem with remainder, which Chapter 11 establishes; the bounds above are proved there. This is the second and last of the results this chapter takes on credit; the other is the factorization fact of §8.4.</p>
     </div>
   </section>
 
@@ -1857,7 +1865,7 @@ window.MathJax = {
       <div class="env-body">
         <p>For \(f(x) = 1/x\) we have \(f''(x) = 2/x^{3}\), which is positive and decreasing on \([1, 2]\), so \(\lvert f''(x)\rvert \le f''(1) = 2\), and \(K = 2\) serves. With \(b - a = 1\), Theorem 8.4 gives</p>
         <p>\[ \lvert E_{T}\rvert \le \frac{2}{12 n^{2}} = \frac{1}{6 n^{2}}, \]</p>
-        <p>and \(\tfrac{1}{6n^{2}} \le 10^{-4}\) holds exactly when \(n^{2} \ge \tfrac{10^{4}}{6}\), that is, \(n \ge \sqrt{10^{4}/6} \approx 40.82\). Since \(n\) is a whole number and the requirement is a guarantee, round <em>up</em>: \(n = 41\) suffices. For the Midpoint Rule the same computation with the constant \(24\) gives \(n^{2} \ge \tfrac{10^{4}}{12}\), so \(n \ge \sqrt{10^{4}/12} \approx 28.87\), and \(n = 29\) suffices. Rounding down would satisfy the arithmetic but not the guarantee, since the bound at \(n = 40\) exceeds the tolerance. The bounds are worst-case: Example 8.33’s actual errors were smaller than Theorem 8.4 predicts, and that is the usual experience. <span class="qed"></span></p>
+        <p>and \(\tfrac{1}{6n^{2}} \le 10^{-4}\) holds exactly when \(n^{2} \ge \tfrac{10^{4}}{6}\), that is, \(n \ge \sqrt{10^{4}/6} \approx 40.82\). Since \(n\) is a whole number and the requirement is a guarantee, round <em>up</em>: \(n = 41\) suffices. For the Midpoint Rule the same computation with the constant \(24\) gives \(n^{2} \ge \tfrac{10^{4}}{12}\), so \(n \ge \sqrt{10^{4}/12} \approx 28.87\), and \(n = 29\) suffices. Rounding down would break the guarantee: the bound at \(n = 40\) exceeds the tolerance. The bounds are worst-case: Example 8.33’s actual errors were smaller than Theorem 8.4 predicts, and that is the usual experience. <span class="qed"></span></p>
       </div>
     </section>
   </div>
@@ -1879,7 +1887,7 @@ window.MathJax = {
           S_{6} &= \frac{30}{3}\Bigl[8 + 4(10) + 2(12) + 4(11) + 2(13) + 4(14) + 12\Bigr] \\
             &= 10 \cdot 210 = 2100.
         \end{aligned} \]</p>
-        <p>The estimated distance is \(2100\) meters, an average speed of about \(11.7\) m/s, or \(42\) km/h, consistent with the readings. Two honest notes. There is no error bound to quote: Theorem 8.4 needs derivative information, and a data column carries none, so the estimate’s quality rests on the smoothness of the actual speed between readings. And the rule demanded nothing but arithmetic on the data, which is why numerical integration, not antidifferentiation, is what measurement-driven work uses. <span class="qed"></span></p>
+        <p>The estimated distance is \(2100\) meters, an average speed of about \(11.7\) m/s, or \(42\) km/h, consistent with the readings. Two honest notes are in order. There is no error bound to quote: Theorem 8.4 needs derivative information, and a data column carries none, so the estimate’s quality rests on the smoothness of the actual speed between readings. And the rule required nothing but arithmetic on the data, which is why numerical integration, not antidifferentiation, is what measurement-driven work uses. <span class="qed"></span></p>
       </div>
     </section>
   </div>
@@ -1892,8 +1900,8 @@ window.MathJax = {
   <h3 class="subsec-head">Chapter summary</h3>
 
   <!-- expansion:summary — chapter-closing summary per SPEC §4: named results in order with §-refs, the arc, the two credits, the forward fences (Ch11 §11.3 export; Ch11 §11.9 debt) -->
-  <p>This chapter set out to finish what the Fundamental Theorem started: if evaluation reduces to antidifferentiation, then antidifferentiation needs a toolkit. Section 8.1 built the first tool from the product rule, integration by parts, \(\int u\,dv = uv - \int v\,du\) (Theorems 8.1 and 8.2), with a strategy for choosing the parts (Strategy 8.1) and, as a dividend, the settlement of Chapter 7’s shell-versus-washer question in the monotone case. Section 8.2 turned trigonometric identities into substitutions, filled the elementary table with \(\int\tan x\,dx = \ln\lvert\sec x\rvert + C\) and its companions (Proposition 8.1), and recorded \(\int\sec^{3}x\,dx\) for later use. Section 8.3 reparametrized quadratic radicals away with the three restricted substitutions of Strategy 8.4, and §8.4 dispatched every rational function through the pipeline of Strategy 8.5, dividing, factoring on the credit of the Fundamental Theorem of Algebra, decomposing by Proposition A.7, and integrating fragment by fragment, with \(\int\frac{dx}{x^{2}+a^{2}} = \frac{1}{a}\arctan\frac{x}{a} + C\) as the recurring closer. Section 8.5 compressed the toolkit into a four-step dispatch (Strategy 8.6) and marked its boundary: some integrands, such as \(e^{-x^{2}}\), yield to none of it.</p>
-  <p>The last two sections changed the question. Section 8.6 extended the integral itself to infinite intervals and unbounded integrands (Definitions 8.1 and 8.2), proved the \(p\)-test boundary \(\int_{1}^{\infty} x^{-p}\,dx\) convergent exactly for \(p &gt; 1\) (Proposition 8.2), and proved the Comparison Theorem (Theorem 8.3) with Chapter 4’s monotone-sequence principle, so that convergence can be certified without evaluation. Section 8.7 then produced the numbers: the Midpoint, Trapezoidal, and Simpson’s Rules (M), (T), (S), the last derived from the three-point parabola lemma, with error bounds (Theorem 8.4) that size \(n\) in advance. The chapter closes with exactly two results taken on credit, both named where they were incurred: the real-factorization fact behind §8.4, borrowed permanently from algebra, and the proofs of Theorem 8.4, which Chapter 11’s Taylor theorem delivers. Chapter 11 also draws on this chapter directly: its Integral Test is built on Definition 8.1, Proposition 8.2, and Theorem 8.3. Before the series arrive, Chapter 9 puts the completed toolkit to work on equations whose unknowns are functions, where every solution method begins by asking the questions this chapter taught: what form is this, and which technique fits?</p>
+  <p>This chapter set out to finish what the Fundamental Theorem started: if evaluation reduces to antidifferentiation, then antidifferentiation needs a toolkit. Section 8.1 built the first tool from the product rule, integration by parts, \(\int u\,dv = uv - \int v\,du\) (Theorems 8.1 and 8.2), with a strategy for choosing the parts (Strategy 8.1) and, as a by-product, the settlement of Chapter 7’s shell-versus-washer question in the monotone case. Section 8.2 turned trigonometric identities into substitutions, filled the antiderivative table of §6.4 with \(\int\tan x\,dx = \ln\lvert\sec x\rvert + C\) and its companions (Proposition 8.1), and recorded \(\int\sec^{3}x\,dx\) for later use. Section 8.3 reparametrized quadratic radicals away with the three restricted substitutions of Strategy 8.4, and §8.4 sent every rational function through the pipeline of Strategy 8.5, dividing, factoring on the credit of the Fundamental Theorem of Algebra, decomposing by Proposition A.7, and integrating fragment by fragment, with \(\int\frac{dx}{x^{2}+a^{2}} = \frac{1}{a}\arctan\frac{x}{a} + C\) as the recurring final step. Section 8.5 compressed the toolkit into a four-step decision procedure (Strategy 8.6) and marked its boundary: some integrands, such as \(e^{-x^{2}}\), cannot be handled by any of it.</p>
+  <p>The last two sections changed the question. Section 8.6 extended the integral itself to infinite intervals and unbounded integrands (Definitions 8.1 and 8.2), proved the \(p\)-test boundary \(\int_{1}^{\infty} x^{-p}\,dx\) convergent exactly for \(p &gt; 1\) (Proposition 8.2), and proved the Comparison Theorem (Theorem 8.3) with Chapter 4’s monotone-sequence principle, so that convergence can be certified without evaluation. Section 8.7 then produced the numbers: the Midpoint, Trapezoidal, and Simpson’s Rules (M), (T), (S), the last derived from the three-point parabola lemma, with error bounds (Theorem 8.4) that let us choose \(n\) in advance. The chapter closes with exactly two results taken on credit, both named where they were incurred: the real-factorization fact behind §8.4, borrowed permanently from algebra, and the proofs of Theorem 8.4, which Chapter 11’s Taylor theorem delivers. Chapter 11 also draws on this chapter directly: its Integral Test is built on Definition 8.1, Proposition 8.2, and Theorem 8.3. Before Chapter 11’s infinite series arrive, Chapter 9 puts the completed toolkit to work on equations whose unknowns are functions, where every solution method begins by asking the questions this chapter taught: what form is this, and which technique fits?</p>
 
 </article>
 </template>

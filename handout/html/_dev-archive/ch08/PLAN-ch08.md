@@ -396,6 +396,21 @@ fill-aux＋triple 版面 3×176px；作者自查修 9 處——含 Fig 8.11 區�
 > Strategy ×6 / Ex 8.1–8.36) · cross-refs 48 used, **0 dangling** · figure-opportunity markers
 > ×9 · expansion markers ×21.
 
+## M3 — 散文＋難度合一輪（2026-07-26）
+
+Gate-1：`handout-prose-audit` ×7 ＋ `learner-sim` ×3 全章盲測（B 類 grep 預檢 PASS）。結果：
+散文七節 **0 blocking**（advisory ≈94）；盲測 **3/3 零 stuck、零 B 類**，難度尖峰 §8.3／§8.6
+≈3.5 ＜ Ch4 的 4.5——「標準/計算」深度成立、無弧線異常；紅旗 1（G1-8.6-10：§8.6 兩處逾越
+③ B-02 的 e^{−x²} scope 紀律→列必修）。裁決（使用者親裁「照建議套用」）：**套用 69 編輯點**
+（必修 1＋客觀 advisory＋導航暖 6；spelling DEFER 書層 sweep、taste 級記錄不動）。修後機械閘：
+build ✔ · quote_lint clean · linebreak 0 · **em-dash 仍 0.0/1000**。Scoped 回歸：**盲測
+0 blocking／0 stuck／0 B 類**（三節全 ok、難度 3/3/2.5 持平偏低基線、sim 逐字引用新導航句判
+「行內有給理由，走得完」）＋**散文複核 0 blocking**（69 修補句無新缺陷、B-02 措辭驗證乾淨）；
+複核殘項採 2（§8.5 過渡句重排、§8.3 對齊 B-02 用語，均逐字採複核者措辭）／記錄 1（§8.4 K
+非 finding），終值 N=8193、em-dash 0.0、tics 不變。**M3 收案。**
+逐條裁決與不採理由見 `ch08_prose-difficulty-audit.md`＋`_audit/REVIEW-ch08-prose-difficulty.html`。
+散文 gate-2 依三閘規則留 M4 後批次。
+
 ## Open questions (for the user, at chapter close)
 
 1. **Inverse hyperbolic functions**: default NOT collected (D2). If wanted: appended §8.8, zero

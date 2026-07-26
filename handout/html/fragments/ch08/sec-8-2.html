@@ -26,11 +26,11 @@
   <!-- expansion:intuition — section opener: the collision (sin³ has no visible du) and the section's one move: spend a factor as du, convert the rest by an identity -->
   <p>Consider \(\int \sin^{3}x\,dx\). No derivative sits beside an inner function, so no substitution presents itself, and the integrand is not a product of unrelated factors either, so parts does not simplify it. The way forward is a property specific to trigonometric functions. They convert into one another. Split off one factor of sine and rewrite the rest by the Pythagorean identity \(\sin^{2}x = 1 - \cos^{2}x\):</p>
   <p>\[ \sin^{3}x = \bigl(1 - \cos^{2}x\bigr)\sin x. \]</p>
-  <p>The right-hand side is a polynomial in \(\cos x\) times \(\sin x\,dx\), and \(\sin x\,dx\) is exactly \(-du\) for \(u = \cos x\). The substitution that seemed absent has been <em>manufactured</em>: one factor was spent as the differential, and an identity converted everything that remained into the new variable. That single move, spend a factor and convert the rest, runs through this whole section. When no factor can be spared, a second family of identities lowers the powers instead. The identities themselves were assembled in Appendix A.2, which promised they would be needed when the techniques of integration arrived. They are needed now.</p>
+  <p>Under the integral sign, the right-hand side becomes a polynomial in \(\cos x\) times \(\sin x\,dx\), and \(\sin x\,dx\) is exactly \(-du\) for \(u = \cos x\). The substitution that seemed absent has been <em>manufactured</em>: one factor was spent as the differential, and an identity converted everything that remained into the new variable. That single move runs through this whole section: spend a factor and convert the rest. When no factor can be spared, a second family of identities lowers the powers instead. The identities themselves were assembled in Appendix A.2, which promised they would be needed when the techniques of integration arrived. They are needed now.</p>
 
   <h3 class="subsec-head">Powers of sine and cosine</h3>
 
-  <p>For an integrand \(\sin^{m}x\cos^{n}x\), the parity of the exponents decides the move.</p>
+  <p>For an integrand \(\sin^{m}x\cos^{n}x\), the parity of the exponents (whether each is odd or even) decides the move.</p>
 
   <section class="env env-strategy">
     <p class="env-head"><span class="env-kicker">Strategy</span><span class="env-num">8.2</span><span class="env-name">Integrating \(\sin^m x\,\cos^n x\)</span></p>
@@ -38,7 +38,7 @@
       <ol class="steps">
         <li><em>If the power of sine is odd,</em> save one factor of \(\sin x\) for the differential and convert the remaining even power by \(\sin^{2}x = 1 - \cos^{2}x\). Then substitute \(u = \cos x\), \(du = -\sin x\,dx\).</li>
         <li><em>If the power of cosine is odd,</em> save one factor of \(\cos x\) and convert the rest by \(\cos^{2}x = 1 - \sin^{2}x\). Then substitute \(u = \sin x\), \(du = \cos x\,dx\).</li>
-        <li><em>If both powers are even,</em> no factor can be spared. Lower the degree with the power-reduction identities of §A.2, \(\sin^{2}x = \tfrac{1}{2}(1 - \cos 2x)\) and \(\cos^{2}x = \tfrac{1}{2}(1 + \cos 2x)\), and repeat as needed.</li>
+        <li><em>If both powers are even,</em> no factor can be spared: setting one aside would leave an odd power, which the Pythagorean identity cannot turn into a polynomial in the other function. Lower the degree with the power-reduction identities of §A.2, \(\sin^{2}x = \tfrac{1}{2}(1 - \cos 2x)\) and \(\cos^{2}x = \tfrac{1}{2}(1 + \cos 2x)\), and repeat as needed.</li>
       </ol>
     </div>
   </section>
@@ -59,7 +59,7 @@
         <p>\[ \int \bigl(1 - u^{2}\bigr)u^{2}\,(-du) = \int \bigl(u^{4} - u^{2}\bigr)\,du = \frac{u^{5}}{5} - \frac{u^{3}}{3} + C. \]</p>
         <p>Substituting \(u = \cos x\) back,</p>
         <p>\[ \int \sin^{3}x\,\cos^{2}x\,dx = \frac{\cos^{5}x}{5} - \frac{\cos^{3}x}{3} + C. \]</p>
-        <p>Splitting off the odd power is what made this work: one factor of sine became the differential, and everything else became a polynomial, which integrates term by term. <span class="qed"></span></p>
+        <p>Splitting one factor off the odd power is what made this work: that factor of sine became the differential, and everything else became a polynomial, which integrates term by term. <span class="qed"></span></p>
       </div>
     </section>
   </div>
@@ -184,7 +184,7 @@
         <p>\[ \int \sec^{3}x\,dx = \sec x\tan x - \int \sec^{3}x\,dx + \int \sec x\,dx. \]</p>
         <p>The original integral has reappeared, and we solve for it as in Example 8.4. Adding \(\int\sec^{3}x\,dx\) to both sides, dividing by \(2\), and evaluating \(\int\sec x\,dx\) by Proposition 8.1:</p>
         <p>\[ \int \sec^{3}x\,dx = \frac{1}{2}\Bigl(\sec x\tan x + \ln\lvert\sec x + \tan x\rvert\Bigr) + C. \]</p>
-        <p>This integral is the workhorse of the next section, where substitutions of the form \(x = a\tan\theta\) produce it repeatedly. The mirror integral \(\int\csc^{3}x\,dx\) is computed by the same two moves, parts and then Proposition 8.1’s cosecant formula. <span class="qed"></span></p>
+        <p>This integral appears throughout the next section, where substitutions of the form \(x = a\tan\theta\) produce it repeatedly. The mirror integral \(\int\csc^{3}x\,dx\) is computed by the same two moves, parts and then Proposition 8.1’s cosecant formula. <span class="qed"></span></p>
       </div>
     </section>
   </div>
@@ -206,7 +206,7 @@
       <div class="env-body">
         <p>Apply the identity with \(u = 4x\) and \(v = 5x\):</p>
         <p>\[ \sin 4x\,\cos 5x = \tfrac{1}{2}\bigl[\sin 9x + \sin(-x)\bigr] = \tfrac{1}{2}\bigl[\sin 9x - \sin x\bigr], \]</p>
-        <p>since sine is an odd function, \(\sin(-x) = -\sin x\). The product has become a sum of two sines at fixed frequencies, and each integrates on sight:</p>
+        <p>since sine is an odd function, \(\sin(-x) = -\sin x\). The product has become a sum of two sines at fixed frequencies, and each integrates immediately:</p>
         <p>\[ \int \sin 4x\,\cos 5x\,dx = \frac{1}{2}\Bigl(-\frac{\cos 9x}{9} + \cos x\Bigr) + C = \frac{\cos x}{2} - \frac{\cos 9x}{18} + C. \]</p>
         <p>For a product of two sines, or of two cosines, the other two lines of Proposition A.2 convert the product the same way. <span class="qed"></span></p>
       </div>
@@ -214,6 +214,6 @@
   </div>
 
   <!-- expansion:summary — close §8.2: the manufacturing idea + what was minted; forward to §8.3 with no mechanics -->
-  <p>This section added no new integration principle. Its engine is still substitution, fed by identities: an odd power donates a factor to the differential, the Pythagorean identities convert what remains, power reduction lowers even powers, and product-to-sum splits mixed frequencies. The four antiderivatives of Proposition 8.1 fill the last gaps in the basic trigonometric table, and Example 8.10’s \(\int\sec^{3}x\,dx\) is recorded for immediate reuse. The next section turns this machinery outward, onto integrands that contain no trigonometry at all: radicals such as \(\sqrt{9 - x^{2}}\), which a well-chosen trigonometric substitution converts into exactly the integrals this section taught.</p>
+  <p>This section added no new integration principle. Its engine is still substitution, fed by identities: one factor of an odd power is spent as the differential, the Pythagorean identities convert what remains, power reduction lowers even powers, and product-to-sum splits mixed frequencies. The four antiderivatives of Proposition 8.1 fill the last gaps in the basic trigonometric table, and Example 8.10’s \(\int\sec^{3}x\,dx\) is recorded for immediate reuse. The next section turns this machinery outward, onto integrands that contain no trigonometry at all: radicals such as \(\sqrt{9 - x^{2}}\), which a well-chosen trigonometric substitution converts into exactly the integrals this section taught.</p>
 
 </article>

@@ -36,7 +36,7 @@
   <ul>
     <li>integrate products, logarithms, and inverse trigonometric functions by parts;</li>
     <li>evaluate trigonometric integrals with the standard identities, and integrals containing quadratic radicals by trigonometric substitution;</li>
-    <li>integrate rational functions by partial fractions, and choose an attack for an unfamiliar integral;</li>
+    <li>integrate rational functions by partial fractions, and choose an approach for an unfamiliar integral;</li>
     <li>decide whether an improper integral converges, by evaluation or by comparison, and evaluate it when it does;</li>
     <li>approximate a definite integral with the Midpoint, Trapezoidal, and Simpson’s rules, and bound the error.</li>
   </ul>
@@ -49,11 +49,11 @@
   </header>
 
   <!-- expansion:intuition — section opener: the collision (substitution needs an inner function; x cos x has none) motivates running the product rule backwards; "trade, not solve" framing -->
-  <p>Try to compute \(\int x\cos x\,dx\) by substitution. The method needs an inner function whose derivative is also present, and this integrand has neither: \(x\) and \(\cos x\) are unrelated factors, and no choice of \(u\) makes the rest of the integrand equal \(du\). Substitution reverses the chain rule, so it applies when the integrand looks like the output of the chain rule. The integrand \(x \cos x\) does not. It looks instead like one term in the output of the <em>product rule</em>, and the product rule is the one differentiation rule we have not yet run backwards. Running it backwards gives the second technique of integration, and the subject of this section.</p>
+  <p>Try to compute \(\int x\cos x\,dx\) by substitution. The method needs two things, an inner function and its derivative alongside, and this integrand has neither: \(x\) and \(\cos x\) are unrelated factors, and no choice of \(u\) makes the rest of the integrand equal \(du\). Substitution reverses the chain rule, so it applies when the integrand looks like the output of the chain rule. The integrand \(x \cos x\) does not. It looks instead like one term in the output of the <em>product rule</em>, and the product rule is the one differentiation rule we have not yet run backwards. Running it backwards gives the second technique of integration, and the subject of this section.</p>
 
   <p>Start from the product rule itself. If \(f\) and \(g\) are differentiable, then by Theorem 2.6,</p>
   <p>\[ \bigl[f(x)\,g(x)\bigr]' = f'(x)\,g(x) + f(x)\,g'(x). \]</p>
-  <p>Read as a statement about antiderivatives (Definition 6.3), this says that \(fg\) is an antiderivative of the sum \(f'g + fg'\). Solving for the term we want turns the rule into a tool.</p>
+  <p>Read this as a statement about antiderivatives (Definition 6.3): it says that \(fg\) is an antiderivative of the sum \(f'g + fg'\). Solving for the term we want turns the rule into a tool.</p>
 
   <section class="env env-theorem">
     <p class="env-head"><span class="env-kicker">Theorem</span><span class="env-num">8.1</span><span class="env-name">Integration by Parts</span></p>
@@ -73,7 +73,7 @@
     </div>
   </section>
 
-  <p>An equation between indefinite integrals is an equation between families of functions, and the constant of integration is shared: it appears once, when the remaining integral on the right is finally evaluated. The identity trades one integral for another. That is all it does, and that is its value: the trade is progress whenever the new integrand \(f'g\) is easier than the old one \(fg'\).</p>
+  <p>An equation between indefinite integrals is an equation between families of functions. The constant of integration is shared: it appears once, when the remaining integral on the right is finally evaluated. The identity trades one integral for another. That is all it does, and that is its value: the trade is progress whenever the new integrand \(f'g\) is easier than the old one \(fg'\).</p>
 
   <p>In practice the formula is applied through the differential notation of §5.3, in the same way substitution was in §6.5. Set \(u = f(x)\) and \(v = g(x)\), so that \(du = f'(x)\,dx\) and \(dv = g'(x)\,dx\). The formula then reads:</p>
   <p>\[ \int u\,dv = uv - \int v\,du. \]</p>
@@ -81,7 +81,7 @@
 
     <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 tier-medium — uv-rectangle bookkeeping, region labels corrected at gate (below-curve = ∫v du); origin-start special case stated in caption; adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "parts-uv-rectangle"] -->
   <figure class="figure" data-fig="parts-uv-rectangle">
-    <figcaption><span class="fig-no">Figure 8.1</span> The parts formula as area bookkeeping. For a curve climbing from the origin to \((u_{1}, v_{1})\) with \(u\) and \(v\) increasing together, the rectangle of area \(u_{1}v_{1}\) splits into \(\int v\,du\), below the curve, and \(\int u\,dv\), beside it; subtracting either from the rectangle leaves the other. The picture reads the formula, and the proof remains Theorem 8.1’s.</figcaption>
+    <figcaption><span class="fig-no">Figure 8.1</span> The parts formula as area bookkeeping. For a curve in the \(uv\)-plane climbing from the origin to \((u_{1}, v_{1})\) with \(u\) and \(v\) increasing together, the rectangle of area \(u_{1}v_{1}\) splits into \(\int v\,du\), below the curve, and \(\int u\,dv\), beside it; subtracting either from the rectangle leaves the other. The picture illustrates the formula; the proof remains that of Theorem 8.1.</figcaption>
   </figure>
 
   <section class="env env-strategy">
@@ -128,7 +128,7 @@
       <div class="env-body">
         <p>The integrand does not look like a product, but step 2 of Strategy 8.1 supplies the split: take \(u = \ln x\) and let \(dv = dx\) be the invisible factor. Then \(du = \tfrac{1}{x}\,dx\) by Theorem 4.14, and \(v = x\). For \(x &gt; 0\), where \(\ln x\) is defined,</p>
         <p>\[ \int \ln x\,dx = x\ln x - \int x\cdot\frac{1}{x}\,dx = x\ln x - \int 1\,dx = x\ln x - x + C. \]</p>
-        <p>The trade turned a logarithm into the constant integrand \(1\). This is the pattern of step 2 in action: the logarithm left \(u\) as an algebraic derivative, and nothing was asked of \(dv\) at all. <span class="qed"></span></p>
+        <p>The trade turned a logarithm into the constant integrand \(1\). This is the pattern of step 2 in action: placing the logarithm in \(u\) produced the algebraic derivative \(\tfrac{1}{x}\), and \(dv\) was nothing more than \(dx\). <span class="qed"></span></p>
       </div>
     </section>
   </div>
@@ -143,11 +143,11 @@
     <section class="env env-solution">
       <p class="env-head"><span class="env-kicker">Solution</span></p>
       <div class="env-body">
-        <p>Take \(u = t^{2}\) and \(dv = e^{t}\,dt\), so \(du = 2t\,dt\) and \(v = e^{t}\):</p>
+        <p>Take \(u = t^{2}\), whose degree drops under differentiation, and \(dv = e^{t}\,dt\), so \(du = 2t\,dt\) and \(v = e^{t}\):</p>
         <p>\[ \int t^{2}e^{t}\,dt = t^{2}e^{t} - 2\int t e^{t}\,dt. \]</p>
         <p>The degree dropped from \(2\) to \(1\), and one more round of parts finishes the job. In the remaining integral take \(u = t\), \(dv = e^{t}\,dt\), so \(du = dt\), \(v = e^{t}\):</p>
         <p>\[ \int t e^{t}\,dt = t e^{t} - \int e^{t}\,dt = t e^{t} - e^{t} + C_1. \]</p>
-        <p>Substituting back,</p>
+        <p>Substituting back, with the constant \(-2C_{1}\) absorbed into \(C\),</p>
         <p>\[ \int t^{2}e^{t}\,dt = t^{2}e^{t} - 2\bigl(t e^{t} - e^{t}\bigr) + C = \bigl(t^{2} - 2t + 2\bigr)e^{t} + C. \]</p>
         <p>Each application of parts lowers the power by one, so an integrand \(t^{n}e^{t}\) yields to \(n\) rounds. <span class="qed"></span></p>
       </div>
@@ -172,12 +172,12 @@
         <p>\[ J = e^{x}\sin x - e^{x}\cos x - J, \]</p>
         <p>and solving for \(J\) gives \(2J = e^{x}(\sin x - \cos x)\), so</p>
         <p>\[ \int e^{x}\sin x\,dx = \frac{e^{x}\bigl(\sin x - \cos x\bigr)}{2} + C. \]</p>
-        <p>Here we treated the unknown integral as a single quantity and solved for it; the constant of integration is restored at the end, since the equation holds for antiderivative families. Differentiating the answer confirms it: \(\tfrac{1}{2}\bigl[e^{x}(\sin x - \cos x) + e^{x}(\cos x + \sin x)\bigr] = e^{x}\sin x\). <span class="qed"></span></p>
+        <p>Here we treated the unknown integral as a single quantity and solved for it. The constant of integration is restored at the end, since the equation holds for antiderivative families. Differentiating the answer confirms it: \(\tfrac{1}{2}\bigl[e^{x}(\sin x - \cos x) + e^{x}(\cos x + \sin x)\bigr] = e^{x}\sin x\). <span class="qed"></span></p>
       </div>
     </section>
   </div>
 
-  <p>For definite integrals, the parts formula carries the evaluation bar along with it. The hypotheses match those of the Fundamental Theorem: we use the term <em>smooth on \([a, b]\)</em> from §7.6, meaning that \(f\) is differentiable with \(f'\) continuous on \([a, b]\), one-sided at the endpoints.</p>
+  <p>For definite integrals, the term \(uv\) is evaluated between the limits: it becomes \(\bigl[f(x)\,g(x)\bigr]_{a}^{b}\) in the next theorem. The hypotheses match those of the Fundamental Theorem: we use the term <em>smooth on \([a, b]\)</em> from §7.6, meaning that \(f\) is differentiable with \(f'\) continuous on \([a, b]\), one-sided at the endpoints.</p>
 
   <section class="env env-theorem">
     <p class="env-head"><span class="env-kicker">Theorem</span><span class="env-num">8.2</span><span class="env-name">Integration by Parts for Definite Integrals</span></p>
@@ -190,7 +190,7 @@
   <section class="env env-proof">
     <p class="env-head"><span class="env-kicker">Proof</span></p>
     <div class="env-body">
-      <p>The sum \(f'g + fg'\) is continuous on \([a, b]\), since \(f, g, f', g'\) all are, so it has the accumulation antiderivative \(H(x) = \int_{a}^{x} \bigl[f'(t)\,g(t) + f(t)\,g'(t)\bigr]\,dt\): by the Fundamental Theorem of Calculus, Part 1 (Theorem 6.3), \(H\) is continuous on \([a, b]\) with \(H' = f'g + fg'\) on \((a, b)\). The product \(fg\) has the same derivative there, by the product rule (Theorem 2.6). The difference \(fg - H\) is therefore continuous on \([a, b]\) with zero derivative on \((a, b)\), hence constant (Corollary 4.4). Evaluating at \(b\) and at \(a\), where \(H(a) = 0\), gives</p>
+      <p>The sum \(f'g + fg'\) is continuous on \([a, b]\), since \(f, g, f', g'\) all are. Theorem 6.4 cannot be cited directly, because it asks for an antiderivative on an open interval larger than \([a, b]\), and smoothness on \([a, b]\) alone does not provide one; instead we build the antiderivative we need. Let \(H(x) = \int_{a}^{x} \bigl[f'(t)\,g(t) + f(t)\,g'(t)\bigr]\,dt\). By the Fundamental Theorem of Calculus, Part 1 (Theorem 6.3), \(H\) is continuous on \([a, b]\) with \(H' = f'g + fg'\) on \((a, b)\). The product \(fg\) has the same derivative there, by the product rule (Theorem 2.6). The difference \(fg - H\) is therefore continuous on \([a, b]\) with zero derivative on \((a, b)\), hence constant (Corollary 4.4). Evaluating at \(b\) and at \(a\), where \(H(a) = 0\), gives</p>
       <p>\[ \int_{a}^{b} \bigl[f'(x)\,g(x) + f(x)\,g'(x)\bigr]\,dx = f(b)\,g(b) - f(a)\,g(a). \]</p>
       <p>Splitting the left side by linearity (Theorem 6.2, part 2) and moving \(\int_{a}^{b} f'g\) to the right side gives the formula. <span class="qed qed-proof"></span></p>
     </div>
@@ -226,7 +226,7 @@
 
   <h3 class="subsec-head">Reduction formulas</h3>
 
-  <p>Parts can lower an exponent by a fixed step even when it cannot remove it outright. Applied once to \(\int\sin^{n}x\,dx\), the formula relates the integral to the one two exponents down. The result is worth recording once, in general, so that any particular power is a chain of lookups rather than a fresh computation.</p>
+  <p>Parts can lower an exponent by a fixed step even when it cannot remove it outright. Applied once to \(\int\sin^{n}x\,dx\), the formula relates the integral to the integral two exponents down. The result is worth recording once, in general, so that any particular power is a chain of lookups rather than a fresh computation.</p>
 
   <div class="workedexample">
     <section class="env env-example">
@@ -249,7 +249,7 @@
         <p>The original integral has reappeared on the right, and as in Example 8.4 we solve for it. Adding \((n-1)\int\sin^{n}x\,dx\) to both sides and dividing by \(n\):</p>
         <p>\[ \int \sin^{n}x\,dx = -\frac{1}{n}\cos x\,\sin^{n-1}x + \frac{n-1}{n}\int \sin^{n-2}x\,dx. \]</p>
         <!-- expansion:formula — consistency spot-check of the reduction formula at n=2 against the §A.2 power-reduction route; also the §8.2 preview hook -->
-        <p>As a check, set \(n = 2\). The formula gives \(\int\sin^{2}x\,dx = -\tfrac{1}{2}\cos x\sin x + \tfrac{1}{2}x + C\), and since \(\sin x\cos x = \tfrac{1}{2}\sin 2x\), this is \(\tfrac{x}{2} - \tfrac{\sin 2x}{4} + C\): the same antiderivative that the power-reduction identity \(\sin^{2}x = \tfrac{1 - \cos 2x}{2}\) of §A.2 produces by direct integration. Repeated powers of sine and cosine are the opening business of the next section, which uses both routes. <span class="qed"></span></p>
+        <p>As a check, set \(n = 2\). The formula gives \(\int\sin^{2}x\,dx = -\tfrac{1}{2}\cos x\sin x + \tfrac{1}{2}x + C\), and since \(\sin x\cos x = \tfrac{1}{2}\sin 2x\), this is \(\tfrac{x}{2} - \tfrac{\sin 2x}{4} + C\). That is the same antiderivative that the power-reduction identity \(\sin^{2}x = \tfrac{1 - \cos 2x}{2}\) of §A.2 produces by direct integration. Repeated powers of sine and cosine are the opening business of the next section, which uses both routes. <span class="qed"></span></p>
       </div>
     </section>
   </div>
@@ -257,7 +257,9 @@
   <h3 class="subsec-head">Settling the shell–washer question</h3>
 
   <!-- expansion:formula [source: ch07 sec-7-3 Example 7.12 closing remark (promise: "the tools arrive with integration by parts in Chapter 8 and change of variables in Chapter 15"); ③ B-01 adjudication 2026-07-26, reworked per ⑤ 8.1-B1 + chapter review CH-B1 — strictly INCREASING smooth case with merely CONTINUOUS inverse, which covers Ex 7.12's solid (f = x², g = √y — note √y is not differentiable at 0, so a smooth-inverse hypothesis would have missed the exemplar); decreasing case = mirror note; nonmonotone case explicitly left to Ch15] -->
-  <p>Section 7.3 computed one solid’s volume by shells and by washers, found the answers equal, and recorded a promise: the tools to explain the agreement would arrive with integration by parts in Chapter 8 and with change of variables in Chapter 15. Parts has now arrived, and it settles the question for the solid §7.3 actually compared, and for every solid of that monotone kind. Let \(f\) be strictly increasing and smooth on \([a, b]\), with \(0 \le a\) and \(f \ge 0\), and suppose its inverse \(g\) is continuous on \([c, d]\), where \(c = f(a)\) and \(d = f(b)\). Rotate the region under \(y = f(x)\) about the \(y\)-axis. In §7.3’s Example 7.12 this is the case \(f(x) = x^{2}\) on \([0, 1]\), with \(g(y) = \sqrt{y}\). The shell method (Theorem 7.1) gives the volume as \(\int_a^b 2\pi x\,f(x)\,dx\). The washer reading slices horizontally instead. Below height \(c\) every slice is the full annulus from \(x = a\) to \(x = b\); at height \(y\) between \(c\) and \(d\), the region contains exactly the points with \(f(x) \ge y\), so the slice runs from \(x = g(y)\) out to \(x = b\). Applying the cross-section definition (Definition 7.2) on each of \([0, c]\) and \([c, d]\) and adding, the washer volume is</p>
+  <p>Section 7.3 computed one solid’s volume by shells and by washers, found the answers equal, and recorded a promise: the tools to explain the agreement would arrive with integration by parts in Chapter 8 and with change of variables in Chapter 15. Parts has now arrived, and it settles the question for the solid §7.3 actually compared, and for every solid of that monotone kind.</p>
+  <p>Let \(f\) be strictly increasing and smooth on \([a, b]\), with \(0 \le a\) and \(f \ge 0\), and suppose its inverse \(g\) is continuous on \([c, d]\), where \(c = f(a)\) and \(d = f(b)\). Rotate the region under \(y = f(x)\) about the \(y\)-axis. In §7.3’s Example 7.12 this is the case \(f(x) = x^{2}\) on \([0, 1]\), with \(g(y) = \sqrt{y}\). The shell method (Theorem 7.1) gives the volume as \(\int_a^b 2\pi x\,f(x)\,dx\).</p>
+  <p>The washer reading slices horizontally instead. Below height \(c\) every slice is the full annulus from \(x = a\) to \(x = b\); at height \(y\) between \(c\) and \(d\), the region contains exactly the points with \(f(x) \ge y\), so the slice runs from \(x = g(y)\) out to \(x = b\); Figure 8.2 draws the split. Applying the cross-section definition (Definition 7.2) on each of \([0, c]\) and \([c, d]\) and adding, the washer volume is</p>
   <p>\[ V_{\text{washer}} = \pi c\,\bigl(b^{2} - a^{2}\bigr) + \pi\int_{c}^{d} \bigl[b^{2} - g(y)^{2}\bigr]\,dy. \]</p>
   <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 — gate-added candidate (D3 override recorded: subsection postdates the brief’s sparsity note); MUST draw a>0 so the full-annulus band exists; caption must not strengthen the continuous-inverse hypothesis; adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "washer-split-monotone"] -->
   <figure class="figure" data-fig="washer-split-monotone">
@@ -267,7 +269,7 @@
   <p>\[ \int_{a}^{b} 2x\,f(x)\,dx = \Bigl[x^{2}f(x)\Bigr]_{a}^{b} - \int_{a}^{b} x^{2}f'(x)\,dx = b^{2}d - a^{2}c - \int_{a}^{b} x^{2}f'(x)\,dx. \]</p>
   <p>In the remaining integral, \(x^{2} = g(f(x))^{2}\), since \(g\) inverts \(f\). Substitution in a definite integral (Theorem 6.7), applied with the continuous outer function \(g(y)^{2}\) and with \(y = f(x)\), converts it to</p>
   <p>\[ \int_{a}^{b} g\bigl(f(x)\bigr)^{2}\,f'(x)\,dx = \int_{c}^{d} g(y)^{2}\,dy. \]</p>
-  <p>Assembling the pieces, the shell volume equals \(\pi\bigl(b^{2}d - a^{2}c - \int_{c}^{d} g(y)^{2}\,dy\bigr)\), and expanding \(V_{\text{washer}}\) gives \(\pi\bigl(b^{2}c - a^{2}c + b^{2}(d - c) - \int_{c}^{d} g(y)^{2}\,dy\bigr)\), which is the same number. The two methods agree, and the agreement is a computation with parts, exactly as promised. In Example 7.12’s case the common value is \(\pi\bigl(1 - 0 - \int_{0}^{1} y\,dy\bigr) = \tfrac{\pi}{2}\), the number §7.3 found twice. A strictly decreasing boundary is the mirror computation, with the annulus and the graph trading roles. For a solid whose boundary is not monotone, as in several of §7.3’s other examples, the argument above does not apply; the general statement belongs to the change of variables of Chapter 15, as §7.3 recorded.</p>
+  <p>Assembling the pieces, the shell volume equals \(\pi\bigl(b^{2}d - a^{2}c - \int_{c}^{d} g(y)^{2}\,dy\bigr)\). Expanding \(V_{\text{washer}}\) gives \(\pi\bigl(b^{2}c - a^{2}c + b^{2}(d - c) - \int_{c}^{d} g(y)^{2}\,dy\bigr)\), which is the same number. The two methods agree, and the agreement is a computation with parts, exactly as promised. In Example 7.12’s case the common value is \(\pi\bigl(1 - 0 - \int_{0}^{1} y\,dy\bigr) = \tfrac{\pi}{2}\), the number §7.3 found twice. A strictly decreasing boundary is the mirror computation, with the annulus and the graph trading roles. For a solid whose boundary is not monotone, as in several of §7.3’s other examples, the argument above does not apply; the general statement belongs to the change of variables of Chapter 15, as §7.3 recorded.</p>
 
   <!-- expansion:summary — close §8.1: what the technique is, when it applies, what was minted; forward to §8.2 with no mechanics -->
   <p>Integration by parts is the product rule read backwards: it trades \(\int u\,dv\) for \(\int v\,du\) at the cost of the boundary product \(uv\). The trade pays when \(u\) simplifies under differentiation, and Strategy 8.1 makes that test explicit. Theorem 8.1 states the identity for antiderivatives, Theorem 8.2 carries it to definite integrals, and the examples display its three working patterns: a power times an integrable factor, a lone logarithm or inverse function with \(dv = dx\), and a self-reproducing integrand solved for algebraically. The same trade settled last chapter’s shell–washer question. The next section turns to integrands built entirely from trigonometric functions, where the tools are identities rather than trades, and where the reduction formula of Example 8.6 finds its regular use.</p>
