@@ -37,8 +37,14 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\
 <h1>Ch8 M3 — 散文＋難度合一裁決稿</h1>
 
 <div class="banner" style="border-color:#2e7d32;background:#e8f5e9">
-  <div class="big" style="color:#1b5e20">✔ APPLIED＋回歸通過（2026-07-26）——使用者親裁「照建議套用」；69＋2 編輯點全落地。</div>
-  <div class="small">修後機械閘：build ✔ · quote_lint clean · linebreak 0 · <b>em-dash 仍 0.0/1000</b>（N=8193、tics 不變）。Scoped 回歸：<b>乾淨盲測（§8.1/§8.6/§8.7）0 blocking／0 stuck／0 B 類</b>——三節全 ok、難度 3／3／2.5 持平偏低基線，sim 逐字引用新導航句判「行內有給理由，走得完」；<b>散文複核 0 blocking</b>——69 修補句無新 garden-path／語意漂移／條件拆散，B-02 兩處措辭驗證乾淨。複核殘項：採 2（§8.5 過渡句重排「We now run the opening's four integrals through the strategy」、§8.3 "elementary antiderivative"→"built from the functions we have named" 對齊 B-02 形；均逐字採複核者建議、手動比對即回歸）／記錄不動 1（§8.4 K 首用——複核自判非 finding）。逐條判決見 <code>_dev-archive/ch08/ch08_prose-difficulty-audit.md</code>。散文 gate-2（Codex S·A·V）依三閘規則待 M4 後批次。</div>
+  <div class="big" style="color:#1b5e20">✔ APPLIED＋回歸通過（2026-07-26 主體／2026-07-27 補正輪）——使用者親裁「照建議套用」＋「7 條全修」；裁決項 66＋必修 1＋回歸殘項 2＋補測 7＋複核 3 ＝ <b>108 處文字替換</b>全落地。</div>
+  <div class="small">
+    <b>終值機械閘：</b>build ✔ · quote_lint clean · linebreak 0 · <b>em-dash 仍 0 raw（0.0/1000）</b>（N=8214；semi 因斷句 37→35）。<br>
+    <b>回歸：</b>乾淨盲測 <b>×3 獨立實例</b>（§8.1/§8.6/§8.7）——<b>0 blocking／0 stuck／0 B 類，gate PASS</b>；難度 §8.1=3–3.5、§8.6=3–3.5、§8.7=2.5–3，三份皆判「與 Ch1–Ch4 基線持平偏低」，局部尖峰（shell–washer ≈4.5、兩處證明 ≈4）未觸及 §4.2 等級。散文 scoped 複核 <b>×3 皆 0 blocking</b>。<br>
+    <b>口徑更正：</b>初版紀錄與 commit <code>7bb9b37</code> 的「69＋2 編輯點」為壓縮前粗估；可驗證口徑＝裁決項 66＋必修 1／文字替換 96＋2。<br>
+    <b>補正輪新修 7＋3：</b>兩份補派的獨立盲測抓出單一實例漏掉的 7 條客觀缺陷（§8.7「the midpoint bound's constant is half…」與 Ex 8.35「the constant 24」撞義、在後者口徑下讀起來為假；§8.6 未宣告別名「monotone convergence theorem」——Thm 4.1 正名為 Completeness of the real numbers；§8.1 shell–washer 的單調性缺步與收尾抵消未展示；§8.7 Simpson 的 \(i\) 未給範圍；§8.1 Thm 8.2 證明轉折未承認；章開場「the one differentiation rule we have not yet run backwards」與 Thm 2.7 商法則衝突），使用者親裁全修；其 scoped 複核 0 blocking＋3 條 advisory（句長、懸垂 it、triples/pair 術語）就地再修，逐字採複核者措辭。<b>駁回 1</b>：「正文很少指到圖」——ch07 23 圖／0 次、ch05 11／1，屬既有慣例，非 finding。<br>
+    逐條判決見 <code>_dev-archive/ch08/ch08_prose-difficulty-audit.md</code>。散文 gate-2（Codex S·A·V）依三閘規則待 M4 後批次。
+  </div>
 </div>
 <p class="sub">2026-07-26 · gate-1＝<code>handout-prose-audit</code> ×7（U／F／S·A·V／R 四維）＋ <code>learner-sim</code> ×3 盲測（§16.2 persona，未預告難點）· B 類先備 grep 預檢先行 · 散文 gate-2（Codex）依三閘規則留 M4 後批次 · 建議裁決欄＝本輪受託裁決者的推薦，最終以使用者裁決為準</p>
 

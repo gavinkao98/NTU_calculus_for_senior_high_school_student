@@ -401,13 +401,21 @@ fill-aux＋triple 版面 3×176px；作者自查修 9 處——含 Fig 8.11 區�
 Gate-1：`handout-prose-audit` ×7 ＋ `learner-sim` ×3 全章盲測（B 類 grep 預檢 PASS）。結果：
 散文七節 **0 blocking**（advisory ≈94）；盲測 **3/3 零 stuck、零 B 類**，難度尖峰 §8.3／§8.6
 ≈3.5 ＜ Ch4 的 4.5——「標準/計算」深度成立、無弧線異常；紅旗 1（G1-8.6-10：§8.6 兩處逾越
-③ B-02 的 e^{−x²} scope 紀律→列必修）。裁決（使用者親裁「照建議套用」）：**套用 69 編輯點**
-（必修 1＋客觀 advisory＋導航暖 6；spelling DEFER 書層 sweep、taste 級記錄不動）。修後機械閘：
+③ B-02 的 e^{−x²} scope 紀律→列必修）。裁決（使用者親裁「照建議套用」）：**套用裁決項 66
+＋必修 1（2 loci）＝落地 96 處文字替換**（腳本 94＋手補 2；spelling DEFER 書層 sweep、taste
+級記錄不動）。〔口徑更正 2026-07-27：原記「69 編輯點」為壓縮前粗估，可驗證口徑為項級 66＋1／
+文字級 96，詳 `ch08_prose-difficulty-audit.md`。〕修後機械閘：
 build ✔ · quote_lint clean · linebreak 0 · **em-dash 仍 0.0/1000**。Scoped 回歸：**盲測
 0 blocking／0 stuck／0 B 類**（三節全 ok、難度 3/3/2.5 持平偏低基線、sim 逐字引用新導航句判
 「行內有給理由，走得完」）＋**散文複核 0 blocking**（69 修補句無新缺陷、B-02 措辭驗證乾淨）；
 複核殘項採 2（§8.5 過渡句重排、§8.3 對齊 B-02 用語，均逐字採複核者措辭）／記錄 1（§8.4 K
-非 finding），終值 N=8193、em-dash 0.0、tics 不變。**M3 收案。**
+非 finding）。**補正輪（2026-07-27）**：盲測實例數補齊為 **3 份獨立實例**（原只跑 1 份涵蓋
+三節，係壓縮後執行落差）——三份合計 **0 blocking／0 stuck／0 B 類，gate PASS 不變**；兩新
+實例另抓出 7 條單一實例漏掉的客觀缺陷（使用者親裁「7 條全修」：§8.7「constant 一半」撞義、
+§8.6 未宣告別名 monotone convergence theorem、§8.1 shell–washer 單調性缺步與收尾抵消、
+§8.7 Simpson 的 \(i\) 範圍、§8.1 Thm 8.2 轉折未承認、章開場「唯一沒倒著跑的法則」不成立），
+其 scoped 複核 **0 blocking**＋3 條 advisory 就地再修。終值 **N=8214、em-dash 0.0/1000**、
+semi 35（斷句淨減 2）。**M3 收案。**
 逐條裁決與不採理由見 `ch08_prose-difficulty-audit.md`＋`_audit/REVIEW-ch08-prose-difficulty.html`。
 散文 gate-2 依三閘規則留 M4 後批次。
 
