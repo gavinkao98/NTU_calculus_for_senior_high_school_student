@@ -4,8 +4,10 @@
      Definition 8.1 (Type 1), Definition 8.2 (Type 2), Proposition 8.2 (p-test, PROVED),
      Theorem 8.3 (Comparison Theorem, PROVED — the chapter's theory highlight, mainline tools
      only: Thm 6.2(3)/(4) monotonicity, Thm 4.1 for the integer-indexed sequence, ⌊t−a⌋
-     bracketing glossed inline; ⌊·⌋ precedent §1.5), Examples 8.27–8.32. Cautions UNNUMBERED
-     (two: principal-value trap; hidden-singularity check).
+     bracketing glossed inline; ⌊·⌋ precedent §1.5), Examples 8.27–8.33 (M4 2026-07-27 added
+     Ex 8.33, the divergence direction of Thm 8.3(b)). Cautions UNNUMBERED (M4: five — principal-value
+     trap; hidden-singularity check; sign-changing scope (8.6-e); the two no-conclusion combinations
+     (8.6-a); the meaning of "divergent" (8.6-b)).
      SEAM GUARD (PLAN-ch08 D7 + brief-8-6): split-point independence for (c) justified via
      additivity Thm 6.2(3), one sentence. Every verdict traces to Def 8.1/8.2, Prop 8.2, or
      Thm 8.3 — no "obviously converges". Limit tools cited: L'Hôpital Thm 5.5 (s e^{−s});
@@ -13,9 +15,14 @@
      sentence (integrand ≥ 1, comparison Thm 6.2(4) on finite intervals). Increasing G sits
      below its limit: one-line contradiction argument, not assumed. NO absolute/conditional
      convergence vocab, NO Integral Test statement (one forward clause in the summary — Ch11
-     §11.3 cites Def 8.1 + Prop 8.2 + Thm 8.3; EXPORT contract), NO principal-value name, NO
-     Gabriel's horn.
-     Counters handed to §8.7: Theorem 8.4, Example 8.33; §8.7 mints tags (M)/(T)/(S).
+     §11.3 cites Def 8.1 + Prop 8.2 + Thm 8.3; EXPORT contract), NO principal-value name.
+     GUARD AMENDED (M4 2026-07-27, user adjudication): this header originally read "NO Gabriel's
+     horn", which over-tightened PLAN-ch08 §Excluded — that record permits "§8.6 one-sentence
+     aside at most". The as-built now carries exactly ONE sentence (candidate 8.6-f), written on
+     the TRUNCATED solid ([1,t], quantities approaching / growing without bound) so that no
+     area-of-an-infinite-surface claim is made; Theorem 7.4 is stated on [a,b] only. Precedent for
+     amending an over-specified guard rather than the content: the 8.6-B1 adjudication in PLAN-ch08.
+     Counters handed to §8.7: Theorem 8.4, Example 8.34; §8.7 mints tags (M)/(T)/(S).
      Record: PLAN-ch08.md, brief-8-6.md, ch08_ch-direction-codex3-audit.md (D7, A-02).
      Math verified during authoring; sympy at sweep. -->
 
@@ -98,6 +105,14 @@
     </div>
   </section>
 
+  <!-- expansion:caution [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.6-b (mode-c-gapwalk B) — every divergent instance in the as-built section was of the unbounded-growth kind, so a reader generalizes "divergent = infinite", which is not what Def 8.1's "provided the limit exists as a finite number" says. The oscillating counterexample is fully in range (FTC-2 + one reason sentence). PLACEMENT (M4 scoped-sim regression fix, 2026-07-27): first sited immediately after Figure 8.6, which put it between Definition 8.1's pointer "see the caution below" and the principal-value Caution that pointer means; a blind learner-sim landed on the wrong box. Moved to sit AFTER the principal-value Caution, restoring the M1 pointer path (Ex 8.27, Fig 8.6, Ex 8.28 only) and pairing the two boxes that both say what a verdict does NOT mean. authored. User adjudication 2026-07-27: adopt (T1).] -->
+  <section class="env env-caution">
+    <p class="env-head"><span class="env-kicker">Caution</span></p>
+    <div class="env-body">
+      <p>Example 8.27(a) diverged because its truncations grew without bound, and that is the most familiar way for the limit to fail. It is not the only way. <em>Divergent</em> says that the limit is not a finite number, which also covers truncations that never settle. For \(f(x) = \cos x\), the truncations are \(\int_{0}^{t}\cos x\,dx = \sin t\), which returns to \(1\) and to \(-1\) again and again as \(t\) grows, so no single number is being approached and \(\int_{0}^{\infty}\cos x\,dx\) diverges. Divergence is the absence of a finite limit, not a claim that the area is infinite.</p>
+    </div>
+  </section>
+
   <div class="workedexample">
     <section class="env env-example">
       <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.29</span></p>
@@ -116,6 +131,14 @@
       </div>
     </section>
   </div>
+
+  <!-- expansion:application [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.6-d (mode-c-gapwalk A and B converged) — §8.6 carried no real-world connection at all (chapter-wide expansion:application count was 0 before this round), and "an unbounded region can hold a finite quantity" reads as a geometric curiosity without one. Mechanism entirely in place: Def 7.3 (Work) + Def 8.1 + the 1/x^2 computation of Ex 8.27(b). The inverse-square law enters as an empirical model, on the §7.4 Hooke's-law precedent. RED LINE honored: stops at "the work is finite"; no escape-velocity formula (that needs energy conservation, which this book has not built). PLACEMENT: moved here from just after Ex 8.28 in the same round, so that Definition 8.1's "see the caution below" pointer reaches the principal-value Caution without two asides in the way (scoped-sim regression fix). User adjudication 2026-07-27: adopt (T2).] -->
+  <p>The convergence recorded in Example 8.27(b) has physical content. Newton’s inverse-square law, an empirical model in the same sense as Hooke’s law in §7.4, says that a body of mass \(M\) pulls a mass \(m\) at distance \(x\) with force \(GMm/x^{2}\). By Definition 7.3, the work needed to move the mass from the body’s surface, at distance \(R\) from its centre, out to distance \(t\) is</p>
+  <p>\[ \int_{R}^{t} \frac{GMm}{x^{2}}\,dx = GMm\Bigl(\frac{1}{R} - \frac{1}{t}\Bigr) \longrightarrow \frac{GMm}{R}, \]</p>
+  <p>so the improper integral converges: moving the mass arbitrarily far from the body requires only a finite amount of work. The reason is the one Example 8.27(b) recorded: the exponent \(2\) sits on the convergent side of the boundary.</p>
+
+  <!-- expansion:application [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.6-f (mode-c-gapwalk A and B converged; user adjudicated adopt). PLAN-ch08 §Excluded permits "§8.6 one-sentence aside at most" — this is exactly one sentence. Written on the TRUNCATED solid so that Theorem 7.4, which is stated on [a,b], is never applied to an infinite surface; both quantities are described as approaching / growing without bound. Volume uses Ex 8.27(b)'s 1/x^2, surface uses Ex 8.27(a)'s 1/x: the same curve lands on both sides of the p-test. The Theorem 7.4 integrand is written out inline after a blind learner-sim reported the "at least" step as unjustified. PLACEMENT: moved here with 8.6-d, same regression fix.] -->
+  <p>Example 8.27’s two verdicts can be produced by one curve: rotating \(y = 1/x\) on \([1, t]\) about the \(x\)-axis gives a solid, traditionally called Gabriel’s horn, whose volume \(\int_{1}^{t}\pi x^{-2}\,dx\) approaches \(\pi\), while its lateral surface area is at least \(\int_{1}^{t} 2\pi x^{-1}\,dx = 2\pi\ln t\) and grows without bound as \(t\) does, since the Theorem 7.4 integrand \(2\pi x^{-1}\sqrt{1 + x^{-4}}\) is never smaller than \(2\pi x^{-1}\) (Theorem 6.2, part 4).</p>
 
   <h3 class="subsec-head">Type 2: unbounded integrands</h3>
 
@@ -240,6 +263,14 @@
     <figcaption><span class="fig-no">Figure 8.9</span> The proof of Theorem 8.3(a) in one schematic picture: the increasing accumulation \(F\) stays below its ceiling \(M\), the integer samples \(F(a + n)\) climb to their limit \(L\) (Theorem 4.1), and every \(t\) is bracketed between consecutive samples, so \(F(t)\) is squeezed to \(L\) as well. The curve’s shape is schematic.</figcaption>
   </figure>
 
+  <!-- expansion:caution [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.6-e (mode-c-gapwalk B) — every worked instance of Thm 8.3 in the as-built has a positive integrand, so the reader has no occasion to notice that 0 <= f <= g is a real hypothesis. Pure scope statement. HARD BOUNDARY honored: no absolute/conditional convergence vocabulary (Ch11's) and no promise that Ch11 handles it, which would add a forward fence to a chapter whose design fixes exactly two credits. authored. User adjudication 2026-07-27: adopt (T3).] -->
+  <section class="env env-caution">
+    <p class="env-head"><span class="env-kicker">Caution</span></p>
+    <div class="env-body">
+      <p>Theorem 8.3 assumes \(0 \le f(x) \le g(x)\), and that assumption cannot be dropped. For an integrand that changes sign, a comparison of this kind yields nothing at all: the proof of Theorem 8.3 rests on \(F\) being increasing, which fails once \(f\) takes negative values, so neither convergence nor divergence follows. Such integrals are outside what this book takes up; every comparison in this chapter therefore begins by checking that both integrands are non-negative.</p>
+    </div>
+  </section>
+
   <div class="workedexample">
     <section class="env env-example">
       <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.32</span></p>
@@ -262,6 +293,39 @@
   <figure class="figure" data-fig="comparison-trap">
     <figcaption><span class="fig-no">Figure 8.10</span> The Comparison Theorem’s trap in Example 8.32: on \([1, \infty)\) the graph of \(e^{-x^{2}}\) runs below \(e^{-x}\), whose tail holds the finite area \(1/e\), so the darker region is confined below a finite roof. The curves meet at \(x = 1\) and separate at a visible angle.</figcaption>
   </figure>
+
+  <!-- expansion:example [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.6-E1 (example-supplement §8.5–8.7) — Layer 1: Theorem 8.3 states two parts and only (a) had a worked instance (grep-verified: the sole in-text citation of Thm 8.3 was Ex 8.32, part (a)). Teaches the direction discipline: to prove divergence the known-divergent integral must be the LOWER bound. Adapted from APEX Calculus V5, text/06_Improper_Integration.tex (CC BY-NC 4.0): same integral, same comparison, official solution complete. Rewrite delta: citations retargeted to this book's numbering; APEX's "for large x, 1/sqrt(x^2-x) ~ 1/x" heuristic opening replaced by the hypothesis check this section uses throughout; steps 5 and 6 are authored (not in the source) and carry the teaching point. sympy-recomputed at the M4 sweep. User adjudication 2026-07-27: adopt.] -->
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.33</span></p>
+      <div class="env-body">
+        <p>Show that \(\displaystyle\int_{3}^{\infty} \frac{dx}{\sqrt{x^{2} - x}}\) diverges.</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>First check the hypotheses. On \([3, \infty)\) we have \(x^{2} - x = x(x - 1) \ge 6\), so the integrand is defined, continuous, and positive there.</p>
+        <p>Divergence is the target, so by Theorem 8.3(b) the integrand must be placed <em>above</em> something already known to diverge. For \(x \ge 3\), \(0 &lt; x^{2} - x &lt; x^{2}\), and taking square roots gives \(\sqrt{x^{2} - x} &lt; x\). Reciprocals reverse the inequality:</p>
+        <p>\[ 0 \;&lt;\; \frac{1}{x} \;&lt;\; \frac{1}{\sqrt{x^{2} - x}} \qquad (x \ge 3). \]</p>
+        <p>In the notation of Theorem 8.3 this makes \(f(x) = 1/x\) the lower function and \(g(x) = 1/\sqrt{x^{2} - x}\) the upper one, both continuous on \([3, \infty)\). The lower integral diverges: \(\int_{3}^{t}\tfrac{dx}{x} = \ln t - \ln 3\) by §6.4 and Theorem 6.4, and this grows without bound, so Definition 8.1(a) records divergence. This is Example 8.27(a)’s computation from a different starting point.</p>
+        <p>Theorem 8.3(b) therefore gives that \(\int_{3}^{\infty}\tfrac{dx}{\sqrt{x^{2} - x}}\) diverges.</p>
+        <p>Getting the direction right is the whole point here. It is just as easy to check that \(\tfrac{1}{\sqrt{x^{2}-x}} \le \tfrac{2}{x}\) on \([3, \infty)\): after squaring and clearing denominators, this is the inequality \(3x^{2} \ge 4x\). The integral \(\int_{3}^{\infty}\tfrac{2\,dx}{x}\) diverges as well. That comparison proves nothing: a divergent upper bound carries no information. To establish divergence, the known-divergent integral has to be the one underneath.</p>
+        <p>This integrand does have an antiderivative, reachable by completing the square and a secant substitution (§8.3). Deciding convergence did not require it. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <!-- expansion:caution [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.6-a (mode-c-gapwalk A, its top-ranked item) — Thm 8.3 reads symmetrically enough that all four combinations look available; getting the direction wrong is the standard misuse. Zero new mathematics: the counterexample is Example 8.27 reused verbatim. Complements the new Ex 8.33, which shows the direction that DOES work. authored. User adjudication 2026-07-27: adopt (T1).] -->
+  <section class="env env-caution">
+    <p class="env-head"><span class="env-kicker">Caution</span></p>
+    <div class="env-body">
+      <p>Even when \(0 \le f \le g\) does hold, only two of the four ways of pairing a function with a verdict give a conclusion, and Example 8.33 has just used one of those two. The other two give nothing: if \(\int_{a}^{\infty} f\) converges, no conclusion follows about \(\int_{a}^{\infty} g\); if \(\int_{a}^{\infty} g\) diverges, none follows about \(\int_{a}^{\infty} f\). Example 8.27 supplies a counterexample to both at once: on \([1, \infty)\) we have \(1/x^{2} \le 1/x\), the smaller integral converges, and the larger one diverges. Decide first which verdict you are trying to prove, then look for a comparison function on the matching side.</p>
+    </div>
+  </section>
+
+  <!-- expansion:intuition [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.6-c (mode-c-gapwalk B) — Def 8.1(c)'s split-point paragraph and Ex 8.32's closing move each did half of this, but the principle was never stated, and without it Theorem 8.3 reads as requiring its inequality on ALL of [a, infinity), which stalls any comparison that only starts holding later. Uses additivity (Thm 6.2 part 3), already cited several times in this section. REVISED at the M4 scoped Mode B (2026-07-27): the closing sentence originally carried its condition on the adjectives "awkward" and "well behaved", which in a section that has just taught Type 2 reads as "unbounded on [a,b]" and would make the recipe's own proper integral improper; and it credited Example 8.32 with a case Example 8.32 is not (its integrand is perfectly ordinary on [0,1]; it is the COMPARISON that only starts at x = 1). Both repaired literally. PLACEMENT: moved ahead of the "Mixed cases" paragraph in the same round, so that paragraph keeps its role as the section's closing beat (a blind learner-sim reported the principle arriving after the closure, and reported the same principle being used in Ex 8.32 before being stated). authored. User adjudication 2026-07-27: adopt (T1).] -->
+  <p>One consequence of additivity deserves stating on its own: convergence is decided by the tail. Attaching or removing a proper integral over a finite interval changes the value but not the verdict (Theorem 6.2, part 3). The practical use is that a comparison need not hold from the very start. If \(0 \le f \le g\) only for \(x \ge b\), with \(b &gt; a\), split \(\int_{a}^{\infty} f\) at \(b\), apply Theorem 8.3 to \(\int_{b}^{\infty} f\), and add back \(\int_{a}^{b} f\), which is an ordinary proper integral whenever \(f\) is continuous on \([a, b]\) (Theorem 6.1). Example 8.32 did exactly this: its comparison \(e^{-x^{2}} \le e^{-x}\) holds only for \(x \ge 1\), so the verdict obtained on \([1, \infty)\) carried across to \([0, \infty)\).</p>
 
   <p>Mixed cases reduce to the two types. An integral such as \(\int_{0}^{\infty} \tfrac{dx}{\sqrt{x}(1 + x)}\) is improper twice, at the endpoint \(0\) and along the infinite tail; split it at any interior point, say \(1\), and require each piece to converge by its own definition. In every case the procedure is the same: locate each point where the integral is improper, isolate it at one end of one integral, and apply the matching definition or the Comparison Theorem.</p>
 

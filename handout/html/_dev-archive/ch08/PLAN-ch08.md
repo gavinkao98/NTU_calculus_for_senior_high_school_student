@@ -279,7 +279,7 @@ addition goes through this table first (kickoff hard guardrail).
 | Proposition | — | **8.1** (Antiderivatives of tan, cot, sec, csc; proved) | — | — | — | **8.2** (\(p\)-test, proved) | — | 2 |
 | Corollary | — | — | — | — | — | — | — | 0 |
 | Strategy | **8.1** (Choosing \(u\) and \(dv\)) | **8.2** (\(\sin^m\cos^n\)) · **8.3** (\(\tan^m\sec^n\)) | **8.4** (Trigonometric substitution) | **8.5** (Integrating a rational function) | **8.6** (A four-step strategy) | — | — | 6 |
-| Example | **8.1–8.6** | **8.7–8.11** | **8.12–8.16** | **8.17–8.22** | **8.23–8.26** | **8.27–8.32** | **8.33–8.36** | 36 (cap 38) |
+| Example | **8.1–8.6** | **8.7–8.11** | **8.12–8.16** | **8.17–8.22** | **8.23–8.26** | **8.27–8.33** | **8.34–8.38** | **38 = cap** (M1 36 + M4 ×2) |
 | Figure | **8.1** parts-uv-rectangle · **8.2** washer-split-monotone | **8.3** sin-squared-midline | **8.4** trig-sub-triangles (triple) · **8.5** ellipse-quarter-area | — | — | **8.6** tail-comparison · **8.7** type2-truncation · **8.8** interior-singularity · **8.9** monotone-sampling · **8.10** comparison-trap | **8.11** three-rules-panel (triple) · **8.12** midpoint-tangent-trap · **8.13** simpson-data-speed | **13**（M2 adopt-all-13 使用者裁決 2026-07-26；§8.4/§8.5 刻意零圖經 gate 覆核成立） |
 | Equation tags | — | — | — | one tagged display for \(\int\frac{dx}{x^2+a^2}\) (tag **(8.A)**) | — | — | **(M)**, **(T)**, **(S)** | 4 tags |
 
@@ -290,6 +290,12 @@ distinct linear · repeated linear · irreducible quadratic · equal-degree+comp
 rationalizing √(x+4)/x) — §8.5 ×4 (tan³/cos³ · e^√x · 1/(x√(ln x)) · √((1−x)/(1+x))) — §8.6 ×6
 (1/x vs 1/x² · 1/(1+x²) over ℝ · te⁻ᵗ · type-2 pair · interior-singularity trap · comparison
 e^{−x²}) — §8.7 ×4 (T₅/M₅ for ∫₁²dx/x · S₁₀ same · error planning · data table).
+
+**As-built after M4 (2026-07-27), Example row only** — §8.6 ×**7** (the six above **+ Ex 8.33**,
+∫₃^∞ dx/√(x²−x) diverges, the Thm 8.3**(b)** direction) — §8.7 ×**5** (T₅/M₅ · S₁₀ · error
+planning · **+ Ex 8.37**, ∫₀¹e^{−x²} by S₁₀ with K₄ = 36 → four guaranteed decimals · data table).
+Cascade actually performed: old 8.33–8.36 → **8.34–8.36 and 8.38**; 5 rendered cross-refs +
+5 in-source ledger comments updated, env-num continuity 8.1–8.38 grep-verified.
 
 > Chapter opener (chapter-head + lead + "By the end…") lives in **sec-8-1.html** (first
 > `<article>`), per handout convention. `build.py` CHAPTERS registry gains `"ch08"` when
@@ -419,11 +425,56 @@ semi 35（斷句淨減 2）。**M3 收案。**
 逐條裁決與不採理由見 `ch08_prose-difficulty-audit.md`＋`_audit/REVIEW-ch08-prose-difficulty.html`。
 散文 gate-2 依三閘規則留 M4 後批次。
 
+## M4 — Mode C 條件式 gap-check（2026-07-27，CLOSED）
+
+Gate-1 偵察 **4 份獨立實例**（`mode-c-gapwalk` ×2 順序／逆序全章＋`example-supplement` ×2 分半章），
+依 M3 補正輪的教訓派雙實例。結果：①波 **4 候選全部 Layer 1**（沒有一筆是「題目不夠多」，全是
+「本書自己陳述或證明了某件事卻從未示範」）；②波 48 筆去重後 **34 筆、全零 cascade**，其中
+**12 個缺口被兩份實例獨立命中**，另有 **1 個跨波命中**（§8.1 的 reduction formula payoff 同時被報成
+Layer 1 例題缺口與 intuition 缺口）。§8.3／§8.4／§8.5 三節例題判定為乾淨、零候選。
+裁決稿 `_audit/REVIEW-ch08-modec-gapcheck.html`；完整紀錄 `ch08_modec-gapcheck-audit.md`。
+
+**使用者裁決（2026-07-27）**：①波採 `8.7-E1`＋`8.6-E1`、`8.1-E1` 轉不編號推導、`8.2-E1` 不採；
+②波採到 **T3**；四個品味題全採（含 `8.6-d` 重力功寫進難度尖峰節、`8.6-f` Gabriel's horn 一句、
+`8.2-E1` 的 parity 診斷改做散文註、授權先查證再落筆 `8.2-a`）。
+
+**落地 26 處**（2 worked example ＋ 24 段不編號內容）：§8.1 ×3・§8.2 ×3・§8.3 ×1・§8.4 ×3・
+§8.5 ×1・§8.6 ×7・§8.7 ×6。**Example 收在 8.1–8.38 ＝ 38 ＝ D1 硬上限**，cascade 僅 4 個位移
+（把 `8.1-E1` 轉成不編號推導段省掉了 30 個重編號，是本輪最大的一筆風險削減）。
+一條 guard 依 8.6-B1 先例**誠實修訂**：`sec-8-6.html` header 原寫 `NO Gabriel's horn`，比 PLAN
+`§Excluded` 的「至多一句」更嚴；採 `8.6-f` 後修訂該 guard 並記明理由，課文措辭維持在截斷體 \([1,t]\)。
+
+**回歸（gate-1）**：範圍限定 Mode B ×3 → **4 blocking**（`8.4-b` 隱喻承載條件／`8.6-f` 不等式無理由／
+`8.6-c` 條件靠模糊形容詞＋Ex 8.32 誤歸類／`8.7-a` `quadrature` 全書未定義）**全修**；
+回歸複核 ×2 → **0 blocking**，四條原 blocking 逐條確認歸零，並抓出 **7 條我的修補自身引入的新缺陷**
+（含「multiplying by \(e^{-x^2}\) cannot enlarge it」字面為假、一處懸垂分詞、一處前指落空）全修。
+盲測 `learner-sim` ×3 全章 → **3/3 零 stuck／零 B 類**，曲線 `[4,3,3.5,3,2,4,2.5]`／`[3.5,3,3,3.5,2,4,3]`／
+`[4,3,4,3,2,4,3]`，三份皆判與 Ch1–Ch4 基線持平或持平偏低、峰值未觸及 §4.2 的 4.5；
+scoped §8.6 回歸盲測 **0 stuck、難度 3.5/5**，並確認位置修補後 Definition 8.1 的「see the caution below」
+**零次走錯**。
+
+**終值**：build ✔・quote_lint clean ×7・**linebreak 0**・sympy **59/59 PASS**（本輪寫進課文的每個數字與恆等式）・
+render **math 1007→1378、MathJax err 0、未渲染 `\(` 0、13/13 圖 hydrate、cross-ref dangling 0**・
+prose **N 8214→10502、em-dash 仍 0.0/1000**（四個 tic guard 密度全部下降，未發生標點代償）。
+不編號 Caution 10→17。**M4 收案。三閘 gate-2 依 PIPELINE 留 M5 前批次。**
+
+> **交給 gate-2 的既有內容發現（本輪不修，Mode C 無權限）** 共 7 條，詳見
+> `ch08_modec-gapcheck-audit.md` §8。最重要一條：**Theorem 6.5（Ch6）與 Theorem 8.2 證明（Ch8）互斥**
+> ——§6.4 說 Thm 6.5「applies verbatim from Thm 6.4」，§8.1 卻說 Thm 6.4「cannot be cited directly」
+> 並自行建構 \(H\)。已逐字驗證兩章原文；判 §8.1 嚴謹、§6.4 超額宣稱，交數學 gate-2 定奪
+> （Ch6 已定版含 LaTeX 線，動它須二模型確認）。
+
 ## Open questions (for the user, at chapter close)
 
 1. **Inverse hyperbolic functions**: default NOT collected (D2). If wanted: appended §8.8, zero
    cascade. (kickoff §1 default; awaiting user.)
-2. **Example budget 36/cap 38** exceeds Ch7's 23 — justified above (D1); flag for user awareness.
+2. **Example budget: M4 closed the chapter at 38/38, the hard cap** (was 36 at M1). Both slots went
+   to Layer-1 gaps where a numbered result had been stated and never exercised: Thm 8.4's Simpson
+   clause (Ex 8.37) and Thm 8.3(b) (Ex 8.33). A third Layer-1 gap of the same kind (Ex 8.6's
+   reduction formula, proved and never used) was discharged **without a slot**, as an unnumbered
+   tagged derivation — see the M4 section. Ch7 by comparison closed at 23; the gap is the D1
+   rationale (this chapter's examples ARE the content). **No headroom remains**: any example that
+   the three gate-2 passes turn up must either replace one or go through D1 first.
 3. **Thm 8.4 error bounds fenced forward to Ch11 §11.9** rather than Appendix D (D8 rationale);
    Ch11 must discharge — recorded in EXPORT section and to be echoed in ROADMAP Ch11 notes at M5.
 

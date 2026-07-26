@@ -71,6 +71,9 @@
     </div>
   </section>
 
+  <!-- expansion:intuition [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27 — the surviving increment of example-supplement candidate 8.2-E1. That candidate proposed a full worked example for Strategy 8.2's step 2, which the adjudication declined as a mirror of Ex 8.7 (cascade 29 renumberings for a repeated mechanism); the user adjudicated 2026-07-27 to keep only the part that was new, the parity diagnostic, as prose at zero cost. Strategy 8.2 states the reason for the parity test inside a step-3 parenthesis and never demonstrates it. Source of the underlying comparison: Mooculus trigonometricIntegrals/digInTrigonometricIntegrals.tex (CC BY-NC-SA), whose own write-up asserts sin^3 = (1-cos^2)^{3/2} without naming an interval; corrected here to the sign-choice statement, per this book's §8.3 radical discipline. authored.] -->
+  <p>The parity test in Strategy 8.2 is a test of which factor can be spent as the differential, and the integrand of Example 8.7 shows where the other choice leads. Spending a factor of \(\cos x\) as the differential, with \(u = \sin x\) and \(du = \cos x\,dx\), leaves \(\int u^{3}\cos x\,du\), in which the substitution is not yet complete: the old variable is still present. And a lone \(\cos x\) is not a function of \(\sin x\) until a sign is chosen: on an interval where \(\cos x \ge 0\) it equals \(\sqrt{1 - u^{2}}\), and the integral becomes \(\int u^{3}\sqrt{1 - u^{2}}\,du\), a radical instead of a polynomial. Spending a factor from the odd power leaves an even power behind, and only an even power converts by the Pythagorean identity.</p>
+
   <div class="workedexample">
     <section class="env env-example">
       <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.8</span></p>
@@ -168,6 +171,9 @@
 
   <p>Each formula holds on every interval avoiding the integrand’s singularities, and the constant \(C\) may differ from interval to interval, as with \(\ln\lvert x\rvert\) in §6.4.</p>
 
+  <!-- expansion:history [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.2-a (mode-c-gapwalk A and B converged, both ranked it their strongest history item) — the proof above labels the secant device "found by trial, not derived", which invites the question of why anyone was trying; this is the one place in the chapter where history answers a mathematical question the text has just raised, and it is a rare application-before-tool case. VERIFIED 2026-07-27 before drafting (user authorized the check), two independent sources agreeing: Wikipedia "Integral of the secant function" and the search-level account tracing to V. F. Rickey & P. M. Tuchinsky, "An Application of Geography to Mathematics: History of the Integral of the Secant", Mathematics Magazine 53 (1980) 162-166. Facts as checked: Mercator chart 1569; Edward Wright, Certaine Errors in Navigation, 1599, table computed by numerical summation; Henry Bond conjectured the closed form c. 1645 by comparing Wright's table with Gunter's table of logarithms of tangents; James Gregory proved it 1668 (Exercitationes Geometricae); Isaac Barrow gave the first transparent proof 1670. NOT claimed, per both sources and both gate instances: that Mercator himself computed or used this integral. Bond's log-tangent form is deliberately not written out (this book's form is Proposition 8.1's). First expansion:history marker in this section.] -->
+  <p>The antiderivative of the secant was wanted before there was a calculus to supply it. On the Mercator chart of 1569, the north-south scale has to stretch with latitude in proportion to the secant of the latitude, so the map distance out to latitude \(\varphi\) is \(\int_{0}^{\varphi}\sec\theta\,d\theta\). Edward Wright published a table of those values in 1599, obtained by adding secants in small steps, since no formula for them was known. Around 1645 Henry Bond noticed that Wright’s table agreed with a table of logarithms of tangents and conjectured a closed form on that evidence alone; James Gregory proved the conjecture in 1668, and Isaac Barrow gave a clearer proof in 1670. The device above looks unmotivated because the order of events was the reverse of the usual one: the formula was found first and justified afterwards.</p>
+
   <div class="workedexample">
     <section class="env env-example">
       <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.10</span></p>
@@ -188,6 +194,9 @@
       </div>
     </section>
   </div>
+
+  <!-- expansion:strategy [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.2-c (mode-c-gapwalk A) — Proposition 8.1 supplies antiderivatives for cot and csc, but Strategy 8.3 covers only the tangent-secant half of the family, leaving a reader facing cot^3 x csc^4 x with no guidance. Zero new machinery: the derivatives of cot and csc are already in evidence in Prop 8.1's proof, and the identity is Prop A.1's third companion. This is the one-sentence "mirror named" form that the fragment's own SEAM GUARD ("no csc^3 (mirror named)") anticipates, not a worked example. authored. User adjudication 2026-07-27: adopt (T3).] -->
+  <p>The cotangent-cosecant family behaves in exactly the same way, with the same split into cases. For \(\int\cot^{m}x\,\csc^{n}x\,dx\): if \(n\) is even, save a factor \(\csc^{2}x\,dx\), which is the differential of \(-\cot x\), and convert what remains by \(1 + \cot^{2}x = \csc^{2}x\) (Proposition A.1); if \(m\) is odd, save a factor \(\csc x\cot x\,dx\), which is the differential of \(-\csc x\), and convert what remains by the same identity. The only change from Strategy 8.3 is a minus sign carried through each substitution.</p>
 
   <h3 class="subsec-head">Products with different frequencies</h3>
 

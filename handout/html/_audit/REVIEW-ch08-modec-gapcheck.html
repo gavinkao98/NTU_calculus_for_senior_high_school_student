@@ -1,0 +1,768 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REVIEW — Ch8 M4 Mode C gap-check（裁決稿）</title>
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] }, svg: { fontCache: 'global' } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+<style>
+  :root { --ink:#1a2230; --soft:#5a6675; --line:#dfe4ea; --bg:#f6f8fa; --card:#fff;
+          --blue:#1f4e79; --red:#c0392b; --green:#1e7a46; --gold:#8a6d00; --amber:#b06f00; --purple:#6c2bd9; }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:30px 18px 90px; background:var(--bg); color:var(--ink);
+         font-family:-apple-system,"Segoe UI",Roboto,"Noto Sans TC","Microsoft JhengHei",sans-serif; line-height:1.7; }
+  .wrap { max-width:980px; margin:0 auto; }
+  h1 { font-size:1.5rem; margin:0 0 .15em; }
+  h2 { font-size:1.18rem; margin:1.8em 0 .5em; padding-bottom:.25em; border-bottom:2px solid var(--line); }
+  h3 { font-size:1.02rem; margin:1.2em 0 .4em; color:var(--blue); }
+  .sub { color:var(--soft); font-size:.9rem; margin:0 0 1.2em; }
+  .banner { background:#e7f4ec; border:1px solid #bfe3cd; border-radius:12px; padding:16px 20px; margin-bottom:14px; }
+  .banner .big { font-size:1.12rem; font-weight:700; color:var(--green); }
+  .banner .lede { font-size:.92rem; margin-top:.4em; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px 20px;
+          margin-bottom:16px; box-shadow:0 1px 2px rgba(0,0,0,.04); }
+  .card.hi { border-left:4px solid var(--blue); }
+  .card.med { border-left:4px solid var(--soft); }
+  .card.lo { border-left:4px solid var(--line); }
+  table { border-collapse:collapse; width:100%; font-size:.87rem; margin:.5em 0; }
+  th,td { border:1px solid var(--line); padding:6px 9px; text-align:left; vertical-align:top; }
+  th { background:#f0f3f6; font-weight:600; }
+  code { font-family:"SF Mono",Consolas,monospace; font-size:.85em; background:#eef1f5; padding:1px 5px; border-radius:4px; }
+  .tag { display:inline-block; font-size:.72rem; font-weight:700; padding:1px 8px; border-radius:999px; }
+  .t-adopt{background:#e7f4ec;color:var(--green);border:1px solid #bfe3cd}
+  .t-opt{background:#fff4d6;color:var(--amber);border:1px solid #eaddaa}
+  .t-decline{background:#eef1f5;color:var(--soft);border:1px solid var(--line)}
+  .t-high{background:#eaf1fb;color:var(--blue);border:1px solid #c4d8f0}
+  .id { font-family:"SF Mono",Consolas,monospace; font-weight:700; font-size:.82rem;
+        background:#eef2f7; padding:.1rem .45rem; border-radius:4px; margin-right:.45rem; }
+  .badge { font-size:.72rem; font-weight:600; padding:.1rem .5rem; border-radius:999px; margin-right:.35rem;
+           text-transform:uppercase; letter-spacing:.02em; }
+  .b-int { background:#e7f0fb; color:var(--blue); }
+  .b-cau { background:#fdeceb; color:var(--red); }
+  .b-app { background:#e9f7ef; color:#1a7f47; }
+  .b-str { background:#f3e8fd; color:var(--purple); }
+  .b-his { background:#fef0e7; color:#9a5b00; }
+  .b-ex  { background:#e8f4f8; color:#0b6379; }
+  .conf { font-size:.72rem; color:var(--soft); float:right; }
+  .conf.hi { color:var(--blue); font-weight:700; }
+  .loc { font-size:.83rem; color:var(--soft); margin:.25rem 0; }
+  .why { font-size:.87rem; color:#475467; margin:.3rem 0 0; }
+  .src { font-size:.78rem; color:var(--soft); margin-top:.35rem; }
+  .warn { background:#fbf4e6; border:1px solid #ecdcb6; border-radius:8px; padding:9px 12px; margin:.5em 0; font-size:.87rem; }
+  .exbox { background:#fafbfc; border:1px solid var(--line); border-left:3px solid var(--blue); border-radius:8px;
+           padding:10px 14px; margin:.5em 0; font-size:.9rem; }
+  .strong { background:#fff7ed; border-left:3px solid #e0a106; padding:.6rem .9rem; border-radius:4px;
+            font-size:.9rem; color:#7a5b00; margin:.4rem 0 1rem; }
+  ul { margin:.3em 0; padding-left:1.25em; } li { margin:.3em 0; font-size:.9rem; }
+  .mini { font-size:.83rem; color:var(--soft); }
+  .ok{color:var(--green);font-weight:700} .no{color:var(--red);font-weight:700}
+  .rec { background:#eef4fb; border:1px solid #cfe0f3; border-radius:10px; padding:14px 18px; margin:.6em 0 1.2em; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Chapter 8 — M4：Mode C 條件式 gap-check（裁決稿）</h1>
+  <p class="sub">2026-07-27 · gate-1 唯讀偵察 ×4 獨立實例：<code>mode-c-gapwalk</code> ×2（②軟深度，順序＋逆序各一）＋
+     <code>example-supplement</code> ×2（①補例，§8.1–8.4／§8.5–8.7）。單一裁決稿（PIPELINE M4）。
+     四份皆只提案、未改任何檔。</p>
+
+  <div class="banner">
+    <div class="big">結果：本章大致飽和，但有一組<b>結構性缺口</b>——「書上自己說了要做、卻沒做」的承諾</div>
+    <div class="lede">①波 <b>4 個例題候選（全部 Layer 1）</b>＋②波 <b>34 筆軟深度候選（去重後）</b>。
+      沒有一筆是「題目不夠多」或「話講得不夠多」：四個例題缺口全都是<b>本書自己陳述或證明了某件事卻從未示範</b>
+      （Thm 8.4 的 Simpson 界、Thm 8.3(b)、Ex 8.6 的 reduction formula、Strategy 8.2 step 2），
+      而②波裡教學槓桿最大的六筆修的也是課文<b>自己開了口沒收的承諾</b>。
+      <b>12 個缺口被兩份獨立實例命中</b>，其中一個更是被①②兩波、不同 scope 的 agent 各自找到（§8.1 的 reduction formula payoff）。
+      <b>我的建議：①波採 2＋轉形 1、②波採 T1 十筆＋T2 三筆</b>，見第 3 節——此處即 ⛳ 你的裁決點。</div>
+  </div>
+
+  <div class="card" style="border-left:4px solid var(--green);background:#f4fbf6;">
+    <b>更新 2026-07-27 — 已套用（使用者裁決：①波採 2＋轉形 1；②波採到 T3；四個品味題全採）</b>
+    <div style="margin-top:.5em">
+      <b>①波</b>　<span class="tag t-adopt">Ex 8.37</span> §8.7 Simpson 界→保證四位小數 ·
+      <span class="tag t-adopt">Ex 8.33</span> §8.6 Thm 8.3(b) 發散方向 ·
+      <span class="tag t-opt">8.1-E1 → 不編號推導段</span>（省下 30 個重編號）·
+      <span class="tag t-decline">8.2-E1 不採</span>（僅其 parity 診斷做成 §8.2 散文註）
+    </div>
+    <div style="margin-top:.5em">
+      <b>②波</b>　T1 十筆＋T2 三筆＋T3 九筆＋品味題 2 筆 ＝ <b>共落地 26 處</b>
+      （§8.1 ×3・§8.2 ×3・§8.3 ×1・§8.4 ×3・§8.5 ×1・§8.6 ×7・§8.7 ×6）。
+    </div>
+    <div style="margin-top:.5em">
+      <b>編號：</b>Example <b>8.1–8.38 ＝ 38 ＝ D1 硬上限</b>，實際只 4 個位移（舊 8.33–8.36 → 8.34–8.36 與 8.38），
+      5 處 cross-ref＋5 處 in-source ledger 同步，env-num 連續與 dangling 皆 grep＋render 雙驗。
+    </div>
+    <div style="margin-top:.5em">
+      <b>回歸（gate-1）：</b>範圍限定 Mode B ×3 抓到 <b>4 blocking</b>
+      （<code>8.4-b</code> 條件全由擬人／機械隱喻承載・<code>8.6-f</code> 不等式無理由・
+      <code>8.6-c</code> 條件靠模糊形容詞且誤歸類 Ex 8.32・<code>8.7-a</code> <code>quadrature</code> 全書未定義）
+      <b>全修</b>；回歸複核 ×2 <span class="ok">0 blocking</span>，四條逐條確認歸零，
+      並另抓出 <b>7 條修補自身引入的新缺陷</b>（含「multiplying by \(e^{-x^{2}}\) cannot enlarge it」字面為假、
+      懸垂分詞、一處前指落空）全修。盲測 <code>learner-sim</code> ×3
+      <span class="ok">3/3 零 stuck、零 B 類</span>，曲線 <code>[4,3,3.5,3,2,4,2.5]</code>／<code>[3.5,3,3,3.5,2,4,3]</code>／<code>[4,3,4,3,2,4,3]</code>，
+      三份皆判與 Ch1–Ch4 基線持平或持平偏低；scoped §8.6 回歸盲測 <span class="ok">0 stuck</span>、難度 3.5/5，
+      且確認位置修補後 Definition 8.1 的「see the caution below」<b>零次走錯</b>。
+    </div>
+    <div style="margin-top:.5em">
+      <b>機械閘終值：</b>build ✔ · quote_lint clean ×7 · <b>linebreak 0</b> · sympy <b>59/59 PASS</b> ·
+      render <b>math 1007→1378、MathJax err 0、未渲染 \(\backslash(\) 0、13/13 圖 hydrate、cross-ref dangling 0</b> ·
+      prose <b>N 8214→10502、em-dash 仍 0.0/1000</b>（四個 tic guard 密度全部下降，未發生標點代償）。
+    </div>
+    <div style="margin-top:.5em">
+      <b>查證：</b><code>8.2-a</code> 麥卡托史脈經兩個獨立來源核對（Wikipedia「Integral of the secant function」＋
+      Rickey &amp; Tuchinsky, <i>Mathematics Magazine</i> 53 (1980)）：Wright 1599 造表・Bond 約 1645 猜想・
+      Gregory 1668 證明・Barrow 1670；<b>確認麥卡托本人未計算或使用此積分</b>，課文據此措辭。
+      <code>8.7-c</code> 採無具名版，來源 <code>problem_banks/APEXCalculusV5</code> L574–576 逐字核對。
+    </div>
+    <div style="margin-top:.5em">
+      <b>交 gate-2 的既有內容發現 7 條</b>（見 <code>ch08_modec-gapcheck-audit.md</code> §8），
+      最重要一條：<b>Ch6 Theorem 6.5 的「applies verbatim from Thm 6.4」與 Ch8 Theorem 8.2 證明的
+      「Theorem 6.4 cannot be cited directly」互斥</b>。已逐字驗證兩章原文，判 §8.1 嚴謹、§6.4 超額宣稱；
+      因 Ch6 已定版（含 LaTeX 出版線）故不在本輪動，交數學 gate-2 由第二模型定奪。
+    </div>
+  </div>
+
+  <div class="strong"><b>怎麼裁：</b>最省事的方式是回「照建議套用」。要調整就點 ID（如「①波只採 8.7-E1」「②波再加 8.4-b、8.4-c」
+    「8.6-f 也寫」）。三個我認為真的該由你決定、不該由我代決的品味題：
+    <b>(i)</b> ①波要不要用滿 38/38 的硬上限；
+    <b>(ii)</b> §8.6 是 M3 難度尖峰，應用型的 <code>8.6-d</code>（重力功）要不要放進去；
+    <b>(iii)</b> <code>8.6-f</code>（Gabriel's horn 一句）貼著 PLAN Excluded 的上限，寫或不寫。</div>
+
+  <h2>0. 先講硬約束：這一輪只有兩個 Example 名額</h2>
+
+  <div class="card">
+    <p>本章 Example 現況 <b>8.1–8.36（36 個）</b>，章層硬上限 <b>38</b>（PLAN D1，理由：本章例題即內容，
+       但要讓稽核面有限）。所以 <b>①波最多只能採 2 筆</b>，而②波軟深度全是不編號物件
+       （Caution／散文段），<b>零編號 cascade</b>、可獨立裁決。</p>
+    <p class="mini">另一個要看的數字是 <b>cascade</b>：Example 編號跨節連續，在中段插一題會把其後所有 Example 編號
+       ＋指向它們的散文 cross-ref 全部推移。PIPELINE 把手動編號 ledger 列為「最大錯誤來源」，所以下面每筆都標了成本。</p>
+  </div>
+
+  <h2>1. ①波 — worked example 補充（4 候選，2 名額）</h2>
+
+  <p class="sub">兩份 <code>example-supplement</code> 實例各掃半章，<b>§8.3／§8.4／§8.5 三節判定為乾淨、零候選</b>
+     （每個 strategy row／fragment shape 都已有實例）。四筆候選<b>全部是 Layer 1</b>——沒有一筆是「題目不夠多」，
+     全都是「本書自己陳述或證明了某件事，卻從未示範」。</p>
+
+  <div class="card hi">
+    <span class="conf hi">priority: high</span>
+    <span class="id">8.7-E1</span><span class="badge b-ex">example</span>
+    <h3 style="margin-top:.2em">§8.7 — 用 Simpson 誤差界保證位數：\(\displaystyle\int_{0}^{1}e^{-x^{2}}\,dx\)（\(S_{10}\)）</h3>
+    <div class="loc"><b>locus</b>：Example 8.35 之後（該例末句「The bounds are worst-case…」天然承接）。
+      <b>零 cascade 替代 locus</b>：Ex 8.36 之後（新號 8.37，重編號 0、cross-ref 0，但與「資料欄＝無公式 client」的收尾次序對調）。</div>
+    <p><b>缺口（Layer 1 ×2）</b>：① <b>Theorem 8.4 的第三條不等式 \(\lvert E_{S}\rvert\le\frac{K_{4}(b-a)^{5}}{180n^{4}}\)
+      全章從未被任何例題使用</b>——我已用 grep 複核：<code>K_4</code>／<code>E_S</code> 只出現在定理陳述那兩行，
+      \(K_4\) 從未被算過。而這條正是本章<b>兩筆 on-credit 之一</b>（證明 fence 到 Ch11 §11.9）：向未來借來的結果，卻零示範。
+      ② §8.7 開場點名的三個 client（\(\int_1^\infty e^{-x^2}\)、橢圓周長、§7.6 弧長）<b>沒有任何一個被服務</b>——
+      四個既有例的被積函數是 \(1/x\)（真值 \(\ln 2\) 已知）或一欄資料。</p>
+    <p><b>教什麼新動作</b>：(a) 求 \(f^{(4)}\) 並取一個<b>夠用但不精確</b>的界——課文寫了「any valid bound serves」
+      卻沒有任何例題兌現（Ex 8.35 取到的是精確極大值）；(b) 在<b>真值不可得</b>時把結果報成「值 ± 保證誤差 → 保證正確到第幾位」。
+      既有四例佔的是另外兩格（真值已知＋有界；真值未知＋無界），本例補的是<b>真值未知＋有界</b>，也正是誤差界唯一真正發揮作用的一格。</p>
+    <div class="exbox">
+      <p><b>Example.</b> The integral \(\displaystyle\int_{0}^{1}e^{-x^{2}}\,dx\) is a proper integral of a continuous
+         function, but §8.5 produced no antiderivative for the integrand. Approximate it by Simpson's Rule with
+         \(n=10\), and state how accurate the result is guaranteed to be.</p>
+      <p><b>Solution 骨架</b>（每步標依據）：</p>
+      <ol>
+        <li>被積函數在 \([0,1]\) 連續、積分存在（<b>Thm 6.1</b>）；缺的是可套 FTC-2（<b>Thm 6.4</b>）的原函數。
+            〔<b>B-02 紀律</b>：措辭沿用 §8.5／Ex 8.32 既定寫法，<b>只說本書技巧產不出</b>，不斷言不存在。〕</li>
+        <li>套 (S)：\(h=0.1\)、\(n=10\) 為偶（even-\(n\) Caution），壓成單一 display：
+            \[ S_{10}=\tfrac{0.1}{3}\bigl[e^{0}+4e^{-0.01}+2e^{-0.04}+\cdots+4e^{-0.81}+e^{-1}\bigr]\approx 0.746825. \]</li>
+        <li>求 \(f^{(4)}\)（鏈鎖 <b>Thm 3.3</b>＋\((e^{x})'=e^{x}\) <b>Thm 4.8</b>＋乘積 <b>Thm 2.6</b>）：
+            \(f^{(4)}=(16x^{4}-48x^{2}+12)e^{-x^{2}}\)。在 \([0,1]\) 上括號 \(\le 16+12=28\)、\(\ge 12-48=-36\)，
+            故 \(\lvert f^{(4)}\rvert\le 36\)，取 \(K_{4}=36\)。界寬鬆只讓保證變弱、不會失效（界的存在由 <b>EVT Thm 4.9(a)</b> 保證）。</li>
+        <li>套 <b>Thm 8.4</b>：\(\lvert E_{S}\rvert\le\frac{36\cdot 1^{5}}{180\cdot 10^{4}}=2\times10^{-5}\)。</li>
+        <li>真值落在 \(0.746825\pm 0.00002\)，即 \(0.74680\) 與 \(0.74685\) 之間，故
+            \(\int_{0}^{1}e^{-x^{2}}dx=0.7468\) 四位小數皆正確。</li>
+        <li>收尾（教學重點）：與 Ex 8.33–8.35 不同，這裡沒有真值可比；那個誤差界就是唯一能講出口的準確度陳述，而它已足以指名四位小數。</li>
+      </ol>
+      <p class="mini"><b>刻意不寫出真值</b>（需 CAS，且本例重點正是「不需要真值也能保證位數」）。</p>
+    </div>
+    <div class="warn"><b>我已用 sympy 全部複核（18/18 PASS）：</b>
+      \(S_{10}=0.746824948\)、真值 \(0.746824133\)、實際誤差 \(-8.15\times10^{-7}\)（確實遠小於界，
+      呼應 Ex 8.35 的「worst-case」那句）；\(f^{(4)}\) 形式正確；\(K_4=36\) 是<b>有效</b>界
+      （\([0,1]\) 上實際極大值＝12，取 36 是刻意示範「粗略界也合法」）；\(2\times10^{-5}\) 正確；
+      區間兩端四捨五入到四位皆為 \(0.7468\)。</div>
+    <div class="src"><b>source</b>：<code>authored</code>（題庫查無附完整解的同型題；題型先例
+      <code>[precedent: APEX Calculus V5 §5.5 #11–12、#19–22，僅有答案]</code>，CC BY-NC 4.0）。
+      被積函數選 \(e^{-x^{2}}\) 是為了接本書自己的 running client（§8.5 提出、Ex 8.32 明文點名）。
+      <b>圖成本 0</b>。<b>cascade：1 個 Example 重編號（8.36→8.37）＋1 處 cross-ref（Fig 8.13 caption）</b>，
+      §8.1–§8.6 完全不受影響。</div>
+  </div>
+
+  <div class="card med">
+    <span class="conf">priority: medium</span>
+    <span class="id">8.6-E1</span><span class="badge b-ex">example</span>
+    <h3 style="margin-top:.2em">§8.6 — 比較定理的<b>發散方向</b>：\(\displaystyle\int_{3}^{\infty}\frac{dx}{\sqrt{x^{2}-x}}\)</h3>
+    <div class="loc"><b>locus</b>：Figure 8.10 之後、「Mixed cases reduce to the two types.」之前。</div>
+    <p><b>缺口（Layer 1）</b>：<b>Theorem 8.3(b)（發散方向）零示範</b>——我已 grep 複核，全章 <code>Theorem 8.3</code>
+      只在 Ex 8.32 被引用一次，而且引的是 <b>(a)</b>；定理前的鋪陳散文也只講收斂方向。</p>
+    <p><b>教什麼新動作</b>：發散方向的比較<b>必須把已知發散者放在下界</b>——不等式方向決定誰扮演誰。
+      這是本節唯一未示範的定理分支，也是公認的經典誤解（學生反射性地「往上界找」）。</p>
+    <div class="exbox">
+      <p><b>Example.</b> Show that \(\displaystyle\int_{3}^{\infty}\frac{dx}{\sqrt{x^{2}-x}}\) diverges.</p>
+      <ol>
+        <li>前提檢查：\(x^{2}-x=x(x-1)\ge 6>0\) 於 \([3,\infty)\)，被積函數連續且為正（Thm 8.3 的假設）。</li>
+        <li>找下界：\(0 &lt; x^{2}-x &lt; x^{2}\Rightarrow\sqrt{x^{2}-x} &lt; x\Rightarrow
+            0 &lt; \frac1x &lt; \frac{1}{\sqrt{x^{2}-x}}\)。即取 \(f=1/x\)（已知者，放<b>下</b>面）、\(g=1/\sqrt{x^{2}-x}\)（待判者）。</li>
+        <li>已知者發散：\(\int_{3}^{t}\frac{dx}{x}=\ln t-\ln 3\to\infty\)（§6.4 ＋ <b>Thm 6.4</b>），由 <b>Def 8.1(a)</b> 判發散。</li>
+        <li>由 <b>Thm 8.3(b)</b>，原積分發散。</li>
+        <li><b>方向這句不能省</b>：同樣容易驗證 \(g\le\frac2x\) 於 \([3,\infty)\)，而 \(\int_{3}^{\infty}\frac{2\,dx}{x}\)
+            也發散——但這個比較什麼都證明不了。要判發散，已知發散的那一個必須在<b>下面</b>。</li>
+        <li>可選收尾：這個被積函數先配方再作正割代換（§8.3）也能求出原函數；判定收斂與否並不需要它。</li>
+      </ol>
+    </div>
+    <div class="warn"><b>sympy 複核 PASS</b>：\(1/x &lt; g\) 於 \([3,\infty)\) ✔、\(g\le 2/x\)（\(\iff 3x^{2}\ge 4x\)）✔、
+      \(x^{2}-x\) 在 \([3,\infty)\) 的極小值＝6 ✔、\(\int_{3}^{\infty}g=\infty\) ✔、\(\int_{3}^{\infty}dx/x=\infty\) ✔。
+      （順帶：sympy 給出的原函數 \(\ln(2x+2\sqrt{x(x-1)}-1)\) 證實步驟 6 的說法成立。）</div>
+    <div class="src"><b>source</b>：<code>[source: APEX Calculus V5, text/06_Improper_Integration.tex — 正文 worked example 第 2 小題]</code>，
+      官方 solution 全文可得；<b>license</b> CC BY-NC 4.0（可 remix）。<b>rewrite_delta＝輕改</b>：數學實質不變，
+      三處對齊本書（引用改本書編號；開場改成假設檢查而非 APEX 的「for large \(x\)…」啟發式；
+      <b>步驟 5 的方向反例句與步驟 6 為本次撰寫</b>，請單獨過目）。<b>圖成本 0</b>。
+      <b>cascade：4 個 Example 重編號（§8.7 全部）＋4 處 cross-ref</b>。</div>
+  </div>
+
+  <div class="card hi">
+    <span class="conf hi">priority: high（但成本最高）</span>
+    <span class="id">8.1-E1</span><span class="badge b-ex">example</span>
+    <h3 style="margin-top:.2em">§8.1 — 把 reduction formula 當遞迴用：\(\displaystyle\int_{0}^{\pi/2}\sin^{6}x\,dx=\frac{5\pi}{32}\)</h3>
+    <div class="loc"><b>locus</b>：Example 8.6 之後、<code>&lt;h3&gt;Settling the shell–washer question&lt;/h3&gt;</code> 之前。</div>
+    <p><b>缺口（Layer 1）</b>：<b>Example 8.6 的 reduction formula 被證明、被 spot-check、從未被使用。</b>
+      課文兩處明講的 payoff 都沒有實例——§8.1 導言「so that any particular power is a chain of lookups rather than a
+      fresh computation」、§8.2 Ex 8.8 收尾「When several powers must be integrated in sequence, the reduction formula
+      is the more systematic tool」。我已讀原文複核：§8.2 那段<b>只說</b>兩條路答案一致，<b>沒有執行</b>遞迴。</p>
+    <p><b>教什麼新動作</b>：① 一條已記錄的公式可反覆套用形成 lookup chain；② 在 \([0,\pi/2]\) 上邊界項
+      \(-\tfrac1n\cos x\sin^{n-1}x\) 兩端皆為 0，遞迴退化成純數字關係；③ 遞迴需要 base case。
+      既有 Ex 8.6 只做 \(n=2\) 的一致性檢查，不是「使用」。全章 36 例中沒有第二個遞迴實例。</p>
+    <div class="exbox">
+      <p><b>Example.</b> Evaluate \(\displaystyle\int_{0}^{\pi/2}\sin^{6}x\,dx\).</p>
+      <ol>
+        <li>令 \(I_{n}=\int_{0}^{\pi/2}\sin^{n}x\,dx\)；Example 8.6 給出
+            \(\int\sin^{n}x\,dx=-\frac1n\cos x\sin^{n-1}x+\frac{n-1}{n}\int\sin^{n-2}x\,dx\)。</li>
+        <li>各函數在含 \([0,\pi/2]\) 的開區間上可微，故可由 <b>Thm 6.4</b> 代入上下限：
+            \(I_{n}=\bigl[-\tfrac1n\cos x\sin^{n-1}x\bigr]_{0}^{\pi/2}+\frac{n-1}{n}I_{n-2}\)。</li>
+        <li>邊界項兩端皆 0（\(\cos\tfrac\pi2=0\)；\(\sin^{n-1}0=0\) 因 \(n\ge2\)），故 \(I_{n}=\frac{n-1}{n}I_{n-2}\)。</li>
+        <li>三次 lookup：\(I_{6}=\tfrac56 I_{4}=\tfrac56\cdot\tfrac34 I_{2}=\tfrac56\cdot\tfrac34\cdot\tfrac12 I_{0}\)。</li>
+        <li>Base case \(I_{0}=\int_{0}^{\pi/2}1\,dx=\tfrac\pi2\)（§6.4 ＋ Thm 6.4）。</li>
+        <li>故 \(\int_{0}^{\pi/2}\sin^{6}x\,dx=\frac56\cdot\frac34\cdot\frac12\cdot\frac\pi2=\frac{5\pi}{32}\)。
+            公式證明一次、使用三次，步驟 1 之後沒有再做任何積分。</li>
+      </ol>
+      <p class="mini"><b>紅線</b>：只算這一個數，<b>不得</b>寫出 \(\int_0^{\pi/2}\sin^n x\,dx\) 的一般封閉式（Wallis 型），
+         否則就是新的未證一般命題；亦不得提 Wallis product。</p>
+    </div>
+    <div class="warn"><b>sympy 複核 PASS</b>：\(\int_{0}^{\pi/2}\sin^{6}=5\pi/32\) ✔；reduction 恆等式在 \(n=2,3,4,6\) 皆成立 ✔；
+      \(I_{0}=\pi/2\) ✔；邊界項在 \(n\ge2\) 時兩端皆 0 ✔。</div>
+    <div class="src"><b>source</b>：<code>authored</code>（題庫查無附完整解的同型題；Mooculus 的 Wallis 頁只以「It can be shown that」
+      陳述同一遞迴、無證明，僅作旁證未引用）。依 <code>CONTENT_SOURCING</code> §3，<b>authored 候選須單獨點名請你過目</b>。
+      <b>圖成本 0</b>。<b class="no">cascade：30 個 Example 重編號（舊 8.7–8.36 全部 +1）＋20 處散文 cross-ref＋13 處 header ledger</b>。</div>
+    <div class="rec"><b>我的替代方案（見第 3 節建議）</b>：這筆的教學功能<b>不一定要吃掉一個 Example 名額</b>。
+      本章已有兩個「不編號的 tagged 推導」先例（§8.1 的 shell–washer 段、§8.7 的 Simpson 拋物線引理），
+      改成緊接 Ex 8.6 的一段 <code>expansion:formula [pass: enrichment]</code> 推導，<b>cascade 歸零</b>、payoff 照樣落地。</div>
+  </div>
+
+  <div class="card med">
+    <span class="conf">priority: medium</span>
+    <span class="id">8.2-E1</span><span class="badge b-ex">example</span>
+    <h3 style="margin-top:.2em">§8.2 — Strategy 8.2 step 2 的實例：\(\displaystyle\int\sin^{4}x\cos^{3}x\,dx\)</h3>
+    <div class="loc"><b>locus</b>：Example 8.7 及其後的負號 Caution 之後、Example 8.8 之前。</div>
+    <p><b>缺口（Layer 1）</b>：Strategy 8.2 的 <b>step 2（cosine 次數為奇，\(u=\sin x\)）完全沒有 worked example</b>
+      ——我已複核 Ex 8.7 是 \(\int\sin^{3}x\cos^{2}x\,dx\)（odd sine，走 step 1）。真正的增量在
+      <b>parity 診斷</b>：把該留的因子花錯會留下奇數個 sine，而單獨一個 \(\sin x\) 不是 \(\cos x\) 的函數
+      （需選定符號），Pythagorean 恆等式因此無法把被積式變成多項式。課文只在 step 3 的括號裡宣告這個理由，從未演示。</p>
+    <div class="exbox">
+      <p><b>Example.</b> Find \(\displaystyle\int\sin^{4}x\cos^{3}x\,dx\)．答案
+         \(=\frac{\sin^{5}x}{5}-\frac{\sin^{7}x}{7}+C\)（Prop A.1 ＋ Thm 6.6；<b>sympy 微分回驗 PASS</b>）。</p>
+      <p><b>Parity 診斷（本例的新內容）</b>：另一種切法（\(u=\cos x\)）會留下 \(\int\sin^{3}x\,u^{3}(-du)\)，
+         而單獨的 \(\sin x\) 需選定符號：只在 \(\sin x\ge0\) 的區間上才等於 \(\sqrt{1-u^{2}}\)，
+         積分變成帶根號而非多項式。parity test 正是「哪個因子可以被花掉」的檢驗。</p>
+    </div>
+    <div class="src"><b>source</b>：<code>[source: Mooculus — trigonometricIntegrals/digInTrigonometricIntegrals.tex]</code>（含完整解與兩路比較），
+      <b>license</b> CC BY-NC-SA。<b>rewrite_delta＝輕改偏中改</b>，其中一處<b>更動數學實質須單獨過目</b>：
+      Mooculus 原文寫 \(\sin^3 x=(1-\cos^2x)^{3/2}\) 而未聲明區間（僅在 \(\sin x\ge0\) 成立），
+      本書依 §8.3 的取號紀律改寫為「需選定符號」。<b>圖成本 0</b>。
+      <b>cascade：29 個 Example 重編號＋20 處 cross-ref</b>。</div>
+    <div class="warn"><b>偵察員自己降為 medium 的理由（我同意）</b>：機械動作是 Ex 8.7 的鏡像，且 §8.3 Ex 8.14 內部已以
+      sub-step 形式出現過 \(u=\sin\theta\)。真正的增量集中在 parity 診斷那一段——<b>若刪掉那段，本筆就是近重複題</b>。</div>
+  </div>
+
+  <h2>2. ②波 — 軟深度（兩份獨立實例，合併去重後 34 筆）</h2>
+
+  <p class="sub">A 實例順序掃（§8.1→§8.7）提 18 筆；B 實例逆序掃（§8.7→§8.1）提 30 筆。
+     <b>去重後 34 筆</b>，其中 <b>12 個缺口被兩份實例獨立命中</b>（下面標
+     <span class="tag t-high">雙命中</span>）——這是本輪最可信的一組。
+     <b>全部 34 筆都是不編號物件</b>（Caution 依 house convention 不編號／散文段），
+     零編號 cascade、零 cross-ref 重排、零圖變動。</p>
+
+  <div class="strong"><b>兩份實例都獨立指出的章層事實：</b>Ch8 的
+     <code>expansion:application</code> ＝ <b>0</b>、<code>expansion:history</code> ＝ <b>0</b>（我已 grep 複核）。
+     Ch1–Ch7 每章都有。這與 SPEC §3 的密度校準有張力，但與「標準/計算 工具箱章」的輕階定位相容——
+     所以下面我只推薦補 2–3 筆應用／史脈，不把工具箱章推成語域更重的章。</div>
+
+  <h3>§8.1 Integration by Parts</h3>
+
+  <div class="card hi"><span class="conf hi">T1 建議採</span>
+    <span class="id">8.1-a</span><span class="badge b-cau">caution</span><span class="tag t-high">雙命中</span>
+    <div class="loc"><b>locus</b>：Example 8.4 solution 之後、「For definite integrals, the term \(uv\) is evaluated…」之前。</div>
+    <p><b>提案</b>（2–3 句）：solve-back 只在第二次分部<b>沿用同一類因式</b>放進 \(u\) 時才成立。第二次若改取
+      \(u=e^{x}\)、\(dv=\cos x\,dx\)，會得到 \(\int e^{x}\cos x\,dx=e^{x}\sin x-J\)，代回後整條式子塌成
+      \(J=J\)：正確，但沒有內容——第二次分部把第一次做的事原路撤銷了。</p>
+    <p class="why"><b>why</b>：solve-back 是 §8.1 三個工作型態之一，而「第二輪反轉角色就白做」是這個型態<b>唯一</b>的失效模式。
+      失敗的樣子很特別（不是算錯，是得到恆等式），讀者第一次撞到會完全不知道發生什麼事。現有 Caution 只管括號與負號。</p>
+    <div class="src">source <code>authored</code>（機制已由 Ex 8.3／8.4 就地驗證，無新數學）· 成本 0 · A、B 皆判 high</div>
+  </div>
+
+  <div class="card hi"><span class="conf hi">T1 建議採</span>
+    <span class="id">8.1-b</span><span class="badge b-str">strategy</span>
+    <div class="loc"><b>locus</b>：「Any antiderivative serves for \(v\), so we take the one with zero constant.」之後、Figure 8.1 之前。</div>
+    <p><b>提案</b>（一句＋一行式）：常數的自由偶爾值得用掉——算 \(\int\ln(x+1)\,dx\) 時取 \(v=x+1\)（而非 \(v=x\)）
+      會讓剩下的積分變成 \(\int dx\)，因為 \(\frac{x+1}{x+1}=1\)；取 \(v=x\) 也對，只是多繞一次分式拆解。</p>
+    <p class="why"><b>why</b>：課文剛說「取常數為零的那個」，這是好的預設但不是規則；讀者不會自己想到常數可以拿來對消分母。
+      把「\(v\) 的選擇是自由的」從抽象變具體。</p>
+    <div class="src">source <code>authored</code> · 成本 0 · <b>寫作限制</b>：一句話＋一行式，不要展開成完整 solution（否則就是事實上的新例題）</div>
+  </div>
+
+  <div class="card hi"><span class="conf hi">T1 建議採（取代 ①波 8.1-E1）</span>
+    <span class="id">8.1-c</span><span class="badge b-int">intuition</span><span class="tag t-high">跨波命中</span>
+    <div class="loc"><b>locus</b>：Example 8.6 solution 之後、<code>&lt;h3&gt;Settling the shell–washer question&lt;/h3&gt;</code> 之前。</div>
+    <p><b>提案</b>（2 句＋一行式）：把上下限取成 \(0\) 到 \(\tfrac\pi2\)，邊界項 \(-\tfrac1n\cos x\sin^{n-1}x\)
+      在兩端都歸零（\(n\ge2\)），reduction formula 塌成乾淨的遞迴 \(I_{n}=\tfrac{n-1}{n}I_{n-2}\)——這才是它值得
+      「記錄一次」的地方：一次計算換到一整族定積分。</p>
+    <p class="why"><b>why 這筆特別重要</b>：這個缺口<b>被兩個不同波、不同 scope 的 agent 各自獨立找到</b>——
+      ①波把它報成「Ex 8.6 被證明、被 spot-check、從未被使用」的 Layer 1 例題缺口（<code>8.1-E1</code>，cascade 30），
+      ②波把它報成「payoff 完全沒說」的 intuition 缺口（cascade 0）。<b>同一個缺口，兩種交付形態。</b></p>
+    <div class="src">source <code>authored</code> · 成本 <b>0</b>（vs 8.1-E1 的 30 個 Example 重編號）· 須明說用的是 Thm 8.2、
+      且 \(\sin^{n-1}x\)、\(-\cos x\) 在 \([0,\tfrac\pi2]\) 上 smooth</div>
+  </div>
+
+  <div class="card med"><span class="conf">T3 可選</span>
+    <span class="id">8.1-d</span><span class="badge b-int">intuition</span>
+    <div class="loc">同 8.1-b 位置（可合併）。</div>
+    <p><b>提案</b>：一句說明「為何 \(v\) 的常數不影響結果」：把 \(v\) 換成 \(v+k\)，右邊多出 \(ku\) 又減掉
+      \(k\int du=ku\)，兩者相消。</p>
+    <p class="why"><b>why</b>：課文只下了斷言沒給理由，而讀者剛被告知「不定積分是函數族、常數只出現一次」，正對常數最敏感。
+      <b>我的看法</b>：與 8.1-b 用的是同一個自由度，兩筆併成一段最經濟（先說為何無所謂、再說何時值得用掉）。</p>
+    <div class="src">source <code>authored</code> · 成本 0</div>
+  </div>
+
+  <div class="card lo"><span class="conf">T4 建議不採</span>
+    <span class="id">8.1-e</span><span class="badge b-str">strategy</span><span class="tag t-high">雙命中（但兩份看法相反）</span>
+    <div class="loc">Strategy 8.1 方塊之後。</div>
+    <p><b>提案</b>：承認業界通行的 <b>LIATE</b> 口訣，指出它是 Strategy 8.1 步驟 1–2 的壓縮版、是經驗法則不是定理。</p>
+    <p class="why"><b>兩份實例意見分歧</b>：A 自己建議<b>不採</b>（SPEC §3 平實條款要求「關鍵位置的陌生詞換直白詞」，
+      引入不透明縮寫與該條款直接張力，且 Strategy 8.1 內容上已完全覆蓋）；B 判為<b>品味決定</b>，交你裁。
+      <b>我的看法</b>：同意 A。讀者在外面遇到 LIATE 是真的，但本書的處理方式一向是「把規則寫清楚」而不是「收編口訣」。</p>
+    <div class="src">source <code>[standard mnemonic]</code> · 成本 0</div>
+  </div>
+
+  <div class="card lo"><span class="conf">T4 建議不採</span>
+    <span class="id">8.1-f</span><span class="badge b-app">application</span> <span class="id">8.1-g</span><span class="badge b-int">intuition</span>
+    <p><b>8.1-f</b>（A）：Ex 8.4 後加一句「指數乘振盪出現在阻尼振動與交流電路」的 scope 應用註。
+       <b>8.1-g</b>（B）：一句前瞻，說分部「邊界項減積分」的形狀會在多變數積分定理再現（Ch16 軟前瞻）。</p>
+    <p class="why"><b>我的看法</b>：8.1-f 提案者自己壓 low（工具箱章 §8.1 沒有應用可辯護）；8.1-g 帶理論味、抬高語域，
+       與本章「標準/計算」定位相衝，提案者亦自壓 low。兩筆都不是缺口，是錦上添花。</p>
+  </div>
+
+  <h3>§8.2 Trigonometric Integrals</h3>
+
+  <div class="card med"><span class="conf">T2 建議採（<b>需先查證</b>）</span>
+    <span class="id">8.2-a</span><span class="badge b-his">history</span><span class="tag t-high">雙命中</span>
+    <div class="loc"><b>locus</b>：Proposition 8.1 證明之後、「Each formula holds on every interval avoiding…」之後。</div>
+    <p><b>提案</b>（2–3 句）：這個反導數不是為了填表而找的。麥卡托海圖要求南北比例尺隨緯度像 \(\sec\) 一樣拉伸，
+      所以「到緯度 \(\varphi\) 的圖上距離」就是 \(\int_0^\varphi\sec\theta\,d\theta\)；十六世紀末的航海表是用逐段求和
+      <b>造</b>出來的，封閉形式 \(\ln\lvert\sec+\tan\rvert\) 要到十七世紀才被猜出並證明。一條具體的航海需求，
+      比微積分本身還早提出這個積分。</p>
+    <p class="why"><b>why</b>：課文剛把 sec 的解法誠實標為「a device that was found by trial, not derived」，
+      讀者立刻會問「那當初為什麼有人要去試」——這段給的正是那個答案。<b>這是全章唯一一處「歷史能直接解釋為什麼這一步看起來莫名其妙」的位置</b>，
+      也是罕見的「應用先於工具」實例。兩份實例都把它排在 history 類第一。</p>
+    <div class="src">source <code>[Rickey &amp; Tuchinsky, "An Application of Geography to Mathematics: History of the
+      Integral of the Secant", Mathematics Magazine 53 (1980) 162–166]</code> ·
+      <b class="no">VERIFY</b>：人名／年代／歸屬須逐項查證後才落筆；<b>不得</b>聲稱麥卡托本人用了這個積分（他沒有）。
+      兩份實例都建議<b>不寫</b>具體人名與 \(\ln\tan(\pi/4+\theta/2)\) 形式，只保留可查證的骨架 · 成本 0</div>
+  </div>
+
+  <div class="card med"><span class="conf">T2 可選</span>
+    <span class="id">8.2-b</span><span class="badge b-app">application</span><span class="tag t-high">雙命中</span>
+    <div class="loc"><b>locus</b>：Figure 8.3 之後、<code>&lt;h3&gt;Tangents and secants&lt;/h3&gt;</code> 之前。</div>
+    <p><b>提案</b>（1–2 句）：把 Fig 8.3 的中線接上 Definition 7.4——\(\sin^{2}\) 在一個完整週期上的平均值恰是
+      \(\tfrac12\)，這正是交流電裡「有效值＝峰值除以 \(\sqrt2\)」這個換算的來源。</p>
+    <p class="why"><b>why</b>：power reduction 的常數項 \(\tfrac12\) 在圖裡是中線、在 §7.5 的語言裡是平均值、在工程裡是 rms
+      ——同一個數字三種讀法，課文只給了第一種。§8.2 是全章最「純技巧」的一節，讀者最容易問「這些恆等式到底幹嘛用」。</p>
+    <div class="warn"><b>兩份實例都提醒的同一件事</b>：M2 圖閘當時明訂 Fig 8.3 的 caption
+      「geometric caption only, no average-value vocabulary」。本候選寫在<b>正文</b>、不動 caption，且引 Definition 7.4（定義）
+      而非 Theorem 7.2（積分均值定理）。rms 的物理意涵是書外事實，措辭須是「這是……換算的來源」而非推導；建議<b>不寫</b>具體電壓數值。</div>
+    <div class="src">source <code>[Def 7.4 ＋ standard AC rms convention]</code> · 成本 0</div>
+  </div>
+
+  <div class="card med"><span class="conf">T3 可選</span>
+    <span class="id">8.2-c</span><span class="badge b-str">strategy</span>
+    <div class="loc"><b>locus</b>：Example 8.10 solution 之後、<code>&lt;h3&gt;Products with different frequencies&lt;/h3&gt;</code> 之前。</div>
+    <p><b>提案</b>（2 句）：把 cotangent–cosecant 鏡像家族一次講完：\(\int\cot^{m}x\csc^{n}x\,dx\) 與 Strategy 8.3 同構——
+      \(n\) 偶則留一個 \(\csc^{2}x\)（\(-\cot x\) 的微分），\(m\) 奇則留一個 \(\csc x\cot x\)（\(-\csc x\) 的微分），
+      其餘用 \(1+\cot^{2}x=\csc^{2}x\)（Prop A.1）換掉；差別只在每次代換多帶一個負號。</p>
+    <p class="why"><b>why</b>：本節只教了 tan/sec 一半的家族，Prop 8.1 卻同時給了 \(\int\cot\) 與 \(\int\csc\)，
+      讀者面對 \(\int\cot^{3}x\csc^{4}x\) 時沒有任何指引。所需事實全部已在場，<b>零新機器</b>。
+      fragment header 的 guard 寫「no csc³（mirror named）」——本候選正是「named」的一句話版，符合 guard。</p>
+    <div class="src">source <code>authored</code> · 成本 0</div>
+  </div>
+
+  <div class="card lo"><span class="conf">T4 建議不採</span>
+    <span class="id">8.2-d</span><span class="badge b-cau">caution</span> <span class="id">8.2-e</span><span class="badge b-cau">caution</span>
+    <p><b>8.2-d</b>（B）：兩個次方都是奇數時 step 1 與 step 2 同時適用，兩條路的答案長得不一樣但只差常數。
+       <b>8.2-e</b>（B）：\(-\ln\lvert\csc+\cot\rvert\) 與 \(\ln\lvert\csc-\cot\rvert\) 是同一個函數（乘積為 1）。</p>
+    <p class="why"><b>我的看法</b>：8.2-d 與下面的 <b>8.5-a</b> 是同一原則的兩個深度，B 自己標了重複風險並建議二擇一——
+       §8.5 是後設節、能引 Corollary 4.4 給出一般原理，是更好的家。8.2-e 價值真實但偏窄，且「別的書寫成後者」的措辭不好拿捏。</p>
+  </div>
+
+  <h3>§8.3 Trigonometric Substitution（M3 難度尖峰節之一，增補須短）</h3>
+
+  <div class="card hi"><span class="conf hi">T1 建議採</span>
+    <span class="id">8.3-a</span><span class="badge b-cau">caution</span><span class="tag t-high">雙命中</span>
+    <div class="loc"><b>locus</b>：A 建議 Strategy 8.4 之後；B 建議 Ex 8.16 之後、定積分 Caution 之前。<b>我傾向 B 的位置</b>（緊貼那句宣稱）。</div>
+    <p><b>提案</b>（2 句＋一行式）：\(x^{2}\) 帶係數時要先把它提出來——\(\sqrt{9x^{2}-4}=3\sqrt{x^{2}-(\tfrac23)^{2}}\)
+      就是 \(a=\tfrac23\) 的第 3 列；\(\sqrt{4x^{2}-9}=2\sqrt{x^{2}-\tfrac94}\) 同理。Strategy 8.4 的三列都以領導係數 1 寫成，
+      這一步是把任意二次式接上表格的接頭。</p>
+    <p class="why"><b>why（B 的框架更硬）</b>：收尾段宣稱「With completing the square, the method reaches any
+      \(\sqrt{px^{2}+qx+r}\)」，但<b>五個例子的領導係數全是 \(\pm1\)</b>（Ex 8.16 的 \(3-2x-x^{2}\) 也化成 \(4-(x+1)^{2}\)），
+      \(\lvert p\rvert\ne1\) 的那一步從頭到尾沒出現過。這是「宣稱」與「示範」之間唯一的實質落差，
+      而 §8.4 Ex 8.21 用 \(u=2x-1\) 做過同一件事——章內兩節的真實不對稱。</p>
+    <div class="src">source <code>authored</code> · 成本 0 · A 建議以<b>散文一句</b>掛在 Strategy 8.4 後，維持「表格＝單一權威」的結構</div>
+  </div>
+
+  <div class="card lo"><span class="conf">T4 建議不採（三筆）</span>
+    <span class="id">8.3-b</span><span class="badge b-his">history</span> <span class="id">8.3-c</span><span class="badge b-app">application</span> <span class="id">8.3-d</span><span class="badge b-cau">caution</span>
+    <p><b>8.3-b</b>（B）Archimedes 的橢圓面積史脈（<b class="no">需查證</b>命題編號與陳述形式）·
+       <b>8.3-c</b>（B）圓弓形／橫置圓柱儲槽的液體體積應用 ·
+       <b>8.3-d</b>（B）換上下限時取的 \(\theta\) 必須落在宣告範圍內 ·
+       另 A 的 <b>8.3-e</b>「三種根號＝三種圓錐曲線」（A 自壓 low）。</p>
+    <p class="why"><b>我的看法</b>：§8.3 是<b>兩份實例都判定最乾淨的一節</b>（hypothesis hygiene 覆蓋近乎無縫），
+       且是 M3 難度尖峰（≈3.5）。8.3-d 的內容 ③ A-01 hygiene 輪已跑過，屬過度覆蓋（B 自壓 low）。
+       8.3-b/8.3-c 是錦上添花且 8.3-b 帶查證成本。本節只採 8.3-a 一筆最恰當。</p>
+  </div>
+
+  <h3>§8.4 Partial Fractions（全章唯一「零應用、零圖」的技巧節）</h3>
+
+  <div class="card med"><span class="conf">T3 建議採</span>
+    <span class="id">8.4-a</span><span class="badge b-str">strategy</span><span class="tag t-high">雙命中</span>
+    <div class="loc"><b>locus</b>：Example 8.18 solution 之後、Example 8.19 之前。</div>
+    <p><b>提案</b>（1–2 句）：常數解出來之後，把一個<b>尚未用過</b>的 \(x\) 值代回清分母後的恆等式，
+      就能在動手積分<b>之前</b>抓出符號與算術錯誤——分解錯了，後面每一步都白做。</p>
+    <p class="why"><b>why</b>：本節有四個例子在解常數，錯一個常數整條答案就毀了；課文只在 Ex 8.17（除法那步）說了
+      「can be checked by recombining」，<b>分解</b>這一步從未給檢查法——同一個習慣缺了一半。與全章
+      「differentiating confirms」的驗算文化一致。</p>
+    <div class="src">source <code>authored</code> · 成本 0 · <b>紅線</b>：不可寫成 Strategy 8.5 的 step 5（ledger 已鎖，
+      既有環境不得改寫），只能是新的散文段落 · <b>若採納，示範算式須進 sympy 重算清單</b></div>
+  </div>
+
+  <div class="card med"><span class="conf">T3 建議採</span>
+    <span class="id">8.4-b</span><span class="badge b-cau">caution</span>
+    <div class="loc"><b>locus</b>：FTA 的不編號 Caution 之後、「Before the fragments can be listed…」之前。</div>
+    <p><b>提案</b>（2 句）：上面那則 Caution 保證分解<b>存在</b>，但沒說怎麼<b>找到</b>它。實務上第一步是因式定理
+      （\(r\) 是根 \(\iff\) \(x-r\) 整除該多項式），先試常數項的整數因數；本節各例的分母就是這樣挑的
+      （Ex 8.19 用分組、Ex 8.18 用二次公式）。根不好找時，Strategy 8.5 的第 2 步就是整條流程的真正瓶頸。</p>
+    <p class="why"><b>why</b>：讀者看完 FTA Caution 後最直接的疑問是「所以 \(x^{3}-x^{2}-x+1\) 你怎麼知道怎麼拆」，
+      課文從未回答。這是 learner-sim 型的卡點，答案完全落在 A 類先備（因式定理），零新機器。</p>
+    <div class="src">source <code>authored</code> · 成本 0 · 建議以<b>散文段</b>交付，避免 §8.4 出現第三個 Caution 方塊</div>
+  </div>
+
+  <div class="card med"><span class="conf">T3 建議採</span>
+    <span class="id">8.4-c</span><span class="badge b-cau">caution</span>
+    <div class="loc"><b>locus</b>：Example 8.19 solution 之後、Example 8.20 之前。</div>
+    <p><b>提案</b>（2 句）：重根因式的模板必須把<b>每一個</b>次方都寫上（\(\frac{A}{x-1}+\frac{B}{(x-1)^{2}}\)）；
+      只寫最高次方不是「比較簡潔」，而是<b>無解</b>——把 \(\frac{4x}{(x-1)^{2}(x+1)}\) 寫成
+      \(\frac{B}{(x-1)^{2}}+\frac{C}{x+1}\) 後清分母，係數方程組直接矛盾（\(x^{2}\) 項給 \(C=0\)、\(x\) 項給 \(B=4\)、
+      常數項要求 \(B+C=0\)）。</p>
+    <p class="why"><b>why</b>：重根 case 最常見的錯誤，而它的後果不是「答案錯」而是「解不出來」，讀者往往以為是自己算術壞掉。
+      Ex 8.19 示範了正確模板卻沒說錯誤模板會怎樣。反例三行可驗。</p>
+    <div class="src">source <code>authored</code> · 成本 0 · <b>若採納，反例的係數方程組須進 sympy 重算清單</b></div>
+  </div>
+
+  <div class="card lo"><span class="conf">T4 建議不採（兩筆）</span>
+    <span class="id">8.4-d</span><span class="badge b-app">application</span><span class="tag t-high">雙命中</span> <span class="id">8.4-e</span><span class="badge b-his">history</span>
+    <p><b>8.4-d</b>：以 \(\int\frac{dP}{P(M-P)}\)（人口成長模型）當 §8.4 的動機應用，指向 Ch9。
+       <b>8.4-e</b>（B）：部分分式的想法<b>最早正是為了積分</b>而發展（Leibniz 與 Johann Bernoulli），
+       這給「附錄先鋪代數、這裡收成」一個誠實的理由。</p>
+    <p class="why"><b>我的看法</b>：8.4-d 教學上有吸引力（本節確實零應用），但 B 抓到一個 A 沒看到的硬問題——
+       它會<b>新增一條 PLAN <code>Cross-chapter EXPORT</code> 表上沒有的 Ch9 前向指標</b>（現有契約只列 (8.A)→Ch9），
+       而 Ch9 尚未撰寫。要嘛採納＋同輪補契約，要嘛不採；我傾向不採，理由是章末 summary 已經有一句
+       「Chapter 9 puts the completed toolkit to work on equations whose unknowns are functions」承擔了同樣的功能。
+       8.4-e 的歸屬先後需查證，payoff 弱於 8.2-a。</p>
+  </div>
+
+  <h3>§8.5 Strategy for Integration（兩份實例都判定第二乾淨）</h3>
+
+  <div class="card hi"><span class="conf hi">T1 建議採</span>
+    <span class="id">8.5-a</span><span class="badge b-cau">caution</span><span class="tag t-high">雙命中（皆 high）</span>
+    <div class="loc"><b>locus</b>：Example 8.26 solution 之後、<code>&lt;h3&gt;The limits of the toolkit&lt;/h3&gt;</code> 之前。</div>
+    <p><b>提案</b>（2–3 句）：同一函數在同一區間上的兩個反導數只差一個常數（<b>Corollary 4.4</b>），
+      所以兩條路線給出的答案<b>看起來可以完全不同而都對</b>；驗證方式是微分回去，或把兩者相減化簡。
+      書中已有現成實例：Ex 8.8 的 \(\sin^{4}\)（降冪）對 Ex 8.6 的 reduction formula、Ex 8.15 把 \(\ln a\) 吸收進常數。</p>
+    <p class="why"><b>why——這是本輪最典型的「技巧被反覆使用卻從未命名」缺口。</b>我已 grep 複核：
+      「differentiating confirms」式的驗算在 §8.1（Ex 8.1、8.4）、§8.2（Prop 8.1 的 sec/csc）、§8.3（兩處）、§8.4
+      共出現 <b>12 次</b>，卻從未被提升為原則。它同時解掉另一個痛點：Strategy 8.6 step 4 明說多條路線可能都成功，
+      卻沒告訴讀者「答案長得不一樣不代表錯」——這是自學者最常見的自我懷疑點。§8.5 是全章唯一的後設節，是它唯一該待的地方。</p>
+    <div class="src">source <code>authored</code>（Corollary 4.4 已在 §8.1 Thm 8.2 的證明中被引用，cross-ref 可解析）· 成本 0 ·
+      <b>寫作限制</b>：fragment header 記錄本節<b>刻意不放 <code>env-caution</code></b>（陷阱住在各自技巧處），
+      建議以散文段落交付（<code>expansion:caution</code> 標記仍可用）</div>
+  </div>
+
+  <div class="card med"><span class="conf">T3 可選</span>
+    <span class="id">8.5-b</span><span class="badge b-cau">caution</span>
+    <div class="loc">同上（可與 8.5-a 合為一段）。</div>
+    <p><b>提案</b>（1 句）：step 1 的代數改寫只在它成立的區間上成立——去絕對值、約分、開根都可能悄悄改變定義域，
+      所以化簡的同時要把區間說出來，正如 Example 8.26 所做。</p>
+    <p class="why"><b>why</b>：整章每個 solution 都在標區間，但只有 §8.5 的 step 1 是「主動改寫被積函數」的一步，
+      也最容易在改寫中丟掉定義域；strategy box 裡沒有這個提醒。</p>
+    <div class="src">source <code>authored</code> · 成本 0</div>
+  </div>
+
+  <h3>§8.6 Improper Integrals（M3 難度尖峰節之一 ≈3.5；候選最多，須節制）</h3>
+
+  <div class="warn"><b>我的整節建議：§8.6 最多採 3 筆、每筆 1–3 句。</b>本節在 M3 盲測是難度尖峰，
+    而兩份實例合計對它提了 8 筆。下面三筆（8.6-a／b／c）都是「修正讀者會形成的錯誤定義」型，
+    加起來反而<b>降低</b>後續閱讀阻力；應用與 aside 型（8.6-d／e）則是純增量閱讀，放在尖峰節要更謹慎。</div>
+
+  <div class="card hi"><span class="conf hi">T1 建議採</span>
+    <span class="id">8.6-a</span><span class="badge b-cau">caution</span>
+    <div class="loc"><b>locus</b>：Figure 8.10 之後、「Mixed cases reduce to the two types.」之前。</div>
+    <p><b>提案</b>：點名 Theorem 8.3 <b>不</b>提供的兩種組合：\(0\le f\le g\) 時，「\(\int f\) 收斂」對 \(\int g\) 沒有結論，
+      「\(\int g\) 發散」對 \(\int f\) 也沒有。<b>現成反例就在本節</b>：\([1,\infty)\) 上 \(f=1/x^{2}\le g=1/x\)，
+      Example 8.27 已算出前者收斂、後者發散——同一組函數同時示範兩個「無結論」。</p>
+    <p class="why"><b>why</b>：「比較方向搞反」是比較審斂法<b>唯一</b>的高頻錯誤，而定理陳述本身
+      （收斂往下傳、發散往上傳）讀起來對稱到讓人以為四種組合都成立。零新數學、反例現成。A 判為<b>本輪最推薦的一筆</b>。</p>
+    <div class="src">source <code>authored</code>（反例＝Example 8.27 逐字複用）· 成本 0 ·
+      <b>與 ①波 <code>8.6-E1</code> 的關係</b>：8.6-E1 示範<b>正確</b>的發散方向，本筆點名<b>無結論</b>的兩種組合——互補不重複，
+      但若 8.6-E1 未採，本筆的價值反而更高（它獨力承擔整個方向紀律）</div>
+  </div>
+
+  <div class="card hi"><span class="conf hi">T1 建議採</span>
+    <span class="id">8.6-b</span><span class="badge b-cau">caution</span>
+    <div class="loc"><b>locus</b>：「The choice of \(c\) in part (c) does not matter…」之後、Example 8.27 之前。</div>
+    <p><b>提案</b>（2 句）：divergent 不是「等於無窮大」的同義詞。它涵蓋兩種情形——截斷值無界增長（Ex 8.27(a)），
+      或根本不安定下來：\(\int_{0}^{t}\cos x\,dx=\sin t\) 在 \(t\to\infty\) 時反覆回到 \(1\) 與 \(-1\)，沒有極限，
+      所以 \(\int_{0}^{\infty}\cos x\,dx\) 發散。</p>
+    <p class="why"><b>why</b>：本節每一個發散實例都是「無界增長」型，讀者會歸納出「divergent＝無窮大」的錯誤定義，
+      而 Def 8.1 的措辭（"provided the limit exists as a finite number"）恰恰不是那個意思。振盪反例完全在射程內。</p>
+    <div class="src">source <code>authored</code> · 成本 0 · \(\sin t\) 無極限一句須就地給理由或引 §1.4，不可裸斷言</div>
+  </div>
+
+  <div class="card hi"><span class="conf hi">T1 建議採</span>
+    <span class="id">8.6-c</span><span class="badge b-int">intuition</span>
+    <div class="loc"><b>locus</b>：「Mixed cases reduce to the two types…」之後、收尾 summary 段之前。</div>
+    <p><b>提案</b>（2–3 句）：收斂與否只取決於<b>尾巴</b>——加進或拿掉任何一段有限的正常積分會改變值，不會改變判定
+      （additivity, <b>Theorem 6.2(3)</b>）。實用後果：Theorem 8.3 的不等式只要在某個 \(x\ge b\) 之後成立就夠了，
+      先把 \([a,b]\) 那段分出來即可。</p>
+    <p class="why"><b>why</b>：Def 8.1(c) 的分割點段落與 Ex 8.32 各做了這件事的一半，但讀者拿 Thm 8.3
+      （陳述要求「for \(x\ge a\)」全程成立）去比較 \(\frac{1}{x-1}\) 與 \(\frac{2}{x}\) 時會卡住——不等式只在 \(x\ge2\) 成立。
+      <b>這是讓 Comparison 真正可用的那句話</b>，也是三筆 §8.6 caution 裡教學槓桿最大的一筆。</p>
+    <div class="src">source <code>authored</code> · 成本 0 · 引 Theorem 6.2(3)（本節已多次引用）</div>
+  </div>
+
+  <div class="card med"><span class="conf">T2 可選（你裁）</span>
+    <span class="id">8.6-d</span><span class="badge b-app">application</span><span class="tag t-high">雙命中</span>
+    <div class="loc"><b>locus</b>：Ex 8.27(b) 之後（B）或 Ex 8.29 之後（A）。</div>
+    <p><b>提案</b>（2–3 句）：把質量 \(m\) 從地表半徑 \(R\) 移到無窮遠所需的功（<b>Definition 7.3</b>）是
+      \(\int_{R}^{\infty}\frac{GMm}{x^{2}}dx=\frac{GMm}{R}\)，是個<b>有限</b>數——這正是 \(p=2\) 收斂那一側的物理意義。
+      平方反比律與 §7.4 的 Hooke's law 同樣是<b>經驗模型</b>（§7.4 已有引入外部物理律並標源的先例）。</p>
+    <p class="why"><b>why</b>：§8.6 全節零真實應用，而「無界區域卻有有限量」在物理上最有說服力的實例就是這個；
+      用的是 Ex 8.27(b) 剛算完的同一個 \(1/x^{2}\)，並把 Ch7 的 Work 接回來。</p>
+    <div class="src">source <code>[Newton inverse-square law as empirical model；先例＝§7.4 Hooke's law；Def 7.3]</code> · 成本 0 ·
+      <b class="no">紅線</b>：<b>不得</b>推到脫離速度公式（需能量守恆，書中未建立），只能停在「功是有限的」</div>
+  </div>
+
+  <div class="card med"><span class="conf">T3 可選</span>
+    <span class="id">8.6-e</span><span class="badge b-cau">caution</span>
+    <div class="loc"><b>locus</b>：Figure 8.9 之後、Example 8.32 之前。</div>
+    <p><b>提案</b>（2 句，純 scope）：Theorem 8.3 的前提是 \(0\le f\le g\)。對會<b>變號</b>的被積函數，
+      這個定理不給任何判定——既不能斷言收斂也不能斷言發散；本書在此不處理該情形。</p>
+    <p class="why"><b>why</b>：比較審斂法最常見的<b>越界</b>誤用就是套到變號被積函數上，而本節所有實例都是正的，
+      讀者沒有理由察覺這個限制。</p>
+    <div class="src">source <code>authored</code> · 成本 0 · <b class="no">硬邊界</b>：措辭必須是純 scope statement——
+      <b>不得</b>出現 absolute／conditional convergence 詞彙（Ch11 的），<b>不得</b>承諾 Ch11 會處理（那會新增一條 forward fence）</div>
+  </div>
+
+  <div class="card lo"><span class="conf">T4 你裁（貼排除清單邊界）</span>
+    <span class="id">8.6-f</span><span class="badge b-app">application</span><span class="tag t-high">雙命中</span>
+    <p><b>提案</b>：Gabriel's horn／Torricelli 小號的<b>一句話</b> aside——\(y=1/x\) 在 \([1,t]\) 上繞 \(x\) 軸的立體體積
+      \(\to\pi\)，同段側面積（Thm 7.4）壓過 \(\int_{1}^{t}2\pi x^{-1}dx\) 而無界增長；同一條曲線的兩個積分落在
+      \(p\)-test 的兩側，正是 Ex 8.27 那組對比的立體版本。</p>
+    <p class="why"><b>為什麼列在 T4 而不是直接砍</b>：PLAN §Excluded <b>明文允許</b>「§8.6 one-sentence aside at most」，
+      所以這不是違規提案，是一個貼著上限的品味決定。<b>兩個寫作限制必守</b>：① 超過一句即違規；
+      ② 必須寫成「截斷後 \([1,t]\) 的側面積隨 \(t\) 無界增長」，<b>不可</b>寫成「無窮曲面的面積是無窮大」
+      （Thm 7.4 只在 \([a,b]\) 上陳述，「無窮曲面之面積」需要書中尚未做的定義動作）。
+      <b>我的看法</b>：A 因難度尖峰壓 low，我同意——§8.6 已建議採 3 筆，這是第 4 筆純增量。</p>
+  </div>
+
+  <div class="card lo"><span class="conf">T4 建議不採</span>
+    <span class="id">8.6-g</span><span class="badge b-int">intuition</span>
+    <p><b>提案</b>（B）：在 <code>&lt;h3&gt;Type 1&lt;/h3&gt;</code> 之後、Def 8.1 之前補一句引導，與 Type 2 區塊的引導句對稱。</p>
+    <p class="why"><b>我的看法</b>：B 自壓 low，理由是 opener 已大致覆蓋、屬對稱性 polish。同意。
+      （B 同時正確指出：<b>不要</b>在 Def 8.1／8.2 body 內加 "Informally" gloss——SPEC §3 明訂形式陳述已接近英語時跳過。）</p>
+  </div>
+
+  <h3>§8.7 Approximate Integration</h3>
+
+  <div class="card hi"><span class="conf hi">T1 建議採</span>
+    <span class="id">8.7-a</span><span class="badge b-cau">caution</span>
+    <div class="loc"><b>locus</b>：Figure 8.13 之後、<code>&lt;h3&gt;Chapter summary&lt;/h3&gt;</code> 之前。</div>
+    <p><b>提案</b>（2–3 句）：三條規則都定義在<b>有限</b> \([a,b]\) 上，所以 opener 點名的無窮區間 client 要先切一刀——
+      \(\int_{1}^{\infty}=\int_{1}^{t}+\int_{t}^{\infty}\)；被丟掉的尾巴由 Example 8.32 已建立的比較界住
+      （\(x\ge1\) 時 \(e^{-x^{2}}\le e^{-x}\)，故 \(\int_{t}^{\infty}e^{-x^{2}}dx\le e^{-t}\)），
+      總誤差＝截斷誤差＋\([1,t]\) 上的求積誤差。</p>
+    <p class="why"><b>why</b>：opener 自己開的三個 client 之一，整節從未回收；讀者照字面把 (S) 套到
+      \(\int_{1}^{\infty}\) 會直接卡住。<b>這是本章唯一一個「章內承諾未兌現」的結構缺口</b>，
+      而修它零成本（尾巴界完全複用 Ex 8.32 已證的比較，不新增斷言）。</p>
+    <div class="src">source <code>authored</code> · 成本 0 · <b>寫作限制</b>：保持結構性敘述、<b>不要</b>展開成完整計算
+      （否則就是第 37 個 example，撞 cap 38 的預算）；若要給具體 \(t\)，數字須 sympy 覆算</div>
+  </div>
+
+  <div class="card hi"><span class="conf hi">T1 建議採（<b>採 B 的路線</b>）</span>
+    <span class="id">8.7-b</span><span class="badge b-int">intuition</span><span class="tag t-high">雙命中（兩條不同路線）</span>
+    <div class="loc"><b>locus</b>：Example 8.34 solution 之後、<code>&lt;h3&gt;Error bounds&lt;/h3&gt;</code> 之前（B）。</div>
+    <p><b>提案</b>（2 句＋一個短 display）：在 Simpson 引理的 \(g\) 上加一項 \(Dx^{3}\)，則
+      \(\int_{-h}^{h}Dx^{3}dx=0\)（奇函數），而加權組合也得 \(D(-h^{3})+4\cdot0+D(h^{3})=0\)，兩邊同時不變。
+      所以 Simpson's Rule 對<b>三次</b>多項式是精確的，儘管它只是用拋物線配出來的——這正是 Ex 8.34 精度跳一個量級的來源。</p>
+    <p class="why"><b>why</b>：課文寫「the bending of \(f\)…so it is the size of the second derivative, and for Simpson's
+      Rule the fourth」——「the fourth」直接丟給讀者，沒有任何理由；而 Ex 8.34 又展示了戲劇性的精度跳躍
+      （第三位 → 第五位小數）卻只用 \(1/n^{4}\) scaling 解釋。<b>這是本節唯一一個「未解釋的邏輯跳躍」型缺口。</b></p>
+    <div class="warn"><b>兩份實例找到同一缺口、走了不同路線，這一點值得你知道：</b>
+      A 走 <b>Thm 8.4 的 \(K_{4}=0\)</b>（三次式的四階導數恆為 0 ⇒ 界為 0 ⇒ 誤差為 0），
+      B 走 <b>本節自己的對稱區間代數</b>（把 \(Dx^{3}\) 加進引理，兩邊同時不變）。兩條都對，
+      但 <b>B 的路線不把結論掛在 on-credit 的 Thm 8.4 上</b>——它只用本節<b>已證</b>的引理。
+      本章對「什麼是借來的、什麼是證過的」極度敏感（恰兩筆 credit 是章層設計），所以我建議採 B 的路線，
+      並可在句末補一句「同一結論也可由 Theorem 8.4 取 \(K_{4}=0\) 讀出」作為對照。
+      <b>A 的來源在 repo 內</b>：<code>problem_banks/APEXCalculusV5/ptx/sec_numerical_integration.ptx</code> L1021–1027，我已逐字核對。</div>
+    <div class="src">source <code>authored</code>（B 路線）／<code>[APEX Calculus V5, CC BY-NC-SA]</code>（A 路線）· 成本 0</div>
+  </div>
+
+  <div class="card med"><span class="conf">T2 建議採（<b>用 A 的版本</b>）</span>
+    <span class="id">8.7-c</span><span class="badge b-his">history</span><span class="tag t-high">雙命中</span>
+    <div class="loc"><b>locus</b>：even-\(n\) Caution 之後、Example 8.34 之前。</div>
+    <p><b>提案</b>（一句）：這個規則以 Thomas Simpson（1710–1761）命名，但同樣的權重在他之前約一個世紀就已在使用。</p>
+    <p class="why"><b>why</b>：全章唯一以人名命名的規則，卻沒有名字的來歷；SPEC §3 型③ 的標準做法
+      （脈絡而非軼事、誠實承認前人）正適用，且本章 <code>expansion:history</code> ＝ 0。</p>
+    <div class="warn"><b>兩份版本的差別很重要</b>：B 提議具名 <b>Kepler（酒桶容積）與 Gregory</b>；
+      A 明確警告<b>不要</b>擅自加上 Kepler／Cavalieri 等具名歸屬，因為來源沒有點名。
+      <b>我查證過了</b>：A 的來源就在 repo 內（<code>problem_banks/APEXCalculusV5/ptx/sec_numerical_integration.ptx</code> L574–576），
+      原文是「named after Thomas Simpson (1710-1761), even though others had used this rule as much as 100 years prior」
+      ——<b>確實沒有點名任何前人</b>。所以採 A 的無具名版本＝<b>零查證負擔</b>；採 B 的具名版本則須另外查證 Kepler／Gregory 的歸屬。</div>
+    <div class="src">source <code>[APEX Calculus V5, sec_numerical_integration L574–576, CC BY-NC-SA]</code>（已逐字核對）· 成本 0</div>
+  </div>
+
+  <div class="card med"><span class="conf">T3 可選</span>
+    <span class="id">8.7-d</span><span class="badge b-cau">caution</span>
+    <div class="loc"><b>locus</b>：Example 8.36 solution 之後、Figure 8.13 之前。</div>
+    <p><b>提案</b>（1–2 句）：三條規則與 Theorem 8.4 都建立在<b>等距</b>節點 \(h=(b-a)/n\) 上；量測資料不等距時，
+      梯形面積可以逐片相加（每片仍是梯形），但 (S) 的權重樣式與 Theorem 8.4 的界都不再照原樣成立。</p>
+    <p class="why"><b>why</b>：Ex 8.36 是「資料欄」client，而真實資料常不等距；課文只說「equally spaced times」
+      卻沒說不等距怎麼辦，讀者會直接把 (S) 硬套。這是 PLAN hypothesis ledger 已列
+      （equal width built into the rules）但<b>課文未對讀者說出</b>的假設。</p>
+    <div class="src">source <code>authored</code> · 成本 0 · 措辭須是 scope statement，不可宣稱不等距情形的替代公式</div>
+  </div>
+
+  <div class="card med"><span class="conf">T3 可選</span>
+    <span class="id">8.7-e</span><span class="badge b-int">intuition</span>
+    <div class="loc"><b>locus</b>：「This is a Riemann sum in the sense of Definition 6.2…」該段之後。</div>
+    <p><b>提案</b>（1–2 句）：三條規則裡只有 Midpoint 完全不取端點的值，這在被積函數於端點難算或無定義時是實際的差別；
+      但要誠實補一句——Theorem 8.4 仍要求 \(f''\) 在<b>整個</b> \([a,b]\) 上連續，所以端點的奇異性讓誤差界失效，
+      不只是換個取樣點就了事。</p>
+    <p class="why"><b>why</b>：§8.6 才剛教完「端點爆掉」的積分，§8.7 立刻給了三條規則卻沒把兩節接起來；
+      讀者最自然的問題（「M 不碰端點，那可以拿來算 Type 2 嗎」）沒有答案。同時預防過度推論。</p>
+    <div class="src">source <code>authored</code> · 成本 0 · <b class="no">紅線</b>：不得暗示 M 可以用來算發散或 Type 2 積分</div>
+  </div>
+
+  <h2>3. 我的建議組合</h2>
+
+  <div class="rec">
+    <p><b>①波（Example，2 個名額）</b></p>
+    <table>
+      <tr><th>裁決</th><th>id</th><th>內容</th><th>cascade</th><th>理由</th></tr>
+      <tr><td><span class="tag t-adopt">採</span></td><td><code>8.7-E1</code></td>
+          <td>Simpson 誤差界 → 保證位數（\(\int_0^1 e^{-x^2}\)，\(S_{10}\)）</td><td><b>1</b></td>
+          <td>Thm 8.4 是本章<b>兩筆 on-credit 之一</b>，其 Simpson 那條界全章零示範；同時服務 §8.7 開場自己點名卻沒回收的 client。sympy 18/18 PASS。</td></tr>
+      <tr><td><span class="tag t-adopt">採</span></td><td><code>8.6-E1</code></td>
+          <td>比較定理<b>發散方向</b>（\(\int_3^\infty dx/\sqrt{x^2-x}\)）</td><td><b>4</b></td>
+          <td>Thm 8.3<b>(b)</b> 這個分支全章零示範（grep 複核：Thm 8.3 只在 Ex 8.32 被引一次、引的是 (a)）。題源 APEX 正文附完整解、輕改。</td></tr>
+      <tr><td><span class="tag t-opt">轉形</span></td><td><code>8.1-E1</code></td>
+          <td>reduction formula 的遞迴使用</td><td>30 → <b>0</b></td>
+          <td>缺口成立（<b>兩波獨立命中</b>），但改用 ②波的 <code>8.1-c</code> 不編號推導段交付，教學功能一樣落地、cascade 歸零。本章已有兩個不編號 tagged 推導的先例（shell–washer、Simpson 引理）。</td></tr>
+      <tr><td><span class="tag t-decline">不採</span></td><td><code>8.2-E1</code></td>
+          <td>Strategy 8.2 step 2 的鏡像例</td><td>29</td>
+          <td>機械動作是 Ex 8.7 的鏡像（提案者自己降 medium）。真正的增量是 parity 診斷那一段——<b>若你要，我建議只把那段做成 §8.2 的散文註，成本 0</b>。</td></tr>
+    </table>
+    <p class="mini">採此組合後：Example <b>8.1–8.38＝38/38（觸及硬上限）</b>，重編號 5 個、cross-ref 5 處。
+       對照：若改採 8.1-E1＋8.7-E1，重編號 31 個、cross-ref 21 處，而 §8.6 的 Thm 8.3(b) 缺口仍在。</p>
+
+    <p style="margin-top:1em"><b>②波（軟深度，全部零 cascade）</b></p>
+    <p><b>T1 核心 10 筆（建議全採）</b>：
+      <code>8.1-a</code> 角色反轉塌成 \(J=J\) ·
+      <code>8.1-b</code> 刻意用掉 \(v\) 的常數 ·
+      <code>8.1-c</code> reduction formula 的遞迴 payoff ·
+      <code>8.3-a</code> 領導係數 ≠ 1 要先提出來 ·
+      <code>8.5-a</code> 答案長得不一樣不代表錯（Cor 4.4） ·
+      <code>8.6-a</code> 比較方向的兩個「無結論」 ·
+      <code>8.6-b</code> divergent ≠ 無窮大 ·
+      <code>8.6-c</code> 收斂只取決於尾巴 ·
+      <code>8.7-a</code> 三規則只在有限區間上、無窮區間要先截斷 ·
+      <code>8.7-b</code> Simpson 對三次式精確（走 B 的自足路線）</p>
+    <p class="mini">這 10 筆的共同性質：全部 <code>authored</code>、<b>零外部查證負擔</b>、
+       且其中 6 筆修的是<b>課文自己開了口卻沒收的承諾</b>（§8.7 opener 的三個 client、§8.3 收尾的「reaches any
+       \(\sqrt{px^2+qx+r}\)」、§8.1 的「chain of lookups」、Strategy 8.6 step 4 的「several routes may succeed」）。</p>
+    <p><b>T2 補齊 application／history 的 0（建議加採 3 筆）</b>：
+      <code>8.2-a</code> ∫sec 與麥卡托海圖（<b class="no">須先查證</b>）·
+      <code>8.7-c</code> Simpson 命名（<b>來源已核，零查證</b>）·
+      <code>8.6-d</code> 重力功（§8.6 的唯一物理鉤子；<b>若你想讓尖峰節維持最輕，這筆是首先該砍的</b>）</p>
+    <p><b>T3 可選 7 筆</b>：<code>8.1-d</code>（併入 8.1-b）·<code>8.2-c</code> cot/csc 鏡像家族 ·
+      <code>8.4-a</code> 代值抽驗常數 ·<code>8.4-b</code> 存在 ≠ 找得到 ·<code>8.4-c</code> 重根模板要寫滿 ·
+      <code>8.5-b</code> 改寫要說區間 ·<code>8.6-e</code> 變號被積函數不在射程 ·<code>8.7-d</code> 資料不等距 ·<code>8.7-e</code> 只有 M 不碰端點</p>
+    <p><b>T4 建議不採 11 筆</b>：<code>8.1-e</code> LIATE ·<code>8.1-f</code> 阻尼振動 ·<code>8.1-g</code> Ch16 前瞻 ·
+      <code>8.2-d</code>／<code>8.2-e</code> ·<code>8.3-b</code>／<code>8.3-c</code>／<code>8.3-d</code>／8.3-e ·
+      <code>8.4-d</code> logistic→Ch9（會新增契約外前向指標）·<code>8.4-e</code> 部分分式史脈 ·<code>8.6-g</code> Def 8.1 引導句。
+      <b>另一筆 <code>8.6-f</code>（Gabriel's horn 一句）交你親裁</b>——它貼著 PLAN Excluded 的「至多一句」上限，不是違規，是品味。</p>
+  </div>
+
+  <h2>4. 兩份實例的駁回清單（合併，供你核對沒漏掉真缺口）</h2>
+
+  <div class="card">
+    <p><b>硬邊界駁回（提了就違規，兩份實例合計 14 條）</b>：對 \(e^{-x^{2}}\) 斷言初等原函數不存在／提 Liouville（③ B-02、M3 唯一紅旗）·
+      §8.4 case IV 的 worked example · Weierstrass \(t=\tan(x/2)\) 具名或給公式 · 反雙曲代換（D2，另立 §8.8 是 open question 不是 Mode C）·
+      積分表／CAS · 機率積分（\(te^{-t}\) 讀成指數分布期望值）· Integral Test 陳述（Ch11 引用我們，不可反向）·
+      absolute／conditional convergence 詞彙 · Romberg／Richardson／浮點捨入 · Heaviside 一般理論 · 複根分解 ·
+      \(\int e^{ax}\sin bx\) 的一般公式 · \(\int\sqrt{x^{2}+a^{2}}\) 完整推導 · Type 2 版的比較定理（會新增未證斷言）。</p>
+    <p><b>ledger 鎖定駁回</b>：§8.6 鑄 Strategy 8.7、§8.6 把 \(\int_0^1 x^{-p}\) 鏡像升成編號 Proposition、§8.7 鑄「三規則怎麼選」的 Strategy
+      ——PLAN 編號表 <b>LOCKED BEFORE DRAFTING</b>，表外物件一律不得鑄。（B 另註：Strategy counter 止於 8.6，故若你堅持要，cascade 為零。）</p>
+    <p><b>值得你知道的三條「真缺口但不該由本輪修」</b>：</p>
+    <ul>
+      <li><b>\(M_n\le I\le T_n\) 的上凹夾擠</b>（不需導數的估計）：B 實查後駁回——需要「上凹圖形在弦之下」作為<b>已證結果</b>，
+          而 <code>ch05/sec-5-6.html</code> 的 Def 5.5 只在 informal gloss 裡給了<b>切線</b>方向，弦方向全書未述。提了就是新增未證斷言。</li>
+      <li><b>Strategy 8.1 step 2 的理由句在 Ex 8.2 之後語意變弱</b>（①波實例的觀察）：屬散文閘／Codex 的判斷範圍，
+          本閘不提案改寫，記錄備查。</li>
+      <li><b>§8.2 Strategy 8.3 step 3（\(m\) 奇、\(n=0\)，即 \(\int\tan^{3}x\)）在 §8.2 內無實例</b>：
+          ①波已查明它由 §8.5 <b>Ex 8.23</b> 完整出貨，屬 forward dependency 非缺口。</li>
+    </ul>
+    <p><b>零 figure-note</b>：兩份實例逐節重掃後皆未發現 M2 圖機會閘沒審過的教學圖缺口
+      （該閘 7 subagent、9 標記→13 採納／32 駁回、§8.4／§8.5 刻意零圖經覆核成立、D1–D8 gate-1 13/13 歸零），依偵察紀律不重複開閘。</p>
+  </div>
+
+  <h2>5. 裁決後的落地紀律（我會照這個做）</h2>
+
+  <div class="card">
+    <ol>
+      <li><b>編號 map 先建完整再動手</b>（PIPELINE：手動 ledger 是最大錯誤來源）。若採建議組合，
+          map ＝ 舊 Ex 8.32→8.33（8.6-E1 插在其前）… 舊 8.36→8.38，共 5 個位移；改完 grep 核對 env-num 連續與 cross-ref 全解析。</li>
+      <li><b>每筆新增都帶</b> <code>&lt;!-- expansion:&lt;cat&gt; [pass: enrichment] [source: …] --&gt;</code>（<code>[pass:]</code> 在 <code>[source:]</code> 前）。</li>
+      <li><b>必接範圍限定 Mode B</b>（只審新的 <code>[pass: enrichment]</code> 標記，不重審 Mode A 標記）——PIPELINE 硬規則、不容妥協。</li>
+      <li><b>scoped 難度盲測</b>：對被改動的節重跑 <code>learner-sim</code>（§8.6／§8.3 是 M3 尖峰節，優先）。</li>
+      <li><b>sympy 重算</b>：新例題與 <code>8.4-a</code>／<code>8.4-c</code> 的示範算式一併進清單（現況 65/65 → 目標全 PASS）。</li>
+      <li><b>機械閘</b>：<code>build.py ch08</code> ＋ <code>linebreak-gate</code>（0 自動斷行）＋ <code>quote_lint</code> ＋ render（0 KaTeX err）
+          ＋ <code>prose_metrics --unit ch08</code>（<b>em-dash 必須維持 0.0/1000</b>——本章是全書第一個在 SPEC §3 平實條款下生成的章，這個數字是它的招牌）。</li>
+      <li><b>查證</b>：<code>8.2-a</code> 若採，先查證年代／歸屬（Ch7 M4 的 Neile 史脈是同樣做法：web 查證 MacTutor／SEP 後才落筆）。</li>
+      <li><b>三閘 gate-2</b>（數學／散文／圖）依 PIPELINE「M4 之後、M5 之前批次跑」——<b>本輪新增內容都會被掃到</b>，這正是它排在 M4 後的理由。屆時另徵你同意（Codex 唯讀亦須逐次徵詢）。</li>
+    </ol>
+  </div>
+
+</div>
+</body>
+</html>

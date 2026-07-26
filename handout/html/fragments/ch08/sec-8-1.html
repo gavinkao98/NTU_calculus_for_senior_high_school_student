@@ -79,6 +79,9 @@
   <p>\[ \int u\,dv = uv - \int v\,du. \]</p>
   <p>To use it, split the given integrand into two parts, a function \(u\) and a differential \(dv\); the name of the technique records that split. From \(u\) we compute \(du\) by differentiating, and from \(dv\) we compute \(v\) by antidifferentiating. Any antiderivative serves for \(v\), so we take the one with zero constant.</p>
 
+  <!-- expansion:strategy [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidates 8.1-b (mode-c-gapwalk B, high) + 8.1-d (mode-c-gapwalk A) merged into one paragraph: A asked why the constant may be dropped, B showed when it is worth keeping. The text asserted "any antiderivative serves" without a reason, at the exact point where the reader has just been told that an indefinite integral is a family and the constant appears once. Both halves are one-line verifiable; no new machinery. authored. User adjudication 2026-07-27: adopt (T1 + T3, merged).] -->
+  <p>Dropping the constant changes nothing: replacing \(v\) by \(v + k\) adds \(ku\) to \(uv\) and adds the same \(ku\) to \(\int v\,du\), which enters with a minus sign, so the two changes cancel. Occasionally a different choice of \(v\) is worth making, because it can simplify the remaining integral. In \(\int\ln(x + 1)\,dx\), taking \(v = x + 1\) instead of \(v = x\) leaves \(\int\frac{x+1}{x+1}\,dx = \int dx\), while \(v = x\) leaves \(\int\frac{x}{x+1}\,dx\), which needs a division step first. Both routes reach the same answer.</p>
+
     <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 tier-medium — uv-rectangle bookkeeping, region labels corrected at gate (below-curve = ∫v du); origin-start special case stated in caption; adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "parts-uv-rectangle"] -->
   <figure class="figure" data-fig="parts-uv-rectangle">
     <figcaption><span class="fig-no">Figure 8.1</span> The parts formula as area bookkeeping. For a curve in the \(uv\)-plane climbing from the origin to \((u_{1}, v_{1})\) with \(u\) and \(v\) increasing together, the rectangle of area \(u_{1}v_{1}\) splits into \(\int v\,du\), below the curve, and \(\int u\,dv\), beside it; subtracting either from the rectangle leaves the other. The picture illustrates the formula; the proof remains that of Theorem 8.1.</figcaption>
@@ -177,6 +180,14 @@
     </section>
   </div>
 
+  <!-- expansion:caution [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.1-a (mode-c-gapwalk A and B converged, both high) — solve-back is one of the section's three working patterns and role reversal is its single failure mode; the failure looks unlike an arithmetic error (a true identity appears instead of a wrong answer), so a first-time reader has nothing to diagnose it with. The existing Cautions cover the minus sign and the brackets only. Mechanism already on the page: Ex 8.3 and Ex 8.4. authored. User adjudication 2026-07-27: adopt (T1).] -->
+  <section class="env env-caution">
+    <p class="env-head"><span class="env-kicker">Caution</span></p>
+    <div class="env-body">
+      <p>Solving for the integral depends on keeping the same kind of factor in the \(u\) position at every round. Reversing the roles on the second application undoes the first. In Example 8.4, choosing \(u = e^{x}\) and \(dv = \cos x\,dx\) at the second step gives \(\int e^{x}\cos x\,dx = e^{x}\sin x - J\), and substituting that back into the first equation returns \(J = J\), a true statement that carries no information. When a second application of parts yields an identity instead of an equation for the unknown, this is why.</p>
+    </div>
+  </section>
+
   <p>For definite integrals, the term \(uv\) is evaluated between the limits: it becomes \(\bigl[f(x)\,g(x)\bigr]_{a}^{b}\) in the next theorem. The hypotheses match those of the Fundamental Theorem: we use the term <em>smooth on \([a, b]\)</em> from §7.6, meaning that \(f\) is differentiable with \(f'\) continuous on \([a, b]\), one-sided at the endpoints.</p>
 
   <section class="env env-theorem">
@@ -253,6 +264,15 @@
       </div>
     </section>
   </div>
+
+  <!-- expansion:formula [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27 — SAME GAP found independently by both waves: example-supplement §8.1–8.4 reported it as Layer 1 candidate 8.1-E1 (a worked example, cascade cost 30 renumberings), mode-c-gapwalk B reported it as candidate 8.1-4 (an unnumbered note, cascade 0). Gap: Example 8.6's formula is proved, spot-checked at n=2, and then never used, while two sentences promise the payoff ("a chain of lookups rather than a fresh computation" here; "the more systematic tool" in §8.2's Ex 8.8). User adjudication 2026-07-27: adopt the zero-cascade form, on the precedent of this chapter's two other unnumbered tagged derivations (the shell-washer block below, the Simpson parabola lemma in §8.7). RED LINE honored: one value only; no general closed form for I_n (that would be a new unproved proposition) and no mention of Wallis. sympy-recomputed at the M4 sweep. authored.] -->
+  <p>The formula pays off most visibly on definite integrals over \([0, \tfrac{\pi}{2}]\), where the boundary term disappears. Both \(\sin^{n-1}x\) and \(-\cos x\) are smooth there, so Theorem 8.2 applies and the boundary term can be evaluated. It vanishes at both ends:</p>
+  <p>\[ \Bigl[-\tfrac{1}{n}\cos x\,\sin^{n-1}x\Bigr]_{0}^{\pi/2} = 0, \]</p>
+  <p>because \(\cos\tfrac{\pi}{2} = 0\) at the upper limit and \(\sin^{n-1}0 = 0\) at the lower one, the second of these because \(n \ge 2\). Writing \(I_{n} = \int_{0}^{\pi/2}\sin^{n}x\,dx\), the reduction formula collapses to a relation between numbers,</p>
+  <p>\[ I_{n} = \frac{n-1}{n}\,I_{n-2} \qquad (n \ge 2), \]</p>
+  <p>and every even power now comes from repeated lookup, ending at \(I_{0} = \int_{0}^{\pi/2} 1\,dx = \tfrac{\pi}{2}\). For \(n = 6\),</p>
+  <p>\[ I_{6} = \tfrac{5}{6}I_{4} = \tfrac{5}{6}\cdot\tfrac{3}{4}\,I_{2} = \tfrac{5}{6}\cdot\tfrac{3}{4}\cdot\tfrac{1}{2}\,I_{0} = \tfrac{5}{6}\cdot\tfrac{3}{4}\cdot\tfrac{1}{2}\cdot\tfrac{\pi}{2} = \frac{5\pi}{32}, \]</p>
+  <p>and no integration was carried out after the formula itself. That is the value of recording a reduction formula once.</p>
 
   <h3 class="subsec-head">Settling the shell–washer question</h3>
 

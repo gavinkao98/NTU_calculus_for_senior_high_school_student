@@ -4,15 +4,17 @@
      spacing h=(b−a)/n, even n verified in the data example). Numbering: mints Theorem 8.4
      (Error bounds — STATED ON CREDIT, forward fence → Ch11 §11.9 Taylor; the chapter's SECOND
      AND LAST credit; unnumbered-Caution fence vehicle per SPEC §16.1, Ch2 §2.4 precedent),
-     Examples 8.33–8.36, equation tags (M)/(T)/(S). Cautions UNNUMBERED (two: even-n; the fence
-     note). Chapter summary (unnumbered h3) closes this fragment per SPEC §4.
+     Examples 8.34–8.38, equation tags (M)/(T)/(S). Cautions UNNUMBERED (M4 2026-07-27: five —
+     even-n; the fence note; unequal spacing (8.7-d); finite-interval scope (8.7-a); plus the
+     midpoint/endpoint note (8.7-e) as prose). Chapter summary (unnumbered h3) closes this
+     fragment per SPEC §4.
      SEAM GUARD (PLAN-ch08 D8 + brief-8-7): M is a Def 6.2 Riemann sum with midpoint sample
      points — §6.2's header comment reserved the RULES for §8.7, discharged here in one clause.
      T derived BOTH ways (average of L/R; trapezoid areas). Simpson's three-point parabola lemma
      PROVED by direct algebra + shift remark (Thm 6.7); weights summed explicitly. Error sign
      convention stated (E = exact − approximation). K/K₄ exist by EVT Thm 4.9(a), "any bound
      serves". Round n UP in planning, say why. NO <table> element (book-wide zero-table
-     invariant — data given as displays). Ex 8.36 is self-authored (readings invented,
+     invariant — data given as displays). Ex 8.38 is self-authored (readings invented,
      plausibility-checked; no error bound claimable without derivative information — honesty
      line). Values recomputed to 6 dp; sympy at sweep.
      Chapter summary: recaps §8.1–§8.7 arc, embeds parts formula, sec³, (8.A), p-test,
@@ -37,20 +39,23 @@
   <p>\[ \int_{a}^{b} f(x)\,dx \;\approx\; M_{n} = h\,\bigl[f(\bar{x}_{1}) + f(\bar{x}_{2}) + \cdots + f(\bar{x}_{n})\bigr]. \tag{M} \]</p>
   <p>This is a Riemann sum in the sense of Definition 6.2, with the sample points taken at midpoints, a choice that §6.2 reserved for exactly this use. For continuous \(f\), Theorem 6.1 guarantees that \(M_{n}\) converges to the integral as \(n\) grows; the question this section adds is how fast.</p>
 
+  <!-- expansion:intuition [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.7-e (mode-c-gapwalk B) — §8.6 has just finished with integrands that blow up at an endpoint, and the natural reader question (can M be pointed at those?) had no answer; the note also blocks the over-inference. authored. User adjudication 2026-07-27: adopt (T3).] -->
+  <p>Unlike the two rules that follow, this rule never evaluates \(f\) at an endpoint of \([a, b]\), which is a practical advantage when the integrand is undefined or hard to evaluate there. The error bound below does not inherit that advantage. Theorem 8.4 requires \(f''\) to be continuous on all of \([a, b]\), endpoints included, so an integrand that is undefined or unbounded at an endpoint loses its guarantee even though the rule still returns a number.</p>
+
   <p>The second rule replaces \(f\) on each slice by the chord joining \(\bigl(x_{i-1}, y_{i-1}\bigr)\) to \(\bigl(x_{i}, y_{i}\bigr)\). The region under a chord is a trapezoid with parallel sides \(y_{i-1}\) and \(y_{i}\) and width \(h\), so its area is \(h\cdot\tfrac{y_{i-1} + y_{i}}{2}\), and summing over the slices gives</p>
   <p>\[ \int_{a}^{b} f(x)\,dx \;\approx\; T_{n} = \frac{h}{2}\,\bigl[y_{0} + 2y_{1} + 2y_{2} + \cdots + 2y_{n-1} + y_{n}\bigr]. \tag{T} \]</p>
   <p>Every interior node is shared by two trapezoids, which is where the repeated factor \(2\) comes from. The same formula arrives by a second route. The left-endpoint and right-endpoint Riemann sums are \(L_{n} = h\sum_{i=1}^{n} y_{i-1}\) and \(R_{n} = h\sum_{i=1}^{n} y_{i}\), and averaging them termwise pairs each interior value with itself:</p>
   <p>\[ \frac{L_{n} + R_{n}}{2} = \frac{h}{2}\sum_{i=1}^{n}\bigl(y_{i-1} + y_{i}\bigr) = \frac{h}{2}\bigl[y_{0} + 2y_{1} + \cdots + 2y_{n-1} + y_{n}\bigr] = T_{n}. \]</p>
   <p>The averaging reading connects the rule to the bracketing picture above: for a monotone integrand the integral lies between \(L_{n}\) and \(R_{n}\), and \(T_{n}\) is the bracket’s midpoint, so the trapezoidal error is at most half the bracket’s width.</p>
 
-    <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 tier-essential — the three rules as pictures; gate MODIFY applied: pinned concave-up decreasing f = 1/x with n = 4 (chords lie above the curve, consistent with Ex 8.33’s sign story), ghost second parabola pair; DRAW-TIME DEVIATION: interval [1,3] instead of the gate’s suggested [1,2] — at [1,2] the chord–curve gap (≈0.016) is invisible at print size, defeating the panel’s teaching function; n = 4 and f = 1/x kept; adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "three-rules-panel"] -->
+    <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 tier-essential — the three rules as pictures; gate MODIFY applied: pinned concave-up decreasing f = 1/x with n = 4 (chords lie above the curve, consistent with Ex 8.34’s sign story), ghost second parabola pair; DRAW-TIME DEVIATION: interval [1,3] instead of the gate’s suggested [1,2] — at [1,2] the chord–curve gap (≈0.016) is invisible at print size, defeating the panel’s teaching function; n = 4 and f = 1/x kept; adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "three-rules-panel"] -->
   <figure class="figure" data-fig="three-rules-panel">
     <figcaption><span class="fig-no">Figure 8.11</span> The three rules on one integrand, \(y = 1/x\) on \([1, 3]\) with \(n = 4\): constants at the midpoints, chords at the nodes, and a parabola through each triple of nodes. The first triple’s arc is shaded; the open dots mark the second triple, whose arc lies too close to the curve to separate by eye, which is the point: each replacement follows the bending of the curve more closely than the last.</figcaption>
   </figure>
 
     <div class="workedexample">
     <section class="env env-example">
-      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.33</span></p>
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.34</span></p>
       <div class="env-body">
         <p>Approximate \(\displaystyle\int_{1}^{2} \frac{dx}{x}\) with \(n = 5\) by the Trapezoidal Rule and by the Midpoint Rule, and compare each result with the true value.</p>
       </div>
@@ -69,9 +74,9 @@
     </section>
   </div>
 
-  <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 tier-medium — the standard picture behind the 24-vs-12 constants; gate MODIFY applied: MOVED after Ex 8.33 (the sentence it annotates), concave-up slice, tangent below / chord above, no exact-half claim in caption; adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "midpoint-tangent-trap"] -->
+  <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 tier-medium — the standard picture behind the 24-vs-12 constants; gate MODIFY applied: MOVED after Ex 8.34 (the sentence it annotates), concave-up slice, tangent below / chord above, no exact-half claim in caption; adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "midpoint-tangent-trap"] -->
   <figure class="figure" data-fig="midpoint-tangent-trap">
-    <figcaption><span class="fig-no">Figure 8.12</span> One slice of Example 8.33’s integrand. Tilting the midpoint rectangle’s lid about the point of tangency onto the tangent line exchanges two equal triangles, so the rectangle and the tangent trapezoid hold the same area. On this upward-bending curve the tangent lies below the curve away from the midpoint while the chord lies above it, which is why the midpoint and trapezoidal errors pull in opposite directions.</figcaption>
+    <figcaption><span class="fig-no">Figure 8.12</span> One slice of Example 8.34’s integrand. Tilting the midpoint rectangle’s lid about the point of tangency onto the tangent line exchanges two equal triangles, so the rectangle and the tangent trapezoid hold the same area. On this upward-bending curve the tangent lies below the curve away from the midpoint while the chord lies above it, which is why the midpoint and trapezoidal errors pull in opposite directions.</figcaption>
   </figure>
 
   <h3 class="subsec-head">Simpson’s Rule</h3>
@@ -93,9 +98,12 @@
     </div>
   </section>
 
+  <!-- expansion:history [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.7-c (mode-c-gapwalk A and B converged; A's unnamed version adopted). Verbatim-checked against problem_banks/APEXCalculusV5/ptx/sec_numerical_integration.ptx L574–576: "named after Thomas Simpson (1710-1761), even though others had used this rule as much as 100 years prior" — the source names no predecessor, so this book names none either (gapwalk B proposed Kepler/Gregory; declined for lack of a checked source). APEX = CC BY-NC-SA. First expansion:history marker in Ch8. User adjudication 2026-07-27: adopt (T2).] -->
+  <p>The rule carries the name of Thomas Simpson (1710–1761), although the same three-point weights were in use about a century before him.</p>
+
   <div class="workedexample">
     <section class="env env-example">
-      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.34</span></p>
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.35</span></p>
       <div class="env-body">
         <p>Approximate \(\displaystyle\int_{1}^{2} \frac{dx}{x}\) by Simpson’s Rule with \(n = 10\).</p>
       </div>
@@ -108,10 +116,13 @@
           S_{10} = \frac{0.1}{3}\Bigl[\frac{1}{1} &+ \frac{4}{1.1} + \frac{2}{1.2} + \frac{4}{1.3} + \frac{2}{1.4} + \frac{4}{1.5} \\
             &+ \frac{2}{1.6} + \frac{4}{1.7} + \frac{2}{1.8} + \frac{4}{1.9} + \frac{1}{2}\Bigr] \approx 0.693150.
         \end{aligned} \]</p>
-        <p>Against \(\ln 2 \approx 0.693147\), the error is about \(-3 \times 10^{-6}\). Example 8.33’s rules, using half as many nodes, erred in the third decimal place; Simpson’s Rule with these ten slices is already correct to five. The jump matches the scales recorded in the bounds below: the trapezoidal bound shrinks like \(1/n^{2}\), the Simpson bound like \(1/n^{4}\), and the errors observed here behave accordingly. <span class="qed"></span></p>
+        <p>Against \(\ln 2 \approx 0.693147\), the error is about \(-3 \times 10^{-6}\). Example 8.34’s rules, using half as many nodes, erred in the third decimal place; Simpson’s Rule with these ten slices is already correct to five. The jump matches the scales recorded in the bounds below: the trapezoidal bound shrinks like \(1/n^{2}\), the Simpson bound like \(1/n^{4}\), and the errors observed here behave accordingly. <span class="qed"></span></p>
       </div>
     </section>
   </div>
+
+  <!-- expansion:formula [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.7-b (mode-c-gapwalk A and B converged on the gap by different routes; B's route adopted). The chapter's only unexplained logical jump: the text says "and for Simpson's Rule the fourth" with no reason given, right after Ex 8.35 showed a dramatic accuracy jump. B's route extends THIS SECTION'S OWN proved lemma (odd term integrates to zero, weighted combination cancels) instead of leaning on the on-credit Theorem 8.4, which matters in a chapter whose design turns on exactly two credits; A's Thm 8.4 route (K_4 = 0) is kept as the closing cross-check. A's route is sourced to APEX Calculus V5 sec_numerical_integration L1021–1027, CC BY-NC-SA, verbatim-checked. authored. User adjudication 2026-07-27: adopt (T1).] -->
+  <p>The size of that jump has a reason the lemma above already contains. Add a cubic term \(Dx^{3}\) to the quadratic \(g\). Over \([-h, h]\) it integrates to \(0\), because \(x^{3}\) is odd (Theorem 6.8), and in the weighted combination it contributes \(D(-h)^{3} + 4 \cdot 0 + Dh^{3} = 0\) as well. Neither side of the lemma changes, so the identity holds for cubics as it stands. Simpson’s Rule is therefore exact on every cubic polynomial, one degree beyond the parabolas it was built from, and that extra degree is what the <em>fourth</em> derivative in the next theorem records.</p>
 
   <h3 class="subsec-head">Error bounds</h3>
 
@@ -135,9 +146,12 @@
     </div>
   </section>
 
+  <!-- expansion:formula [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.7-b closing cross-check (the Theorem 8.4 route, = mode-c-gapwalk A's version, sourced APEX Calculus V5 sec_numerical_integration L1021–1027, CC BY-NC-SA). Kept OUTSIDE the fence Caution so the on-credit vehicle stays untouched (Mode C: add only). User adjudication 2026-07-27: adopt (T1).] -->
+  <p>The theorem confirms the exactness noted above from the other direction: a cubic has \(f^{(4)} = 0\), so \(K_{4} = 0\) is a valid bound and the Simpson bound reads \(\lvert E_{S}\rvert \le 0\).</p>
+
   <div class="workedexample">
     <section class="env env-example">
-      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.35</span></p>
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.36</span></p>
       <div class="env-body">
         <p>How large must \(n\) be to guarantee that the Trapezoidal Rule approximates \(\displaystyle\int_{1}^{2}\frac{dx}{x}\) with error at most \(10^{-4}\)? How large for the Midpoint Rule?</p>
       </div>
@@ -147,14 +161,43 @@
       <div class="env-body">
         <p>For \(f(x) = 1/x\) we have \(f''(x) = 2/x^{3}\), which is positive and decreasing on \([1, 2]\), so \(\lvert f''(x)\rvert \le f''(1) = 2\), and \(K = 2\) serves. With \(b - a = 1\), Theorem 8.4 gives</p>
         <p>\[ \lvert E_{T}\rvert \le \frac{2}{12 n^{2}} = \frac{1}{6 n^{2}}, \]</p>
-        <p>and \(\tfrac{1}{6n^{2}} \le 10^{-4}\) holds exactly when \(n^{2} \ge \tfrac{10^{4}}{6}\), that is, \(n \ge \sqrt{10^{4}/6} \approx 40.82\). Since \(n\) is a whole number and the requirement is a guarantee, round <em>up</em>: \(n = 41\) suffices. For the Midpoint Rule the same computation with the constant \(24\) gives \(n^{2} \ge \tfrac{10^{4}}{12}\), so \(n \ge \sqrt{10^{4}/12} \approx 28.87\), and \(n = 29\) suffices. Rounding down would break the guarantee: the bound at \(n = 40\) exceeds the tolerance. The bounds are worst-case: Example 8.33’s actual errors were smaller than Theorem 8.4 predicts, and that is the usual experience. <span class="qed"></span></p>
+        <p>and \(\tfrac{1}{6n^{2}} \le 10^{-4}\) holds exactly when \(n^{2} \ge \tfrac{10^{4}}{6}\), that is, \(n \ge \sqrt{10^{4}/6} \approx 40.82\). Since \(n\) is a whole number and the requirement is a guarantee, round <em>up</em>: \(n = 41\) suffices. For the Midpoint Rule the same computation with the constant \(24\) gives \(n^{2} \ge \tfrac{10^{4}}{12}\), so \(n \ge \sqrt{10^{4}/12} \approx 28.87\), and \(n = 29\) suffices. Rounding down would break the guarantee: the bound at \(n = 40\) exceeds the tolerance. The bounds are worst-case: Example 8.34’s actual errors were smaller than Theorem 8.4 predicts, and that is the usual experience. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <!-- expansion:example [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.7-E1 (example-supplement §8.5–8.7) — Layer 1 ×2: Theorem 8.4's Simpson clause was stated and never used anywhere in the chapter (grep-verified: K_4/E_S appeared only in the theorem statement), and none of the opener's three named clients was served. Teaches: a valid-but-loose bound, and an accuracy statement when no true value is available. authored; problem-type precedent APEX Calculus V5 §5.5 #11–12/#19–22 (answers only), CC BY-NC 4.0. B-02 discipline: wording follows §8.5 and Ex 8.32 — this book's techniques produce no antiderivative; no claim that none exists. All numbers sympy-recomputed at the M4 sweep. User adjudication 2026-07-27: adopt.] -->
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.37</span></p>
+      <div class="env-body">
+        <p>Approximate \(\displaystyle\int_{0}^{1} e^{-x^{2}}\,dx\) by Simpson’s Rule with \(n = 10\), and state how many decimal places the result is guaranteed to give.</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>The integrand is continuous on \([0, 1]\), so the integral exists (Theorem 6.1). What is missing is an antiderivative to hand to the Fundamental Theorem (Theorem 6.4): none of this book’s techniques produces one, which is why §8.5 set this integrand aside. The rules of this section do not need one.</p>
+        <p>With \(n = 10\) the width is \(h = 0.1\), the nodes are \(0, 0.1, 0.2, \dots, 1\), and \(10\) is even, so (S) applies:</p>
+        <p>\[ \begin{aligned}
+          S_{10} = \frac{0.1}{3}\Bigl[e^{0} &+ 4e^{-0.01} + 2e^{-0.04} + \cdots \\
+            &+ 2e^{-0.64} + 4e^{-0.81} + e^{-1}\Bigr] \approx 0.746825.
+        \end{aligned} \]</p>
+        <p>For the bound, differentiate four times. With \(f(x) = e^{-x^{2}}\), the chain rule (Theorem 3.3), the derivative of the exponential (Theorem 4.8), and the product rule (Theorem 2.6) give</p>
+        <p>\[ f''(x) = \bigl(4x^{2} - 2\bigr)e^{-x^{2}}, \qquad f^{(4)}(x) = \bigl(16x^{4} - 48x^{2} + 12\bigr)e^{-x^{2}}. \]</p>
+        <p>On \([0, 1]\) we have \(0 \le x^{2} \le 1\) and \(0 &lt; e^{-x^{2}} \le 1\). Bounding each term of the factor \(16x^{4} - 48x^{2} + 12\) separately, we find that it lies between \(0 - 48 + 12 = -36\) and \(16 - 0 + 12 = 28\). Since \(0 &lt; e^{-x^{2}} \le 1\), multiplying by \(e^{-x^{2}}\) cannot increase its absolute value, so \(\lvert f^{(4)}(x)\rvert \le 36\) throughout. Take \(K_{4} = 36\). The theorem requires a valid bound, not the exact maximum; a generous bound weakens the guarantee without invalidating it, and here it saves the work of locating the maximum exactly.</p>
+        <p>Theorem 8.4 now gives, with \(b - a = 1\) and \(n = 10\),</p>
+        <p>\[ \lvert E_{S}\rvert \le \frac{36 \cdot 1^{5}}{180 \cdot 10^{4}} = 2 \times 10^{-5}. \]</p>
+        <p>The true value therefore lies between \(0.746805\) and \(0.746845\). Both ends round to \(0.7468\), so</p>
+        <p>\[ \int_{0}^{1} e^{-x^{2}}\,dx = 0.7468 \]</p>
+        <p>to four decimal places. Examples 8.34 and 8.35 measured their errors against a known value, \(\ln 2\). Here no such value is available, and the bound is the only statement of accuracy that can be made. It is still enough to name four decimal places, which is what the question asked for. <span class="qed"></span></p>
       </div>
     </section>
   </div>
 
   <div class="workedexample">
     <section class="env env-example">
-      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.36</span></p>
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.38</span></p>
       <div class="env-body">
         <p>A car’s speedometer is read every \(30\) seconds during a three-minute drive, giving speeds, in meters per second, of</p>
         <p>\[ 8, \quad 10, \quad 12, \quad 11, \quad 13, \quad 14, \quad 12 \]</p>
@@ -174,10 +217,26 @@
     </section>
   </div>
 
+  <!-- expansion:caution [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.7-d (mode-c-gapwalk B) — equal spacing is in the PLAN hypothesis ledger (③ A-03) but was never stated to the reader; Ex 8.38 is the data client, and measured data is often unequally spaced. Scope statement only: no substitute formula is offered. authored. User adjudication 2026-07-27: adopt (T3).] -->
+  <section class="env env-caution">
+    <p class="env-head"><span class="env-kicker">Caution</span></p>
+    <div class="env-body">
+      <p>All three rules, and Theorem 8.4 with them, are built on equally spaced nodes, that is, on slices of equal width \(h = \tfrac{b - a}{n}\). Measured data does not always arrive that way. Readings at unequal spacings can still be handled by adding trapezoid areas one piece at a time, since each piece is a trapezoid whatever its width. The weight pattern of (S) and the bounds of Theorem 8.4, however, are not available in that setting.</p>
+    </div>
+  </section>
+
   <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 — gate-added candidate; t–v coordinate graph (plots, not tabulates — zero-table invariant untouched); no underlying curve = the no-derivative-information honesty line drawn; companion piece to ch06 Fig 6.3; adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "simpson-data-speed"] -->
   <figure class="figure" data-fig="simpson-data-speed">
-    <figcaption><span class="fig-no">Figure 8.13</span> Example 8.36’s data: seven speedometer readings and the three parabolic arcs that Simpson’s Rule fits through consecutive triples, meeting at the shared nodes \(t = 60\) and \(t = 120\). No curve is drawn between the readings, because none is known; the first triple happens to be collinear, so its arc is a straight segment.</figcaption>
+    <figcaption><span class="fig-no">Figure 8.13</span> Example 8.38’s data: seven speedometer readings and the three parabolic arcs that Simpson’s Rule fits through consecutive triples, meeting at the shared nodes \(t = 60\) and \(t = 120\). No curve is drawn between the readings, because none is known; the first triple happens to be collinear, so its arc is a straight segment.</figcaption>
   </figure>
+
+  <!-- expansion:caution [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.7-a (mode-c-gapwalk B) — the section opener names three clients and this one, the infinite-interval integral certified in §8.6, was never collected; a reader applying (S) to it literally gets stuck. Zero new assertions: the tail bound reuses Ex 8.32's already-proved comparison. authored. User adjudication 2026-07-27: adopt (T1).] -->
+  <section class="env env-caution">
+    <p class="env-head"><span class="env-kicker">Caution</span></p>
+    <div class="env-body">
+      <p>One of the integrals named at the start of this section still needs a comment. All three rules act on a finite interval, so \(\int_{1}^{\infty} e^{-x^{2}}\,dx\) cannot be handed to them as it stands. Split it instead: \(\int_{1}^{\infty} = \int_{1}^{t} + \int_{t}^{\infty}\), approximate the first piece by any of the rules, and bound the discarded tail. Example 8.32 supplies that bound already: its comparison \(e^{-x^{2}} \le e^{-x}\) holds for every \(x \ge 1\). Comparing on \([t, \infty)\), where \(\int_{t}^{\infty} e^{-x}\,dx = e^{-t}\), gives \(\int_{t}^{\infty} e^{-x^{2}}\,dx \le e^{-t}\) (Theorem 8.3(a)). The total error is then at most the rule’s error on \([1, t]\) plus that tail bound, and \(t\) is chosen large enough to make the tail as small as the target accuracy requires.</p>
+    </div>
+  </section>
 
   <h3 class="subsec-head">Chapter summary</h3>
 

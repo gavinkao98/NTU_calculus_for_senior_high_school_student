@@ -482,6 +482,9 @@ window.MathJax = {
   <p>\[ \int u\,dv = uv - \int v\,du. \]</p>
   <p>To use it, split the given integrand into two parts, a function \(u\) and a differential \(dv\); the name of the technique records that split. From \(u\) we compute \(du\) by differentiating, and from \(dv\) we compute \(v\) by antidifferentiating. Any antiderivative serves for \(v\), so we take the one with zero constant.</p>
 
+  <!-- expansion:strategy [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidates 8.1-b (mode-c-gapwalk B, high) + 8.1-d (mode-c-gapwalk A) merged into one paragraph: A asked why the constant may be dropped, B showed when it is worth keeping. The text asserted "any antiderivative serves" without a reason, at the exact point where the reader has just been told that an indefinite integral is a family and the constant appears once. Both halves are one-line verifiable; no new machinery. authored. User adjudication 2026-07-27: adopt (T1 + T3, merged).] -->
+  <p>Dropping the constant changes nothing: replacing \(v\) by \(v + k\) adds \(ku\) to \(uv\) and adds the same \(ku\) to \(\int v\,du\), which enters with a minus sign, so the two changes cancel. Occasionally a different choice of \(v\) is worth making, because it can simplify the remaining integral. In \(\int\ln(x + 1)\,dx\), taking \(v = x + 1\) instead of \(v = x\) leaves \(\int\frac{x+1}{x+1}\,dx = \int dx\), while \(v = x\) leaves \(\int\frac{x}{x+1}\,dx\), which needs a division step first. Both routes reach the same answer.</p>
+
     <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 tier-medium — uv-rectangle bookkeeping, region labels corrected at gate (below-curve = ∫v du); origin-start special case stated in caption; adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "parts-uv-rectangle"] -->
   <figure class="figure" data-fig="parts-uv-rectangle">
     <figcaption><span class="fig-no">Figure 8.1</span> The parts formula as area bookkeeping. For a curve in the \(uv\)-plane climbing from the origin to \((u_{1}, v_{1})\) with \(u\) and \(v\) increasing together, the rectangle of area \(u_{1}v_{1}\) splits into \(\int v\,du\), below the curve, and \(\int u\,dv\), beside it; subtracting either from the rectangle leaves the other. The picture illustrates the formula; the proof remains that of Theorem 8.1.</figcaption>
@@ -580,6 +583,14 @@ window.MathJax = {
     </section>
   </div>
 
+  <!-- expansion:caution [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.1-a (mode-c-gapwalk A and B converged, both high) — solve-back is one of the section's three working patterns and role reversal is its single failure mode; the failure looks unlike an arithmetic error (a true identity appears instead of a wrong answer), so a first-time reader has nothing to diagnose it with. The existing Cautions cover the minus sign and the brackets only. Mechanism already on the page: Ex 8.3 and Ex 8.4. authored. User adjudication 2026-07-27: adopt (T1).] -->
+  <section class="env env-caution">
+    <p class="env-head"><span class="env-kicker">Caution</span></p>
+    <div class="env-body">
+      <p>Solving for the integral depends on keeping the same kind of factor in the \(u\) position at every round. Reversing the roles on the second application undoes the first. In Example 8.4, choosing \(u = e^{x}\) and \(dv = \cos x\,dx\) at the second step gives \(\int e^{x}\cos x\,dx = e^{x}\sin x - J\), and substituting that back into the first equation returns \(J = J\), a true statement that carries no information. When a second application of parts yields an identity instead of an equation for the unknown, this is why.</p>
+    </div>
+  </section>
+
   <p>For definite integrals, the term \(uv\) is evaluated between the limits: it becomes \(\bigl[f(x)\,g(x)\bigr]_{a}^{b}\) in the next theorem. The hypotheses match those of the Fundamental Theorem: we use the term <em>smooth on \([a, b]\)</em> from §7.6, meaning that \(f\) is differentiable with \(f'\) continuous on \([a, b]\), one-sided at the endpoints.</p>
 
   <section class="env env-theorem">
@@ -656,6 +667,15 @@ window.MathJax = {
       </div>
     </section>
   </div>
+
+  <!-- expansion:formula [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27 — SAME GAP found independently by both waves: example-supplement §8.1–8.4 reported it as Layer 1 candidate 8.1-E1 (a worked example, cascade cost 30 renumberings), mode-c-gapwalk B reported it as candidate 8.1-4 (an unnumbered note, cascade 0). Gap: Example 8.6's formula is proved, spot-checked at n=2, and then never used, while two sentences promise the payoff ("a chain of lookups rather than a fresh computation" here; "the more systematic tool" in §8.2's Ex 8.8). User adjudication 2026-07-27: adopt the zero-cascade form, on the precedent of this chapter's two other unnumbered tagged derivations (the shell-washer block below, the Simpson parabola lemma in §8.7). RED LINE honored: one value only; no general closed form for I_n (that would be a new unproved proposition) and no mention of Wallis. sympy-recomputed at the M4 sweep. authored.] -->
+  <p>The formula pays off most visibly on definite integrals over \([0, \tfrac{\pi}{2}]\), where the boundary term disappears. Both \(\sin^{n-1}x\) and \(-\cos x\) are smooth there, so Theorem 8.2 applies and the boundary term can be evaluated. It vanishes at both ends:</p>
+  <p>\[ \Bigl[-\tfrac{1}{n}\cos x\,\sin^{n-1}x\Bigr]_{0}^{\pi/2} = 0, \]</p>
+  <p>because \(\cos\tfrac{\pi}{2} = 0\) at the upper limit and \(\sin^{n-1}0 = 0\) at the lower one, the second of these because \(n \ge 2\). Writing \(I_{n} = \int_{0}^{\pi/2}\sin^{n}x\,dx\), the reduction formula collapses to a relation between numbers,</p>
+  <p>\[ I_{n} = \frac{n-1}{n}\,I_{n-2} \qquad (n \ge 2), \]</p>
+  <p>and every even power now comes from repeated lookup, ending at \(I_{0} = \int_{0}^{\pi/2} 1\,dx = \tfrac{\pi}{2}\). For \(n = 6\),</p>
+  <p>\[ I_{6} = \tfrac{5}{6}I_{4} = \tfrac{5}{6}\cdot\tfrac{3}{4}\,I_{2} = \tfrac{5}{6}\cdot\tfrac{3}{4}\cdot\tfrac{1}{2}\,I_{0} = \tfrac{5}{6}\cdot\tfrac{3}{4}\cdot\tfrac{1}{2}\cdot\tfrac{\pi}{2} = \frac{5\pi}{32}, \]</p>
+  <p>and no integration was carried out after the formula itself. That is the value of recording a reduction formula once.</p>
 
   <h3 class="subsec-head">Settling the shell–washer question</h3>
 
@@ -754,6 +774,9 @@ window.MathJax = {
     </div>
   </section>
 
+  <!-- expansion:intuition [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27 — the surviving increment of example-supplement candidate 8.2-E1. That candidate proposed a full worked example for Strategy 8.2's step 2, which the adjudication declined as a mirror of Ex 8.7 (cascade 29 renumberings for a repeated mechanism); the user adjudicated 2026-07-27 to keep only the part that was new, the parity diagnostic, as prose at zero cost. Strategy 8.2 states the reason for the parity test inside a step-3 parenthesis and never demonstrates it. Source of the underlying comparison: Mooculus trigonometricIntegrals/digInTrigonometricIntegrals.tex (CC BY-NC-SA), whose own write-up asserts sin^3 = (1-cos^2)^{3/2} without naming an interval; corrected here to the sign-choice statement, per this book's §8.3 radical discipline. authored.] -->
+  <p>The parity test in Strategy 8.2 is a test of which factor can be spent as the differential, and the integrand of Example 8.7 shows where the other choice leads. Spending a factor of \(\cos x\) as the differential, with \(u = \sin x\) and \(du = \cos x\,dx\), leaves \(\int u^{3}\cos x\,du\), in which the substitution is not yet complete: the old variable is still present. And a lone \(\cos x\) is not a function of \(\sin x\) until a sign is chosen: on an interval where \(\cos x \ge 0\) it equals \(\sqrt{1 - u^{2}}\), and the integral becomes \(\int u^{3}\sqrt{1 - u^{2}}\,du\), a radical instead of a polynomial. Spending a factor from the odd power leaves an even power behind, and only an even power converts by the Pythagorean identity.</p>
+
   <div class="workedexample">
     <section class="env env-example">
       <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.8</span></p>
@@ -851,6 +874,9 @@ window.MathJax = {
 
   <p>Each formula holds on every interval avoiding the integrand’s singularities, and the constant \(C\) may differ from interval to interval, as with \(\ln\lvert x\rvert\) in §6.4.</p>
 
+  <!-- expansion:history [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.2-a (mode-c-gapwalk A and B converged, both ranked it their strongest history item) — the proof above labels the secant device "found by trial, not derived", which invites the question of why anyone was trying; this is the one place in the chapter where history answers a mathematical question the text has just raised, and it is a rare application-before-tool case. VERIFIED 2026-07-27 before drafting (user authorized the check), two independent sources agreeing: Wikipedia "Integral of the secant function" and the search-level account tracing to V. F. Rickey & P. M. Tuchinsky, "An Application of Geography to Mathematics: History of the Integral of the Secant", Mathematics Magazine 53 (1980) 162-166. Facts as checked: Mercator chart 1569; Edward Wright, Certaine Errors in Navigation, 1599, table computed by numerical summation; Henry Bond conjectured the closed form c. 1645 by comparing Wright's table with Gunter's table of logarithms of tangents; James Gregory proved it 1668 (Exercitationes Geometricae); Isaac Barrow gave the first transparent proof 1670. NOT claimed, per both sources and both gate instances: that Mercator himself computed or used this integral. Bond's log-tangent form is deliberately not written out (this book's form is Proposition 8.1's). First expansion:history marker in this section.] -->
+  <p>The antiderivative of the secant was wanted before there was a calculus to supply it. On the Mercator chart of 1569, the north-south scale has to stretch with latitude in proportion to the secant of the latitude, so the map distance out to latitude \(\varphi\) is \(\int_{0}^{\varphi}\sec\theta\,d\theta\). Edward Wright published a table of those values in 1599, obtained by adding secants in small steps, since no formula for them was known. Around 1645 Henry Bond noticed that Wright’s table agreed with a table of logarithms of tangents and conjectured a closed form on that evidence alone; James Gregory proved the conjecture in 1668, and Isaac Barrow gave a clearer proof in 1670. The device above looks unmotivated because the order of events was the reverse of the usual one: the formula was found first and justified afterwards.</p>
+
   <div class="workedexample">
     <section class="env env-example">
       <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.10</span></p>
@@ -871,6 +897,9 @@ window.MathJax = {
       </div>
     </section>
   </div>
+
+  <!-- expansion:strategy [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.2-c (mode-c-gapwalk A) — Proposition 8.1 supplies antiderivatives for cot and csc, but Strategy 8.3 covers only the tangent-secant half of the family, leaving a reader facing cot^3 x csc^4 x with no guidance. Zero new machinery: the derivatives of cot and csc are already in evidence in Prop 8.1's proof, and the identity is Prop A.1's third companion. This is the one-sentence "mirror named" form that the fragment's own SEAM GUARD ("no csc^3 (mirror named)") anticipates, not a worked example. authored. User adjudication 2026-07-27: adopt (T3).] -->
+  <p>The cotangent-cosecant family behaves in exactly the same way, with the same split into cases. For \(\int\cot^{m}x\,\csc^{n}x\,dx\): if \(n\) is even, save a factor \(\csc^{2}x\,dx\), which is the differential of \(-\cot x\), and convert what remains by \(1 + \cot^{2}x = \csc^{2}x\) (Proposition A.1); if \(m\) is odd, save a factor \(\csc x\cot x\,dx\), which is the differential of \(-\csc x\), and convert what remains by the same identity. The only change from Strategy 8.3 is a minus sign carried through each substitution.</p>
 
   <h3 class="subsec-head">Products with different frequencies</h3>
 
@@ -1074,6 +1103,9 @@ window.MathJax = {
     </section>
   </div>
 
+  <!-- expansion:caution [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.3-a (mode-c-gapwalk A and B converged; B's framing adopted because it names the exact promise-versus-demonstration gap) — the section closes by claiming the method "reaches any sqrt(px^2+qx+r)", but all five worked examples have leading coefficient +-1 (Ex 8.16's 3-2x-x^2 becomes 4-(x+1)^2), so the |p| != 1 step never appears anywhere. §8.4's Ex 8.21 performs the analogous move with u = 2x-1, which makes the asymmetry between the two sections real rather than notional. Delivered as prose rather than a third Caution box, per gapwalk A's note that Strategy 8.4 should remain the single visible authority. authored. User adjudication 2026-07-27: adopt (T1).] -->
+  <p>Completing the square clears the linear term; a leading coefficient other than \(1\) needs one more preliminary step. The three rows of Strategy 8.4 are written with \(x^{2}\) by itself, so the leading coefficient must be factored out first. Then \(\sqrt{9x^{2} - 4} = 3\sqrt{x^{2} - \bigl(\tfrac{2}{3}\bigr)^{2}}\) is row 3 with \(a = \tfrac{2}{3}\), and \(\sqrt{9 - 4x^{2}} = 2\sqrt{\bigl(\tfrac{3}{2}\bigr)^{2} - x^{2}}\) is row 1 with \(a = \tfrac{3}{2}\). A linear substitution such as \(u = 2x\) does the same work, as in Example 8.21 of the next section, where it clears a leading coefficient from a quadratic denominator.</p>
+
   <section class="env env-caution">
     <p class="env-head"><span class="env-kicker">Caution</span></p>
     <div class="env-body">
@@ -1091,7 +1123,8 @@ window.MathJax = {
 <!-- §8.4 Integration of Rational Functions by Partial Fractions. section-source: Stewart ET 9e
      §7.4; cross-checked Thomas 14e §8.5, Rogawski 4e §7.5. Authored 2026-07-26 per PLAN-ch08 +
      brief-8-4 (canon-as-spine; plain-register generation). Numbering: mints Strategy 8.5,
-     Examples 8.17–8.22, equation tag (8.A). NO Def/Thm/Prop. Cautions UNNUMBERED (two: FTA
+     Examples 8.17–8.22, equation tag (8.A). NO Def/Thm/Prop. Cautions UNNUMBERED (M4 2026-07-27:
+     three — the repeated-factor template box (8.4-c) joins the original two: FTA
      on-credit fence — SPEC §16.1 unnumbered-Caution vehicle, Ch2 §2.4 precedent, the chapter's
      FIRST of two credits; irreducibility check p²<4q).
      SEAM GUARD (PLAN-ch08 D6 + brief-8-4): the ALGEBRA layer is §A.4's — Prop A.7 (decomposition
@@ -1124,6 +1157,9 @@ window.MathJax = {
       <p>Proposition A.7 begins by factoring the denominator completely into linear and irreducible quadratic factors. That such a factorization always exists is a consequence of the Fundamental Theorem of Algebra, whose proof lies outside this book. We take the factorization fact on credit; it is the first of two results this chapter borrows without proof, and everything else in the section is proved or computed in full.</p>
     </div>
   </section>
+
+  <!-- expansion:intuition [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.4-b (mode-c-gapwalk A) — the Caution above guarantees that a factorization EXISTS and says nothing about finding one, which is the reader's immediate next question and the step every example silently performs. The answer lies entirely in A-class prerequisite material (factor theorem, rational-root search), so nothing new is assumed. Delivered as prose rather than as a Caution box, since it is a method note and not a warning. authored. User adjudication 2026-07-27: adopt (T3).] -->
+  <p>Existence is not the same as a method for finding one. The credit above, and the promise that the method always succeeds, guarantee that a factorization exists; neither says how to produce it. The first tool is the factor theorem: \(r\) is a root of a polynomial exactly when \(x - r\) divides it. When the coefficients are integers this narrows the search, because an integer root must divide the constant term, so the divisors of that term form a short list of candidates to test. Every denominator in this section factors by hand, sometimes by that test and sometimes by a shortcut: the quadratic formula, which supplies the roots of the quadratic factor in Example 8.18 below, or grouping, as in Example 8.19. When no factorization can be found, the method stops at step 2 of Strategy 8.5, and no integration technique can supply the missing factorization. From here on we take the factoring as done.</p>
 
   <p>Before the fragments can be listed, one small antiderivative is needed: the scaled version of §6.4’s arctangent row. For \(a &gt; 0\), substitute \(u = x/a\), \(du = dx/a\), in the table entry \(\int\frac{du}{1 + u^{2}} = \arctan u + C\):</p>
   <p>\[ \int \frac{dx}{x^{2} + a^{2}} = \frac{1}{a^{2}}\int \frac{a\,du}{1 + u^{2}} = \frac{1}{a}\arctan\frac{x}{a} + C. \tag{8.A} \]</p>
@@ -1182,6 +1218,9 @@ window.MathJax = {
     </section>
   </div>
 
+  <!-- expansion:strategy [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.4-a (mode-c-gapwalk A and B converged) — four examples in this section solve for constants, and a single wrong constant ruins the answer, but the text supplies a check only for the DIVISION step ("can be checked by recombining", Ex 8.17); the decomposition step has none, so the section's verification habit is half missing. Consistent with the chapter-wide "differentiating confirms" culture. Demonstration arithmetic sympy-recomputed at the M4 sweep. authored. User adjudication 2026-07-27: adopt (T3).] -->
+  <p>One habit belongs here. Once the constants are found, pick a value of \(x\) that has not been used yet, substitute it into the identity obtained after clearing denominators, and check that the two sides agree. In Example 8.18, taking \(x = 1\) gives \(2\) on the left and \(3A + 3B + C = \tfrac{3}{2} + \tfrac{3}{5} - \tfrac{1}{10} = 2\) on the right. The check costs one line and catches sign and arithmetic slips before any integration begins, which matters because a wrong decomposition integrates just as smoothly as a correct one.</p>
+
   <div class="workedexample">
     <section class="env env-example">
       <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.19</span></p>
@@ -1205,6 +1244,14 @@ window.MathJax = {
       </div>
     </section>
   </div>
+
+  <!-- expansion:caution [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.4-c (mode-c-gapwalk B) — Ex 8.19 exhibits the correct template for a repeated factor but never shows what the abbreviated one does, and the consequence is unusual: not a wrong answer but an unsolvable system, which a first-time reader reads as an arithmetic failure of their own. Three-line counterexample, fully verifiable, no new machinery. Coefficient system sympy-recomputed at the M4 sweep. authored. User adjudication 2026-07-27: adopt (T3).] -->
+  <section class="env env-caution">
+    <p class="env-head"><span class="env-kicker">Caution</span></p>
+    <div class="env-body">
+      <p>The template needs a fragment for every power of a repeated factor, not only the highest. Dropping the lower ones does not save work; it leaves a system with no solution at all. Writing \(\frac{4x}{(x - 1)^{2}(x + 1)}\) as \(\frac{B}{(x - 1)^{2}} + \frac{C}{x + 1}\) and clearing denominators gives \(4x = B(x + 1) + C(x - 1)^{2}\). Matching \(x^{2}\) coefficients forces \(C = 0\), matching \(x\) coefficients then forces \(B = 4\), and matching constants requires \(B + C = 0\). No such constants exist. The failure looks like an arithmetic mistake, but it is a sign that the template itself was wrong.</p>
+    </div>
+  </section>
 
   <div class="workedexample">
     <section class="env env-example">
@@ -1428,6 +1475,11 @@ window.MathJax = {
     </section>
   </div>
 
+  <!-- expansion:caution [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidates 8.5-a (mode-c-gapwalk A and B converged, BOTH ranked it high; the round's clearest "technique used repeatedly, never named" gap) + 8.5-b (mode-c-gapwalk B) merged into one paragraph. Verification by differentiation appears twelve times across §§8.1-8.4 (grep-verified: Ex 8.1, Ex 8.4, Prop 8.1's sec and csc proofs, §8.3's x<-a caution and Ex 8.15, §8.4's rationalizing close) and is never stated as a principle; meanwhile Strategy 8.6 step 4 tells the reader several routes may succeed without warning that their answers will look different, which is the self-taught reader's standard moment of doubt. §8.5 is the chapter's only meta section and Corollary 4.4 is already cited in §8.1's proof of Theorem 8.2. Delivered as prose, not as an env-caution box: this fragment's SEAM GUARD records that the section deliberately carries no Caution boxes (traps live with their techniques). authored. User adjudication 2026-07-27: adopt (T1 + T3, merged).] -->
+  <p>Two remarks are worth adding here, one about step 1 and one about step 4. First, an algebraic rewriting need not hold on the whole domain. Dropping an absolute value, cancelling a factor, or extracting a square root can each change the set of \(x\) on which the two sides agree, and can do so silently, so name the interval at the moment you rewrite, as was done in Example 8.26.</p>
+
+  <p>Second, when several routes succeed, their answers need not look alike. Two antiderivatives of the same function on the same interval differ by a constant (Corollary 4.4), and by nothing more, so an answer that looks different from another may still be correct. There are two ways to settle the question: differentiate and compare with the integrand, or subtract the two answers and simplify. This chapter already contains two such cases. In Example 8.8 the power-reduction answer looks unlike the one the reduction formula of Example 8.6 gives, and the two agree only after a double-angle identity; in Example 8.15 the two forms differ by the constant \(\ln a\).</p>
+
   <h3 class="subsec-head">The limits of the toolkit</h3>
 
   <!-- expansion:intuition [source: ③ B-02 adjudicated form — scope statement, no nonexistence claim, no Liouville credit; forward hooks to §8.6/§8.7] -->
@@ -1448,8 +1500,10 @@ window.MathJax = {
      Definition 8.1 (Type 1), Definition 8.2 (Type 2), Proposition 8.2 (p-test, PROVED),
      Theorem 8.3 (Comparison Theorem, PROVED — the chapter's theory highlight, mainline tools
      only: Thm 6.2(3)/(4) monotonicity, Thm 4.1 for the integer-indexed sequence, ⌊t−a⌋
-     bracketing glossed inline; ⌊·⌋ precedent §1.5), Examples 8.27–8.32. Cautions UNNUMBERED
-     (two: principal-value trap; hidden-singularity check).
+     bracketing glossed inline; ⌊·⌋ precedent §1.5), Examples 8.27–8.33 (M4 2026-07-27 added
+     Ex 8.33, the divergence direction of Thm 8.3(b)). Cautions UNNUMBERED (M4: five — principal-value
+     trap; hidden-singularity check; sign-changing scope (8.6-e); the two no-conclusion combinations
+     (8.6-a); the meaning of "divergent" (8.6-b)).
      SEAM GUARD (PLAN-ch08 D7 + brief-8-6): split-point independence for (c) justified via
      additivity Thm 6.2(3), one sentence. Every verdict traces to Def 8.1/8.2, Prop 8.2, or
      Thm 8.3 — no "obviously converges". Limit tools cited: L'Hôpital Thm 5.5 (s e^{−s});
@@ -1457,9 +1511,14 @@ window.MathJax = {
      sentence (integrand ≥ 1, comparison Thm 6.2(4) on finite intervals). Increasing G sits
      below its limit: one-line contradiction argument, not assumed. NO absolute/conditional
      convergence vocab, NO Integral Test statement (one forward clause in the summary — Ch11
-     §11.3 cites Def 8.1 + Prop 8.2 + Thm 8.3; EXPORT contract), NO principal-value name, NO
-     Gabriel's horn.
-     Counters handed to §8.7: Theorem 8.4, Example 8.33; §8.7 mints tags (M)/(T)/(S).
+     §11.3 cites Def 8.1 + Prop 8.2 + Thm 8.3; EXPORT contract), NO principal-value name.
+     GUARD AMENDED (M4 2026-07-27, user adjudication): this header originally read "NO Gabriel's
+     horn", which over-tightened PLAN-ch08 §Excluded — that record permits "§8.6 one-sentence
+     aside at most". The as-built now carries exactly ONE sentence (candidate 8.6-f), written on
+     the TRUNCATED solid ([1,t], quantities approaching / growing without bound) so that no
+     area-of-an-infinite-surface claim is made; Theorem 7.4 is stated on [a,b] only. Precedent for
+     amending an over-specified guard rather than the content: the 8.6-B1 adjudication in PLAN-ch08.
+     Counters handed to §8.7: Theorem 8.4, Example 8.34; §8.7 mints tags (M)/(T)/(S).
      Record: PLAN-ch08.md, brief-8-6.md, ch08_ch-direction-codex3-audit.md (D7, A-02).
      Math verified during authoring; sympy at sweep. -->
 
@@ -1542,6 +1601,14 @@ window.MathJax = {
     </div>
   </section>
 
+  <!-- expansion:caution [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.6-b (mode-c-gapwalk B) — every divergent instance in the as-built section was of the unbounded-growth kind, so a reader generalizes "divergent = infinite", which is not what Def 8.1's "provided the limit exists as a finite number" says. The oscillating counterexample is fully in range (FTC-2 + one reason sentence). PLACEMENT (M4 scoped-sim regression fix, 2026-07-27): first sited immediately after Figure 8.6, which put it between Definition 8.1's pointer "see the caution below" and the principal-value Caution that pointer means; a blind learner-sim landed on the wrong box. Moved to sit AFTER the principal-value Caution, restoring the M1 pointer path (Ex 8.27, Fig 8.6, Ex 8.28 only) and pairing the two boxes that both say what a verdict does NOT mean. authored. User adjudication 2026-07-27: adopt (T1).] -->
+  <section class="env env-caution">
+    <p class="env-head"><span class="env-kicker">Caution</span></p>
+    <div class="env-body">
+      <p>Example 8.27(a) diverged because its truncations grew without bound, and that is the most familiar way for the limit to fail. It is not the only way. <em>Divergent</em> says that the limit is not a finite number, which also covers truncations that never settle. For \(f(x) = \cos x\), the truncations are \(\int_{0}^{t}\cos x\,dx = \sin t\), which returns to \(1\) and to \(-1\) again and again as \(t\) grows, so no single number is being approached and \(\int_{0}^{\infty}\cos x\,dx\) diverges. Divergence is the absence of a finite limit, not a claim that the area is infinite.</p>
+    </div>
+  </section>
+
   <div class="workedexample">
     <section class="env env-example">
       <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.29</span></p>
@@ -1560,6 +1627,14 @@ window.MathJax = {
       </div>
     </section>
   </div>
+
+  <!-- expansion:application [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.6-d (mode-c-gapwalk A and B converged) — §8.6 carried no real-world connection at all (chapter-wide expansion:application count was 0 before this round), and "an unbounded region can hold a finite quantity" reads as a geometric curiosity without one. Mechanism entirely in place: Def 7.3 (Work) + Def 8.1 + the 1/x^2 computation of Ex 8.27(b). The inverse-square law enters as an empirical model, on the §7.4 Hooke's-law precedent. RED LINE honored: stops at "the work is finite"; no escape-velocity formula (that needs energy conservation, which this book has not built). PLACEMENT: moved here from just after Ex 8.28 in the same round, so that Definition 8.1's "see the caution below" pointer reaches the principal-value Caution without two asides in the way (scoped-sim regression fix). User adjudication 2026-07-27: adopt (T2).] -->
+  <p>The convergence recorded in Example 8.27(b) has physical content. Newton’s inverse-square law, an empirical model in the same sense as Hooke’s law in §7.4, says that a body of mass \(M\) pulls a mass \(m\) at distance \(x\) with force \(GMm/x^{2}\). By Definition 7.3, the work needed to move the mass from the body’s surface, at distance \(R\) from its centre, out to distance \(t\) is</p>
+  <p>\[ \int_{R}^{t} \frac{GMm}{x^{2}}\,dx = GMm\Bigl(\frac{1}{R} - \frac{1}{t}\Bigr) \longrightarrow \frac{GMm}{R}, \]</p>
+  <p>so the improper integral converges: moving the mass arbitrarily far from the body requires only a finite amount of work. The reason is the one Example 8.27(b) recorded: the exponent \(2\) sits on the convergent side of the boundary.</p>
+
+  <!-- expansion:application [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.6-f (mode-c-gapwalk A and B converged; user adjudicated adopt). PLAN-ch08 §Excluded permits "§8.6 one-sentence aside at most" — this is exactly one sentence. Written on the TRUNCATED solid so that Theorem 7.4, which is stated on [a,b], is never applied to an infinite surface; both quantities are described as approaching / growing without bound. Volume uses Ex 8.27(b)'s 1/x^2, surface uses Ex 8.27(a)'s 1/x: the same curve lands on both sides of the p-test. The Theorem 7.4 integrand is written out inline after a blind learner-sim reported the "at least" step as unjustified. PLACEMENT: moved here with 8.6-d, same regression fix.] -->
+  <p>Example 8.27’s two verdicts can be produced by one curve: rotating \(y = 1/x\) on \([1, t]\) about the \(x\)-axis gives a solid, traditionally called Gabriel’s horn, whose volume \(\int_{1}^{t}\pi x^{-2}\,dx\) approaches \(\pi\), while its lateral surface area is at least \(\int_{1}^{t} 2\pi x^{-1}\,dx = 2\pi\ln t\) and grows without bound as \(t\) does, since the Theorem 7.4 integrand \(2\pi x^{-1}\sqrt{1 + x^{-4}}\) is never smaller than \(2\pi x^{-1}\) (Theorem 6.2, part 4).</p>
 
   <h3 class="subsec-head">Type 2: unbounded integrands</h3>
 
@@ -1684,6 +1759,14 @@ window.MathJax = {
     <figcaption><span class="fig-no">Figure 8.9</span> The proof of Theorem 8.3(a) in one schematic picture: the increasing accumulation \(F\) stays below its ceiling \(M\), the integer samples \(F(a + n)\) climb to their limit \(L\) (Theorem 4.1), and every \(t\) is bracketed between consecutive samples, so \(F(t)\) is squeezed to \(L\) as well. The curve’s shape is schematic.</figcaption>
   </figure>
 
+  <!-- expansion:caution [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.6-e (mode-c-gapwalk B) — every worked instance of Thm 8.3 in the as-built has a positive integrand, so the reader has no occasion to notice that 0 <= f <= g is a real hypothesis. Pure scope statement. HARD BOUNDARY honored: no absolute/conditional convergence vocabulary (Ch11's) and no promise that Ch11 handles it, which would add a forward fence to a chapter whose design fixes exactly two credits. authored. User adjudication 2026-07-27: adopt (T3).] -->
+  <section class="env env-caution">
+    <p class="env-head"><span class="env-kicker">Caution</span></p>
+    <div class="env-body">
+      <p>Theorem 8.3 assumes \(0 \le f(x) \le g(x)\), and that assumption cannot be dropped. For an integrand that changes sign, a comparison of this kind yields nothing at all: the proof of Theorem 8.3 rests on \(F\) being increasing, which fails once \(f\) takes negative values, so neither convergence nor divergence follows. Such integrals are outside what this book takes up; every comparison in this chapter therefore begins by checking that both integrands are non-negative.</p>
+    </div>
+  </section>
+
   <div class="workedexample">
     <section class="env env-example">
       <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.32</span></p>
@@ -1707,6 +1790,39 @@ window.MathJax = {
     <figcaption><span class="fig-no">Figure 8.10</span> The Comparison Theorem’s trap in Example 8.32: on \([1, \infty)\) the graph of \(e^{-x^{2}}\) runs below \(e^{-x}\), whose tail holds the finite area \(1/e\), so the darker region is confined below a finite roof. The curves meet at \(x = 1\) and separate at a visible angle.</figcaption>
   </figure>
 
+  <!-- expansion:example [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.6-E1 (example-supplement §8.5–8.7) — Layer 1: Theorem 8.3 states two parts and only (a) had a worked instance (grep-verified: the sole in-text citation of Thm 8.3 was Ex 8.32, part (a)). Teaches the direction discipline: to prove divergence the known-divergent integral must be the LOWER bound. Adapted from APEX Calculus V5, text/06_Improper_Integration.tex (CC BY-NC 4.0): same integral, same comparison, official solution complete. Rewrite delta: citations retargeted to this book's numbering; APEX's "for large x, 1/sqrt(x^2-x) ~ 1/x" heuristic opening replaced by the hypothesis check this section uses throughout; steps 5 and 6 are authored (not in the source) and carry the teaching point. sympy-recomputed at the M4 sweep. User adjudication 2026-07-27: adopt.] -->
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.33</span></p>
+      <div class="env-body">
+        <p>Show that \(\displaystyle\int_{3}^{\infty} \frac{dx}{\sqrt{x^{2} - x}}\) diverges.</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>First check the hypotheses. On \([3, \infty)\) we have \(x^{2} - x = x(x - 1) \ge 6\), so the integrand is defined, continuous, and positive there.</p>
+        <p>Divergence is the target, so by Theorem 8.3(b) the integrand must be placed <em>above</em> something already known to diverge. For \(x \ge 3\), \(0 &lt; x^{2} - x &lt; x^{2}\), and taking square roots gives \(\sqrt{x^{2} - x} &lt; x\). Reciprocals reverse the inequality:</p>
+        <p>\[ 0 \;&lt;\; \frac{1}{x} \;&lt;\; \frac{1}{\sqrt{x^{2} - x}} \qquad (x \ge 3). \]</p>
+        <p>In the notation of Theorem 8.3 this makes \(f(x) = 1/x\) the lower function and \(g(x) = 1/\sqrt{x^{2} - x}\) the upper one, both continuous on \([3, \infty)\). The lower integral diverges: \(\int_{3}^{t}\tfrac{dx}{x} = \ln t - \ln 3\) by §6.4 and Theorem 6.4, and this grows without bound, so Definition 8.1(a) records divergence. This is Example 8.27(a)’s computation from a different starting point.</p>
+        <p>Theorem 8.3(b) therefore gives that \(\int_{3}^{\infty}\tfrac{dx}{\sqrt{x^{2} - x}}\) diverges.</p>
+        <p>Getting the direction right is the whole point here. It is just as easy to check that \(\tfrac{1}{\sqrt{x^{2}-x}} \le \tfrac{2}{x}\) on \([3, \infty)\): after squaring and clearing denominators, this is the inequality \(3x^{2} \ge 4x\). The integral \(\int_{3}^{\infty}\tfrac{2\,dx}{x}\) diverges as well. That comparison proves nothing: a divergent upper bound carries no information. To establish divergence, the known-divergent integral has to be the one underneath.</p>
+        <p>This integrand does have an antiderivative, reachable by completing the square and a secant substitution (§8.3). Deciding convergence did not require it. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <!-- expansion:caution [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.6-a (mode-c-gapwalk A, its top-ranked item) — Thm 8.3 reads symmetrically enough that all four combinations look available; getting the direction wrong is the standard misuse. Zero new mathematics: the counterexample is Example 8.27 reused verbatim. Complements the new Ex 8.33, which shows the direction that DOES work. authored. User adjudication 2026-07-27: adopt (T1).] -->
+  <section class="env env-caution">
+    <p class="env-head"><span class="env-kicker">Caution</span></p>
+    <div class="env-body">
+      <p>Even when \(0 \le f \le g\) does hold, only two of the four ways of pairing a function with a verdict give a conclusion, and Example 8.33 has just used one of those two. The other two give nothing: if \(\int_{a}^{\infty} f\) converges, no conclusion follows about \(\int_{a}^{\infty} g\); if \(\int_{a}^{\infty} g\) diverges, none follows about \(\int_{a}^{\infty} f\). Example 8.27 supplies a counterexample to both at once: on \([1, \infty)\) we have \(1/x^{2} \le 1/x\), the smaller integral converges, and the larger one diverges. Decide first which verdict you are trying to prove, then look for a comparison function on the matching side.</p>
+    </div>
+  </section>
+
+  <!-- expansion:intuition [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.6-c (mode-c-gapwalk B) — Def 8.1(c)'s split-point paragraph and Ex 8.32's closing move each did half of this, but the principle was never stated, and without it Theorem 8.3 reads as requiring its inequality on ALL of [a, infinity), which stalls any comparison that only starts holding later. Uses additivity (Thm 6.2 part 3), already cited several times in this section. REVISED at the M4 scoped Mode B (2026-07-27): the closing sentence originally carried its condition on the adjectives "awkward" and "well behaved", which in a section that has just taught Type 2 reads as "unbounded on [a,b]" and would make the recipe's own proper integral improper; and it credited Example 8.32 with a case Example 8.32 is not (its integrand is perfectly ordinary on [0,1]; it is the COMPARISON that only starts at x = 1). Both repaired literally. PLACEMENT: moved ahead of the "Mixed cases" paragraph in the same round, so that paragraph keeps its role as the section's closing beat (a blind learner-sim reported the principle arriving after the closure, and reported the same principle being used in Ex 8.32 before being stated). authored. User adjudication 2026-07-27: adopt (T1).] -->
+  <p>One consequence of additivity deserves stating on its own: convergence is decided by the tail. Attaching or removing a proper integral over a finite interval changes the value but not the verdict (Theorem 6.2, part 3). The practical use is that a comparison need not hold from the very start. If \(0 \le f \le g\) only for \(x \ge b\), with \(b &gt; a\), split \(\int_{a}^{\infty} f\) at \(b\), apply Theorem 8.3 to \(\int_{b}^{\infty} f\), and add back \(\int_{a}^{b} f\), which is an ordinary proper integral whenever \(f\) is continuous on \([a, b]\) (Theorem 6.1). Example 8.32 did exactly this: its comparison \(e^{-x^{2}} \le e^{-x}\) holds only for \(x \ge 1\), so the verdict obtained on \([1, \infty)\) carried across to \([0, \infty)\).</p>
+
   <p>Mixed cases reduce to the two types. An integral such as \(\int_{0}^{\infty} \tfrac{dx}{\sqrt{x}(1 + x)}\) is improper twice, at the endpoint \(0\) and along the infinite tail; split it at any interior point, say \(1\), and require each piece to converge by its own definition. In every case the procedure is the same: locate each point where the integral is improper, isolate it at one end of one integral, and apply the matching definition or the Comparison Theorem.</p>
 
   <!-- expansion:summary — close §8.6: the extension move + the two tools; forward clause = Ch11 §11.3 export contract; forward to §8.7 -->
@@ -1722,15 +1838,17 @@ window.MathJax = {
      spacing h=(b−a)/n, even n verified in the data example). Numbering: mints Theorem 8.4
      (Error bounds — STATED ON CREDIT, forward fence → Ch11 §11.9 Taylor; the chapter's SECOND
      AND LAST credit; unnumbered-Caution fence vehicle per SPEC §16.1, Ch2 §2.4 precedent),
-     Examples 8.33–8.36, equation tags (M)/(T)/(S). Cautions UNNUMBERED (two: even-n; the fence
-     note). Chapter summary (unnumbered h3) closes this fragment per SPEC §4.
+     Examples 8.34–8.38, equation tags (M)/(T)/(S). Cautions UNNUMBERED (M4 2026-07-27: five —
+     even-n; the fence note; unequal spacing (8.7-d); finite-interval scope (8.7-a); plus the
+     midpoint/endpoint note (8.7-e) as prose). Chapter summary (unnumbered h3) closes this
+     fragment per SPEC §4.
      SEAM GUARD (PLAN-ch08 D8 + brief-8-7): M is a Def 6.2 Riemann sum with midpoint sample
      points — §6.2's header comment reserved the RULES for §8.7, discharged here in one clause.
      T derived BOTH ways (average of L/R; trapezoid areas). Simpson's three-point parabola lemma
      PROVED by direct algebra + shift remark (Thm 6.7); weights summed explicitly. Error sign
      convention stated (E = exact − approximation). K/K₄ exist by EVT Thm 4.9(a), "any bound
      serves". Round n UP in planning, say why. NO <table> element (book-wide zero-table
-     invariant — data given as displays). Ex 8.36 is self-authored (readings invented,
+     invariant — data given as displays). Ex 8.38 is self-authored (readings invented,
      plausibility-checked; no error bound claimable without derivative information — honesty
      line). Values recomputed to 6 dp; sympy at sweep.
      Chapter summary: recaps §8.1–§8.7 arc, embeds parts formula, sec³, (8.A), p-test,
@@ -1755,20 +1873,23 @@ window.MathJax = {
   <p>\[ \int_{a}^{b} f(x)\,dx \;\approx\; M_{n} = h\,\bigl[f(\bar{x}_{1}) + f(\bar{x}_{2}) + \cdots + f(\bar{x}_{n})\bigr]. \tag{M} \]</p>
   <p>This is a Riemann sum in the sense of Definition 6.2, with the sample points taken at midpoints, a choice that §6.2 reserved for exactly this use. For continuous \(f\), Theorem 6.1 guarantees that \(M_{n}\) converges to the integral as \(n\) grows; the question this section adds is how fast.</p>
 
+  <!-- expansion:intuition [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.7-e (mode-c-gapwalk B) — §8.6 has just finished with integrands that blow up at an endpoint, and the natural reader question (can M be pointed at those?) had no answer; the note also blocks the over-inference. authored. User adjudication 2026-07-27: adopt (T3).] -->
+  <p>Unlike the two rules that follow, this rule never evaluates \(f\) at an endpoint of \([a, b]\), which is a practical advantage when the integrand is undefined or hard to evaluate there. The error bound below does not inherit that advantage. Theorem 8.4 requires \(f''\) to be continuous on all of \([a, b]\), endpoints included, so an integrand that is undefined or unbounded at an endpoint loses its guarantee even though the rule still returns a number.</p>
+
   <p>The second rule replaces \(f\) on each slice by the chord joining \(\bigl(x_{i-1}, y_{i-1}\bigr)\) to \(\bigl(x_{i}, y_{i}\bigr)\). The region under a chord is a trapezoid with parallel sides \(y_{i-1}\) and \(y_{i}\) and width \(h\), so its area is \(h\cdot\tfrac{y_{i-1} + y_{i}}{2}\), and summing over the slices gives</p>
   <p>\[ \int_{a}^{b} f(x)\,dx \;\approx\; T_{n} = \frac{h}{2}\,\bigl[y_{0} + 2y_{1} + 2y_{2} + \cdots + 2y_{n-1} + y_{n}\bigr]. \tag{T} \]</p>
   <p>Every interior node is shared by two trapezoids, which is where the repeated factor \(2\) comes from. The same formula arrives by a second route. The left-endpoint and right-endpoint Riemann sums are \(L_{n} = h\sum_{i=1}^{n} y_{i-1}\) and \(R_{n} = h\sum_{i=1}^{n} y_{i}\), and averaging them termwise pairs each interior value with itself:</p>
   <p>\[ \frac{L_{n} + R_{n}}{2} = \frac{h}{2}\sum_{i=1}^{n}\bigl(y_{i-1} + y_{i}\bigr) = \frac{h}{2}\bigl[y_{0} + 2y_{1} + \cdots + 2y_{n-1} + y_{n}\bigr] = T_{n}. \]</p>
   <p>The averaging reading connects the rule to the bracketing picture above: for a monotone integrand the integral lies between \(L_{n}\) and \(R_{n}\), and \(T_{n}\) is the bracket’s midpoint, so the trapezoidal error is at most half the bracket’s width.</p>
 
-    <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 tier-essential — the three rules as pictures; gate MODIFY applied: pinned concave-up decreasing f = 1/x with n = 4 (chords lie above the curve, consistent with Ex 8.33’s sign story), ghost second parabola pair; DRAW-TIME DEVIATION: interval [1,3] instead of the gate’s suggested [1,2] — at [1,2] the chord–curve gap (≈0.016) is invisible at print size, defeating the panel’s teaching function; n = 4 and f = 1/x kept; adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "three-rules-panel"] -->
+    <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 tier-essential — the three rules as pictures; gate MODIFY applied: pinned concave-up decreasing f = 1/x with n = 4 (chords lie above the curve, consistent with Ex 8.34’s sign story), ghost second parabola pair; DRAW-TIME DEVIATION: interval [1,3] instead of the gate’s suggested [1,2] — at [1,2] the chord–curve gap (≈0.016) is invisible at print size, defeating the panel’s teaching function; n = 4 and f = 1/x kept; adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "three-rules-panel"] -->
   <figure class="figure" data-fig="three-rules-panel">
     <figcaption><span class="fig-no">Figure 8.11</span> The three rules on one integrand, \(y = 1/x\) on \([1, 3]\) with \(n = 4\): constants at the midpoints, chords at the nodes, and a parabola through each triple of nodes. The first triple’s arc is shaded; the open dots mark the second triple, whose arc lies too close to the curve to separate by eye, which is the point: each replacement follows the bending of the curve more closely than the last.</figcaption>
   </figure>
 
     <div class="workedexample">
     <section class="env env-example">
-      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.33</span></p>
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.34</span></p>
       <div class="env-body">
         <p>Approximate \(\displaystyle\int_{1}^{2} \frac{dx}{x}\) with \(n = 5\) by the Trapezoidal Rule and by the Midpoint Rule, and compare each result with the true value.</p>
       </div>
@@ -1787,9 +1908,9 @@ window.MathJax = {
     </section>
   </div>
 
-  <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 tier-medium — the standard picture behind the 24-vs-12 constants; gate MODIFY applied: MOVED after Ex 8.33 (the sentence it annotates), concave-up slice, tangent below / chord above, no exact-half claim in caption; adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "midpoint-tangent-trap"] -->
+  <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 tier-medium — the standard picture behind the 24-vs-12 constants; gate MODIFY applied: MOVED after Ex 8.34 (the sentence it annotates), concave-up slice, tangent below / chord above, no exact-half claim in caption; adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "midpoint-tangent-trap"] -->
   <figure class="figure" data-fig="midpoint-tangent-trap">
-    <figcaption><span class="fig-no">Figure 8.12</span> One slice of Example 8.33’s integrand. Tilting the midpoint rectangle’s lid about the point of tangency onto the tangent line exchanges two equal triangles, so the rectangle and the tangent trapezoid hold the same area. On this upward-bending curve the tangent lies below the curve away from the midpoint while the chord lies above it, which is why the midpoint and trapezoidal errors pull in opposite directions.</figcaption>
+    <figcaption><span class="fig-no">Figure 8.12</span> One slice of Example 8.34’s integrand. Tilting the midpoint rectangle’s lid about the point of tangency onto the tangent line exchanges two equal triangles, so the rectangle and the tangent trapezoid hold the same area. On this upward-bending curve the tangent lies below the curve away from the midpoint while the chord lies above it, which is why the midpoint and trapezoidal errors pull in opposite directions.</figcaption>
   </figure>
 
   <h3 class="subsec-head">Simpson’s Rule</h3>
@@ -1811,9 +1932,12 @@ window.MathJax = {
     </div>
   </section>
 
+  <!-- expansion:history [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.7-c (mode-c-gapwalk A and B converged; A's unnamed version adopted). Verbatim-checked against problem_banks/APEXCalculusV5/ptx/sec_numerical_integration.ptx L574–576: "named after Thomas Simpson (1710-1761), even though others had used this rule as much as 100 years prior" — the source names no predecessor, so this book names none either (gapwalk B proposed Kepler/Gregory; declined for lack of a checked source). APEX = CC BY-NC-SA. First expansion:history marker in Ch8. User adjudication 2026-07-27: adopt (T2).] -->
+  <p>The rule carries the name of Thomas Simpson (1710–1761), although the same three-point weights were in use about a century before him.</p>
+
   <div class="workedexample">
     <section class="env env-example">
-      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.34</span></p>
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.35</span></p>
       <div class="env-body">
         <p>Approximate \(\displaystyle\int_{1}^{2} \frac{dx}{x}\) by Simpson’s Rule with \(n = 10\).</p>
       </div>
@@ -1826,10 +1950,13 @@ window.MathJax = {
           S_{10} = \frac{0.1}{3}\Bigl[\frac{1}{1} &+ \frac{4}{1.1} + \frac{2}{1.2} + \frac{4}{1.3} + \frac{2}{1.4} + \frac{4}{1.5} \\
             &+ \frac{2}{1.6} + \frac{4}{1.7} + \frac{2}{1.8} + \frac{4}{1.9} + \frac{1}{2}\Bigr] \approx 0.693150.
         \end{aligned} \]</p>
-        <p>Against \(\ln 2 \approx 0.693147\), the error is about \(-3 \times 10^{-6}\). Example 8.33’s rules, using half as many nodes, erred in the third decimal place; Simpson’s Rule with these ten slices is already correct to five. The jump matches the scales recorded in the bounds below: the trapezoidal bound shrinks like \(1/n^{2}\), the Simpson bound like \(1/n^{4}\), and the errors observed here behave accordingly. <span class="qed"></span></p>
+        <p>Against \(\ln 2 \approx 0.693147\), the error is about \(-3 \times 10^{-6}\). Example 8.34’s rules, using half as many nodes, erred in the third decimal place; Simpson’s Rule with these ten slices is already correct to five. The jump matches the scales recorded in the bounds below: the trapezoidal bound shrinks like \(1/n^{2}\), the Simpson bound like \(1/n^{4}\), and the errors observed here behave accordingly. <span class="qed"></span></p>
       </div>
     </section>
   </div>
+
+  <!-- expansion:formula [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.7-b (mode-c-gapwalk A and B converged on the gap by different routes; B's route adopted). The chapter's only unexplained logical jump: the text says "and for Simpson's Rule the fourth" with no reason given, right after Ex 8.35 showed a dramatic accuracy jump. B's route extends THIS SECTION'S OWN proved lemma (odd term integrates to zero, weighted combination cancels) instead of leaning on the on-credit Theorem 8.4, which matters in a chapter whose design turns on exactly two credits; A's Thm 8.4 route (K_4 = 0) is kept as the closing cross-check. A's route is sourced to APEX Calculus V5 sec_numerical_integration L1021–1027, CC BY-NC-SA, verbatim-checked. authored. User adjudication 2026-07-27: adopt (T1).] -->
+  <p>The size of that jump has a reason the lemma above already contains. Add a cubic term \(Dx^{3}\) to the quadratic \(g\). Over \([-h, h]\) it integrates to \(0\), because \(x^{3}\) is odd (Theorem 6.8), and in the weighted combination it contributes \(D(-h)^{3} + 4 \cdot 0 + Dh^{3} = 0\) as well. Neither side of the lemma changes, so the identity holds for cubics as it stands. Simpson’s Rule is therefore exact on every cubic polynomial, one degree beyond the parabolas it was built from, and that extra degree is what the <em>fourth</em> derivative in the next theorem records.</p>
 
   <h3 class="subsec-head">Error bounds</h3>
 
@@ -1853,9 +1980,12 @@ window.MathJax = {
     </div>
   </section>
 
+  <!-- expansion:formula [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.7-b closing cross-check (the Theorem 8.4 route, = mode-c-gapwalk A's version, sourced APEX Calculus V5 sec_numerical_integration L1021–1027, CC BY-NC-SA). Kept OUTSIDE the fence Caution so the on-credit vehicle stays untouched (Mode C: add only). User adjudication 2026-07-27: adopt (T1).] -->
+  <p>The theorem confirms the exactness noted above from the other direction: a cubic has \(f^{(4)} = 0\), so \(K_{4} = 0\) is a valid bound and the Simpson bound reads \(\lvert E_{S}\rvert \le 0\).</p>
+
   <div class="workedexample">
     <section class="env env-example">
-      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.35</span></p>
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.36</span></p>
       <div class="env-body">
         <p>How large must \(n\) be to guarantee that the Trapezoidal Rule approximates \(\displaystyle\int_{1}^{2}\frac{dx}{x}\) with error at most \(10^{-4}\)? How large for the Midpoint Rule?</p>
       </div>
@@ -1865,14 +1995,43 @@ window.MathJax = {
       <div class="env-body">
         <p>For \(f(x) = 1/x\) we have \(f''(x) = 2/x^{3}\), which is positive and decreasing on \([1, 2]\), so \(\lvert f''(x)\rvert \le f''(1) = 2\), and \(K = 2\) serves. With \(b - a = 1\), Theorem 8.4 gives</p>
         <p>\[ \lvert E_{T}\rvert \le \frac{2}{12 n^{2}} = \frac{1}{6 n^{2}}, \]</p>
-        <p>and \(\tfrac{1}{6n^{2}} \le 10^{-4}\) holds exactly when \(n^{2} \ge \tfrac{10^{4}}{6}\), that is, \(n \ge \sqrt{10^{4}/6} \approx 40.82\). Since \(n\) is a whole number and the requirement is a guarantee, round <em>up</em>: \(n = 41\) suffices. For the Midpoint Rule the same computation with the constant \(24\) gives \(n^{2} \ge \tfrac{10^{4}}{12}\), so \(n \ge \sqrt{10^{4}/12} \approx 28.87\), and \(n = 29\) suffices. Rounding down would break the guarantee: the bound at \(n = 40\) exceeds the tolerance. The bounds are worst-case: Example 8.33’s actual errors were smaller than Theorem 8.4 predicts, and that is the usual experience. <span class="qed"></span></p>
+        <p>and \(\tfrac{1}{6n^{2}} \le 10^{-4}\) holds exactly when \(n^{2} \ge \tfrac{10^{4}}{6}\), that is, \(n \ge \sqrt{10^{4}/6} \approx 40.82\). Since \(n\) is a whole number and the requirement is a guarantee, round <em>up</em>: \(n = 41\) suffices. For the Midpoint Rule the same computation with the constant \(24\) gives \(n^{2} \ge \tfrac{10^{4}}{12}\), so \(n \ge \sqrt{10^{4}/12} \approx 28.87\), and \(n = 29\) suffices. Rounding down would break the guarantee: the bound at \(n = 40\) exceeds the tolerance. The bounds are worst-case: Example 8.34’s actual errors were smaller than Theorem 8.4 predicts, and that is the usual experience. <span class="qed"></span></p>
+      </div>
+    </section>
+  </div>
+
+  <!-- expansion:example [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.7-E1 (example-supplement §8.5–8.7) — Layer 1 ×2: Theorem 8.4's Simpson clause was stated and never used anywhere in the chapter (grep-verified: K_4/E_S appeared only in the theorem statement), and none of the opener's three named clients was served. Teaches: a valid-but-loose bound, and an accuracy statement when no true value is available. authored; problem-type precedent APEX Calculus V5 §5.5 #11–12/#19–22 (answers only), CC BY-NC 4.0. B-02 discipline: wording follows §8.5 and Ex 8.32 — this book's techniques produce no antiderivative; no claim that none exists. All numbers sympy-recomputed at the M4 sweep. User adjudication 2026-07-27: adopt.] -->
+  <div class="workedexample">
+    <section class="env env-example">
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.37</span></p>
+      <div class="env-body">
+        <p>Approximate \(\displaystyle\int_{0}^{1} e^{-x^{2}}\,dx\) by Simpson’s Rule with \(n = 10\), and state how many decimal places the result is guaranteed to give.</p>
+      </div>
+    </section>
+    <section class="env env-solution">
+      <p class="env-head"><span class="env-kicker">Solution</span></p>
+      <div class="env-body">
+        <p>The integrand is continuous on \([0, 1]\), so the integral exists (Theorem 6.1). What is missing is an antiderivative to hand to the Fundamental Theorem (Theorem 6.4): none of this book’s techniques produces one, which is why §8.5 set this integrand aside. The rules of this section do not need one.</p>
+        <p>With \(n = 10\) the width is \(h = 0.1\), the nodes are \(0, 0.1, 0.2, \dots, 1\), and \(10\) is even, so (S) applies:</p>
+        <p>\[ \begin{aligned}
+          S_{10} = \frac{0.1}{3}\Bigl[e^{0} &+ 4e^{-0.01} + 2e^{-0.04} + \cdots \\
+            &+ 2e^{-0.64} + 4e^{-0.81} + e^{-1}\Bigr] \approx 0.746825.
+        \end{aligned} \]</p>
+        <p>For the bound, differentiate four times. With \(f(x) = e^{-x^{2}}\), the chain rule (Theorem 3.3), the derivative of the exponential (Theorem 4.8), and the product rule (Theorem 2.6) give</p>
+        <p>\[ f''(x) = \bigl(4x^{2} - 2\bigr)e^{-x^{2}}, \qquad f^{(4)}(x) = \bigl(16x^{4} - 48x^{2} + 12\bigr)e^{-x^{2}}. \]</p>
+        <p>On \([0, 1]\) we have \(0 \le x^{2} \le 1\) and \(0 &lt; e^{-x^{2}} \le 1\). Bounding each term of the factor \(16x^{4} - 48x^{2} + 12\) separately, we find that it lies between \(0 - 48 + 12 = -36\) and \(16 - 0 + 12 = 28\). Since \(0 &lt; e^{-x^{2}} \le 1\), multiplying by \(e^{-x^{2}}\) cannot increase its absolute value, so \(\lvert f^{(4)}(x)\rvert \le 36\) throughout. Take \(K_{4} = 36\). The theorem requires a valid bound, not the exact maximum; a generous bound weakens the guarantee without invalidating it, and here it saves the work of locating the maximum exactly.</p>
+        <p>Theorem 8.4 now gives, with \(b - a = 1\) and \(n = 10\),</p>
+        <p>\[ \lvert E_{S}\rvert \le \frac{36 \cdot 1^{5}}{180 \cdot 10^{4}} = 2 \times 10^{-5}. \]</p>
+        <p>The true value therefore lies between \(0.746805\) and \(0.746845\). Both ends round to \(0.7468\), so</p>
+        <p>\[ \int_{0}^{1} e^{-x^{2}}\,dx = 0.7468 \]</p>
+        <p>to four decimal places. Examples 8.34 and 8.35 measured their errors against a known value, \(\ln 2\). Here no such value is available, and the bound is the only statement of accuracy that can be made. It is still enough to name four decimal places, which is what the question asked for. <span class="qed"></span></p>
       </div>
     </section>
   </div>
 
   <div class="workedexample">
     <section class="env env-example">
-      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.36</span></p>
+      <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.38</span></p>
       <div class="env-body">
         <p>A car’s speedometer is read every \(30\) seconds during a three-minute drive, giving speeds, in meters per second, of</p>
         <p>\[ 8, \quad 10, \quad 12, \quad 11, \quad 13, \quad 14, \quad 12 \]</p>
@@ -1892,10 +2051,26 @@ window.MathJax = {
     </section>
   </div>
 
+  <!-- expansion:caution [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.7-d (mode-c-gapwalk B) — equal spacing is in the PLAN hypothesis ledger (③ A-03) but was never stated to the reader; Ex 8.38 is the data client, and measured data is often unequally spaced. Scope statement only: no substitute formula is offered. authored. User adjudication 2026-07-27: adopt (T3).] -->
+  <section class="env env-caution">
+    <p class="env-head"><span class="env-kicker">Caution</span></p>
+    <div class="env-body">
+      <p>All three rules, and Theorem 8.4 with them, are built on equally spaced nodes, that is, on slices of equal width \(h = \tfrac{b - a}{n}\). Measured data does not always arrive that way. Readings at unequal spacings can still be handled by adding trapezoid areas one piece at a time, since each piece is a trapezoid whatever its width. The weight pattern of (S) and the bounds of Theorem 8.4, however, are not available in that setting.</p>
+    </div>
+  </section>
+
   <!-- expansion:figure [pass: enrichment] [source: figure-opportunity gate 2026-07-26 — gate-added candidate; t–v coordinate graph (plots, not tabulates — zero-table invariant untouched); no underlying curve = the no-derivative-information honesty line drawn; companion piece to ch06 Fig 6.3; adjudicated adopt-all-13 (user decision); registered in chapter8 FIGS as "simpson-data-speed"] -->
   <figure class="figure" data-fig="simpson-data-speed">
-    <figcaption><span class="fig-no">Figure 8.13</span> Example 8.36’s data: seven speedometer readings and the three parabolic arcs that Simpson’s Rule fits through consecutive triples, meeting at the shared nodes \(t = 60\) and \(t = 120\). No curve is drawn between the readings, because none is known; the first triple happens to be collinear, so its arc is a straight segment.</figcaption>
+    <figcaption><span class="fig-no">Figure 8.13</span> Example 8.38’s data: seven speedometer readings and the three parabolic arcs that Simpson’s Rule fits through consecutive triples, meeting at the shared nodes \(t = 60\) and \(t = 120\). No curve is drawn between the readings, because none is known; the first triple happens to be collinear, so its arc is a straight segment.</figcaption>
   </figure>
+
+  <!-- expansion:caution [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.7-a (mode-c-gapwalk B) — the section opener names three clients and this one, the infinite-interval integral certified in §8.6, was never collected; a reader applying (S) to it literally gets stuck. Zero new assertions: the tail bound reuses Ex 8.32's already-proved comparison. authored. User adjudication 2026-07-27: adopt (T1).] -->
+  <section class="env env-caution">
+    <p class="env-head"><span class="env-kicker">Caution</span></p>
+    <div class="env-body">
+      <p>One of the integrals named at the start of this section still needs a comment. All three rules act on a finite interval, so \(\int_{1}^{\infty} e^{-x^{2}}\,dx\) cannot be handed to them as it stands. Split it instead: \(\int_{1}^{\infty} = \int_{1}^{t} + \int_{t}^{\infty}\), approximate the first piece by any of the rules, and bound the discarded tail. Example 8.32 supplies that bound already: its comparison \(e^{-x^{2}} \le e^{-x}\) holds for every \(x \ge 1\). Comparing on \([t, \infty)\), where \(\int_{t}^{\infty} e^{-x}\,dx = e^{-t}\), gives \(\int_{t}^{\infty} e^{-x^{2}}\,dx \le e^{-t}\) (Theorem 8.3(a)). The total error is then at most the rule’s error on \([1, t]\) plus that tail bound, and \(t\) is chosen large enough to make the tail as small as the target accuracy requires.</p>
+    </div>
+  </section>
 
   <h3 class="subsec-head">Chapter summary</h3>
 

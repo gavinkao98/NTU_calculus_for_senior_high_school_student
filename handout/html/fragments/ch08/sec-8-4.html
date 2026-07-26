@@ -1,7 +1,8 @@
 <!-- §8.4 Integration of Rational Functions by Partial Fractions. section-source: Stewart ET 9e
      §7.4; cross-checked Thomas 14e §8.5, Rogawski 4e §7.5. Authored 2026-07-26 per PLAN-ch08 +
      brief-8-4 (canon-as-spine; plain-register generation). Numbering: mints Strategy 8.5,
-     Examples 8.17–8.22, equation tag (8.A). NO Def/Thm/Prop. Cautions UNNUMBERED (two: FTA
+     Examples 8.17–8.22, equation tag (8.A). NO Def/Thm/Prop. Cautions UNNUMBERED (M4 2026-07-27:
+     three — the repeated-factor template box (8.4-c) joins the original two: FTA
      on-credit fence — SPEC §16.1 unnumbered-Caution vehicle, Ch2 §2.4 precedent, the chapter's
      FIRST of two credits; irreducibility check p²<4q).
      SEAM GUARD (PLAN-ch08 D6 + brief-8-4): the ALGEBRA layer is §A.4's — Prop A.7 (decomposition
@@ -34,6 +35,9 @@
       <p>Proposition A.7 begins by factoring the denominator completely into linear and irreducible quadratic factors. That such a factorization always exists is a consequence of the Fundamental Theorem of Algebra, whose proof lies outside this book. We take the factorization fact on credit; it is the first of two results this chapter borrows without proof, and everything else in the section is proved or computed in full.</p>
     </div>
   </section>
+
+  <!-- expansion:intuition [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.4-b (mode-c-gapwalk A) — the Caution above guarantees that a factorization EXISTS and says nothing about finding one, which is the reader's immediate next question and the step every example silently performs. The answer lies entirely in A-class prerequisite material (factor theorem, rational-root search), so nothing new is assumed. Delivered as prose rather than as a Caution box, since it is a method note and not a warning. authored. User adjudication 2026-07-27: adopt (T3).] -->
+  <p>Existence is not the same as a method for finding one. The credit above, and the promise that the method always succeeds, guarantee that a factorization exists; neither says how to produce it. The first tool is the factor theorem: \(r\) is a root of a polynomial exactly when \(x - r\) divides it. When the coefficients are integers this narrows the search, because an integer root must divide the constant term, so the divisors of that term form a short list of candidates to test. Every denominator in this section factors by hand, sometimes by that test and sometimes by a shortcut: the quadratic formula, which supplies the roots of the quadratic factor in Example 8.18 below, or grouping, as in Example 8.19. When no factorization can be found, the method stops at step 2 of Strategy 8.5, and no integration technique can supply the missing factorization. From here on we take the factoring as done.</p>
 
   <p>Before the fragments can be listed, one small antiderivative is needed: the scaled version of §6.4’s arctangent row. For \(a &gt; 0\), substitute \(u = x/a\), \(du = dx/a\), in the table entry \(\int\frac{du}{1 + u^{2}} = \arctan u + C\):</p>
   <p>\[ \int \frac{dx}{x^{2} + a^{2}} = \frac{1}{a^{2}}\int \frac{a\,du}{1 + u^{2}} = \frac{1}{a}\arctan\frac{x}{a} + C. \tag{8.A} \]</p>
@@ -92,6 +96,9 @@
     </section>
   </div>
 
+  <!-- expansion:strategy [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.4-a (mode-c-gapwalk A and B converged) — four examples in this section solve for constants, and a single wrong constant ruins the answer, but the text supplies a check only for the DIVISION step ("can be checked by recombining", Ex 8.17); the decomposition step has none, so the section's verification habit is half missing. Consistent with the chapter-wide "differentiating confirms" culture. Demonstration arithmetic sympy-recomputed at the M4 sweep. authored. User adjudication 2026-07-27: adopt (T3).] -->
+  <p>One habit belongs here. Once the constants are found, pick a value of \(x\) that has not been used yet, substitute it into the identity obtained after clearing denominators, and check that the two sides agree. In Example 8.18, taking \(x = 1\) gives \(2\) on the left and \(3A + 3B + C = \tfrac{3}{2} + \tfrac{3}{5} - \tfrac{1}{10} = 2\) on the right. The check costs one line and catches sign and arithmetic slips before any integration begins, which matters because a wrong decomposition integrates just as smoothly as a correct one.</p>
+
   <div class="workedexample">
     <section class="env env-example">
       <p class="env-head"><span class="env-kicker">Example</span><span class="env-num">8.19</span></p>
@@ -115,6 +122,14 @@
       </div>
     </section>
   </div>
+
+  <!-- expansion:caution [pass: enrichment] [source: M4 Mode C gap-check 2026-07-27, candidate 8.4-c (mode-c-gapwalk B) — Ex 8.19 exhibits the correct template for a repeated factor but never shows what the abbreviated one does, and the consequence is unusual: not a wrong answer but an unsolvable system, which a first-time reader reads as an arithmetic failure of their own. Three-line counterexample, fully verifiable, no new machinery. Coefficient system sympy-recomputed at the M4 sweep. authored. User adjudication 2026-07-27: adopt (T3).] -->
+  <section class="env env-caution">
+    <p class="env-head"><span class="env-kicker">Caution</span></p>
+    <div class="env-body">
+      <p>The template needs a fragment for every power of a repeated factor, not only the highest. Dropping the lower ones does not save work; it leaves a system with no solution at all. Writing \(\frac{4x}{(x - 1)^{2}(x + 1)}\) as \(\frac{B}{(x - 1)^{2}} + \frac{C}{x + 1}\) and clearing denominators gives \(4x = B(x + 1) + C(x - 1)^{2}\). Matching \(x^{2}\) coefficients forces \(C = 0\), matching \(x\) coefficients then forces \(B = 4\), and matching constants requires \(B + C = 0\). No such constants exist. The failure looks like an arithmetic mistake, but it is a sign that the template itself was wrong.</p>
+    </div>
+  </section>
 
   <div class="workedexample">
     <section class="env env-example">
