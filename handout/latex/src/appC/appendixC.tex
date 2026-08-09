@@ -15,6 +15,7 @@
 % 模板內的 {../figs/} 是 chapters/<ch>/ 為 CWD 時的路徑，dist/<ch>/ 需這一行覆寫。
 \graphicspath{{../../chapters/}}
 \begin{document}
+\cbchapter{C}
 \appendixopener{Appendix C}{Linear Algebra for Calculus}
 \begin{lead}
 This appendix collects the piece of linear algebra that multivariable calculus leans on — not a full course, but the handful of tools Chapters 12–16 reach for repeatedly. A single number attached to a square array, the \emph{determinant}, turns out to measure area and volume, fix orientation, and drive the cross product; and — once calculus supplies the derivatives — the same number scales the change-of-variables formula and classifies critical points. These four sections build that one idea and its immediate companions. Read them before the multivariable chapters, or turn to them when those chapters send you; nothing here uses calculus.
@@ -29,13 +30,13 @@ This appendix collects the piece of linear algebra that multivariable calculus l
 \sechead{C.1}{Matrices and Determinants}
 A \emph{matrix} is a rectangular array of numbers, set in brackets and addressed by row and column. A \emph{square} matrix — as many rows as columns — carries an extra meaning: it encodes a \emph{linear map}, a rule that sends each vector to another by a fixed pattern of multiplying and adding its entries. Most of what calculus asks of a square matrix is answered by a single number read off it, the \emph{determinant}, written \(\det A\) or with vertical bars in place of the brackets.
 
-\begin{envdefinition}{Definition}{C.1}{}
+\begin{envdefinition}{Definition}{def:C.1}{}
 The determinant of a \(2\times 2\) matrix is \[ \begin{vmatrix} a & b \\ c & d \end{vmatrix} = ad - bc. \] The determinant of a \(3\times 3\) matrix is computed by \emph{cofactor expansion along the first row}: each entry of the top row times the \(2\times 2\) determinant of what is left when that entry’s row and column are struck out, taken with the alternating signs \(+, -, +\): \[ \begin{vmatrix} a_1 & a_2 & a_3 \\ b_1 & b_2 & b_3 \\ c_1 & c_2 & c_3 \end{vmatrix} = a_1\begin{vmatrix} b_2 & b_3 \\ c_2 & c_3 \end{vmatrix} - a_2\begin{vmatrix} b_1 & b_3 \\ c_1 & c_3 \end{vmatrix} + a_3\begin{vmatrix} b_1 & b_2 \\ c_1 & c_2 \end{vmatrix}. \]
 \end{envdefinition}
 The determinant is the exact test for whether the map can be undone. When \(\det A \neq 0\), the columns point in genuinely independent directions and the map has an inverse; when \(\det A = 0\), the columns collapse onto a line or plane, the map flattens space, and the information needed to reverse it is lost. The two sections after this one read the \emph{size} and the \emph{sign} of this number geometrically; the last turns it on a symmetric matrix. Expansion may be carried out along any row or column with the appropriate sign pattern, so a row or column carrying zeros is the one to choose.
 
 \begin{workedexample}
-\begin{envexample}{Example}{C.1}{}
+\begin{envexample}{Example}{ex:C.1}{}
 Evaluate \(\begin{vmatrix} 2 & 0 & 1 \\ 1 & 3 & 2 \\ -1 & 1 & 1 \end{vmatrix}\).
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
@@ -46,7 +47,7 @@ Expand along the first row. Its middle entry is \(0\), so that term vanishes and
 \sechead{C.2}{The Determinant as Signed Area and Volume}
 The determinant is not only an algebraic test for reversibility; it is a \emph{measurement}. Read the columns of a square matrix as vectors placed tail to tail, and the determinant reports the size — carrying a sign — of the region they span.
 
-\begin{envproposition}{Proposition}{C.1}{Determinant as signed measure}
+\begin{envproposition}{Proposition}{prop:C.1}{Determinant as signed measure}
 For a \(2\times 2\) matrix with columns \(\mathbf{u}\) and \(\mathbf{v}\), \[ \left|\begin{vmatrix} a & b \\ c & d \end{vmatrix}\right| = \text{the area of the parallelogram spanned by } \mathbf{u} = (a, c) \text{ and } \mathbf{v} = (b, d), \] and for a \(3\times 3\) matrix the absolute value of the determinant is the volume of the parallelepiped spanned by its three columns. Equivalently, the linear map with matrix \(A\) multiplies every area (in the plane) or volume (in space) by the constant factor \(\lvert\det A\rvert\).
 \end{envproposition}
 The \emph{sign} that the absolute value discards records \emph{orientation}. A positive \(2\times 2\) determinant means the second column lies counterclockwise from the first, so the ordered pair keeps the plane’s standard orientation; a negative one means the pair is flipped into its mirror image. In space the sign separates right-handed triples from left-handed ones in the same way — the distinction Section C.3 makes precise.
@@ -54,7 +55,7 @@ The \emph{sign} that the absolute value discards records \emph{orientation}. A p
 This measuring role is what survives into calculus. A smooth change of variables is, examined closely enough, a linear map; the matrix of that map is the \emph{Jacobian} (Chapter 15), and the reasoning here is exactly what makes \(\lvert\det\rvert\) of the Jacobian the local factor by which the substitution stretches area or volume — the factor that must ride along inside a transformed integral. The determinant is thus the bridge from linear algebra to the change-of-variables formula.
 
 \begin{workedexample}
-\begin{envexample}{Example}{C.2}{}
+\begin{envexample}{Example}{ex:C.2}{}
 Find the area of the triangle with vertices \(O = (0, 0)\), \(P = (3, 1)\), and \(Q = (1, 4)\).
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
@@ -65,18 +66,18 @@ The two edges leaving \(O\) are the vectors \(\mathbf{u} = (3, 1)\) and \(\mathb
 \sechead{C.3}{Orientation and the Cross Product}
 Two independent vectors in the plane span a parallelogram, and Section C.2 measured it. In space a second question joins the size: two vectors lie in a plane, and \emph{two} opposite directions stand perpendicular to it — which one to name. Fixing that choice consistently is the work of \emph{orientation}, and the rule that fixes it is the \emph{right-hand rule}: point the fingers of the right hand along the first vector and curl them toward the second, and the outstretched thumb selects the perpendicular direction. The cross product bundles this choice together with an area into a single vector — and computes it as a determinant.
 
-\begin{envdefinition}{Definition}{C.2}{}
+\begin{envdefinition}{Definition}{def:C.2}{}
 The \emph{cross product} of \(\mathbf{a} = (a_1, a_2, a_3)\) and \(\mathbf{b} = (b_1, b_2, b_3)\) is the vector produced by expanding, along its first row, the symbolic determinant whose top row holds the standard basis vectors \(\mathbf{i}, \mathbf{j}, \mathbf{k}\): \[ \begin{aligned}
         \mathbf{a} \times \mathbf{b}
           &= \begin{vmatrix} \mathbf{i} & \mathbf{j} & \mathbf{k} \\ a_1 & a_2 & a_3 \\ b_1 & b_2 & b_3 \end{vmatrix} \\[2pt]
           &= (a_2 b_3 - a_3 b_2)\,\mathbf{i} - (a_1 b_3 - a_3 b_1)\,\mathbf{j} + (a_1 b_2 - a_2 b_1)\,\mathbf{k}.
       \end{aligned} \]
 \end{envdefinition}
-\begin{envproposition}{Proposition}{C.2}{Geometry of the cross and triple products}
-The vector \(\mathbf{a} \times \mathbf{b}\) is perpendicular to both \(\mathbf{a}\) and \(\mathbf{b}\); when the two are nonzero and nonparallel it is directed by the right-hand rule, and its length \[ |\mathbf{a} \times \mathbf{b}| = |\mathbf{a}|\,|\mathbf{b}|\sin\theta \] is the area of the parallelogram they span, where \(\theta\) is the angle between them. Parallel vectors span no parallelogram, and there \(\sin\theta = 0\) collapses the product to the zero vector — which has no direction to name. The related \emph{scalar triple product} is an ordinary determinant, \[ \mathbf{a} \cdot (\mathbf{b} \times \mathbf{c}) = \begin{vmatrix} a_1 & a_2 & a_3 \\ b_1 & b_2 & b_3 \\ c_1 & c_2 & c_3 \end{vmatrix}, \] whose absolute value is the volume of the parallelepiped spanned by the three vectors — the space version of Proposition C.1 — and whose sign tells whether the ordered triple is right- or left-handed.
+\begin{envproposition}{Proposition}{prop:C.2}{Geometry of the cross and triple products}
+The vector \(\mathbf{a} \times \mathbf{b}\) is perpendicular to both \(\mathbf{a}\) and \(\mathbf{b}\); when the two are nonzero and nonparallel it is directed by the right-hand rule, and its length \[ |\mathbf{a} \times \mathbf{b}| = |\mathbf{a}|\,|\mathbf{b}|\sin\theta \] is the area of the parallelogram they span, where \(\theta\) is the angle between them. Parallel vectors span no parallelogram, and there \(\sin\theta = 0\) collapses the product to the zero vector — which has no direction to name. The related \emph{scalar triple product} is an ordinary determinant, \[ \mathbf{a} \cdot (\mathbf{b} \times \mathbf{c}) = \begin{vmatrix} a_1 & a_2 & a_3 \\ b_1 & b_2 & b_3 \\ c_1 & c_2 & c_3 \end{vmatrix}, \] whose absolute value is the volume of the parallelepiped spanned by the three vectors — the space version of Proposition \ref{prop:C.1} — and whose sign tells whether the ordered triple is right- or left-handed.
 \end{envproposition}
 \begin{workedexample}
-\begin{envexample}{Example}{C.3}{}
+\begin{envexample}{Example}{ex:C.3}{}
 Compute \(\mathbf{a} \times \mathbf{b}\) for \(\mathbf{a} = (1, 2, 0)\) and \(\mathbf{b} = (0, 3, 1)\), and then the volume of the box that \(\mathbf{a}\), \(\mathbf{b}\), and \(\mathbf{c} = (1, 0, 2)\) enclose.
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
@@ -94,10 +95,10 @@ The multivariable chapters develop these products in full — the cross product 
 \sechead{C.4}{Quadratic Forms and Definiteness}
 The determinant read areas and volumes off the columns of a matrix. Turned on a \emph{symmetric} matrix it does something different but just as useful to calculus: it decides the \emph{sign} a quadratic expression is forced to keep. This is the algebra behind telling a peak from a valley from a saddle on a surface.
 
-\begin{envdefinition}{Definition}{C.3}{}
+\begin{envdefinition}{Definition}{def:C.3}{}
 A \emph{quadratic form} in two variables is an expression \[ Q(x, y) = a x^2 + 2b\,xy + c y^2, \] carried by the symmetric matrix \(\begin{pmatrix} a & b \\ b & c \end{pmatrix}\), in which the off-diagonal \(b\) is half the coefficient of \(xy\), shared evenly between the two symmetric slots. The form is \emph{positive definite} if \(Q(x, y) > 0\) for every \((x, y) \neq (0, 0)\), \emph{negative definite} if \(Q(x, y) < 0\) throughout, and \emph{indefinite} if it takes both signs.
 \end{envdefinition}
-\begin{envproposition}{Proposition}{C.3}{Definiteness test}
+\begin{envproposition}{Proposition}{prop:C.3}{Definiteness test}
 Let \(D = ac - b^2\) be the determinant of the symmetric matrix. Then \(Q\) is \emph{positive definite} when \(D > 0\) and \(a > 0\); \emph{negative definite} when \(D > 0\) and \(a < 0\); and \emph{indefinite} when \(D < 0\). When \(D = 0\) the form is degenerate and the test is silent.
 \end{envproposition}
 \begin{envproof}{Proof}{}{}
@@ -106,7 +107,7 @@ Suppose first \(a \neq 0\) and complete the square to absorb the cross-term: \[ 
 This is exactly the \emph{second-derivative test} of Chapter 14. There the symmetric matrix is the \emph{Hessian} of a function \(f(x, y)\) — its array of second partial derivatives — and these same three cases stamp a critical point as a local minimum (positive definite), a local maximum (negative definite), or a saddle (indefinite). The linear algebra is finished here; the calculus that fills the entries with second derivatives waits for Chapter 14.
 
 \begin{workedexample}
-\begin{envexample}{Example}{C.4}{}
+\begin{envexample}{Example}{ex:C.4}{}
 Classify \(Q(x, y) = 2x^2 + 4xy + 5y^2\).
 \end{envexample}
 \begin{envsolution}{Solution}{}{}

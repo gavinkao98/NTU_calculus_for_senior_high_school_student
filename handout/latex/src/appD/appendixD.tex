@@ -15,6 +15,7 @@
 % 模板內的 {../figs/} 是 chapters/<ch>/ 為 CWD 時的路徑，dist/<ch>/ 需這一行覆寫。
 \graphicspath{{../../chapters/}}
 \begin{document}
+\cbchapter{D}
 \appendixopener{Appendix D}{The Proof Track}
 \begin{lead}
 A handful of theorems in the main text are stated, used at once, and then have their proofs deferred — on credit — to here. The reason is always the same: the result keeps a chapter moving, but its proof is a self-contained analytic construction that would interrupt the line of thought if inserted where the theorem is used. This appendix is the home for those proofs. Nothing in it introduces a new result the chapters depend on: each entry proves a theorem already stated and numbered where it appeared, and you can read it whenever you want the argument behind a result you have been taking on trust.
@@ -46,7 +47,7 @@ Section 4.4 stated the two foundational theorems about a continuous function on 
 \subsechead{The least upper bound}
 An \emph{upper bound} of a set \(S \subseteq \mathbb{R}\) is a number that is \(\ge\) every element of \(S\). Completeness guarantees that a set bounded above has a \emph{smallest} upper bound.
 
-\begin{envtheorem}{Lemma}{D.1}{Least upper bound}
+\begin{envtheorem}{Lemma}{lem:D.1}{Least upper bound}
 Every nonempty set \(S \subseteq \mathbb{R}\) that is bounded above has a \emph{least upper bound} \(M = \sup S\): a number \(M\) that is an upper bound of \(S\) and satisfies \(M \le B\) for every upper bound \(B\) of \(S\).
 \end{envtheorem}
 \begin{envproof}{Proof}{}{}
@@ -72,7 +73,7 @@ We show \(f\) attains a maximum; the minimum then follows by applying the result
 
 \runin{The values are bounded above.} Suppose not. Then for each \(n \in \mathbb{N}\) there is a point \(x_{n} \in [a, b]\) with \(f(x_{n}) > n\). The sequence \(\{x_{n}\}\) lies in \([a, b]\), so it is bounded, and by the Bolzano–Weierstrass theorem (Theorem 4.4) some subsequence \(x_{n_{k}}\) converges to a point \(\xi\). Since \(a \le x_{n_{k}} \le b\) for every \(k\), the limit satisfies \(\xi \in [a, b]\), so \(f\) is defined and continuous there; continuity gives \(f(x_{n_{k}}) \to f(\xi)\), a finite real number. But \(f(x_{n_{k}}) > n_{k} \to \infty\), so the values cannot approach a finite limit — a contradiction. Hence \(f\) is bounded above on \([a, b]\).
 
-\runin{The bound is attained.} The set of values \(f([a, b]) = \{\, f(x) : x \in [a, b] \,\}\) is nonempty and bounded above, so by Lemma D.1 it has a least upper bound \(M = \sup f([a, b])\). For each \(n\), the number \(M - \tfrac{1}{n}\) is smaller than \(M\), hence not an upper bound of the values, so there is a point \(x_{n} \in [a, b]\) with
+\runin{The bound is attained.} The set of values \(f([a, b]) = \{\, f(x) : x \in [a, b] \,\}\) is nonempty and bounded above, so by Lemma \ref{lem:D.1} it has a least upper bound \(M = \sup f([a, b])\). For each \(n\), the number \(M - \tfrac{1}{n}\) is smaller than \(M\), hence not an upper bound of the values, so there is a point \(x_{n} \in [a, b]\) with
 
 \[ M - \tfrac{1}{n} < f(x_{n}) \le M. \]
 

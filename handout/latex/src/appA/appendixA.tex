@@ -15,6 +15,7 @@
 % 模板內的 {../figs/} 是 chapters/<ch>/ 為 CWD 時的路徑，dist/<ch>/ 需這一行覆寫。
 \graphicspath{{../../chapters/}}
 \begin{document}
+\cbchapter{A}
 \appendixopener{Appendix A}{Precalculus Toolbox}
 \begin{lead}
 This appendix collects the precalculus tools you will want on hand but that many precalculus courses now treat briefly or omit: the reciprocal trigonometric functions (§A.1), the product-to-sum and sum-to-product identities (§A.2), sigma notation, power sums, and the geometric series (§A.3), partial fractions (§A.4), a quick tour of the conic sections (§A.5), and absolute value and inequalities (§A.6). Some are pointed to from the main text at the moment they are first needed; others are here as a handy reference to reach for when you want them. The sections are independent of one another; read each when the main text sends you, or straight through as a warm-up. Nothing here uses calculus, with one small exception flagged in §A.3, where an infinite sum is read as a limit.
@@ -31,7 +32,7 @@ This appendix collects the precalculus tools you will want on hand but that many
 \sechead{A.1}{The Reciprocal Trigonometric Functions}
 The three primary trigonometric functions \(\sin\), \(\cos\), and \(\tan\) have three companions — two honest reciprocals and one inverted ratio. They carry no new information — every fact about them is a fact about \(\sin\) and \(\cos\) in disguise. Yet calculus speaks them fluently: the derivative of \(\tan x\) turns out to be \(\sec^{2} x\), the inverse secant needs a principal range of its own, and integral tables are full of secants and cosecants. This section gives them an honest introduction.
 
-\begin{envdefinition}{Definition}{A.1}{}
+\begin{envdefinition}{Definition}{def:A.1}{}
 For any angle \(\theta\) at which the denominator is nonzero, the \emph{secant}, \emph{cosecant}, and \emph{cotangent} functions are defined by \[ \sec\theta = \frac{1}{\cos\theta}, \qquad \csc\theta = \frac{1}{\sin\theta}, \qquad \cot\theta = \frac{\cos\theta}{\sin\theta}. \]
 
 \begin{informal}
@@ -45,14 +46,14 @@ Cotangent is defined as \(\cos\theta/\sin\theta\), \emph{not} as \(1/\tan\theta\
 \end{envcaution}
 Dividing the Pythagorean identity \(\sin^{2}\theta + \cos^{2}\theta = 1\) by \(\cos^{2}\theta\) or by \(\sin^{2}\theta\) produces the two companion identities that calculus uses constantly.
 
-\begin{envproposition}{Proposition}{A.1}{Pythagorean companions}
+\begin{envproposition}{Proposition}{prop:A.1}{Pythagorean companions}
 \[ \begin{aligned} 1 + \tan^{2}\theta &= \sec^{2}\theta \qquad (\cos\theta \neq 0), \\ 1 + \cot^{2}\theta &= \csc^{2}\theta \qquad (\sin\theta \neq 0). \end{aligned} \]
 \end{envproposition}
 \begin{envproof}{Proof}{}{}
 Divide \(\sin^{2}\theta + \cos^{2}\theta = 1\) through by \(\cos^{2}\theta\): \[ \frac{\sin^{2}\theta}{\cos^{2}\theta} + 1 = \frac{1}{\cos^{2}\theta}, \qquad\text{that is,}\qquad \tan^{2}\theta + 1 = \sec^{2}\theta. \] Dividing instead by \(\sin^{2}\theta\) gives \(1 + \cot^{2}\theta = \csc^{2}\theta\). \qedmark
 \end{envproof}
 \begin{workedexample}
-\begin{envexample}{Example}{A.1}{}
+\begin{envexample}{Example}{ex:A.1}{}
 Evaluate the following.
 
 \begin{enumerate}
@@ -63,7 +64,7 @@ Evaluate the following.
 \begin{envsolution}{Solution}{}{}
 \begin{enumerate}
   \item Since \(\cos\tfrac{2\pi}{3} = -\tfrac{1}{2}\), we get \(\sec\tfrac{2\pi}{3} = 1/(-\tfrac{1}{2}) = -2\). Since \(\cos(-\tfrac{\pi}{4}) = \tfrac{\sqrt{2}}{2}\) and \(\sin(-\tfrac{\pi}{4}) = -\tfrac{\sqrt{2}}{2}\), we get \(\cot(-\tfrac{\pi}{4}) = \frac{\sqrt{2}/2}{-\sqrt{2}/2} = -1\).
-  \item By Proposition A.1, \(\sec^{2}\theta = 1 + \tan^{2}\theta = 1 + 9 = 10\), so \(\sec\theta = \pm\sqrt{10}\). In the third quadrant \(\cos\theta < 0\), hence \(\sec\theta < 0\), and therefore \(\sec\theta = -\sqrt{10}\). For the cosecant, \(\cot\theta = 1/\tan\theta = \tfrac{1}{3}\) (legitimate here, since \(\tan\theta = 3\) is defined and nonzero), so \(\csc^{2}\theta = 1 + \cot^{2}\theta = 1 + \tfrac{1}{9} = \tfrac{10}{9}\) and \(\csc\theta = \pm\tfrac{\sqrt{10}}{3}\). In the third quadrant \(\sin\theta < 0\), so \(\csc\theta = -\tfrac{\sqrt{10}}{3}\). The squaring in Proposition A.1 forgets all signs; the quadrant restores them.
+  \item By Proposition \ref{prop:A.1}, \(\sec^{2}\theta = 1 + \tan^{2}\theta = 1 + 9 = 10\), so \(\sec\theta = \pm\sqrt{10}\). In the third quadrant \(\cos\theta < 0\), hence \(\sec\theta < 0\), and therefore \(\sec\theta = -\sqrt{10}\). For the cosecant, \(\cot\theta = 1/\tan\theta = \tfrac{1}{3}\) (legitimate here, since \(\tan\theta = 3\) is defined and nonzero), so \(\csc^{2}\theta = 1 + \cot^{2}\theta = 1 + \tfrac{1}{9} = \tfrac{10}{9}\) and \(\csc\theta = \pm\tfrac{\sqrt{10}}{3}\). In the third quadrant \(\sin\theta < 0\), so \(\csc\theta = -\tfrac{\sqrt{10}}{3}\). The squaring in Proposition \ref{prop:A.1} forgets all signs; the quadrant restores them.
 \end{enumerate}
 \end{envsolution}
 \end{workedexample}
@@ -77,7 +78,7 @@ Everything starts from the four angle-sum and angle-difference formulas, which w
 
 Add or subtract these in matching pairs and half of each right-hand side cancels, leaving a single product.
 
-\begin{envproposition}{Proposition}{A.2}{Product-to-sum identities}
+\begin{envproposition}{Proposition}{prop:A.2}{Product-to-sum identities}
 \[ \begin{aligned} \sin u \cos v &= \tfrac{1}{2}\bigl[\sin(u + v) + \sin(u - v)\bigr], \\ \cos u \cos v &= \tfrac{1}{2}\bigl[\cos(u + v) + \cos(u - v)\bigr], \\ \sin u \sin v &= \tfrac{1}{2}\bigl[\cos(u - v) - \cos(u + v)\bigr]. \end{aligned} \]
 \end{envproposition}
 \begin{envproof}{Proof}{}{}
@@ -87,13 +88,13 @@ Setting \(u = v = \theta\) in these product-to-sum identities pays an immediate 
 
 The sum-to-product identities are the same cancellations read in the other direction. The only new idea is a change of names: given a sum like \(\sin A + \sin B\), arrange for the two angles to read \(u + v\) and \(u - v\) by choosing \(u\) and \(v\) so that \(u + v = A\) and \(u - v = B\). Adding these two equations gives \(2u = A + B\) and subtracting them gives \(2v = A - B\), so \(u\) is the \emph{average} and \(v\) the \emph{half-difference}: \[ u = \frac{A + B}{2}, \qquad v = \frac{A - B}{2}. \]
 
-\begin{envproposition}{Proposition}{A.3}{Sum-to-product identities}
+\begin{envproposition}{Proposition}{prop:A.3}{Sum-to-product identities}
 \[ \begin{aligned} \sin A + \sin B &= 2 \sin\frac{A + B}{2} \cos\frac{A - B}{2}, \\ \sin A - \sin B &= 2 \cos\frac{A + B}{2} \sin\frac{A - B}{2}, \\ \cos A + \cos B &= 2 \cos\frac{A + B}{2} \cos\frac{A - B}{2}, \\ \cos A - \cos B &= -2 \sin\frac{A + B}{2} \sin\frac{A - B}{2}. \end{aligned} \]
 \end{envproposition}
 \begin{envproof}{Proof}{}{}
 With \(u = \tfrac{A+B}{2}\) and \(v = \tfrac{A-B}{2}\) we have \(u + v = A\) and \(u - v = B\). Then, reading the cancellations in the previous proof from right to left, \[ \begin{aligned} \sin A + \sin B &= \sin(u + v) + \sin(u - v) \\ &= 2 \sin u \cos v = 2 \sin\frac{A + B}{2} \cos\frac{A - B}{2}, \end{aligned} \] and the other three lines follow the same way: \(\sin A - \sin B = \sin(u+v) - \sin(u-v) = 2 \cos u \sin v\) (this time subtracting the two sine expansions); \(\cos A + \cos B = 2 \cos u \cos v\); and \(\cos A - \cos B = \cos(u+v) - \cos(u-v) = -2 \sin u \sin v\). Note the minus sign in the last line — the only one in the family, and the easiest thing to misremember; the subtraction order \(\cos(u+v) - \cos(u-v)\) is where it comes from. \qedmark
 \end{envproof}
-\begin{envstrategy}{Strategy}{A.1}{Recovering an identity you forgot}
+\begin{envstrategy}{Strategy}{strat:A.1}{Recovering an identity you forgot}
 \begin{steps}
   \item Write down the two angle-sum (or angle-difference) expansions that contain the pieces you have, and add or subtract them so that the unwanted terms cancel.
   \item If your expression is a sum of two trig values at angles \(A\) and \(B\), substitute the average \(u = \tfrac{A+B}{2}\) and half-difference \(v = \tfrac{A-B}{2}\), so that \(A = u + v\) and \(B = u - v\).
@@ -103,7 +104,7 @@ Rebuilding takes perhaps a minute; a memorized list of eight is easy to get wron
 \end{informal}
 \end{envstrategy}
 \begin{workedexample}
-\begin{envexample}{Example}{A.2}{}
+\begin{envexample}{Example}{ex:A.2}{}
 Rewrite each expression as requested.
 
 \begin{enumerate}
@@ -118,7 +119,7 @@ Rewrite each expression as requested.
 \end{enumerate}
 \end{envsolution}
 \end{workedexample}
-Of the whole family, the identity for \(\sin A - \sin B\) in Proposition A.3 is the one worth keeping at your fingertips; the rest follow from the same two moves the moment you need them.
+Of the whole family, the identity for \(\sin A - \sin B\) in Proposition \ref{prop:A.3} is the one worth keeping at your fingertips; the rest follow from the same two moves the moment you need them.
 
 
 \sechead{A.3}{Sigma Notation, Power Sums, and the Geometric Series}
@@ -130,7 +131,7 @@ One special sum collapses outright. When each term is the \emph{difference} of c
 
 Those moves are all finite bookkeeping. Adding up \emph{infinitely} many terms is a genuinely new act, and most of its theory belongs to a later chapter of calculus. But one infinite sum is so simple, and so useful so early, that it deserves to be settled now: the geometric series, in which each term is a fixed multiple \(r\) of the one before. It earns its keep everywhere — the \emph{tail} of a series (its leftover terms past a cutoff) can often be trapped under a geometric tail and squeezed to nothing. Everything rests on one finite identity plus one limit.
 
-\begin{envproposition}{Proposition}{A.4}{Finite geometric sum}
+\begin{envproposition}{Proposition}{prop:A.4}{Finite geometric sum}
 For any number \(r \neq 1\) and any positive integer \(m\), \[ 1 + r + r^{2} + \cdots + r^{m} = \frac{1 - r^{m+1}}{1 - r}. \]
 \end{envproposition}
 \begin{envproof}{Proof}{}{}
@@ -138,14 +139,14 @@ Write \(S = 1 + r + r^{2} + \cdots + r^{m}\) and multiply by \(1 - r\): \[ (1 - 
 \end{envproof}
 Now let the sum run on. If \(\lvert r \rvert < 1\), each multiplication by \(r\) shrinks the next term by a fixed factor, and the power \(r^{m+1}\) in the formula dies away: its size \(\lvert r \rvert^{m+1}\) drops below any positive threshold once \(m\) is large enough. In the arrow notation for a limit (here the whole-number index \(m\) runs off to infinity, rather than a variable approaching a finite point), \(r^{m+1} \to 0\) as \(m \to \infty\), so the running totals \[ S_{m} = \frac{1 - r^{m+1}}{1 - r} \qquad\text{settle toward}\qquad \frac{1 - 0}{1 - r} = \frac{1}{1 - r}. \] The value of an infinite sum \emph{means} exactly this: the limit of its running totals. (The running totals also go by the name \emph{partial sums}; the completeness facts behind general convergence arguments belong to a later chapter of calculus, and none of them are needed for the simple limit here.)
 
-\begin{envproposition}{Proposition}{A.5}{Infinite geometric series}
+\begin{envproposition}{Proposition}{prop:A.5}{Infinite geometric series}
 If \(\lvert r \rvert < 1\), then for any number \(a\), \[ \sum_{k = 0}^{\infty} a r^{k} = a + ar + ar^{2} + \cdots = \frac{a}{1 - r}, \] and in particular the tail starting at \(k = 1\) sums to \[ \sum_{k = 1}^{\infty} r^{k} = \frac{r}{1 - r}. \]
 \end{envproposition}
 \begin{envproof}{Proof}{}{}
-By Proposition A.4 the \(m\)-th running total is \(a \cdot \dfrac{1 - r^{m+1}}{1 - r}\). As \(m \to \infty\) the power \(r^{m+1}\) tends to \(0\), so the totals tend to \(\dfrac{a}{1 - r}\). The tail formula is the case \(a = r\): \(r + r^{2} + r^{3} + \cdots = \dfrac{r}{1 - r}\). \qedmark
+By Proposition \ref{prop:A.4} the \(m\)-th running total is \(a \cdot \dfrac{1 - r^{m+1}}{1 - r}\). As \(m \to \infty\) the power \(r^{m+1}\) tends to \(0\), so the totals tend to \(\dfrac{a}{1 - r}\). The tail formula is the case \(a = r\): \(r + r^{2} + r^{3} + \cdots = \dfrac{r}{1 - r}\). \qedmark
 \end{envproof}
 \begin{workedexample}
-\begin{envexample}{Example}{A.3}{}
+\begin{envexample}{Example}{ex:A.3}{}
 Evaluate each infinite sum.
 
 \begin{enumerate}
@@ -155,7 +156,7 @@ Evaluate each infinite sum.
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
 \begin{enumerate}
-  \item This is Proposition A.5 with \(a = \tfrac{1}{2}\) and \(r = \tfrac{1}{2}\): \[ \frac{1}{2} + \frac{1}{4} + \frac{1}{8} + \cdots = \frac{1/2}{1 - 1/2} = 1. \] The picture matches the algebra: eat half the cake, then half of what remains, then half of that — the running total approaches one whole cake, and in the limit exactly fills it.
+  \item This is Proposition \ref{prop:A.5} with \(a = \tfrac{1}{2}\) and \(r = \tfrac{1}{2}\): \[ \frac{1}{2} + \frac{1}{4} + \frac{1}{8} + \cdots = \frac{1/2}{1 - 1/2} = 1. \] The picture matches the algebra: eat half the cake, then half of what remains, then half of that — the running total approaches one whole cake, and in the limit exactly fills it.
   \item Here \(a = \tfrac{9}{10}\) and \(r = \tfrac{1}{10}\): \[ 0.999\ldots = \frac{9/10}{1 - 1/10} = \frac{9/10}{9/10} = 1. \] Not approximately \(1\) — exactly \(1\). The two decimal expressions \(0.999\ldots\) and \(1\) are two names for the same number, and the infinite-sum reading is what makes that a computation rather than a debate.
 \end{enumerate}
 \end{envsolution}
@@ -165,7 +166,7 @@ The hypothesis \(\lvert r \rvert < 1\) is doing real work. For \(r = 2\) the ser
 \end{envcaution}
 The geometric series is one of two finite-sum patterns worth carrying forward. The other is a short family of \emph{power sums} — the totals of the first \(n\) whole numbers, their squares, and their cubes — which surface the moment Chapter 6 builds the integral as a limit of sums over \(n\) equal pieces. Like the geometric sum, they drop straight out of telescoping.
 
-\begin{envproposition}{Proposition}{A.6}{Power sums}
+\begin{envproposition}{Proposition}{prop:A.6}{Power sums}
 For every positive integer \(n\), \[ \begin{aligned}
         \sum_{k=1}^{n} k &= \frac{n(n+1)}{2}, \\[2pt]
         \sum_{k=1}^{n} k^{2} &= \frac{n(n+1)(2n+1)}{6}, \\[2pt]
@@ -177,13 +178,13 @@ Each formula comes from the same collapse that gave the geometric sum. Telescopi
 \end{envproof}
 A quick check pins the shapes down: at \(n = 3\) the square sum reads \(1 + 4 + 9 = 14\), and \(\tfrac{3 \cdot 4 \cdot 7}{6} = 14\) agrees. What matters is less any single value than the whole shape at once — to add the areas of \(n\) thin rectangles under \(y = x^{2}\) and watch the total settle as \(n \to \infty\), one needs \(\sum k^{2}\) as a formula in \(n\), not a number. That is exactly the step behind the first integral computed from its definition in Chapter 6.
 
-Two formulas from this section will see the most reuse: the geometric tail bound \(\sum_{k \ge 1} r^{k} = \frac{r}{1 - r}\) of Proposition A.5, behind any argument that traps a series under a geometric tail; and the square sum \(\sum_{k=1}^{n} k^{2} = \frac{n(n+1)(2n+1)}{6}\) of Proposition A.6, behind the first integrals Chapter 6 computes from scratch.
+Two formulas from this section will see the most reuse: the geometric tail bound \(\sum_{k \ge 1} r^{k} = \frac{r}{1 - r}\) of Proposition \ref{prop:A.5}, behind any argument that traps a series under a geometric tail; and the square sum \(\sum_{k=1}^{n} k^{2} = \frac{n(n+1)(2n+1)}{6}\) of Proposition \ref{prop:A.6}, behind the first integrals Chapter 6 computes from scratch.
 
 
 \sechead{A.4}{Partial Fractions}
 Adding two fractions over a common denominator is routine; the reverse — breaking one complicated fraction back into simple pieces — is \emph{partial fractions}. A rational function is a quotient of polynomials \(P(x)/Q(x)\), and partial fractions rewrites it as a sum of fragments simple enough to handle one at a time. The smallest instance is worth seeing first: \[ \frac{1}{x(x + 1)} = \frac{1}{x} - \frac{1}{x + 1}, \] as recombining the right-hand side over a common denominator confirms. (Read left to right, this is exactly the split that makes \(\sum \tfrac{1}{k(k + 1)}\) telescope — §A.3’s collapsing sum in disguise.) Its real payoff is in integration, where each fragment turns out to have a standard antiderivative.
 
-\begin{envproposition}{Proposition}{A.7}{Partial-fraction decomposition}
+\begin{envproposition}{Proposition}{prop:A.7}{Partial-fraction decomposition}
 Let \(P(x)/Q(x)\) be a \emph{proper} rational function — one whose numerator has lower degree than its denominator — and factor \(Q\) completely into linear and irreducible quadratic factors. Then \(P/Q\) equals a sum of partial fractions, contributed factor by factor:
 
 \begin{itemize}
@@ -195,10 +196,10 @@ In every case the fragment’s numerator sits one degree below its denominator �
 \end{envproposition}
 That such a decomposition always exists, and with only one choice of constants, is a fact of linear algebra: matching numerators forces a system of linear equations in the unknowns that has exactly one solution. We take the \emph{shape} as given and spend the effort where the work really is — pinning down the constants.
 
-\begin{envstrategy}{Strategy}{A.2}{Finding the constants}
+\begin{envstrategy}{Strategy}{strat:A.2}{Finding the constants}
 \begin{steps}
   \item If the fraction is \emph{improper} (numerator degree \(\ge\) denominator degree), divide first: \(P/Q = (\text{a polynomial}) + (\text{proper remainder})/Q\), and decompose only the remainder.
-  \item Factor the denominator completely and write the template from Proposition A.7 with the constants left as unknowns.
+  \item Factor the denominator completely and write the template from Proposition \ref{prop:A.7} with the constants left as unknowns.
   \item Multiply through by \(Q(x)\) to clear denominators, then solve for the constants — either by matching coefficients of like powers of \(x\), or by substituting convenient values of \(x\) (a factor’s own root kills every other term at once).
 \end{steps}
 \begin{informal}
@@ -206,7 +207,7 @@ The substitution trick in step 3 is the \emph{cover-up} shortcut: to get the con
 \end{informal}
 \end{envstrategy}
 \begin{workedexample}
-\begin{envexample}{Example}{A.4}{}
+\begin{envexample}{Example}{ex:A.4}{}
 Decompose \(\dfrac{5x - 1}{(x - 1)(x + 2)}\).
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
@@ -214,7 +215,7 @@ Two distinct linear factors call for the template \(\dfrac{5x - 1}{(x - 1)(x + 2
 \end{envsolution}
 \end{workedexample}
 \begin{workedexample}
-\begin{envexample}{Example}{A.5}{}
+\begin{envexample}{Example}{ex:A.5}{}
 Decompose each.
 
 \begin{enumerate}
@@ -242,28 +243,28 @@ Slice a cone with a flat plane and the rim of the cut is a \emph{conic section}:
 
 \begin{figureblock}
   \includegraphics[width=107.78mm]{appA/figs/conic-circle}
-\figcaption{Figure A.1}{A circle of radius \(r\) centred at the origin: \(x^2 + y^2 = r^2\).}
+\figcaption{fig:A.1}{A circle of radius \(r\) centred at the origin: \(x^2 + y^2 = r^2\).}
 \end{figureblock}
 \runin{The parabola.} Fix a point \(F\) (the \emph{focus}) and a line (the \emph{directrix}). A parabola is the set of points equidistant from the two. Take focus \(F = (0, p)\) with \(p > 0\) and directrix \(y = -p\). Equating a point’s distance to the focus with its distance to the directrix — the latter being the vertical gap \(y + p\) down to the line \(y = -p\) — gives \(x^2 + (y - p)^2 = (y + p)^2\), which simplifies to the standard equation \[ x^2 = 4py, \] a curve opening upward from its vertex at the origin. (Putting the focus on the \(x\)-axis instead gives the sideways form \(y^2 = 4px\).)
 
 \begin{figureblock}
   \includegraphics[width=150.53mm]{appA/figs/conic-parabola}
-\figcaption{Figure A.2}{A parabola \(x^2 = 4py\), with focus \(F = (0, p)\) and directrix \(y = -p\).}
+\figcaption{fig:A.2}{A parabola \(x^2 = 4py\), with focus \(F = (0, p)\) and directrix \(y = -p\).}
 \end{figureblock}
 \runin{The ellipse.} Fix two points \(F_1, F_2\) (the \emph{foci}). An ellipse is the set of points whose distances to the two foci add to a fixed total. Placing the foci at \((\pm c, 0)\) and writing the total as \(2a\) leads to the standard equation \[ \frac{x^2}{a^2} + \frac{y^2}{b^2} = 1, \qquad b^2 = a^2 - c^2, \] with \(a > b > 0\). The number \(b\) has a clean meaning: at the top of the ellipse, \((0, b)\), symmetry makes the two focal distances equal, and since they sum to \(2a\) each equals \(a\); the right triangle with legs \(b\) and \(c\) and hypotenuse \(a\) then gives \(a^2 = b^2 + c^2\) — the relation above. The curve crosses the axes at \((\pm a, 0)\) and \((0, \pm b)\), and the longer semi-axis \(a\) runs along the line through the foci. Because the foci sit \emph{inside} the curve, \(c < a\), and \(c = \sqrt{a^2 - b^2}\) places them between the centre and the vertices.
 
 \begin{figureblock}
   \includegraphics[width=150.53mm]{appA/figs/conic-ellipse}
-\figcaption{Figure A.3}{An ellipse \(\frac{x^2}{a^2} + \frac{y^2}{b^2} = 1\) with foci \(F_1, F_2\) at \((\pm c, 0)\), where \(c = \sqrt{a^2 - b^2}\).}
+\figcaption{fig:A.3}{An ellipse \(\frac{x^2}{a^2} + \frac{y^2}{b^2} = 1\) with foci \(F_1, F_2\) at \((\pm c, 0)\), where \(c = \sqrt{a^2 - b^2}\).}
 \end{figureblock}
 \runin{The hyperbola.} Keep two foci, but now ask for a fixed \emph{difference} of distances rather than a sum. With foci at \((\pm c, 0)\) and the difference written \(2a\), the standard equation is \[ \frac{x^2}{a^2} - \frac{y^2}{b^2} = 1, \qquad b^2 = c^2 - a^2. \] The curve has two branches with vertices at \((\pm a, 0)\), and far from the centre it draws arbitrarily close to the two \emph{asymptotes} \(y = \pm\frac{b}{a}x\) — the crossed lines whose slopes \(\pm b/a\) set how widely the branches open. This time the foci lie \emph{beyond} the vertices, so \(c > a\), and the relation turns into \(c = \sqrt{a^2 + b^2}\): a \emph{plus} where the ellipse had a minus, precisely because the focus has moved from inside the curve to outside it.
 
 \begin{figureblock}
   \includegraphics[width=150.53mm]{appA/figs/conic-hyperbola}
-\figcaption{Figure A.4}{A hyperbola \(\frac{x^2}{a^2} - \frac{y^2}{b^2} = 1\), with vertices \((\pm a, 0)\), foci \((\pm c, 0)\), and asymptotes \(y = \pm\frac{b}{a}x\).}
+\figcaption{fig:A.4}{A hyperbola \(\frac{x^2}{a^2} - \frac{y^2}{b^2} = 1\), with vertices \((\pm a, 0)\), foci \((\pm c, 0)\), and asymptotes \(y = \pm\frac{b}{a}x\).}
 \end{figureblock}
 \begin{workedexample}
-\begin{envexample}{Example}{A.6}{}
+\begin{envexample}{Example}{ex:A.6}{}
 Identify the curve \(4x^2 + 9y^2 = 36\) and locate its foci.
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
@@ -284,7 +285,7 @@ The absolute value \(|x|\) is the size of \(x\) with its sign discarded — \(|3
 The single most useful reading turns a distance bound into an interval. For \(\delta > 0\), \[ |x - a| < \delta \quad\Longleftrightarrow\quad a - \delta < x < a + \delta, \] since “within \(\delta\) of \(a\)” is exactly “no further than \(\delta\) to either side.” The set on the right is the \emph{\(\delta\)-neighbourhood} of \(a\): an open interval of width \(2\delta\) centred at \(a\). Closing the inequality closes the interval — \(|x - a| \le \delta \Leftrightarrow a - \delta \le x \le a + \delta\) — and reversing it turns the region inside out: \(|x - a| > \delta\) describes the two rays \emph{outside}, \(x < a - \delta\) or \(x > a + \delta\). This is the unpacking behind every limit and continuity statement, and behind the interval of convergence of a power series, where \(|x - a| < R\) reads as “\(x\) lies within \(R\) of the centre \(a\).”
 
 \begin{workedexample}
-\begin{envexample}{Example}{A.7}{}
+\begin{envexample}{Example}{ex:A.7}{}
 Solve \(|2x - 3| < 5\), and describe the solution as a neighbourhood.
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
@@ -298,7 +299,7 @@ Unpack the bound into a double inequality and work the two sides together: \[ \b
 \end{workedexample}
 One inequality outranks all others for the proofs in this book. It bounds the size of a sum by the sizes of its parts, and it is the lever behind almost every \(\varepsilon\)–\(\delta\) estimate.
 
-\begin{envproposition}{Proposition}{A.8}{Triangle inequality}
+\begin{envproposition}{Proposition}{prop:A.8}{Triangle inequality}
 For all real numbers \(x\) and \(y\), \[ |x + y| \le |x| + |y|, \] and consequently \(\bigl||x| - |y|\bigr| \le |x - y|\).
 \end{envproposition}
 \begin{envproof}{Proof}{}{}

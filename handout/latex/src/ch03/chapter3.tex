@@ -15,6 +15,7 @@
 % 模板內的 {../figs/} 是 chapters/<ch>/ 為 CWD 時的路徑，dist/<ch>/ 需這一行覆寫。
 \graphicspath{{../../chapters/}}
 \begin{document}
+\cbchapter{3}
 \chapteropener{Chapter 3}{Chain Rule and Trigonometric Derivatives}
 \begin{lead}
 Chapter 2 built the derivative from its definition as the limit of a difference quotient, and turned it into a working toolkit: rules for constants, powers, sums, products, quotients, and the exponential. Yet a whole world of functions still lies just out of reach. How fast does \(\sin x\) change? And what is the derivative of a \emph{composition} such as \(\sqrt{1 + x^{2}}\) or \(\sin(x^{2})\), where the output of one function becomes the input of another? This chapter supplies the two ideas that complete the differentiation toolkit. First we differentiate the trigonometric functions. Algebra alone cannot evaluate the limit that this requires, so we use a geometric comparison of areas on the unit circle. Then we prove the \emph{chain rule}, the single rule that differentiates any composition, and use it to unlock the derivatives of inverse and implicitly defined functions.
@@ -39,11 +40,11 @@ Fix \(x\) and form the difference quotient for \(f(x) = \sin x\). The decisive a
 As \(h \to 0\), two things happen at once. The factor \(\cos\bigl(x + \tfrac{h}{2}\bigr)\) ought to tend to \(\cos x\) — provided \(\cos\) is continuous — and the factor \(\dfrac{\sin(h/2)}{h/2}\) is exactly \(\dfrac{\sin\theta}{\theta}\) with \(\theta = h/2 \to 0\). So the derivative rests on two facts: that sine and cosine are continuous, and the value of \(\lim_{\theta \to 0}\sin\theta/\theta\). We secure both now.
 
 \subsechead{A geometric inequality on the unit circle}
-To get a grip on \(\sin\theta/\theta\) for small \(\theta\), we compare three areas on a circle of radius \(1\). Because both \(\theta\) and \(\sin\theta\) reverse sign when \(\theta\) is replaced by \(-\theta\), the ratio \(\sin\theta/\theta\) is unchanged. A function with this property is called an \emph{even} function. It is therefore enough to treat \(\theta > 0\), shrinking to \(0\). Take \(0 < \theta < \tfrac{\pi}{2}\) and look at Figure 3.1.
+To get a grip on \(\sin\theta/\theta\) for small \(\theta\), we compare three areas on a circle of radius \(1\). Because both \(\theta\) and \(\sin\theta\) reverse sign when \(\theta\) is replaced by \(-\theta\), the ratio \(\sin\theta/\theta\) is unchanged. A function with this property is called an \emph{even} function. It is therefore enough to treat \(\theta > 0\), shrinking to \(0\). Take \(0 < \theta < \tfrac{\pi}{2}\) and look at Figure \ref{fig:3.1}.
 
 \begin{figureblock}
   \includegraphics[width=79.9mm]{ch03/figs/sector-inequality}
-\figcaption{Figure 3.1}{The unit-circle area comparison behind \(\sin\theta \le \theta \le \tan\theta\).}
+\figcaption{fig:3.1}{The unit-circle area comparison behind \(\sin\theta \le \theta \le \tan\theta\).}
 \end{figureblock}
 Here \(A = (1, 0)\) lies on the circle, \(B = (\cos\theta, \sin\theta)\) is the point at angle \(\theta\), and \(C = (1, \tan\theta)\) is where the radius \(OB\), extended, meets the vertical tangent line at \(A\). Three nested regions appear, and their areas are easy to read off:
 
@@ -57,7 +58,7 @@ The triangle \(OAB\) lies inside the sector, which lies inside the triangle \(OA
 \subsechead{Continuity of sine and cosine}
 The bound \(\lvert \sin\theta \rvert \le \lvert \theta \rvert\) does more than help with the fundamental limit: it is also what makes sine and cosine continuous, in the sense introduced in Chapter 1. We need continuity for the first factor of the difference quotient and for the proof of the fundamental limit, so we establish it now.
 
-\begin{envproposition}{Proposition}{3.1}{Continuity of sine and cosine}
+\begin{envproposition}{Proposition}{prop:3.1}{Continuity of sine and cosine}
 The functions \(\sin x\) and \(\cos x\) are continuous at every \(x_{0} \in \mathbb{R}\).
 \end{envproposition}
 \begin{envproof}{Proof}{}{}
@@ -79,20 +80,20 @@ In each line the factor with argument \(\tfrac{x + x_{0}}{2}\) has absolute valu
 As \(x \to x_{0}\) the angle \(\tfrac{x - x_{0}}{2} \to 0\), so by the limit just established both right-hand sides tend to \(0\). The squeeze theorem then gives \(\cos x \to \cos x_{0}\) and \(\sin x \to \sin x_{0}\); that is, cosine and sine are continuous at \(x_{0}\).
 \end{envproof}
 \subsechead{The fundamental limit}
-With continuity secured, we can finally squeeze \(\sin\theta/\theta\) to its limit (Figure 3.2).
+With continuity secured, we can finally squeeze \(\sin\theta/\theta\) to its limit (Figure \ref{fig:3.2}).
 
-\begin{envproposition}{Proposition}{3.2}{The fundamental trigonometric limit}
+\begin{envproposition}{Proposition}{prop:3.2}{The fundamental trigonometric limit}
 \[ \lim_{\theta \to 0} \frac{\sin\theta}{\theta} = 1. \]
 \end{envproposition}
 \begin{envproof}{Proof}{}{}
-For \(0 < \theta < \tfrac{\pi}{2}\), inequality (1) reads \(\cos\theta \le \dfrac{\sin\theta}{\theta} \le 1\). As \(\theta \to 0^{+}\) the upper bound is the constant \(1\), while the lower bound satisfies \(\cos\theta \to \cos 0 = 1\) by the continuity of cosine (Proposition 3.1). The squeeze theorem (§1.5) pins the quantity between them: \(\lim_{\theta \to 0^{+}} \sin\theta/\theta = 1\). Finally \(\sin\theta/\theta\) is even, so its left-hand limit at \(0\) equals its right-hand limit, and the two-sided limit is \(1\) as well.
+For \(0 < \theta < \tfrac{\pi}{2}\), inequality (1) reads \(\cos\theta \le \dfrac{\sin\theta}{\theta} \le 1\). As \(\theta \to 0^{+}\) the upper bound is the constant \(1\), while the lower bound satisfies \(\cos\theta \to \cos 0 = 1\) by the continuity of cosine (Proposition \ref{prop:3.1}). The squeeze theorem (§1.5) pins the quantity between them: \(\lim_{\theta \to 0^{+}} \sin\theta/\theta = 1\). Finally \(\sin\theta/\theta\) is even, so its left-hand limit at \(0\) equals its right-hand limit, and the two-sided limit is \(1\) as well.
 \end{envproof}
 \begin{figureblock}
   \includegraphics[width=81.92mm]{ch03/figs/squeeze-limit}
-\figcaption{Figure 3.2}{A graphical reading of the squeeze in Proposition 3.2: \(\dfrac{\sin\theta}{\theta}\) sits between \(\cos\theta\) and \(1\), with an open circle at \(\theta = 0\).}
+\figcaption{fig:3.2}{A graphical reading of the squeeze in Proposition \ref{prop:3.2}: \(\dfrac{\sin\theta}{\theta}\) sits between \(\cos\theta\) and \(1\), with an open circle at \(\theta = 0\).}
 \end{figureblock}
 \begin{envcaution}{Caution}{}{}
-Proposition 3.2 is a statement about the \emph{limit} as \(\theta \to 0\), not an identity. At a fixed angle the ratio \(\sin\theta/\theta\) is generally not \(1\): at \(\theta = \tfrac{\pi}{2}\) it equals \(\dfrac{\sin(\pi/2)}{\pi/2} = \dfrac{1}{\pi/2} = \dfrac{2}{\pi} \approx 0.64\), and at \(\theta = \pi\) it equals \(\dfrac{0}{\pi} = 0\). The value \(1\) is reached only in the limit, as \(\theta\) shrinks to \(0\).
+Proposition \ref{prop:3.2} is a statement about the \emph{limit} as \(\theta \to 0\), not an identity. At a fixed angle the ratio \(\sin\theta/\theta\) is generally not \(1\): at \(\theta = \tfrac{\pi}{2}\) it equals \(\dfrac{\sin(\pi/2)}{\pi/2} = \dfrac{1}{\pi/2} = \dfrac{2}{\pi} \approx 0.64\), and at \(\theta = \pi\) it equals \(\dfrac{0}{\pi} = 0\). The value \(1\) is reached only in the limit, as \(\theta\) shrinks to \(0\).
 \end{envcaution}
 \begin{envcaution}{Caution}{}{}
 Everything here depends on measuring angles in \emph{radians}. The formula \(\tfrac12\theta\) for the sector area uses radian measure, for which the arc cut off on the unit circle has length exactly \(\theta\). The limit \(\sin\theta/\theta \to 1\) rests on that formula, so it depends on radians too. In degrees the limit is not \(1\): since \(x^{\circ} = \tfrac{\pi}{180}x\) radians, one finds \(\lim_{x \to 0}\dfrac{\sin(x^{\circ})}{x} = \dfrac{\pi}{180}\), and so \(\dfrac{d}{dx}\sin(x^{\circ}) = \dfrac{\pi}{180}\cos(x^{\circ})\). The clean formulas of this section, \(\sin' = \cos\) and \(\cos' = -\sin\), hold only in radians.
@@ -100,7 +101,7 @@ Everything here depends on measuring angles in \emph{radians}. The formula \(\tf
 \subsechead{The derivatives of sine and cosine}
 With continuity and the fundamental limit established, the difference quotient for \(\sin\) is now easy to evaluate.
 
-\begin{envtheorem}{Theorem}{3.1}{Derivative of sine}
+\begin{envtheorem}{Theorem}{thm:3.1}{Derivative of sine}
 \[ \frac{d}{dx}\sin x = \cos x \qquad \text{for all } x \in \mathbb{R}. \]
 \end{envtheorem}
 \begin{envproof}{Proof}{}{}
@@ -111,11 +112,11 @@ Using the form of the difference quotient found above,
           &= \lim_{h \to 0} \cos\Bigl(x + \tfrac{h}{2}\Bigr) \cdot \frac{\sin(h/2)}{h/2}.
       \end{aligned} \]
 
-As \(h \to 0\), the first factor tends to \(\cos x\) because cosine is continuous (Proposition 3.1), and the second tends to \(1\) by the fundamental limit (Proposition 3.2), with \(\theta = h/2 \to 0\). The product therefore tends to \(\cos x \cdot 1 = \cos x\).
+As \(h \to 0\), the first factor tends to \(\cos x\) because cosine is continuous (Proposition \ref{prop:3.1}), and the second tends to \(1\) by the fundamental limit (Proposition \ref{prop:3.2}), with \(\theta = h/2 \to 0\). The product therefore tends to \(\cos x \cdot 1 = \cos x\).
 \end{envproof}
 The same machinery handles cosine, this time through the companion identity \(\cos A - \cos B = -2 \sin\frac{A + B}{2} \sin\frac{A - B}{2}\), obtained just like the sine version by expanding \(\cos(u + v) - \cos(u - v)\) with the angle-sum formulas.
 
-\begin{envtheorem}{Theorem}{3.2}{Derivative of cosine}
+\begin{envtheorem}{Theorem}{thm:3.2}{Derivative of cosine}
 \[ \frac{d}{dx}\cos x = -\sin x \qquad \text{for all } x \in \mathbb{R}. \]
 \end{envtheorem}
 \begin{envproof}{Proof}{}{}
@@ -123,16 +124,16 @@ With \(A = x + h\) and \(B = x\), the identity gives \(\cos(x + h) - \cos x = -2
 
 \[ \frac{\cos(x + h) - \cos x}{h} = -\sin\Bigl(x + \tfrac{h}{2}\Bigr) \cdot \frac{\sin(h/2)}{h/2}. \]
 
-Letting \(h \to 0\), the factor \(\sin\bigl(x + \tfrac{h}{2}\bigr) \to \sin x\) by continuity (Proposition 3.1) and \(\dfrac{\sin(h/2)}{h/2} \to 1\) by Proposition 3.2, so
+Letting \(h \to 0\), the factor \(\sin\bigl(x + \tfrac{h}{2}\bigr) \to \sin x\) by continuity (Proposition \ref{prop:3.1}) and \(\dfrac{\sin(h/2)}{h/2} \to 1\) by Proposition \ref{prop:3.2}, so
 
 \[ \frac{d}{dx}\cos x = -\sin x \cdot 1 = -\sin x. \]
 \end{envproof}
 \begin{figureblock}
   \includegraphics[width=55.07mm]{ch03/figs/sin-cos-slope}
-\figcaption{Figure 3.3}{Tangent slopes on \(y = \sin x\) matching the heights of \(y = \cos x\) at the same \(x\)-values.}
+\figcaption{fig:3.3}{Tangent slopes on \(y = \sin x\) matching the heights of \(y = \cos x\) at the same \(x\)-values.}
 \end{figureblock}
 \begin{workedexample}
-\begin{envexample}{Example}{3.1}{}
+\begin{envexample}{Example}{ex:3.1}{}
 Establish the companion limit \(\displaystyle \lim_{\theta \to 0} \frac{1 - \cos\theta}{\theta} = 0\).
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
@@ -146,11 +147,11 @@ This is again of the form \(0/0\). Multiplying numerator and denominator by \(1 
              = \frac{\sin\theta}{\theta} \cdot \frac{\sin\theta}{1 + \cos\theta}.
         \end{aligned} \]
 
-As \(\theta \to 0\), the first factor tends to \(1\) by Proposition 3.2, while the second tends to \(\dfrac{0}{1 + 1} = 0\) by the continuity of sine and cosine (Proposition 3.1). The product tends to \(1 \cdot 0 = 0\).
+As \(\theta \to 0\), the first factor tends to \(1\) by Proposition \ref{prop:3.2}, while the second tends to \(\dfrac{0}{1 + 1} = 0\) by the continuity of sine and cosine (Proposition \ref{prop:3.1}). The product tends to \(1 \cdot 0 = 0\).
 \end{envsolution}
 \end{workedexample}
 \begin{workedexample}
-\begin{envexample}{Example}{3.2}{}
+\begin{envexample}{Example}{ex:3.2}{}
 Using \(\sin' = \cos\) and \(\cos' = -\sin\) together with the quotient rule (§2.5), differentiate (a) \(\tan x\) and (b) \(\sec x\), wherever \(\cos x \ne 0\).
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
@@ -179,27 +180,27 @@ The same technique applied to \(\cot x = \dfrac{\cos x}{\sin x}\) and \(\csc x =
 \end{envsolution}
 \end{workedexample}
 \begin{workedexample}
-\begin{envexample}{Example}{3.3}{}
+\begin{envexample}{Example}{ex:3.3}{}
 A weight bobbing on a spring has height \(s(t) = \sin t\) above its rest level at time \(t\). Find its velocity \(s'(t)\) and acceleration \(s''(t)\), and describe how the acceleration is related to the height.
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
-Velocity is the derivative of height, and acceleration the derivative of velocity. Differentiating with Theorems 3.1 and 3.2,
+Velocity is the derivative of height, and acceleration the derivative of velocity. Differentiating with Theorems \ref{thm:3.1} and \ref{thm:3.2},
 
 \[ s'(t) = \cos t, \qquad s''(t) = \frac{d}{dt}\cos t = -\sin t. \]
 
-Thus \(s''(t) = -\sin t = -s(t)\): at every instant the weight accelerates back toward its rest level, by an amount proportional to its distance from that level. This relation \(s'' = -s\) is the signature of \emph{simple harmonic motion} (Figure 3.4). Both sine and cosine satisfy this relation, so both can be used to describe oscillation.
+Thus \(s''(t) = -\sin t = -s(t)\): at every instant the weight accelerates back toward its rest level, by an amount proportional to its distance from that level. This relation \(s'' = -s\) is the signature of \emph{simple harmonic motion} (Figure \ref{fig:3.4}). Both sine and cosine satisfy this relation, so both can be used to describe oscillation.
 \end{envsolution}
 \end{workedexample}
 \begin{figureblock}
   \includegraphics[width=79.9mm]{ch03/figs/shm-triple}
-\figcaption{Figure 3.4}{Simple harmonic motion over one time axis: \(s = \sin t\), \(s' = \cos t\), and \(s'' = -\sin t\).}
+\figcaption{fig:3.4}{Simple harmonic motion over one time axis: \(s = \sin t\), \(s' = \cos t\), and \(s'' = -\sin t\).}
 \end{figureblock}
-\begin{envremark}{Remark}{3.1}{The derivative cycle of sine and cosine}
-Differentiation sends sine and cosine into each other, with a sign that changes every second step (Figure 3.3). Writing \(\to\) for one application of \(\dfrac{d}{dx}\),
+\begin{envremark}{Remark}{rem:3.1}{The derivative cycle of sine and cosine}
+Differentiation sends sine and cosine into each other, with a sign that changes every second step (Figure \ref{fig:3.3}). Writing \(\to\) for one application of \(\dfrac{d}{dx}\),
 
 \[ \sin x \;\to\; \cos x \;\to\; -\sin x \;\to\; -\cos x \;\to\; \sin x. \]
 
-After four derivatives we are back where we started, so \(\dfrac{d^{4}}{dx^{4}}\sin x = \sin x\), and likewise for cosine. Where \(e^{x}\) reproduces itself in a single step (§2.4), sine and cosine need four. Two of those steps already turn each of them into its own negative, which is the relation \(s'' = -s\) of Example 3.3.
+After four derivatives we are back where we started, so \(\dfrac{d^{4}}{dx^{4}}\sin x = \sin x\), and likewise for cosine. Where \(e^{x}\) reproduces itself in a single step (§2.4), sine and cosine need four. Two of those steps already turn each of them into its own negative, which is the relation \(s'' = -s\) of Example \ref{ex:3.3}.
 \end{envremark}
 We can now differentiate every trigonometric function, but only in its bare form, \(\sin x\) rather than \(\sin(x^{2})\) or \(\sin(3x + 1)\). To reach a function tucked \emph{inside} another we need a rule for differentiating compositions. That rule, the chain rule, is the business of the next section; with it, the derivatives found here become the seeds of a vast family of new ones.
 
@@ -207,27 +208,27 @@ We can now differentiate every trigonometric function, but only in its bare form
 \sechead{3.2}{The Chain Rule}
 Section 3.1 gave us the derivatives of the trigonometric functions, but only in their bare form. We can differentiate \(\sin x\), yet nothing so far reaches \(\sin(x^{2})\) or \(\sqrt{1 + x^{2}}\), where one function is fed \emph{into} another. Chapter 2 supplied rules for sums, products, and quotients, but not for \emph{composition}, the operation of applying one function to the output of another. The chain rule fills exactly this gap, and it is the rule that finally completes the differentiation toolkit.
 
-The idea behind it, pictured in Figure 3.5, fits in a single image. Near a point, a differentiable function behaves like its tangent line: it takes a small change in its input and scales it by its slope. The catch is only that this is approximate: there is an error, and it shrinks faster than the change itself. Now chain two such functions together. If \(g\) scales a small increment \(h\) by \(g'(x)\), and \(f\) then scales \emph{that} by \(f'(g(x))\), the two magnifications stack. The composite scales \(h\) by the product \(f'(g(x))\,g'(x)\). That product is the chain rule, and the proof at the end of this section is nothing more than the careful check that the two error terms, once chained, are still negligible.
+The idea behind it, pictured in Figure \ref{fig:3.5}, fits in a single image. Near a point, a differentiable function behaves like its tangent line: it takes a small change in its input and scales it by its slope. The catch is only that this is approximate: there is an error, and it shrinks faster than the change itself. Now chain two such functions together. If \(g\) scales a small increment \(h\) by \(g'(x)\), and \(f\) then scales \emph{that} by \(f'(g(x))\), the two magnifications stack. The composite scales \(h\) by the product \(f'(g(x))\,g'(x)\). That product is the chain rule, and the proof at the end of this section is nothing more than the careful check that the two error terms, once chained, are still negligible.
 
 Alongside the chain rule, this section draws on two results that already belong to Chapter 2, the product rule (§2.5) and the fact that a differentiable function is continuous (§2.3, Theorem 2.1). We take both as established and use them freely, without re-proving them here.
 
-\begin{envtheorem}{Theorem}{3.3}{The chain rule}
+\begin{envtheorem}{Theorem}{thm:3.3}{The chain rule}
 Let \(g\) be differentiable at \(x_{0}\), and let \(f\) be differentiable at \(g(x_{0})\). Then the composition \(P = f \circ g\), given by \(P(x) = f(g(x))\), is differentiable at \(x_{0}\), and
 
 \[ P'(x_{0}) = f'(g(x_{0}))\, g'(x_{0}). \]
 \end{envtheorem}
 \begin{figureblock}
   \includegraphics[width=79.9mm]{ch03/figs/composed-mapping}
-\figcaption{Figure 3.5}{The chain rule as a composed mapping: local slope factors accumulate along \(x \mapsto u \mapsto y\).}
+\figcaption{fig:3.5}{The chain rule as a composed mapping: local slope factors accumulate along \(x \mapsto u \mapsto y\).}
 \end{figureblock}
-\begin{envremark}{Remark}{3.2}{The Leibniz form}
+\begin{envremark}{Remark}{rem:3.2}{The Leibniz form}
 Writing \(u = g(x)\) for the inner variable and \(y = f(u)\) for the output, the chain rule takes the memorable Leibniz shape
 
 \[ \frac{dy}{dx} = \frac{dy}{du}\cdot\frac{du}{dx}. \]
 
 This is the form most often used in practice, and it reads as “the rate of \(y\) per \(x\) equals the rate of \(y\) per \(u\) times the rate of \(u\) per \(x\).” The apparent cancellation of \(du\) is a useful memory aid, but it is \emph{not} a proof: \(\dfrac{dy}{du}\) and \(\dfrac{du}{dx}\) are limits, not fractions with a common factor to cancel. What actually makes the rule true is the argument given below, where the controlled error terms — not a literal \(du/du = 1\) — do the work.
 \end{envremark}
-\begin{envstrategy}{Strategy}{3.1}{Differentiating a composition}
+\begin{envstrategy}{Strategy}{strat:3.1}{Differentiating a composition}
 To differentiate a composite expression, work from the outside in.
 
 \begin{steps}
@@ -242,7 +243,7 @@ For \(\sqrt{1 + x^{2}}\), the last operation is the square root, so \(f(u) = \sq
 \subsechead{Why the rule is true}
 The rule is already usable. The rest of this section proves it. On a first reading you may jump straight to the subsection “Using the rule” below and return to this proof later; none of the examples depend on it. To prove that the two slopes really do multiply, we need to handle both functions’ linear approximations at once, and for that it helps to repackage what “differentiable” means. Chapter 2 defined \(f\) to be differentiable at \(x_{0}\) when the difference quotient \(\dfrac{f(x_{0}+h) - f(x_{0})}{h}\) has a limit as \(h \to 0\) (§2.2); that limit is \(f'(x_{0})\). The following form says the same thing, but as a statement about approximation by a straight line.
 
-\begin{envdefinition}{Definition}{3.1}{Differentiability, remainder form}
+\begin{envdefinition}{Definition}{def:3.1}{Differentiability, remainder form}
 A function \(f\) is \emph{differentiable} at \(x_{0}\) if there is a number \(m\) and a function \(R\) such that
 
 \[ f(x_{0} + h) = f(x_{0}) + m h + R(h), \qquad \lim_{h \to 0}\frac{R(h)}{h} = 0. \]
@@ -250,17 +251,17 @@ A function \(f\) is \emph{differentiable} at \(x_{0}\) if there is a number \(m\
 The number \(m\) is the derivative \(f'(x_{0})\).
 
 \begin{informal}
-Informally, \(f(x_{0}+h)\) equals its tangent-line value \(f(x_{0}) + m h\) plus an error \(R(h)\) that shrinks faster than \(h\) does. The tangent line is a good fit to first order (Figure 3.6).
+Informally, \(f(x_{0}+h)\) equals its tangent-line value \(f(x_{0}) + m h\) plus an error \(R(h)\) that shrinks faster than \(h\) does. The tangent line is a good fit to first order (Figure \ref{fig:3.6}).
 \end{informal}
 \end{envdefinition}
 \begin{figureblock}
   \includegraphics[width=65.62mm]{ch03/figs/remainder-tangent-1}\hspace{6mm}\includegraphics[width=65.62mm]{ch03/figs/remainder-tangent-2}
-\figcaption{Figure 3.6}{Remainder-form geometry: halving \(h\) makes the vertical error \(R(h)\) much smaller, illustrating \(R(h)/h \to 0\).}
+\figcaption{fig:3.6}{Remainder-form geometry: halving \(h\) makes the vertical error \(R(h)\) much smaller, illustrating \(R(h)/h \to 0\).}
 \end{figureblock}
 This is not a new notion of derivative, only a new way of writing the old one.
 
-\begin{envproposition}{Proposition}{3.3}{Equivalence of the two forms}
-The limit form of differentiability (§2.2) and the remainder form (Definition 3.1) are equivalent: \(f\) satisfies one at \(x_{0}\) if and only if it satisfies the other, and the number \(m\) is the same in both, namely \(f'(x_{0})\).
+\begin{envproposition}{Proposition}{prop:3.3}{Equivalence of the two forms}
+The limit form of differentiability (§2.2) and the remainder form (Definition \ref{def:3.1}) are equivalent: \(f\) satisfies one at \(x_{0}\) if and only if it satisfies the other, and the number \(m\) is the same in both, namely \(f'(x_{0})\).
 \end{envproposition}
 \begin{envproof}{Proof}{}{}
 Suppose first that the limit form holds, with \(\lim_{h \to 0}\dfrac{f(x_{0}+h) - f(x_{0})}{h} = m\). Define \(R(h) = f(x_{0}+h) - f(x_{0}) - m h\). Then
@@ -275,8 +276,8 @@ so the limit form holds, again with the same \(m\). The two forms therefore desc
 \end{envproof}
 With the remainder form available, the chain rule comes out by substitution. We expand \(g\) near \(x_{0}\) and \(f\) near \(g(x_{0})\), each as a linear part plus a small remainder; substituting the expansion for \(g\) into the one for \(f\), the linear parts multiply to give \(g'(x_{0})f'(g(x_{0}))\,h\), and everything left over collects into a single remainder. The whole proof is then the one estimate that this leftover still vanishes faster than \(h\).
 
-\begin{envproof}{Proof}{}{of Theorem 3.3}
-We use the remainder form of differentiability (Definition 3.1), which by Proposition 3.3 is available for any differentiable function. Because \(g\) is differentiable at \(x_{0}\),
+\begin{envproof}{Proof}{}{of Theorem \ref{thm:3.3}}
+We use the remainder form of differentiability (Definition \ref{def:3.1}), which by Proposition \ref{prop:3.3} is available for any differentiable function. Because \(g\) is differentiable at \(x_{0}\),
 
 \[ g(x_{0} + h) = g(x_{0}) + m_{1} h + R_{1}(h), \qquad m_{1} = g'(x_{0}), \quad \lim_{h \to 0}\frac{R_{1}(h)}{h} = 0. \]
 
@@ -323,7 +324,7 @@ As \(\varepsilon > 0\) was arbitrary and \(\lvert m_{1} \rvert + 1\) is a fixed 
 \end{envproof}
 \subsechead{Using the rule}
 \begin{workedexample}
-\begin{envexample}{Example}{3.4}{}
+\begin{envexample}{Example}{ex:3.4}{}
 Differentiate (a) \(\sqrt{1 + x^{2}}\) and (b) \(\sin(x^{2})\).
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
@@ -331,7 +332,7 @@ For (a), the outermost operation is the square root, so \(f(u) = \sqrt{u} = u^{1
 
 \[ \frac{d}{dx}\sqrt{1 + x^{2}} = \frac{1}{2\sqrt{1 + x^{2}}}\cdot 2x = \frac{x}{\sqrt{1 + x^{2}}}. \]
 
-For (b), the outer function is sine and the inner is \(x^{2}\), so with \(f'(u) = \cos u\) (Theorem 3.1) and \(g'(x) = 2x\),
+For (b), the outer function is sine and the inner is \(x^{2}\), so with \(f'(u) = \cos u\) (Theorem \ref{thm:3.1}) and \(g'(x) = 2x\),
 
 \[ \frac{d}{dx}\sin(x^{2}) = \cos(x^{2})\cdot 2x = 2x\cos(x^{2}). \]
 
@@ -342,7 +343,7 @@ The factor \(2x\) is the inner derivative; dropping it and writing just \(\cos(x
 The most common mistake with the chain rule is to differentiate the outer function and forget the inner derivative, writing \(\dfrac{d}{dx}\sin(g(x)) = \cos(g(x))\) instead of the correct \(\cos(g(x))\cdot g'(x)\). The inner factor \(g'(x)\) — the \(2x\) in \(\sin(x^{2})\) above — is never optional.
 \end{envcaution}
 \begin{workedexample}
-\begin{envexample}{Example}{3.5}{}
+\begin{envexample}{Example}{ex:3.5}{}
 Differentiate \(\sqrt{1 + \sin^{2} x}\).
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
@@ -355,15 +356,15 @@ This is a composition three layers deep: the square root of \(1 + \sin^{2} x\), 
             &= \frac{\sin x \cos x}{\sqrt{1 + \sin^{2} x}}.
         \end{aligned} \]
 
-Each layer contributes exactly one factor: \(\tfrac12 u^{-1/2}\) from the square root, \(2\sin x\) from squaring, and \(\cos x\) from the sine. Their product is the derivative. The slopes multiply down the chain, just as Figure 3.5 pictures.
+Each layer contributes exactly one factor: \(\tfrac12 u^{-1/2}\) from the square root, \(2\sin x\) from squaring, and \(\cos x\) from the sine. Their product is the derivative. The slopes multiply down the chain, just as Figure \ref{fig:3.5} pictures.
 \end{envsolution}
 \end{workedexample}
 \begin{workedexample}
-\begin{envexample}{Example}{3.6}{}
+\begin{envexample}{Example}{ex:3.6}{}
 Differentiate \(\sqrt{\dfrac{x - 1}{x + 2}}\) for \(x > 1\).
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
-The outermost operation is the square root, so by Strategy 3.1 take \(f(u) = \sqrt{u} = u^{1/2}\) with inner function \(u = \dfrac{x - 1}{x + 2}\). The chain rule gives
+The outermost operation is the square root, so by Strategy \ref{strat:3.1} take \(f(u) = \sqrt{u} = u^{1/2}\) with inner function \(u = \dfrac{x - 1}{x + 2}\). The chain rule gives
 
 \[ \frac{d}{dx}\sqrt{\frac{x - 1}{x + 2}} = \frac{1}{2\sqrt{(x - 1)/(x + 2)}}\cdot\frac{d}{dx}\!\left(\frac{x - 1}{x + 2}\right). \]
 
@@ -379,7 +380,7 @@ The chain rule does not finish the computation by itself. It requires the deriva
 \end{envsolution}
 \end{workedexample}
 \begin{workedexample}
-\begin{envexample}{Example}{3.7}{}
+\begin{envexample}{Example}{ex:3.7}{}
 Differentiate \(y = (1 + x^{2})\cos^{2} x\).
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
@@ -399,11 +400,11 @@ The two rules cooperate: the product rule splits the work into two terms, and th
 \end{envsolution}
 \end{workedexample}
 \begin{workedexample}
-\begin{envexample}{Example}{3.8}{}
+\begin{envexample}{Example}{ex:3.8}{}
 In a harbour, the amount of kelp \(K\) depends on the urchin population \(U\), since urchins eat kelp, and \(U\) in turn depends on the otter population \(O\), since otters eat urchins. Use the chain rule to decide whether \(\dfrac{dK}{dO}\) is positive or negative.
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
-Determine the sign of each link first. More urchins means less kelp, so \(K\) decreases as \(U\) increases: \(\dfrac{dK}{dU} < 0\). More otters means fewer urchins, so \(\dfrac{dU}{dO} < 0\). The chain rule in Leibniz form (Remark 3.2) chains the two rates:
+Determine the sign of each link first. More urchins means less kelp, so \(K\) decreases as \(U\) increases: \(\dfrac{dK}{dU} < 0\). More otters means fewer urchins, so \(\dfrac{dU}{dO} < 0\). The chain rule in Leibniz form (Remark \ref{rem:3.2}) chains the two rates:
 
 \[ \frac{dK}{dO} = \frac{dK}{dU}\cdot\frac{dU}{dO}. \]
 
@@ -414,19 +415,19 @@ With the chain rule in hand the differentiation toolkit is essentially complete:
 
 
 \sechead{3.3}{Applications of the Chain Rule}
-Sections 3.1 and 3.2 built the machinery; this section uses it. The chain rule (Theorem 3.3) was advertised as the tool that completes the differentiation toolkit, and here we see why: it reaches a whole family of derivatives that no rule of Chapter 2 can differentiate directly. We have no formula for \(\ln x\) to differentiate. It is known only as the function that undoes \(e^{x}\). The expression \(x^{x}\) carries its variable in \emph{both} the base and the exponent, so neither the power rule nor the rule for \(e^{x}\) applies to it. And \(\arcsin\) has no elementary formula at all. Each of these functions is defined only indirectly.
+Sections 3.1 and 3.2 built the machinery; this section uses it. The chain rule (Theorem \ref{thm:3.3}) was advertised as the tool that completes the differentiation toolkit, and here we see why: it reaches a whole family of derivatives that no rule of Chapter 2 can differentiate directly. We have no formula for \(\ln x\) to differentiate. It is known only as the function that undoes \(e^{x}\). The expression \(x^{x}\) carries its variable in \emph{both} the base and the exponent, so neither the power rule nor the rule for \(e^{x}\) applies to it. And \(\arcsin\) has no elementary formula at all. Each of these functions is defined only indirectly.
 
-Yet each one satisfies an \emph{identity} assembled from functions we already know how to differentiate: \(e^{\ln x} = x\), or \(\ln(x^{x}) = x\ln x\), or \(\arcsin(\sin x) = x\) for \(x \in \bigl[-\tfrac{\pi}{2}, \tfrac{\pi}{2}\bigr]\). That is the whole idea of this section, used over and over: \emph{when no rule differentiates a function directly, differentiate an identity it satisfies, then solve for the derivative you want.} It is the chain rule run backward. In Strategy 3.1 we start from known derivatives and apply the chain rule to a composition. Here we apply it to a known relation and solve for the one derivative we do not yet have. The same method handles the inverse functions \(\ln\), \(\arcsin\), \(\arccos\), and \(\arctan\), and, through the closely related trick of \emph{logarithmic differentiation}, awkward powers like \(x^{x}\).
+Yet each one satisfies an \emph{identity} assembled from functions we already know how to differentiate: \(e^{\ln x} = x\), or \(\ln(x^{x}) = x\ln x\), or \(\arcsin(\sin x) = x\) for \(x \in \bigl[-\tfrac{\pi}{2}, \tfrac{\pi}{2}\bigr]\). That is the whole idea of this section, used over and over: \emph{when no rule differentiates a function directly, differentiate an identity it satisfies, then solve for the derivative you want.} It is the chain rule run backward. In Strategy \ref{strat:3.1} we start from known derivatives and apply the chain rule to a composition. Here we apply it to a known relation and solve for the one derivative we do not yet have. The same method handles the inverse functions \(\ln\), \(\arcsin\), \(\arccos\), and \(\arctan\), and, through the closely related trick of \emph{logarithmic differentiation}, awkward powers like \(x^{x}\).
 
 \subsechead{The logarithm and logarithmic differentiation}
 We begin with the natural logarithm. Throughout this section we use \(\ln x\) informally, as the inverse of the exponential function. That is, \(\ln x\) is the number whose exponential is \(x\), so that \(e^{\ln x} = x\) for every \(x > 0\). This relation is all we need to find its derivative. The rigorous construction of \(\ln x\) as the inverse of \(e^{x}\), together with a proof that it is differentiable, is deferred to Chapter 4 (§4.5), which re-derives the formula below from the ground up.
 
 \begin{workedexample}
-\begin{envexample}{Example}{3.9}{}
+\begin{envexample}{Example}{ex:3.9}{}
 Show that \(\dfrac{d}{dx}\ln x = \dfrac{1}{x}\) for \(x > 0\).
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
-Start from the identity that defines the logarithm, \(e^{\ln x} = x\), and differentiate both sides with respect to \(x\). The left side is a composition, with outer function \(\exp\) and inner function \(\ln x\). By the chain rule (Theorem 3.3), using \(\dfrac{d}{du}e^{u} = e^{u}\) (Chapter 2, §2.4, Theorem 2.5),
+Start from the identity that defines the logarithm, \(e^{\ln x} = x\), and differentiate both sides with respect to \(x\). The left side is a composition, with outer function \(\exp\) and inner function \(\ln x\). By the chain rule (Theorem \ref{thm:3.3}), using \(\dfrac{d}{du}e^{u} = e^{u}\) (Chapter 2, §2.4, Theorem 2.5),
 
 \[ \frac{d}{dx}\,e^{\ln x} = e^{\ln x}\cdot\frac{d}{dx}\ln x = x\cdot\frac{d}{dx}\ln x, \]
 
@@ -439,7 +440,7 @@ The unknown derivative sat inside a relation we could differentiate; one applica
 \end{workedexample}
 The derivative of the logarithm is more than one more entry in a table. It also makes a general technique possible. When a function carries its variable in the exponent, or is a long product and quotient of many factors, taking its logarithm first turns powers into products and products into sums, all of which we can already differentiate. Applying \(\dfrac{d}{dx}\ln\) to both sides and then solving is called \emph{logarithmic differentiation}.
 
-\begin{envstrategy}{Strategy}{3.2}{Logarithmic differentiation}
+\begin{envstrategy}{Strategy}{strat:3.2}{Logarithmic differentiation}
 To differentiate a complicated positive expression \(y = f(x)\), especially one with the variable in an exponent:
 
 \begin{steps}
@@ -451,7 +452,7 @@ To differentiate a complicated positive expression \(y = f(x)\), especially one 
 In particular this differentiates any power-of-a-function \(f(x)^{g(x)}\) (with \(f(x) > 0\)): its logarithm is \(g(x)\ln f(x)\); differentiate that, then multiply back by \(f(x)^{g(x)}\). The next example is the cleanest case.
 \end{envstrategy}
 \begin{workedexample}
-\begin{envexample}{Example}{3.10}{}
+\begin{envexample}{Example}{ex:3.10}{}
 Differentiate \(W(x) = x^{x}\) for \(x > 0\).
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
@@ -459,7 +460,7 @@ There is no rule for a variable raised to a variable power, so we take logarithm
 
 \[ \ln W = \ln\bigl(x^{x}\bigr) = x\ln x. \]
 
-Differentiate both sides with respect to \(x\). On the left, the chain rule gives \(\dfrac{d}{dx}\ln W = \dfrac{W'}{W}\). On the right, the product rule (Chapter 2, §2.5, Theorem 2.6) together with \(\dfrac{d}{dx}\ln x = \dfrac{1}{x}\) (Example 3.9) gives
+Differentiate both sides with respect to \(x\). On the left, the chain rule gives \(\dfrac{d}{dx}\ln W = \dfrac{W'}{W}\). On the right, the product rule (Chapter 2, §2.5, Theorem 2.6) together with \(\dfrac{d}{dx}\ln x = \dfrac{1}{x}\) (Example \ref{ex:3.9}) gives
 
 \[ \frac{d}{dx}\bigl(x\ln x\bigr) = 1\cdot\ln x + x\cdot\frac{1}{x} = \ln x + 1. \]
 
@@ -469,7 +470,7 @@ Therefore \(\dfrac{W'}{W} = \ln x + 1\), and solving for \(W'\),
 \end{envsolution}
 \end{workedexample}
 \begin{workedexample}
-\begin{envexample}{Example}{3.11}{}
+\begin{envexample}{Example}{ex:3.11}{}
 Differentiate \(2^{x}\) for \(x \in \mathbb{R}\).
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
@@ -481,11 +482,11 @@ The same rewrite gives \(\dfrac{d}{dx}a^{x} = a^{x}\ln a\) for any base \(a > 0\
 \end{envsolution}
 \end{workedexample}
 \begin{workedexample}
-\begin{envexample}{Example}{3.12}{}
+\begin{envexample}{Example}{ex:3.12}{}
 Differentiate \(x\ln x - x\) for \(x > 0\).
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
-We met the first term inside Example 3.10: by the product rule and \(\dfrac{d}{dx}\ln x = \dfrac{1}{x}\), we have \(\dfrac{d}{dx}(x\ln x) = \ln x + 1\). The second term has derivative \(1\). Hence
+We met the first term inside Example \ref{ex:3.10}: by the product rule and \(\dfrac{d}{dx}\ln x = \dfrac{1}{x}\), we have \(\dfrac{d}{dx}(x\ln x) = \ln x + 1\). The second term has derivative \(1\). Hence
 
 \[ \frac{d}{dx}\bigl(x\ln x - x\bigr) = (\ln x + 1) - 1 = \ln x \quad (x > 0). \]
 
@@ -493,7 +494,7 @@ The derivative is exactly \(\ln x\), so \(x\ln x - x\) is an \emph{antiderivativ
 \end{envsolution}
 \end{workedexample}
 \begin{workedexample}
-\begin{envexample}{Example}{3.13}{}
+\begin{envexample}{Example}{ex:3.13}{}
 Differentiate \(y = (x + 1)(x^{2} + 1)^{2}(x^{3} + 1)^{3}\) for \(x > 0\) by logarithmic differentiation.
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
@@ -501,7 +502,7 @@ Differentiating this product directly would mean nesting the product rule again 
 
 \[ \ln y = \ln\!\bigl[(x + 1)(x^{2} + 1)^{2}(x^{3} + 1)^{3}\bigr]. \]
 
-The laws of logarithms (Strategy 3.2, step 2) turn the product into a sum and bring each exponent out in front:
+The laws of logarithms (Strategy \ref{strat:3.2}, step 2) turn the product into a sum and bring each exponent out in front:
 
 \[ \ln y = \ln(x + 1) + 2\ln(x^{2} + 1) + 3\ln(x^{3} + 1). \]
 
@@ -520,13 +521,13 @@ Each factor of the original product contributes exactly one term to the bracket:
 We found the derivative of the logarithm by differentiating the relation \(e^{\ln x} = x\) that expresses \(\ln\) as the inverse of \(e^{x}\). The same method works for the inverse trigonometric functions, only now the identity comes from trigonometry. Each inverse function composes with the function it inverts to give an identity, and differentiating that identity by the chain rule isolates the derivative we are after.
 
 \begin{workedexample}
-\begin{envexample}{Example}{3.14}{}
+\begin{envexample}{Example}{ex:3.14}{}
 Show that \(\dfrac{d}{dy}\arcsin y = \dfrac{1}{\sqrt{1 - y^{2}}}\) for \(y \in (-1, 1)\).
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
 Recall from Chapter 1 that \(\arcsin\) is the inverse of sine restricted to the branch \(\bigl[-\tfrac{\pi}{2}, \tfrac{\pi}{2}\bigr]\): for \(-1 \le y \le 1\), \(\arcsin y\) is the unique angle \(x\) in that interval with \(\sin x = y\). On this branch the two functions undo each other, so in particular \(\arcsin(\sin x) = x\).
 
-Differentiate this identity with respect to \(x\). Reading \(x = \arcsin(\sin x)\) as a composition and applying the chain rule (Theorem 3.3), with \(\dfrac{d}{dx}\sin x = \cos x\) (Theorem 3.1),
+Differentiate this identity with respect to \(x\). Reading \(x = \arcsin(\sin x)\) as a composition and applying the chain rule (Theorem \ref{thm:3.3}), with \(\dfrac{d}{dx}\sin x = \cos x\) (Theorem \ref{thm:3.1}),
 
 \[ 1 = \frac{d}{dx}\arcsin(\sin x) = (\arcsin)'(\sin x)\cdot\cos x, \]
 
@@ -536,18 +537,18 @@ so \((\arcsin)'(\sin x) = \dfrac{1}{\cos x}\), valid where \(\cos x \neq 0\), th
 \end{envsolution}
 \end{workedexample}
 \begin{envcaution}{Caution}{}{}
-The formula \(\dfrac{1}{\sqrt{1 - y^{2}}}\) is valid only on the \emph{open} interval \((-1, 1)\). At the endpoints \(y = \pm 1\) the denominator vanishes: the graph of \(\arcsin\) (and of \(\arccos\) below) has a vertical tangent there (Figure 3.7), so the derivative does not exist. Report these derivatives on the open interval, never the closed one.
+The formula \(\dfrac{1}{\sqrt{1 - y^{2}}}\) is valid only on the \emph{open} interval \((-1, 1)\). At the endpoints \(y = \pm 1\) the denominator vanishes: the graph of \(\arcsin\) (and of \(\arccos\) below) has a vertical tangent there (Figure \ref{fig:3.7}), so the derivative does not exist. Report these derivatives on the open interval, never the closed one.
 \end{envcaution}
 \begin{figureblock}
   \includegraphics[width=64.03mm]{ch03/figs/arcsin-vertical-tangent}
-\figcaption{Figure 3.7}{Endpoint behavior of \(\arcsin y\): the tangent becomes vertical at \(y = \pm 1\), so the derivative formula applies only on \((-1, 1)\).}
+\figcaption{fig:3.7}{Endpoint behavior of \(\arcsin y\): the tangent becomes vertical at \(y = \pm 1\), so the derivative formula applies only on \((-1, 1)\).}
 \end{figureblock}
 \begin{workedexample}
-\begin{envexample}{Example}{3.15}{}
+\begin{envexample}{Example}{ex:3.15}{}
 Show that \(\dfrac{d}{dy}\arccos y = \dfrac{-1}{\sqrt{1 - y^{2}}}\) for \(y \in (-1, 1)\).
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
-The method is exactly that of Example 3.14, now applied to cosine. Recall that \(\arccos\) is the inverse of cosine on the branch \([0, \pi]\), so \(\arccos(\cos x) = x\) there. Differentiating with respect to \(x\), with \(\dfrac{d}{dx}\cos x = -\sin x\) (Theorem 3.2),
+The method is exactly that of Example \ref{ex:3.14}, now applied to cosine. Recall that \(\arccos\) is the inverse of cosine on the branch \([0, \pi]\), so \(\arccos(\cos x) = x\) there. Differentiating with respect to \(x\), with \(\dfrac{d}{dx}\cos x = -\sin x\) (Theorem \ref{thm:3.2}),
 
 \[ 1 = (\arccos)'(\cos x)\cdot(-\sin x). \]
 
@@ -559,11 +560,11 @@ The only change from \(\arcsin\) is the minus sign, inherited from \(\cos' = -\s
 \end{envsolution}
 \end{workedexample}
 \begin{workedexample}
-\begin{envexample}{Example}{3.16}{}
+\begin{envexample}{Example}{ex:3.16}{}
 Show that \(\dfrac{d}{dy}\arctan y = \dfrac{1}{1 + y^{2}}\) for all \(y \in \mathbb{R}\).
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
-Once more the same method. Recall that \(\arctan\) is the inverse of tangent on the branch \(\bigl(-\tfrac{\pi}{2}, \tfrac{\pi}{2}\bigr)\), so \(\arctan(\tan x) = x\). Differentiating with respect to \(x\), and using \(\dfrac{d}{dx}\tan x = \sec^{2} x\) (Example 3.2),
+Once more the same method. Recall that \(\arctan\) is the inverse of tangent on the branch \(\bigl(-\tfrac{\pi}{2}, \tfrac{\pi}{2}\bigr)\), so \(\arctan(\tan x) = x\). Differentiating with respect to \(x\), and using \(\dfrac{d}{dx}\tan x = \sec^{2} x\) (Example \ref{ex:3.2}),
 
 \[ 1 = (\arctan)'(\tan x)\cdot\sec^{2} x, \qquad\text{so}\qquad (\arctan)'(\tan x) = \frac{1}{\sec^{2} x}. \]
 
@@ -574,7 +575,7 @@ Now write \(y = \tan x\) and use the Pythagorean identity \(\sec^{2} x = 1 + \ta
 Here there is no domain restriction to worry about: as \(x\) ranges over \(\bigl(-\tfrac{\pi}{2}, \tfrac{\pi}{2}\bigr)\), \(y = \tan x\) ranges over all of \(\mathbb{R}\), and \(1 + y^{2}\) never vanishes. Unlike \(\arcsin\) and \(\arccos\), the arctangent is differentiable everywhere.
 \end{envsolution}
 \end{workedexample}
-\begin{envremark}{Remark}{3.3}{One lever for many derivatives}
+\begin{envremark}{Remark}{rem:3.3}{One lever for many derivatives}
 Look back at what just happened. We never differentiated \(\ln x\), \(x^{x}\), or an inverse trigonometric function \emph{directly}. There was no rule to do so. In every case we found a known identity the function satisfies, differentiated it by the chain rule, and solved for the one unknown. The identities were \(e^{\ln x} = x\), \(\ln(x^{x}) = x\ln x\), \(\arcsin(\sin x) = x\), \(\arccos(\cos x) = x\), and \(\arctan(\tan x) = x\), each on the branch fixed in its own example. The chain rule differentiates compositions, and applied to a known identity it also gives derivatives for which no direct rule exists.
 \end{envremark}
 \subsechead{Chapter summary}

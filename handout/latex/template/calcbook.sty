@@ -216,10 +216,29 @@
 
 % env 標頭一列：pill＋字面編號（Inter 700 accent ≈11.3pt）＋選用 serif 斜體 name
 % #1 pill 巨集  #2 色  #3 kicker  #4 num（可空）  #5 name（可空）
+% ── 編號語意層（U3，2026-08-09；KICKOFF-latex-unification.md）─────────────────
+% env 的 num 參數與 \figcaption 的 fig-no 參數：含「:」＝語意 label key——自動
+% refstep 該 kicker 的 counter、印「章號.序」並 \label{key}；不含「:」＝字面照印
+% （向後相容：converter 時代的輸出全為字面）。counter 依 kicker 名 lazy 建立
+% （cbExample、cbTheorem、cbFigure…每型獨立、章內連續），章號由源檔在
+% \begin{document} 後以 \cbchapter{N} 宣告（附錄用字母：\cbchapter{A}）。
+% 語意化完成時點的 label key 沿用歷史號（ex:8.3）；其後新增內容用語意 key
+% （ex:parts-tabular），key 不承諾等於印值——印值永遠是 auto-counter。
+\newcommand{\cb@chapternum}{??}
+\newcommand{\cbchapter}[1]{\gdef\cb@chapternum{#1}}
+\newcommand{\cb@autonum}[2]{%   % #1=kicker（counter 型）、#2=label key
+  \ifcsname c@cb#1\endcsname\else
+    \newcounter{cb#1}%
+    \expandafter\gdef\csname thecb#1\endcsname{\cb@chapternum.\arabic{cb#1}}%
+  \fi
+  \refstepcounter{cb#1}\csname thecb#1\endcsname\label{#2}}
+\newcommand{\cb@numor}[2]{%     % #1=kicker、#2=num 字面或 label key
+  \in@{:}{#2}\ifin@\cb@autonum{#1}{#2}\else#2\fi}
+
 \newcommand{\cb@envhead}[5]{%
   \noindent#1{#2}{#3}%
   \if\relax\detokenize{#4}\relax\else
-    \hspace{0.55em}{\cbuibold\fontsize{11.3}{13}\selectfont\color{#2}#4}\fi
+    \hspace{0.55em}{\cbuibold\fontsize{11.3}{13}\selectfont\color{#2}\cb@numor{#3}{#4}}\fi
   \if\relax\detokenize{#5}\relax\else
     \hspace{0.55em}{\itshape\color{inkSoft}#5}\fi
   \par\nobreak\vspace{2.2mm}\noindent\ignorespaces}
@@ -363,7 +382,9 @@
 \NewDocumentEnvironment{datatable}{m}
   {\par\vspace{3mm}\begin{center}\small\begin{tabular}{#1}\toprule}
   {\bottomrule\end{tabular}\end{center}\vspace{2mm}}
-\newcommand{\figcaption}[2]{%   % {字面 fig-no}{caption 散文}
+\newcommand{\cb@fignum}[1]{%   % fig-no 字面（Figure 8.3）或 label key（fig:8.3）
+  \in@{:}{#1}\ifin@ Figure \cb@autonum{Figure}{#1}\else#1\fi}
+\newcommand{\figcaption}[2]{%   % {字面 fig-no 或 fig: label key}{caption 散文}
   \par\vspace{2.5mm}%
   {\cbuiregular\fontsize{9.5}{13}\selectfont\color{inkSoft}%
-   {\cbuisemibold\color{black}#1}\hspace{0.4em}#2\par}}
+   {\cbuisemibold\color{black}\cb@fignum{#1}}\hspace{0.4em}#2\par}}

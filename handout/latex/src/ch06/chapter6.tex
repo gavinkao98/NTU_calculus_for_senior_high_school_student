@@ -15,6 +15,7 @@
 % 模板內的 {../figs/} 是 chapters/<ch>/ 為 CWD 時的路徑，dist/<ch>/ 需這一行覆寫。
 \graphicspath{{../../chapters/}}
 \begin{document}
+\cbchapter{6}
 \chapteropener{Chapter 6}{Integrals}
 \begin{lead}
 The first five chapters were about the derivative, the instantaneous rate at which one quantity changes as another does. This chapter turns to the opposite question, and to a problem far older than the derivative: how to measure the \emph{total amount} accumulated from a rate, or the \emph{area} enclosed by a curve. The Greeks computed areas of curved regions by approximating them ever more closely with polygons; the same idea, sharpened into a limit, becomes the \emph{definite integral}. We build it from the ground up as a limit of sums. Then, in the Fundamental Theorem of Calculus, we discover that this process of summation and the derivative are inverse to each other. That link between areas and slopes ties the two halves of calculus together, and this chapter is where we prove it.
@@ -43,7 +44,7 @@ by the points \(x_{0} = a,\ x_{1},\ x_{2},\ \dots,\ x_{n} = b\), where \(x_{i} =
 where \(\sum_{i=1}^{n}\) is the sigma notation for the sum of the listed terms as \(i\) runs from \(1\) to \(n\). Choosing instead the \emph{left} endpoint of each strip gives the \emph{left endpoint sum} \(L_{n} = \sum_{i=1}^{n} f(x_{i-1})\,\Delta x\). Each is a sum of rectangle areas, an approximation to the area of \(S\) that we expect to sharpen as the strips grow thinner.
 
 \begin{workedexample}
-\begin{envexample}{Example}{6.1}{}
+\begin{envexample}{Example}{ex:6.1}{}
 Estimate the area under \(y = x^{2}\) from \(0\) to \(1\) using \(n = 4\) rectangles of equal width, with heights taken at the right endpoints. Then do the same with the left endpoints, and read off what the two estimates say about the true area.
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
@@ -72,7 +73,7 @@ With four rectangles, the left and right sums bracket the area only loosely. The
 \end{workedexample}
 \begin{figureblock}
   \includegraphics[width=66.67mm]{ch06/figs/riemann-lr-x2-1}\hspace{6mm}\includegraphics[width=66.67mm]{ch06/figs/riemann-lr-x2-2}
-\figcaption{Figure 6.1}{Approximating the area under \(y = x^{2}\) on \([0, 1]\) with four equal strips. Reading each rectangle’s height at the \emph{left} endpoint (left panel) keeps every rectangle below the curve, so \(L_{4} = \tfrac{7}{32}\) underestimates; reading it at the \emph{right} endpoint (right panel) lifts every rectangle above the curve, so \(R_{4} = \tfrac{15}{32}\) overestimates. The true area is trapped between.}
+\figcaption{fig:6.1}{Approximating the area under \(y = x^{2}\) on \([0, 1]\) with four equal strips. Reading each rectangle’s height at the \emph{left} endpoint (left panel) keeps every rectangle below the curve, so \(L_{4} = \tfrac{7}{32}\) underestimates; reading it at the \emph{right} endpoint (right panel) lifts every rectangle above the curve, so \(R_{4} = \tfrac{15}{32}\) overestimates. The true area is trapped between.}
 \end{figureblock}
 To let \(n \to \infty\) we need the right endpoint sum as an explicit function of \(n\). For \(f(x) = x^{2}\) on \([0, 1]\) the width is \(\Delta x = \tfrac{1}{n}\) and the right endpoints are \(x_{i} = \tfrac{i}{n}\), so \(f(x_{i}) = \tfrac{i^{2}}{n^{2}}\) and
 
@@ -88,11 +89,11 @@ proved by telescoping in Appendix A (Proposition A.6). With that closed form in 
   \begin{minipage}{\linewidth}\centering
   \includegraphics[width=57.41mm]{ch06/figs/refinement-rn-x2-1}\hspace{6mm}\includegraphics[width=57.41mm]{ch06/figs/refinement-rn-x2-2}\\[6pt]
   \includegraphics[width=57.41mm]{ch06/figs/refinement-rn-x2-3}
-  \figcaption{Figure 6.2}{Refining the right endpoint sum for \(y = x^{2}\) on \([0, 1]\). With \(n = 4, 8, 16\) strips the rectangles overshoot the curve on every strip, but by less and less as \(n\) grows, so the overestimates close in on the true area from above.}
+  \figcaption{fig:6.2}{Refining the right endpoint sum for \(y = x^{2}\) on \([0, 1]\). With \(n = 4, 8, 16\) strips the rectangles overshoot the curve on every strip, but by less and less as \(n\) grows, so the overestimates close in on the true area from above.}
   \end{minipage}
 \end{figureblock}
 \begin{workedexample}
-\begin{envexample}{Example}{6.2}{}
+\begin{envexample}{Example}{ex:6.2}{}
 Find the exact area under \(y = x^{2}\) from \(0\) to \(1\) as the limit of the right endpoint sums.
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
@@ -109,12 +110,12 @@ As \(n \to \infty\), both \(\tfrac{1}{n}\) terms vanish, so
 
 \[ A = \lim_{n \to \infty} R_{n} = \frac{1}{6}\,(1)(2) = \frac{1}{3}. \]
 
-The exact area is \(\tfrac{1}{3}\), comfortably inside the bracket \(0.219 < A < 0.469\) from Example 6.1. The same limit results from the left endpoint sums \(L_{n}\): they differ from \(R_{n}\) by only the single end rectangle \(\tfrac{1}{n}\bigl(f(1) - f(0)\bigr) = \tfrac{1}{n}\), which itself tends to \(0\). Approaching the area from below or from above, we arrive at the one number. \qedmark
+The exact area is \(\tfrac{1}{3}\), comfortably inside the bracket \(0.219 < A < 0.469\) from Example \ref{ex:6.1}. The same limit results from the left endpoint sums \(L_{n}\): they differ from \(R_{n}\) by only the single end rectangle \(\tfrac{1}{n}\bigl(f(1) - f(0)\bigr) = \tfrac{1}{n}\), which itself tends to \(0\). Approaching the area from below or from above, we arrive at the one number. \qedmark
 \end{envsolution}
 \end{workedexample}
 That the left and right sums converge to a single value is exactly what lets us \emph{define} the area to be that value.
 
-\begin{envdefinition}{Definition}{6.1}{Area under a curve}
+\begin{envdefinition}{Definition}{def:6.1}{Area under a curve}
 Let \(f\) be continuous and non-negative on \([a, b]\). The \emph{area} of the region under the graph of \(f\) from \(a\) to \(b\) is
 
 \[ A = \lim_{n \to \infty} \sum_{i=1}^{n} f(x_{i})\,\Delta x, \qquad \Delta x = \frac{b - a}{n},\quad x_{i} = a + i\,\Delta x, \]
@@ -128,13 +129,13 @@ We rely on this guarantee here so that the definition gives one unambiguous valu
 
 For a badly discontinuous \(f\), sums built from different choices of sample point really can disagree. Driving every sample to where the function misbehaves gives one value, and steering clear of those places gives another. No single limit exists, and hence no area is defined. (For the equal-width left and right sums themselves the gap is only \(\bigl(f(b) - f(a)\bigr)\,\Delta x\), which closes regardless. Continuity is needed to handle the freedom in the sample points, not the choice of side.)
 \end{envcaution}
-The method is old. In the third century BCE, Archimedes found the area of a parabolic segment by trapping it between inscribed and circumscribed straight-sided figures, then bringing the two bounds together. That is the same bracket, computed by hand, that Examples 6.1 and 6.2 tightened into a limit. What the seventeenth century added was not the idea but the machinery to carry the limit out in general, which is what this chapter does.
+The method is old. In the third century BCE, Archimedes found the area of a parabolic segment by trapping it between inscribed and circumscribed straight-sided figures, then bringing the two bounds together. That is the same bracket, computed by hand, that Examples \ref{ex:6.1} and \ref{ex:6.2} tightened into a limit. What the seventeenth century added was not the idea but the machinery to carry the limit out in general, which is what this chapter does.
 
 \subsechead{The distance problem}
 Suppose we know the \emph{speed} of a moving object at every instant, but not its position, and we want the \emph{total distance} it travels over a time interval. Speed is never negative, because it measures how fast the object moves, whichever way it is heading. We take it to vary continuously. If it were \emph{constant}, the distance would be just speed times elapsed time. It is not constant, but over a \emph{short} stretch of time it is nearly so, and on that stretch \(\text{speed} \times \text{time}\) is a good estimate of the distance covered. Add these estimates over the whole interval and the total distance is approximated by a sum of exactly the form \(\sum v(t_{i})\,\Delta t\), a Riemann sum again, now with speed in place of \(f\) and elapsed time in place of width.
 
 \begin{workedexample}
-\begin{envexample}{Example}{6.3}{}
+\begin{envexample}{Example}{ex:6.3}{}
 A runner starts from rest and speeds up, her speed recorded every second for five seconds:
 
 \[ \begin{array}{c|cccccc} t\ (\text{s}) & 0 & 1 & 2 & 3 & 4 & 5 \\ \hline v\ (\text{m/s}) & 0 & 4 & 7 & 9 & 10 & 10 \end{array} \]
@@ -150,12 +151,12 @@ while the speed at the \emph{right} end of each interval (the readings at \(t = 
 
 \[ R = 1\cdot(4 + 7 + 9 + 10 + 10) = 40 \text{ m}. \]
 
-Because the speed never falls back, on each one-second stretch it stays no lower than the left reading and no higher than the right, so the left sum is a lower estimate of the distance and the right sum an upper one: the true distance lies between them, \(30 \text{ m} \le \text{distance} \le 40 \text{ m}\), about \(35\) metres. The readings alone fix only the sampled values; the bracket rests on the modelling assumption that the speed climbs without falling back between them. Readings taken every half-second, then every tenth of a second, would squeeze the two estimates together. That is the same refinement that Example 6.2 carried to the limit. \qedmark
+Because the speed never falls back, on each one-second stretch it stays no lower than the left reading and no higher than the right, so the left sum is a lower estimate of the distance and the right sum an upper one: the true distance lies between them, \(30 \text{ m} \le \text{distance} \le 40 \text{ m}\), about \(35\) metres. The readings alone fix only the sampled values; the bracket rests on the modelling assumption that the speed climbs without falling back between them. Readings taken every half-second, then every tenth of a second, would squeeze the two estimates together. That is the same refinement that Example \ref{ex:6.2} carried to the limit. \qedmark
 \end{envsolution}
 \end{workedexample}
 \begin{figureblock}
   \includegraphics[width=82.66mm]{ch06/figs/velocity-distance-steps}
-\figcaption{Figure 6.3}{The runner’s recorded speeds at one-second marks (Example 6.3), with the right endpoint rectangles whose areas sum to the overestimate \(R\). Since distance accumulates speed times time, the distance travelled is the area under the speed–time graph; the dashed line only suggests the unrecorded speed between readings.}
+\figcaption{fig:6.3}{The runner’s recorded speeds at one-second marks (Example \ref{ex:6.3}), with the right endpoint rectangles whose areas sum to the overestimate \(R\). Since distance accumulates speed times time, the distance travelled is the area under the speed–time graph; the dashed line only suggests the unrecorded speed between readings.}
 \end{figureblock}
 Set the two computations side by side. The area under a curve is \(\lim_{n\to\infty}\sum f(x_{i})\,\Delta x\); the distance from a speed is \(\lim_{n\to\infty}\sum v(t_{i})\,\Delta t\). They are the \emph{same} limit of the \emph{same} kind of sum, differing only in what the quantities are called. Indeed, for a non-negative speed the distance is exactly the area under the speed-versus-time graph. Whenever a quantity accumulates from a varying rate, the same construction returns: chop the interval, multiply rate by width, sum, and refine. The next section names this common limit the \emph{definite integral} and introduces its symbol. It also states the theorem that guarantees the limit for every continuous function.
 
@@ -169,7 +170,7 @@ Fix a function \(f\) on \([a, b]\). Exactly as before, cut \([a, b]\) into \(n\)
 
 is called a \emph{Riemann sum} for \(f\) on \([a, b]\), after Bernhard Riemann. The left, right, and midpoint sums are the special cases \(x_{i}^{*} = x_{i-1}\), \(x_{i}^{*} = x_{i}\), and \(x_{i}^{*} = \tfrac{1}{2}(x_{i-1} + x_{i})\). The definite integral is what these sums approach.
 
-\begin{envdefinition}{Definition}{6.2}{Definite integral}
+\begin{envdefinition}{Definition}{def:6.2}{Definite integral}
 Let \(f\) be defined on \([a, b]\). The \emph{definite integral of \(f\) from \(a\) to \(b\)} is
 
 \[ \int_{a}^{b} f(x)\,dx = \lim_{n \to \infty} \sum_{i=1}^{n} f(x_{i}^{*})\,\Delta x, \qquad \Delta x = \frac{b - a}{n}, \]
@@ -180,7 +181,7 @@ The symbol \(\int\), an elongated \(S\) for \emph{summa}, was Leibniz’s; it st
 
 \[ \int_{a}^{b} f(x)\,dx = \int_{a}^{b} f(t)\,dt = \int_{a}^{b} f(u)\,du. \]
 
-Leibniz settled on the elongated \(S\) in 1675, writing the integral as a continuous analogue of a sum of infinitely many infinitely thin rectangles. He based the notation on infinitesimals, an idea that was hard to make precise. The notation is still in use because it translates directly into the limit of Definition 6.2.
+Leibniz settled on the elongated \(S\) in 1675, writing the integral as a continuous analogue of a sum of infinitely many infinitely thin rectangles. He based the notation on infinitesimals, an idea that was hard to make precise. The notation is still in use because it translates directly into the limit of Definition \ref{def:6.2}.
 
 To use the integral freely we extend it to the cases \(a = b\) and \(a > b\) by convention, so that the limits of integration may sit in either order:
 
@@ -189,27 +190,27 @@ To use the integral freely we extend it to the cases \(a = b\) and \(a > b\) by 
 Reversing the limits reverses the sign, since running the strips from \(b\) back to \(a\) turns each width \(\Delta x\) into its negative.
 
 \subsechead{When does the limit exist?}
-Definition 6.2 is a strong requirement: \emph{every} choice of sample points must give the same number. For a badly behaved function this fails. Recall the caution of §6.1: there, some choices of sample point fell where \(f\) misbehaves and others steered clear of those places, so different choices gave different answers. For the functions we actually meet, continuity prevents this.
+Definition \ref{def:6.2} is a strong requirement: \emph{every} choice of sample points must give the same number. For a badly behaved function this fails. Recall the caution of §6.1: there, some choices of sample point fell where \(f\) misbehaves and others steered clear of those places, so different choices gave different answers. For the functions we actually meet, continuity prevents this.
 
-\begin{envtheorem}{Theorem}{6.1}{Integrability of continuous functions}
+\begin{envtheorem}{Theorem}{thm:6.1}{Integrability of continuous functions}
 If \(f\) is continuous on \([a, b]\), then \(f\) is integrable on \([a, b]\): the Riemann sums approach a single limit, the same for every way of slicing \([a, b]\) into strips whose widths shrink to zero, and every choice of sample points within them. The same holds if \(f\) is bounded on \([a, b]\) and continuous there except at finitely many points.
 \end{envtheorem}
 \begin{envcaution}{Caution}{}{}
-Theorem 6.1 is the one result of this chapter we do not prove. Its proof turns on a property of a continuous function on a \emph{closed} interval that is subtler than continuity at each point. That property is \emph{uniform} continuity, a single rate of continuity good across the whole interval, and it forces the gap between the largest and smallest Riemann sums to shrink to zero as the strips narrow. We take the theorem on credit and use what it gives us: for a continuous integrand the limit is always there, and the sample points may be chosen for convenience. Everything else in this chapter is proved in full.
+Theorem \ref{thm:6.1} is the one result of this chapter we do not prove. Its proof turns on a property of a continuous function on a \emph{closed} interval that is subtler than continuity at each point. That property is \emph{uniform} continuity, a single rate of continuity good across the whole interval, and it forces the gap between the largest and smallest Riemann sums to shrink to zero as the strips narrow. We take the theorem on credit and use what it gives us: for a continuous integrand the limit is always there, and the sample points may be chosen for convenience. Everything else in this chapter is proved in full.
 \end{envcaution}
 \subsechead{Net signed area}
 When \(f\) can be negative, a strip where \(f(x_{i}^{*}) < 0\) contributes a \emph{negative} term \(f(x_{i}^{*})\,\Delta x\) to the Riemann sum. So the integral counts area above the \(x\)-axis as positive and area below it as negative:
 
 \[ \int_{a}^{b} f(x)\,dx = \bigl(\text{area above the axis}\bigr) - \bigl(\text{area below the axis}\bigr), \]
 
-the \emph{net signed area} between the graph and the axis. For a non-negative \(f\) nothing lies below the axis, and this reduces to the area of Definition 6.1. The definite integral extends that idea to functions that change sign.
+the \emph{net signed area} between the graph and the axis. For a non-negative \(f\) nothing lies below the axis, and this reduces to the area of Definition \ref{def:6.1}. The definite integral extends that idea to functions that change sign.
 
 \begin{workedexample}
-\begin{envexample}{Example}{6.4}{}
+\begin{envexample}{Example}{ex:6.4}{}
 Evaluate \(\displaystyle\int_{0}^{1} x^{2}\,dx\) directly from the definition.
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
-The integrand \(x^{2}\) is continuous, so Theorem 6.1 guarantees that the limit exists and that it does not depend on the choice of sample points. We may therefore use the right-endpoint sums already computed in §6.1 (Example 6.2), where they were found to converge to \(\tfrac{1}{3}\). Hence
+The integrand \(x^{2}\) is continuous, so Theorem \ref{thm:6.1} guarantees that the limit exists and that it does not depend on the choice of sample points. We may therefore use the right-endpoint sums already computed in §6.1 (Example \ref{ex:6.2}), where they were found to converge to \(\tfrac{1}{3}\). Hence
 
 \[ \int_{0}^{1} x^{2}\,dx = \frac{1}{3}. \]
 
@@ -217,7 +218,7 @@ What §6.1 called “the area under \(y = x^{2}\)” is now, with the axis label
 \end{envsolution}
 \end{workedexample}
 \begin{workedexample}
-\begin{envexample}{Example}{6.5}{}
+\begin{envexample}{Example}{ex:6.5}{}
 Evaluate \(\displaystyle\int_{0}^{2} (x - 1)\,dx\) using net signed area.
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
@@ -230,10 +231,10 @@ The two signed pieces cancel exactly. Note the contrast with the \emph{total} ar
 \end{workedexample}
 \begin{figureblock}
   \includegraphics[width=79.9mm]{ch06/figs/signed-area-line}
-\figcaption{Figure 6.4}{The integral \(\int_{0}^{2} (x - 1)\,dx\) as net signed area. The line crosses the axis at \(x = 1\); the triangle below the axis (marked \(-\), area \(\tfrac{1}{2}\)) cancels the congruent triangle above it (marked \(+\), area \(\tfrac{1}{2}\)), so the integral is \(0\) even though the total area enclosed is \(1\).}
+\figcaption{fig:6.4}{The integral \(\int_{0}^{2} (x - 1)\,dx\) as net signed area. The line crosses the axis at \(x = 1\); the triangle below the axis (marked \(-\), area \(\tfrac{1}{2}\)) cancels the congruent triangle above it (marked \(+\), area \(\tfrac{1}{2}\)), so the integral is \(0\) even though the total area enclosed is \(1\).}
 \end{figureblock}
 \begin{workedexample}
-\begin{envexample}{Example}{6.6}{}
+\begin{envexample}{Example}{ex:6.6}{}
 Evaluate \(\displaystyle\int_{-1}^{1} \sqrt{1 - x^{2}}\,dx\) by interpreting it as an area.
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
@@ -246,12 +247,12 @@ When an integrand’s graph bounds a region whose area we already know, we can r
 \end{workedexample}
 \begin{figureblock}
   \includegraphics[width=53.8mm]{ch06/figs/semicircle-area}
-\figcaption{Figure 6.5}{Reading \(\int_{-1}^{1} \sqrt{1 - x^{2}}\,dx\) as an area (Example 6.6). The graph \(y = \sqrt{1 - x^{2}}\) is the upper half of the unit circle, so the shaded region is a semicircle of radius \(1\); its area \(\tfrac{\pi}{2}\) is the value of the integral.}
+\figcaption{fig:6.5}{Reading \(\int_{-1}^{1} \sqrt{1 - x^{2}}\,dx\) as an area (Example \ref{ex:6.6}). The graph \(y = \sqrt{1 - x^{2}}\) is the upper half of the unit circle, so the shaded region is a semicircle of radius \(1\); its area \(\tfrac{\pi}{2}\) is the value of the integral.}
 \end{figureblock}
 \subsechead{Properties of the integral}
 Because the integral is a limit of sums, the arithmetic of sums passes to it in the limit. The following properties hold for continuous \(f\) and \(g\); each is the limit of the corresponding statement about Riemann sums.
 
-\begin{envtheorem}{Theorem}{6.2}{Properties of the definite integral}
+\begin{envtheorem}{Theorem}{thm:6.2}{Properties of the definite integral}
 Let \(f\) and \(g\) be continuous on \([a, b]\) with \(a \le b\); let \(k\) be a constant; and let \(c\) satisfy \(a \le c \le b\).
 
 \begin{steps}
@@ -267,16 +268,16 @@ Let \(f\) and \(g\) be continuous on \([a, b]\) with \(a \le b\); let \(k\) be a
 
 \emph{Comparison.} If \(f \ge 0\) then every term \(f(x_{i}^{*})\,\Delta x \ge 0\), so each Riemann sum is \(\ge 0\), and a limit of non-negative numbers is non-negative. Applying this to \(g - f\), which is \(\ge 0\) exactly when \(f \le g\), and using linearity gives \(\int f \le \int g\). Squeezing \(f\) between the constants \(m\) and \(M\) then yields the two-sided bound through the constant rule.
 
-\emph{Additivity.} This is the geometric fact that the signed area over \([a, b]\) is the signed area over \([a, c]\) together with that over \([c, b]\): the region divides at the vertical line \(x = c\). Being continuous on \([a, b]\), \(f\) is continuous on \([a, c]\) and \([c, b]\) as well, so both pieces are themselves integrals. A sum-based proof slices \([a, b]\) with a division point at \(c\), where the Riemann sum splits outright into a part over \([a, c]\) and a part over \([c, b]\), and Theorem 6.1 guarantees the same limit whichever way we slice.
+\emph{Additivity.} This is the geometric fact that the signed area over \([a, b]\) is the signed area over \([a, c]\) together with that over \([c, b]\): the region divides at the vertical line \(x = c\). Being continuous on \([a, b]\), \(f\) is continuous on \([a, c]\) and \([c, b]\) as well, so both pieces are themselves integrals. A sum-based proof slices \([a, b]\) with a division point at \(c\), where the Riemann sum splits outright into a part over \([a, c]\) and a part over \([c, b]\), and Theorem \ref{thm:6.1} guarantees the same limit whichever way we slice.
 
 The sign convention \(\int_{b}^{a} = -\int_{a}^{b}\) then extends the identity to a \(c\) lying outside \([a, b]\), as long as \(f\) is continuous on the whole interval that \(a\), \(b\), and \(c\) span.
 
 \begin{workedexample}
-\begin{envexample}{Example}{6.7}{}
-Given that \(\displaystyle\int_{0}^{1} x^{2}\,dx = \tfrac{1}{3}\) (Example 6.4), and without evaluating any new limit, find \(\displaystyle\int_{0}^{1} \bigl(3x^{2} - 4\bigr)\,dx\).
+\begin{envexample}{Example}{ex:6.7}{}
+Given that \(\displaystyle\int_{0}^{1} x^{2}\,dx = \tfrac{1}{3}\) (Example \ref{ex:6.4}), and without evaluating any new limit, find \(\displaystyle\int_{0}^{1} \bigl(3x^{2} - 4\bigr)\,dx\).
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
-The properties turn one known integral into many. Linearity (Theorem 6.2, part 2) splits the integral and pulls out the constant factor, and the constant rule (part 1) evaluates the remaining piece directly:
+The properties turn one known integral into many. Linearity (Theorem \ref{thm:6.2}, part 2) splits the integral and pulls out the constant factor, and the constant rule (part 1) evaluates the remaining piece directly:
 
 \[ \begin{aligned}
           \int_{0}^{1} \bigl(3x^{2} - 4\bigr)\,dx &= 3\int_{0}^{1} x^{2}\,dx - \int_{0}^{1} 4\,dx \\[2pt]
@@ -287,11 +288,11 @@ No new Riemann sum was evaluated: the single value \(\int_{0}^{1} x^{2} = \tfrac
 \end{envsolution}
 \end{workedexample}
 \begin{workedexample}
-\begin{envexample}{Example}{6.8}{}
+\begin{envexample}{Example}{ex:6.8}{}
 Show that \(\displaystyle 3 \le \int_{1}^{4} \sqrt{x}\,dx \le 6\) without evaluating the integral.
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
-Since \(\sqrt{x}\) is continuous on \([1, 4]\), it is integrable there by Theorem 6.1, so the properties apply. On \([1, 4]\) the integrand is increasing, running from \(\sqrt{1} = 1\) up to \(\sqrt{4} = 2\), so \(1 \le \sqrt{x} \le 2\) throughout, and the bounding property (Theorem 6.2, part 4) with \(m = 1\), \(M = 2\), and \(b - a = 3\) gives
+Since \(\sqrt{x}\) is continuous on \([1, 4]\), it is integrable there by Theorem \ref{thm:6.1}, so the properties apply. On \([1, 4]\) the integrand is increasing, running from \(\sqrt{1} = 1\) up to \(\sqrt{4} = 2\), so \(1 \le \sqrt{x} \le 2\) throughout, and the bounding property (Theorem \ref{thm:6.2}, part 4) with \(m = 1\), \(M = 2\), and \(b - a = 3\) gives
 
 \[ 1 \cdot 3 \le \int_{1}^{4} \sqrt{x}\,dx \le 2 \cdot 3, \qquad\text{that is}\qquad 3 \le \int_{1}^{4} \sqrt{x}\,dx \le 6. \]
 
@@ -300,9 +301,9 @@ A single comparison, with no limit computed, traps the integral between \(3\) an
 \end{workedexample}
 \begin{figureblock}
   \includegraphics[width=79.9mm]{ch06/figs/minmax-sqrt}
-\figcaption{Figure 6.6}{Bounding \(\int_{1}^{4} \sqrt{x}\,dx\) without evaluating it (Example 6.8). On \([1, 4]\) the integrand runs from its minimum \(m = 1\) to its maximum \(M = 2\); the inscribed rectangle (area \(1 \cdot 3 = 3\)) and the circumscribed rectangle (area \(2 \cdot 3 = 6\)) trap the integral, so \(3 \le \int_{1}^{4} \sqrt{x}\,dx \le 6\).}
+\figcaption{fig:6.6}{Bounding \(\int_{1}^{4} \sqrt{x}\,dx\) without evaluating it (Example \ref{ex:6.8}). On \([1, 4]\) the integrand runs from its minimum \(m = 1\) to its maximum \(M = 2\); the inscribed rectangle (area \(1 \cdot 3 = 3\)) and the circumscribed rectangle (area \(2 \cdot 3 = 6\)) trap the integral, so \(3 \le \int_{1}^{4} \sqrt{x}\,dx \le 6\).}
 \end{figureblock}
-We now have the definite integral on a firm footing: a number defined as a limit of Riemann sums, guaranteed to exist whenever the integrand is continuous, measuring net signed area, and obeying the linearity, additivity, and comparison rules that make it possible to reason about it. Yet every value we have produced has come the hard way, either from a limit of sums, as in Example 6.4, or from a picture, as in Example 6.5. Only a few integrals can be evaluated either way. The next section removes this obstacle: the Fundamental Theorem of Calculus connects the definite integral to the derivative, and makes the great majority of integrals easy to evaluate.
+We now have the definite integral on a firm footing: a number defined as a limit of Riemann sums, guaranteed to exist whenever the integrand is continuous, measuring net signed area, and obeying the linearity, additivity, and comparison rules that make it possible to reason about it. Yet every value we have produced has come the hard way, either from a limit of sums, as in Example \ref{ex:6.4}, or from a picture, as in Example \ref{ex:6.5}. Only a few integrals can be evaluated either way. The next section removes this obstacle: the Fundamental Theorem of Calculus connects the definite integral to the derivative, and makes the great majority of integrals easy to evaluate.
 
 
 \sechead{6.3}{The Fundamental Theorem of Calculus}
@@ -310,7 +311,7 @@ Two sections of work have built the definite integral into a well-defined number
 
 The reverse of differentiation has a name of its own.
 
-\begin{envdefinition}{Definition}{6.3}{Antiderivative}
+\begin{envdefinition}{Definition}{def:6.3}{Antiderivative}
 A function \(F\) is an \emph{antiderivative} of \(f\) on an open interval \(I\) if \(F'(x) = f(x)\) for every \(x\) in \(I\).
 \end{envdefinition}
 For example, \(\tfrac{1}{3}x^{3}\) is an antiderivative of \(x^{2}\), since its derivative is \(x^{2}\); so is \(\tfrac{1}{3}x^{3} + 5\). Reading each differentiation rule of Chapters 2–4 backwards produces an antiderivative, and the Fundamental Theorem is about to make antiderivatives the key to every definite integral.
@@ -324,9 +325,9 @@ The variable of integration is written \(t\) to keep it distinct from the upper 
 
 \begin{figureblock}
   \includegraphics[width=85.19mm]{ch06/figs/accumulation-sliver}
-\figcaption{Figure 6.7}{The accumulation function \(g(x) = \int_{a}^{x} f(t)\,dt\) is the shaded area up to \(x\). Advancing \(x\) by a small \(h\) adds the thin strip over \([x, x + h]\), of width \(h\) and height about \(f(x)\), so \(g\) grows by roughly \(f(x)\,h\). Its rate of change is the current height \(f(x)\). The strip is widened for visibility.}
+\figcaption{fig:6.7}{The accumulation function \(g(x) = \int_{a}^{x} f(t)\,dt\) is the shaded area up to \(x\). Advancing \(x\) by a small \(h\) adds the thin strip over \([x, x + h]\), of width \(h\) and height about \(f(x)\), so \(g\) grows by roughly \(f(x)\,h\). Its rate of change is the current height \(f(x)\). The strip is widened for visibility.}
 \end{figureblock}
-\begin{envtheorem}{Theorem}{6.3}{Fundamental Theorem of Calculus, Part 1}
+\begin{envtheorem}{Theorem}{thm:6.3}{Fundamental Theorem of Calculus, Part 1}
 If \(f\) is continuous on \([a, b]\), then the function \(g\) defined by
 
 \[ g(x) = \int_{a}^{x} f(t)\,dt, \qquad a \le x \le b, \]
@@ -338,14 +339,14 @@ is continuous on \([a, b]\) and differentiable on \((a, b)\), and
 In Leibniz notation, \(\displaystyle\frac{d}{dx}\int_{a}^{x} f(t)\,dt = f(x)\): the accumulation function \(g\) is an antiderivative of \(f\) on \((a, b)\).
 \end{envtheorem}
 \begin{envproof}{Proof}{}{}
-Fix \(x\) in \((a, b)\) and take \(h \ne 0\) small enough that \(x + h\) lies in \([a, b]\). By additivity of the integral (Theorem 6.2),
+Fix \(x\) in \((a, b)\) and take \(h \ne 0\) small enough that \(x + h\) lies in \([a, b]\). By additivity of the integral (Theorem \ref{thm:6.2}),
 
 \[ \begin{aligned}
         g(x + h) - g(x) &= \int_{a}^{x+h} f(t)\,dt - \int_{a}^{x} f(t)\,dt \\[2pt]
                         &= \int_{x}^{x+h} f(t)\,dt.
       \end{aligned} \]
 
-Consider the difference quotient \(\dfrac{g(x + h) - g(x)}{h} = \dfrac{1}{h}\displaystyle\int_{x}^{x+h} f(t)\,dt\). We claim it lies between the least and greatest values of \(f\) on the closed interval joining \(x\) and \(x + h\). For \(h > 0\), the comparison bound (Theorem 6.2, part 4) applied on \([x, x+h]\) gives, with \(m_{h}\) and \(M_{h}\) the minimum and maximum of \(f\) there,
+Consider the difference quotient \(\dfrac{g(x + h) - g(x)}{h} = \dfrac{1}{h}\displaystyle\int_{x}^{x+h} f(t)\,dt\). We claim it lies between the least and greatest values of \(f\) on the closed interval joining \(x\) and \(x + h\). For \(h > 0\), the comparison bound (Theorem \ref{thm:6.2}, part 4) applied on \([x, x+h]\) gives, with \(m_{h}\) and \(M_{h}\) the minimum and maximum of \(f\) there,
 
 \[ m_{h}\,h \le \int_{x}^{x+h} f(t)\,dt \le M_{h}\,h, \]
 
@@ -361,13 +362,13 @@ It remains to see that \(g\) is continuous on the whole closed interval, endpoin
 \end{envproof}
 \begin{figureblock}
   \includegraphics[width=85.64mm]{ch06/figs/ftc-trap}
-\figcaption{Figure 6.8}{The trapping step in the proof of Part 1. Over \([x, x + h]\) the added area \(\int_{x}^{x+h} f\) lies between the inscribed rectangle of height \(m_{h} = \min f\) and the circumscribed rectangle of height \(M_{h} = \max f\), attained at points \(u_{h}, v_{h}\) in the interval. Dividing by \(h\) brackets the difference quotient between \(m_{h}\) and \(M_{h}\); as \(h \to 0\) both tend to \(f(x)\).}
+\figcaption{fig:6.8}{The trapping step in the proof of Part 1. Over \([x, x + h]\) the added area \(\int_{x}^{x+h} f\) lies between the inscribed rectangle of height \(m_{h} = \min f\) and the circumscribed rectangle of height \(M_{h} = \max f\), attained at points \(u_{h}, v_{h}\) in the interval. Dividing by \(h\) brackets the difference quotient between \(m_{h}\) and \(M_{h}\); as \(h \to 0\) both tend to \(f(x)\).}
 \end{figureblock}
 \begin{envcaution}{Caution}{}{}
 Two points. First, the letter under the integral sign is only a placeholder, so \(\int_{a}^{x} f(t)\,dt\) and \(\int_{a}^{x} f(s)\,ds\) are the same function of \(x\). Writing \(\int_{a}^{x} f(x)\,dx\), with \(x\) doing double duty as both limit and dummy, is a genuine error. Second, Part 1 requires nothing of \(f\) beyond continuity, so it differentiates accumulation functions we cannot evaluate: \(g(x) = \int_{0}^{x} e^{-t^{2}}\,dt\) has \(g'(x) = e^{-x^{2}}\) exactly, even though \(e^{-t^{2}}\) has no antiderivative expressible in elementary functions. The theorem \emph{constructs} an antiderivative where no formula for one exists.
 \end{envcaution}
 \begin{workedexample}
-\begin{envexample}{Example}{6.9}{}
+\begin{envexample}{Example}{ex:6.9}{}
 Differentiate: (a) \(\displaystyle g(x) = \int_{1}^{x} \sqrt{1 + t^{2}}\,dt\); and (b) \(\displaystyle h(x) = \int_{0}^{x^{3}} \cos t\,dt\).
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
@@ -383,7 +384,7 @@ A variable limit of integration is differentiated by Part 1; a \emph{function} i
 \end{envsolution}
 \end{workedexample}
 \begin{workedexample}
-\begin{envexample}{Example}{6.10}{}
+\begin{envexample}{Example}{ex:6.10}{}
 Differentiate (a) \(\displaystyle g(x) = \int_{x}^{1} \sqrt{1 + t^{2}}\,dt\); and (b) \(\displaystyle h(x) = \int_{x^{2}}^{x^{3}} \cos t\,dt\).
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
@@ -403,7 +404,7 @@ Each end contributes the integrand evaluated at that limit, times the limit’s 
 \subsechead{Evaluating integrals}
 Part 1 built one antiderivative of \(f\), the accumulation function. Part 2 does the reverse: it evaluates a definite integral from \emph{any} antiderivative whatsoever, and most antiderivatives are far easier to write down than \(\int_{a}^{x} f\).
 
-\begin{envtheorem}{Theorem}{6.4}{Fundamental Theorem of Calculus, Part 2}
+\begin{envtheorem}{Theorem}{thm:6.4}{Fundamental Theorem of Calculus, Part 2}
 If \(f\) is continuous on \([a, b]\) and \(F\) is \emph{any} antiderivative of \(f\) on an open interval containing \([a, b]\), then
 
 \[ \int_{a}^{b} f(x)\,dx = F(b) - F(a). \]
@@ -420,7 +421,7 @@ Finally \(g(b) = \int_{a}^{b} f(t)\,dt\) and \(g(a) = \int_{a}^{a} f(t)\,dt = 0\
 \end{envproof}
 The difference \(F(b) - F(a)\) is written \(\bigl[F(x)\bigr]_{a}^{b}\) (or \(F(x)\big|_{a}^{b}\)) when the antiderivative is displayed. Any added constant is pointless here because it cancels in the subtraction. We therefore take the simplest antiderivative available.
 
-\begin{envstrategy}{Strategy}{6.1}{Evaluating a definite integral}
+\begin{envstrategy}{Strategy}{strat:6.1}{Evaluating a definite integral}
 To evaluate \(\displaystyle\int_{a}^{b} f(x)\,dx\) by the Fundamental Theorem:
 
 \begin{steps}
@@ -430,7 +431,7 @@ To evaluate \(\displaystyle\int_{a}^{b} f(x)\,dx\) by the Fundamental Theorem:
 \end{steps}
 \end{envstrategy}
 \begin{workedexample}
-\begin{envexample}{Example}{6.11}{}
+\begin{envexample}{Example}{ex:6.11}{}
 Evaluate \(\displaystyle\int_{0}^{1} x^{2}\,dx\) and \(\displaystyle\int_{1}^{4} \sqrt{x}\,dx\) by the Fundamental Theorem, and compare with the earlier sections.
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
@@ -446,11 +447,11 @@ The whole limit-of-Riemann-sums computation of §6.1–6.2 reduces to one line. 
                                     &= \frac{2}{3}(8 - 1) = \frac{14}{3}.
         \end{aligned} \]
 
-In Example 6.8 the bounding property could only confine this integral to the range \([3, 6]\); the Fundamental Theorem gives the exact value \(\tfrac{14}{3} \approx 4.67\), which indeed sits there. \qedmark
+In Example \ref{ex:6.8} the bounding property could only confine this integral to the range \([3, 6]\); the Fundamental Theorem gives the exact value \(\tfrac{14}{3} \approx 4.67\), which indeed sits there. \qedmark
 \end{envsolution}
 \end{workedexample}
 \begin{workedexample}
-\begin{envexample}{Example}{6.12}{}
+\begin{envexample}{Example}{ex:6.12}{}
 Evaluate \(\displaystyle\int_{0}^{\pi} \sin x\,dx\).
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
@@ -473,7 +474,7 @@ The two parts are one statement seen from opposite ends. Part 1 differentiates a
 \sechead{6.4}{Indefinite Integrals and the Net Change Theorem}
 The Fundamental Theorem reduces the evaluation of a definite integral to finding an antiderivative, so we now need a notation and a working table for antiderivatives. This section provides both, and then rereads the theorem as a statement about accumulated change, the form most useful in practice.
 
-\begin{envdefinition}{Definition}{6.4}{Indefinite integral}
+\begin{envdefinition}{Definition}{def:6.4}{Indefinite integral}
 The \emph{indefinite integral} of \(f\), written \(\int f(x)\,dx\), denotes the family of all antiderivatives of \(f\). The statement
 
 \[ \int f(x)\,dx = F(x) + C \]
@@ -506,7 +507,7 @@ So on either side of the origin \(\dfrac{d}{dx}\ln\lvert x\rvert = \dfrac{1}{x}\
 The absolute value extends the antiderivative to negative \(x\) as well as positive. One caution: \(1/x\) is undefined at \(x = 0\), and its domain falls into the two separate intervals \((-\infty, 0)\) and \((0, \infty)\); the formula is valid on any interval that avoids the origin, but \(C\) may take different values on the two sides.
 
 \begin{workedexample}
-\begin{envexample}{Example}{6.13}{}
+\begin{envexample}{Example}{ex:6.13}{}
 Find (a) \(\displaystyle\int \bigl(x^{3} - 6x\bigr)\,dx\) and (b) \(\displaystyle\int \left(2e^{x} - \frac{5}{x}\right)dx\).
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
@@ -522,7 +523,7 @@ A single constant \(C\) absorbs the constants from every term. We can always che
 \end{envsolution}
 \end{workedexample}
 \begin{workedexample}
-\begin{envexample}{Example}{6.14}{}
+\begin{envexample}{Example}{ex:6.14}{}
 Evaluate \(\displaystyle\int_{1}^{2} \frac{1}{x}\,dx\).
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
@@ -534,7 +535,7 @@ The area under \(y = 1/x\) from \(1\) to \(2\) is exactly \(\ln 2 \approx 0.693\
 \end{envsolution}
 \end{workedexample}
 \begin{workedexample}
-\begin{envexample}{Example}{6.15}{}
+\begin{envexample}{Example}{ex:6.15}{}
 Evaluate \(\displaystyle\int_{0}^{1} \frac{1}{1 + x^{2}}\,dx\).
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
@@ -548,14 +549,14 @@ A rational integrand with no area to read off has produced the number \(\tfrac{\
 \subsechead{The Net Change Theorem}
 Read the Fundamental Theorem with the integrand named as a derivative. If a quantity \(F\) changes at the rate \(F'\), then integrating that rate over \([a, b]\) recovers the total change in \(F\).
 
-\begin{envtheorem}{Theorem}{6.5}{Net Change Theorem}
+\begin{envtheorem}{Theorem}{thm:6.5}{Net Change Theorem}
 If \(F'\) is continuous on \([a, b]\), then
 
 \[ \int_{a}^{b} F'(x)\,dx = F(b) - F(a). \]
 
 The integral of a rate of change is the net change in the quantity.
 \end{envtheorem}
-This is nothing more than Part 2 of the Fundamental Theorem (Theorem 6.4) with the integrand written as \(F'\): \(F\) is an antiderivative of \(F'\), so the theorem applies verbatim. What is new is how we read it. If \(V'(t)\) is the rate at which water flows into a tank, \(\int_{t_{1}}^{t_{2}} V'(t)\,dt\) is the net volume added; if \(C'(x)\) is a marginal cost, \(\int_{x_{1}}^{x_{2}} C'(x)\,dx\) is the added cost of raising production from \(x_{1}\) to \(x_{2}\). The most important case is motion.
+This is nothing more than Part 2 of the Fundamental Theorem (Theorem \ref{thm:6.4}) with the integrand written as \(F'\): \(F\) is an antiderivative of \(F'\), so the theorem applies verbatim. What is new is how we read it. If \(V'(t)\) is the rate at which water flows into a tank, \(\int_{t_{1}}^{t_{2}} V'(t)\,dt\) is the net volume added; if \(C'(x)\) is a marginal cost, \(\int_{x_{1}}^{x_{2}} C'(x)\,dx\) is the added cost of raising production from \(x_{1}\) to \(x_{2}\). The most important case is motion.
 
 For an object moving along a line with velocity \(v(t)\), position is an antiderivative of velocity. The \emph{displacement} is the net change in position, and the Net Change Theorem gives it as
 
@@ -568,7 +569,7 @@ This is a signed quantity: motion in the negative direction subtracts. The \emph
 To compute the distance we split the interval at the instants where \(v\) changes sign, integrate \(v\) on each piece, and add the absolute values.
 
 \begin{workedexample}
-\begin{envexample}{Example}{6.16}{}
+\begin{envexample}{Example}{ex:6.16}{}
 A particle moves along a line with velocity \(v(t) = t^{2} - 4\) (in m/s) for \(0 \le t \le 3\). Find its displacement and the total distance it travels.
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
@@ -592,7 +593,7 @@ The particle covers \(\tfrac{23}{3}\) metres of ground while ending only \(3\) m
 \end{workedexample}
 \begin{figureblock}
   \includegraphics[width=79.9mm]{ch06/figs/velocity-signed-area}
-\figcaption{Figure 6.9}{Displacement versus distance for \(v(t) = t^{2} - 4\) on \([0, 3]\) (Example 6.16). The velocity is negative on \([0, 2)\) — the region below the axis, marked \(-\), of area \(\tfrac{16}{3}\) — and positive on \((2, 3]\) — the region above, marked \(+\), of area \(\tfrac{7}{3}\). The displacement is the net \(\tfrac{7}{3} - \tfrac{16}{3} = -3\) m, while the total distance adds the magnitudes, \(\tfrac{16}{3} + \tfrac{7}{3} = \tfrac{23}{3}\) m.}
+\figcaption{fig:6.9}{Displacement versus distance for \(v(t) = t^{2} - 4\) on \([0, 3]\) (Example \ref{ex:6.16}). The velocity is negative on \([0, 2)\) — the region below the axis, marked \(-\), of area \(\tfrac{16}{3}\) — and positive on \((2, 3]\) — the region above, marked \(+\), of area \(\tfrac{7}{3}\). The displacement is the net \(\tfrac{7}{3} - \tfrac{16}{3} = -3\) m, while the total distance adds the magnitudes, \(\tfrac{16}{3} + \tfrac{7}{3} = \tfrac{23}{3}\) m.}
 \end{figureblock}
 The definite integral is now, in principle, a solved problem: find an antiderivative, subtract its values, and read the result as an area or a net change. In practice a gap remains. The table above applies directly only to functions that are visibly some derivative run backwards. An integrand with an inner function tucked inside another often has no direct entry there. The next section carries the chain rule over to the antiderivative side, and with it the single most useful technique for finding antiderivatives that the table alone cannot.
 
@@ -600,7 +601,7 @@ The definite integral is now, in principle, a solved problem: find an antideriva
 \sechead{6.5}{The Substitution Rule}
 The table of §6.4 antidifferentiates a function directly only when the function is visibly a derivative written plainly. Many integrands contain an inner function inside another function, the pattern to which the chain rule applies. To integrate \(\int 2x\sqrt{1 + x^{2}}\,dx\) there is no direct table entry, yet \(2x\) is exactly the derivative of the inner expression \(1 + x^{2}\), and that is no accident. Applying the chain rule in reverse gives the method of \emph{substitution}. It is the single most useful technique of integration.
 
-\begin{envtheorem}{Theorem}{6.6}{The Substitution Rule}
+\begin{envtheorem}{Theorem}{thm:6.6}{The Substitution Rule}
 If \(u = g(x)\) is differentiable and \(f\) is continuous on the range of \(g\), then
 
 \[ \int f\bigl(g(x)\bigr)\,g'(x)\,dx = \int f(u)\,du. \]
@@ -614,7 +615,7 @@ So \(F(g(x))\) is an antiderivative of \(f(g(x))\,g'(x)\), which means \(\int f(
 \end{envproof}
 In practice the rule is applied through the differential notation of §5.3. Setting \(u = g(x)\) gives \(du = g'(x)\,dx\), and the rule reads as the literal replacement of \(g(x)\) by \(u\) and of \(g'(x)\,dx\) by \(du\). The art is entirely in the choice of \(u\): pick an inner function whose derivative is also present, up to a constant factor.
 
-\begin{envstrategy}{Strategy}{6.2}{Integration by substitution}
+\begin{envstrategy}{Strategy}{strat:6.2}{Integration by substitution}
 To evaluate an integral by substitution:
 
 \begin{steps}
@@ -625,7 +626,7 @@ To evaluate an integral by substitution:
 \end{steps}
 \end{envstrategy}
 \begin{workedexample}
-\begin{envexample}{Example}{6.17}{}
+\begin{envexample}{Example}{ex:6.17}{}
 Find \(\displaystyle\int 2x\sqrt{1 + x^{2}}\,dx\).
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
@@ -637,7 +638,7 @@ Differentiating the answer returns \(2x\sqrt{1 + x^{2}}\), confirming it. \qedma
 \end{envsolution}
 \end{workedexample}
 \begin{workedexample}
-\begin{envexample}{Example}{6.18}{}
+\begin{envexample}{Example}{ex:6.18}{}
 Find \(\displaystyle\int x^{2}\bigl(x^{3} + 1\bigr)^{5}\,dx\).
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
@@ -649,7 +650,7 @@ Only a \emph{constant} factor may be moved across the integral sign in this way;
 \end{envsolution}
 \end{workedexample}
 \begin{workedexample}
-\begin{envexample}{Example}{6.19}{}
+\begin{envexample}{Example}{ex:6.19}{}
 Find \(\displaystyle\int \frac{2x}{1 + x^{2}}\,dx\).
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
@@ -663,13 +664,13 @@ where the absolute value is dropped because \(1 + x^{2} > 0\) throughout. This i
 \subsechead{Substitution in definite integrals}
 A definite integral can be substituted just as an indefinite one, provided the limits are handled with care. There are two correct options: finish the antiderivative and restore \(x\) before applying the limits, or — usually cleaner — carry the substitution through the limits themselves.
 
-\begin{envtheorem}{Theorem}{6.7}{Substitution in a definite integral}
+\begin{envtheorem}{Theorem}{thm:6.7}{Substitution in a definite integral}
 If \(g'\) is continuous on \([a, b]\) and \(f\) is continuous on the range of \(g\), then
 
 \[ \int_{a}^{b} f\bigl(g(x)\bigr)\,g'(x)\,dx = \int_{g(a)}^{g(b)} f(u)\,du. \]
 \end{envtheorem}
 \begin{envproof}{Proof}{}{}
-Let \(F\) be an antiderivative of \(f\). As in Theorem 6.6, \(F(g(x))\) is an antiderivative of \(f(g(x))\,g'(x)\), so by Part 2 of the Fundamental Theorem (Theorem 6.4),
+Let \(F\) be an antiderivative of \(f\). As in Theorem \ref{thm:6.6}, \(F(g(x))\) is an antiderivative of \(f(g(x))\,g'(x)\), so by Part 2 of the Fundamental Theorem (Theorem \ref{thm:6.4}),
 
 \[ \begin{aligned}
         \int_{a}^{b} f\bigl(g(x)\bigr)\,g'(x)\,dx &= \Bigl[F\bigl(g(x)\bigr)\Bigr]_{a}^{b} = F\bigl(g(b)\bigr) - F\bigl(g(a)\bigr) \\[2pt]
@@ -682,7 +683,7 @@ Both sides equal \(F(g(b)) - F(g(a))\); the substitution merely reads the same d
 When a definite integral is converted to \(u\), the limits must be converted too. Writing \(\int_{a}^{b} \dots\,du\) with the \emph{original} \(x\)-limits still attached to a \(u\)-integrand is a common and costly error: the numbers \(a\) and \(b\) are values of \(x\), not of \(u\). Either change the limits to \(g(a)\) and \(g(b)\) and evaluate in \(u\), or return to \(x\) first and use the original limits. Never blend the two.
 \end{envcaution}
 \begin{workedexample}
-\begin{envexample}{Example}{6.20}{}
+\begin{envexample}{Example}{ex:6.20}{}
 Evaluate \(\displaystyle\int_{0}^{2} 2x\bigl(1 + x^{2}\bigr)^{3}\,dx\).
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
@@ -698,7 +699,7 @@ When the interval is symmetric about the origin, the symmetry of the integrand �
 
 Picture the two cases. For an even function, the graph on \([-a, 0]\) is the graph on \([0, a]\) reflected across the vertical axis. Each thin strip on the left therefore has a matching strip on the right with the same height and the same sign, so the matched signed areas \emph{add}: the integral is twice the integral over \([0, a]\). An odd function’s graph on \([-a, 0]\) is the \([0, a]\) graph turned a half-turn about the origin, so each left strip is the mirror of a right strip carrying the \emph{opposite} sign; the matched contributions \emph{cancel} and the integral is zero. The substitution \(u = -x\) below turns this picture into a proof.
 
-\begin{envtheorem}{Theorem}{6.8}{Integrals of symmetric functions}
+\begin{envtheorem}{Theorem}{thm:6.8}{Integrals of symmetric functions}
 Suppose \(f\) is continuous on \([-a, a]\).
 
 \begin{steps}
@@ -714,11 +715,11 @@ Split at the origin: \(\int_{-a}^{a} f = \int_{-a}^{0} f + \int_{0}^{a} f\). In 
 If \(f\) is even, \(f(-u) = f(u)\), so this equals \(\int_{0}^{a} f(u)\,du\) and the two pieces add to \(2\int_{0}^{a} f\). If \(f\) is odd, \(f(-u) = -f(u)\), so it equals \(-\int_{0}^{a} f(u)\,du\), which cancels the second piece and leaves \(0\). \qedmark
 \end{envproof}
 \begin{workedexample}
-\begin{envexample}{Example}{6.21}{}
+\begin{envexample}{Example}{ex:6.21}{}
 Evaluate \(\displaystyle\int_{-1}^{1} \bigl(x^{4} + x^{3}\bigr)\,dx\).
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
-The integrand splits into an even part and an odd part. Over the symmetric interval \([-1, 1]\), the even \(x^{4}\) doubles its integral over \([0, 1]\), while the odd \(x^{3}\) integrates to zero (Theorem 6.8):
+The integrand splits into an even part and an odd part. Over the symmetric interval \([-1, 1]\), the even \(x^{4}\) doubles its integral over \([0, 1]\), while the odd \(x^{3}\) integrates to zero (Theorem \ref{thm:6.8}):
 
 \[ \int_{-1}^{1} \bigl(x^{4} + x^{3}\bigr)\,dx = 2\int_{0}^{1} x^{4}\,dx + 0 = 2\left[\frac{x^{5}}{5}\right]_{0}^{1} = \frac{2}{5}. \]
 
@@ -728,11 +729,11 @@ The odd term contributes nothing at all, so recognizing this saves the work of i
 Substitution is the reverse of the chain rule, and the first entry in the toolkit of integration techniques. It applies to integrands with a single inner function whose derivative is present, up to a constant factor. This is a wide class, but it does not include all integrands. Products of unrelated functions, powers of trigonometric functions, and rational functions each require different techniques. Those techniques are the subject of Chapter 8.
 
 \subsechead{Chapter summary}
-This chapter built the integral from the ground up and bound it to the derivative. Section 6.1 met the area and distance problems and discovered them to be one limit of Riemann sums. Section 6.2 named that limit the \emph{definite integral} \(\int_{a}^{b} f(x)\,dx\) (Definition 6.2), established that a continuous integrand is integrable (Theorem 6.1, taken on credit), read the integral as net signed area, and collected its properties (Theorem 6.2).
+This chapter built the integral from the ground up and bound it to the derivative. Section 6.1 met the area and distance problems and discovered them to be one limit of Riemann sums. Section 6.2 named that limit the \emph{definite integral} \(\int_{a}^{b} f(x)\,dx\) (Definition \ref{def:6.2}), established that a continuous integrand is integrable (Theorem \ref{thm:6.1}, taken on credit), read the integral as net signed area, and collected its properties (Theorem \ref{thm:6.2}).
 
-Section 6.3 proved the \emph{Fundamental Theorem of Calculus}: Part 1 (Theorem 6.3) shows the accumulation function \(\int_{a}^{x} f\) is an antiderivative of \(f\), so differentiating an integral returns the integrand; Part 2 (Theorem 6.4) evaluates any definite integral from a single antiderivative. That the derivative of an accumulated area is the height, and that an area is therefore recovered from an antiderivative, is the central fact of the subject.
+Section 6.3 proved the \emph{Fundamental Theorem of Calculus}: Part 1 (Theorem \ref{thm:6.3}) shows the accumulation function \(\int_{a}^{x} f\) is an antiderivative of \(f\), so differentiating an integral returns the integrand; Part 2 (Theorem \ref{thm:6.4}) evaluates any definite integral from a single antiderivative. That the derivative of an accumulated area is the height, and that an area is therefore recovered from an antiderivative, is the central fact of the subject.
 
-Section 6.4 introduced the notation \(\int f(x)\,dx\) for the \emph{indefinite integral} (Definition 6.4) and a working table, singled out \(\int \tfrac{1}{x}\,dx = \ln\lvert x\rvert + C\), and reread the theorem as the Net Change Theorem (Theorem 6.5). Section 6.5 turned the chain rule around into the Substitution Rule (Theorems 6.6–6.7) and used it to exploit symmetry (Theorem 6.8).
+Section 6.4 introduced the notation \(\int f(x)\,dx\) for the \emph{indefinite integral} (Definition \ref{def:6.4}) and a working table, singled out \(\int \tfrac{1}{x}\,dx = \ln\lvert x\rvert + C\), and reread the theorem as the Net Change Theorem (Theorem \ref{thm:6.5}). Section 6.5 turned the chain rule around into the Substitution Rule (Theorems \ref{thm:6.6}–\ref{thm:6.7}) and used it to exploit symmetry (Theorem \ref{thm:6.8}).
 
 The results worth carrying forward are few and central:
 
