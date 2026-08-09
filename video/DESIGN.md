@@ -387,7 +387,7 @@ meta:
     - id: radians
       text: "$\\theta$ in radians (arc length $=\\theta$)"
       first_use_unit: sector_inequality
-      source: "chapter3-print-standalone.html §3.1 · radians 預告句"
+      source: "chapter3.tex §3.1 · radians 預告句"
 ```
 
 每筆 `{id, text, first_use_unit, source}` 必須在 `first_use_unit` 渲出對應 `scaffold.flag: <id>`；「是否用到／何處

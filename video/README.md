@@ -1,11 +1,11 @@
 # video/ 課程影片產線（第二代）
 
-將一節 HTML 講義（handout kit）轉成一支帶旁白課程影片的單一進入點。取代第一代的
+將一節講義轉成一支帶旁白課程影片的單一進入點。取代第一代的
 `tools/manim_*` 產線（現已凍結）。
 
 - **改了什麼、為什麼：** [DESIGN.md](DESIGN.md)
 - **所有審核閘一覽（七層 + meta-gate + 各節狀態）：** [REVIEW_GATES.md](REVIEW_GATES.md)
-- **輸入：** HTML 講義（handout kit，[`../handout/`](../handout/)）的各節（由人閱讀、手寫產出內容稿）。**各章權威檔**——ch01：[`chapter1-print-standalone.html`](../handout/html/standalone/chapter1-print-standalone.html)（2026-06-10 拍板；原 `chapter1-standalone.html`，2026-06-13 重組後改此名，編輯源在 `handout/html/fragments/ch01/sec-*.html`）；ch02+ 屆時在此補。2026-06-10 前的輸入源為 `../chapters/*.tex`（已換源，§1.1/§1.6 原型基於它）。
+- **輸入：** 講義 **LaTeX 線**（[`../handout/latex/`](../handout/latex/)）的各節（由人閱讀、手寫產出內容稿）。**各章權威檔＝`../handout/latex/src/<ch>/<name>.tex`（唯一內容源；閱讀版＝`dist/<ch>/<name>.pdf`）**——2026-08-09 LaTeX 統一拍板（U5，[`../handout/latex/KICKOFF-latex-unification.md`](../handout/latex/KICKOFF-latex-unification.md)）。沿革：2026-06-10 前輸入為第一代 `../chapters/*.tex`（§1.1/§1.6 原型基於它）→ 2026-06-10 換 HTML standalone（ch01 拍板檔＝`chapter1-print-standalone.html`，其 `source:` 錨沿用於既有內容稿，屬歷史紀錄不改）→ 2026-08-09 換回 LaTeX（源升格）。既有內容稿／storyboard 的 `source:` 錨照舊；**新內容稿一律錨 `<name>.tex`**（格式見 [`CONTENT_METHODOLOGY.md`](CONTENT_METHODOLOGY.md) §6）。
 - **輸出：** `output/`（gitignored）
 
 ## 結構

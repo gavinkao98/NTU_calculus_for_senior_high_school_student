@@ -6,7 +6,7 @@
 >
 > **血統與定位：** 萃取自 [`legacy/MANIM_STORYBOARD.md`](../legacy/MANIM_STORYBOARD.md)（gen-1, v1.6）的教學精神，**剝離**其 gen-1 工程約束（spoken-math 改寫大表、reveal 策略、9-template catalog、lint／schema），**適配** gen-2（正典 narration 內嵌 LaTeX 只寫一次；真旁白走 MiMo＝逐節輕量口語派生，非大規則表；intro／outro first-class）。它是 gen-1 方法論在 gen-2 的繼任者。
 >
-> **相關文件：** 視覺系統見 [`DESIGN.md`](DESIGN.md) 與 [`pipeline/visuals/theme.py`](pipeline/visuals/theme.py)（Direction D 版面＋Times 字型）；講義（HTML handout kit）的撰寫契約與環境詞彙見 [`../handout/html/CONTRACT-html-writing.md`](../handout/html/CONTRACT-html-writing.md)；本產線總覽見 [`README.md`](README.md)。
+> **相關文件：** 視覺系統見 [`DESIGN.md`](DESIGN.md) 與 [`pipeline/visuals/theme.py`](pipeline/visuals/theme.py)（Direction D 版面＋Times 字型）；講義環境詞彙（2026-08-09 LaTeX 統一後）定義在 [`../handout/latex/template/calcbook.sty`](../handout/latex/template/calcbook.sty) 語意層（歷史 HTML 契約＝[`../handout/html/CONTRACT-html-writing.md`](../handout/html/CONTRACT-html-writing.md)，環境同構：`env-theorem`→`envtheorem`）；本產線總覽見 [`README.md`](README.md)。
 >
 > **交付物：** 每節一份**內容稿**（格式見 §6）——`.md` 為 source of truth，且**一律附上編譯後的 standalone HTML 審核稿**供使用者閱讀（見 §6「交付形式」，2026-06-14 使用者指示）。
 
@@ -52,7 +52,7 @@
 
 ### 環境 → 教學單元對應
 
-第一刀照下表切；邊角看註解。（講義環境詞彙定義在 [`../handout/html/CONTRACT-html-writing.md`](../handout/html/CONTRACT-html-writing.md)。）**注意：下表給的是教學單元的 `kind`（教學角色），不是工程 template——template 是第二階段的事。**
+第一刀照下表切；邊角看註解。（表中 `env-*` 詞彙沿 HTML 時代 class 名；LaTeX 源的環境名去連字號一一同構——`env-theorem`→`envtheorem`、`workedexample`／`ol.steps`→`workedexample`／`steps` 環境，定義在 [`../handout/latex/template/calcbook.sty`](../handout/latex/template/calcbook.sty) 語意層。）**注意：下表給的是教學單元的 `kind`（教學角色），不是工程 template——template 是第二階段的事。**
 
 | 講義環境（kit class） | 單元 `kind` | 處理 |
 |---|---|---|
@@ -64,7 +64,7 @@
 | `env-remark`（具 `env-name` 的具名規則） | `proposition`／`definition` | 當輕量命題處理。 |
 | `env-remark`（短附註） | —（併入鄰段 narration） | 2 句的提醒不需要自己的單元。 |
 | `env-caution`（1–3 句陷阱警示） | —（併入其警示對象的單元） | 用警示語氣融進該單元 narration；自成教學點（如標準反例）才獨立，多為 `counterexample`。 |
-| `figure`（`data-fig` 註冊於 standalone 的 `FIGS`，或 inline SVG） | `visual` | **Redraw, don't reproduce**（見 §5）；多半值得做成動畫。 |
+| `figureblock`＋`\figcaption`（繪製源＝[`../handout/figkit/`](../handout/figkit/README.md) harness 的 `FIGS`） | `visual` | **Redraw, don't reproduce**（見 §5）；多半值得做成動畫。 |
 | 散文裡的幾何主張 | `visual`（補充） | 講義只用散文講鏡射／相交／形狀時，**SHOULD** 加一個視覺單元（symbol-heavy 例外見 §5）。 |
 
 ### 邊角：具名規則 + 其演示圖
@@ -233,7 +233,7 @@ pedagogy／OTF 閘與 six-lens **界定不重疊的切片**：`.md` 內容是否
 | 欄位 | 內容 |
 |---|---|
 | `id` | 單元識別碼。snake_case、描述**教學重點**而非書本結構（好：`why_square_fails`；壞：`scene_3`）。本節內唯一。 |
-| `source` | 對應講義環境＋手寫編號（如 `chapter1-print-standalone.html §1.1 · Definition 1.1`；prose 段落用就近環境錨點描述、圖用 `data-fig` id 或 `Figure N.M`）。 |
+| `source` | 對應講義環境＋編號（2026-08-09 起錨 LaTeX 源：`chapter1.tex §1.1 · Definition 1.1`；prose 段落用就近環境錨點描述、圖用 `\figcaption` 的 label key（如 `fig:1.1`）或 `Figure N.M`。既有內容稿的 `…-print-standalone.html` 錨屬歷史紀錄，不回改）。 |
 | `learning_goal` | 一句話：學生看完此單元學會什麼。 |
 | `kind` | 教學角色：`motivation` / `definition` / `theorem` / `proof` / `proposition` / `example` / `counterexample` / `procedure` / `visual` / `recap` / `forward_ref` … |
 | `narration` | 口語完整稿（英文；數學依 §4 口語化原則；intro／outro 無此欄）。 |
@@ -257,7 +257,7 @@ pedagogy／OTF 閘與 six-lens **界定不重疊的切片**：`.md` 內容是否
 
 ```
 id: one_to_one_definition
-source: chapter1-print-standalone.html §1.1 · Definition 1.1（one-to-one）
+source: chapter1.tex §1.1 · Definition 1.1（one-to-one）
 learning_goal: 認得讓函數可逆的形式條件——one-to-one。
 kind: definition
 narration: |
@@ -274,7 +274,7 @@ animation_cue: （無——靜態即可）
 
 ```
 id: why_square_fails
-source: chapter1-print-standalone.html §1.1 · Remark 1.1（Horizontal line test）+ Figure 1.1（data-fig: hlt）
+source: chapter1.tex §1.1 · Remark 1.1（Horizontal line test）+ Figure 1.1（fig:1.1）
 learning_goal: 看見「重複的輸出」如何讓反函數無法定義。
 kind: counterexample
 narration: |
