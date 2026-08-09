@@ -1,0 +1,870 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Chapter 6 — Print build</title>
+
+<!-- ════════════════════════════════════════════════════════════════
+     圖片寬度控制面板 —— 直接改下面的數字即可（px 固定寬 / % 相對頁寬）
+     並排或多格圖（1.1 / 1.7 / 1.9）控制的是「每一格」的寬度。
+     ════════════════════════════════════════════════════════════════ -->
+<style>
+:root {
+}
+
+</style>
+
+<!-- Google Fonts: Inter for UI -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<!-- New Computer Modern (prose/text faces) — matches MathJax 4 "mathjax-newcm" math font.
+     Source: npm web-computer-modern@1.1.0-new-cm-7-0-2 via jsDelivr. License: GUST Font License.
+     10pt optical size ("Serif 10"). NOTE: filenames contain %20-encoded spaces — keep them. -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<style>
+@font-face {
+  font-family: "New Computer Modern";
+  font-style: normal; font-weight: 400; font-display: swap;
+  src: url("https://cdn.jsdelivr.net/npm/web-computer-modern@1.1.0-new-cm-7-0-2/woff2/WebCM%20Serif%2010%20Regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "New Computer Modern";
+  font-style: italic; font-weight: 400; font-display: swap;
+  src: url("https://cdn.jsdelivr.net/npm/web-computer-modern@1.1.0-new-cm-7-0-2/woff2/WebCM%20Serif%2010%20Italic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "New Computer Modern";
+  font-style: normal; font-weight: 700; font-display: swap;
+  src: url("https://cdn.jsdelivr.net/npm/web-computer-modern@1.1.0-new-cm-7-0-2/woff2/WebCM%20Serif%2010%20Bold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "New Computer Modern";
+  font-style: italic; font-weight: 700; font-display: swap;
+  src: url("https://cdn.jsdelivr.net/npm/web-computer-modern@1.1.0-new-cm-7-0-2/woff2/WebCM%20Serif%2010%20BoldItalic.woff2") format("woff2");
+}
+</style>
+
+<!-- MathJax 4 (CHTML output with inline line-breaking) -->
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']],
+    macros: {
+      arccsc: '\\operatorname{arccsc}',
+      arcsec: '\\operatorname{arcsec}',
+      arccot: '\\operatorname{arccot}'
+    }
+  },
+  chtml: {
+    mtextInheritFont: true,
+    matchFontHeight: true
+  },
+  output: {
+    displayOverflow: 'linebreak',
+    linebreaks: {
+      inline: true,
+      width: '100%',
+      lineleading: 0.2
+    }
+  },
+  startup: { typeset: false }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js"></script>
+
+<style>
+/* ============================================================
+   skin-hs.css — inlined + modified: Times New Roman + MathJax
+   ============================================================ */
+.paper {
+  --c-primary: oklch(0.50 0.13 245);
+  --c-caution: oklch(0.50 0.155 25);
+  --c-aux: oklch(0.55 0.01 260);
+  --c-axis: #474b54;
+  --ink: #1b1c1f;
+  --ink-soft: #565a63;
+  --ink-faint: #8a8e98;
+  --paper: #ffffff;
+  --rule: #e5e7eb;
+  --fig-w-pair: 250px;     /* 並排(pair)圖每張的預設寬度（整體一次調） */
+  --fig-w-single: 100%;    /* 單張/triple/grid 圖的預設最大寬度（整體一次調） */
+  /* 個別覆寫：在任一 <figure> 標籤加 style="--fig-w: 320px" 即可只改那一張 */
+  --serif: "New Computer Modern", "Latin Modern Roman", "Times New Roman", Times, Georgia, serif;
+  --ui: "Inter", -apple-system, system-ui, sans-serif;
+  --a-concept:  oklch(0.50 0.13 55);
+  --a-result:   oklch(0.50 0.13 245);
+  --a-practice: oklch(0.50 0.13 152);
+  --a-aside:    oklch(0.50 0.02 260);
+  --a-caution:  oklch(0.50 0.155 25);
+  --a-strategy: oklch(0.50 0.13 290);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: var(--fs-base, 17.5px);
+  line-height: var(--lh-base, 1.62);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  box-sizing: border-box;
+}
+.paper *, .paper *::before, .paper *::after { box-sizing: border-box; }
+.paper .page { padding: 52px 58px 64px; max-width: 760px; margin: 0 auto; }
+.skin-hs .page { hyphens: auto; -webkit-hyphens: auto; }
+.skin-hs p, .skin-hs li { text-align: justify; text-justify: inter-word; }
+.paper p { margin: 0 0 .85em; text-wrap: pretty; }
+.paper em { font-style: italic; }
+.paper .informal { font-style: italic; color: var(--ink-soft); }
+.paper ol { margin: .2em 0 .9em; padding-left: 1.5em; }
+.paper li { margin: .35em 0; text-wrap: pretty; }
+.paper .warmup { counter-reset: wu; list-style: none; padding-left: 0; }
+.paper .warmup > li { counter-increment: wu; position: relative; padding-left: 2.1em; }
+.paper .warmup > li::before {
+  content: "(" counter(wu, lower-alpha) ")";
+  position: absolute; left: 0; top: 0;
+  font-family: var(--ui); font-size: .82em; color: var(--ink-faint); line-height: 1.85;
+}
+.paper mjx-container[display="true"] { margin: .55em 0 !important; overflow-x: auto; overflow-y: hidden; }
+.paper mjx-container[display="true"]::-webkit-scrollbar { display: none; }
+.paper .qed { display: block; text-align: right; margin: -1.62em 0 0; height: 1.62em; pointer-events: none; }
+.paper .qed::after {
+  content: ""; display: inline-block; width: .56em; height: .56em;
+  border: 1.3px solid var(--ink-soft);
+}
+.paper .env-body > :has(+ .qed) { margin-bottom: 0; display: flow-root; }
+.paper .env-body::after { content: ""; display: block; clear: both; }
+.paper .sec-head {
+  margin-top: 2.7em; padding-top: 1.35em;
+  border-top: 1px solid var(--rule); margin-bottom: 1.5em;
+}
+.sheet-body > .sec-head:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+.paper .sec-kicker {
+  font-family: var(--ui); font-size: .7rem; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--c-primary); font-weight: 700; margin-bottom: .55em;
+}
+.paper .sec-title { font-weight: 600; font-size: 2rem; line-height: 1.12; letter-spacing: -.012em; margin: 0; }
+.paper .sec-no { color: var(--c-primary); margin-right: .5em; font-weight: 600; }
+.paper .subsec-head {
+  font-family: var(--ui); font-weight: 600; font-size: 1.08rem; margin: 1.9em 0 .65em;
+  display: flex; align-items: center; gap: .55em; color: var(--ink);
+}
+.paper .subsec-head::before { content: ""; width: 18px; height: 3px; background: var(--c-primary); border-radius: 2px; }
+.paper .figure { margin: 1.7em 0; text-align: center; }
+.paper .figure-art { display: flex; justify-content: center; }
+.paper .figure-art--pair { gap: 26px; }
+.paper .fig-svg { width: 100%; max-width: var(--fig-w, var(--fig-w-pair)); height: auto; }
+.paper .figure-art:not(.figure-art--pair) .fig-svg { max-width: var(--fig-w, var(--fig-w-single)); }
+.paper figcaption {
+  font-family: var(--ui); font-size: .8em; line-height: 1.5;
+  color: var(--ink-soft); margin-top: .7em; text-wrap: pretty;
+  max-width: none; text-align: left; display: table; margin-inline: auto;
+}
+.paper .fig-no { font-weight: 600; color: var(--ink); margin-right: .4em; }
+.paper figcaption mjx-container { font-size: .95em; }
+.paper .axis { stroke: var(--c-axis); stroke-width: 1.25; fill: none; stroke-linecap: round; }
+.paper .curve { stroke: var(--c-primary); stroke-width: 2.2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.paper .refline { stroke: var(--c-caution); stroke-width: 1.3; stroke-dasharray: 4.5 3.5; fill: none; stroke-linecap: round; opacity: .85; }
+.paper .secant { stroke: var(--c-aux); stroke-width: 1.6; stroke-dasharray: 5 3.5; fill: none; stroke-linecap: round; }
+.paper .tangent { stroke: var(--c-caution); stroke-width: 2; fill: none; stroke-linecap: round; }
+/* fill primitives (ch6 M2: rect + area items in buildPlot) */
+.paper .fill-area { fill: color-mix(in srgb, var(--c-primary) 15%, transparent); stroke: none; }
+.paper .fill-pos  { fill: color-mix(in srgb, var(--c-primary) 17%, transparent); stroke: none; }
+.paper .fill-neg  { fill: color-mix(in srgb, var(--c-caution) 22%, transparent); stroke: none; }
+.paper .rect-lo   { fill: color-mix(in srgb, var(--ink) 9%, transparent); stroke: var(--c-primary); stroke-width: 1.1; }
+.paper .rect-hi   { fill: none; stroke: var(--c-primary); stroke-width: 1.4; stroke-dasharray: 4 2.5; }
+.paper .rect-sum  { fill: color-mix(in srgb, var(--c-primary) 13%, transparent); stroke: var(--c-primary); stroke-width: 1.1; }
+.paper .curve-log { stroke: var(--c-caution); stroke-width: 2.2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.paper .idline { stroke: var(--c-aux); stroke-width: 1.3; stroke-dasharray: 4.5 3.5; fill: none; stroke-linecap: round; opacity: .85; }
+.paper .dot { fill: var(--ink); }
+.paper .bubble { stroke: var(--c-aux); stroke-width: 1.4; fill: none; }
+.paper .arrow-fwd { stroke: var(--c-primary); stroke-width: 2; fill: none; }
+.paper .arrow-bwd { stroke: var(--c-caution); stroke-width: 2; fill: none; }
+.paper .fig-svg text { font-family: var(--ui); font-size: 13px; }
+.paper .axlab { fill: var(--c-aux); font-style: italic; }
+.paper .lab-curve { fill: var(--c-primary); font-style: italic; }
+.paper .lab-ref, .paper .lab-ref-b { fill: var(--c-caution); }
+.paper .ptlab { fill: var(--ink-soft); font-size: 12px; }
+.paper .setlab { fill: var(--ink); font-weight: 600; font-size: 14.5px; text-anchor: middle; }
+
+/* env blocks */
+.skin-hs .env {
+  --accent: var(--a-aside);
+  margin: 1.2em 0; padding-left: 16px;
+  border-left: 2.5px solid color-mix(in srgb, var(--accent) 38%, var(--paper));
+}
+.skin-hs .env-definition  { --accent: var(--a-concept); }
+.skin-hs .env-theorem, .skin-hs .env-proposition, .skin-hs .env-corollary { --accent: var(--a-result); }
+.skin-hs .env-example, .skin-hs .env-solution, .skin-hs .env-exercise { --accent: var(--a-practice); }
+.skin-hs .env-remark { --accent: var(--a-aside); }
+.skin-hs .env-head {
+  display: flex; align-items: baseline; gap: .5em; flex-wrap: wrap;
+  margin: 0 0 .55em; font-family: var(--ui);
+}
+.skin-hs .env-kicker {
+  font-size: .62rem; letter-spacing: .07em; text-transform: uppercase; font-weight: 700;
+  color: var(--paper); background: var(--accent); padding: 3px 10px; border-radius: 999px; line-height: 1.5;
+}
+.skin-hs .env-num { font-weight: 700; color: var(--accent); font-size: .94em; }
+.skin-hs .env-name { font-style: italic; font-weight: 400; color: var(--ink-soft); font-family: var(--serif); font-size: 1em; }
+.skin-hs .env-body > p:first-child { margin-top: 0; }
+.skin-hs .env-body > :last-child { margin-bottom: 0; }
+.skin-hs .env-theorem .env-body, .skin-hs .env-proposition .env-body { font-style: italic; }
+.skin-hs .env-theorem .env-body mjx-container, .skin-hs .env-proposition .env-body mjx-container { font-style: normal; }
+.skin-hs .env-definition em { font-style: italic; }
+.skin-hs .env-remark { color: var(--ink-soft); font-size: .97em; }
+.skin-hs .env-remark .env-kicker { background: transparent; color: var(--a-aside); border: 1px solid color-mix(in srgb, var(--a-aside) 45%, var(--paper)); }
+.skin-hs .env-proof { --accent: var(--a-result); }
+.skin-hs .env-proof .env-kicker {
+  background: transparent; color: var(--a-result); font-style: italic; letter-spacing: .04em;
+  border: 1px solid color-mix(in srgb, var(--a-result) 45%, var(--paper));
+}
+.skin-hs .qed-proof::after { border-color: var(--ink); }
+.skin-hs .workedexample {
+  margin: 1.6em 0; padding-left: 16px;
+  border-left: 2.5px solid color-mix(in srgb, var(--a-practice) 38%, var(--paper));
+  display: flow-root;
+}
+.skin-hs .workedexample .env { margin: .7em 0; padding-left: 0; border-left: 0; }
+.skin-hs .env-solution .env-kicker { background: transparent; color: var(--a-practice); border: 1px solid color-mix(in srgb, var(--a-practice) 45%, var(--paper)); }
+.skin-hs > .env-cont { margin-top: 0; padding-top: .82em; }
+.skin-hs > .env:has(+ .env-cont) { margin-bottom: 0; display: flow-root; }
+.skin-hs > .env-example:has(+ .env-solution) { margin-bottom: 0; }
+.skin-hs > .env-example + .env-solution { margin-top: 0; padding-top: .72em; }
+.skin-hs > .env-cont, .skin-hs > .env-example, .skin-hs > .env-solution { display: flow-root; }
+.skin-hs .env-exercise .env-kicker { background: transparent; color: var(--a-practice); border: 1px solid var(--a-practice); }
+.skin-hs .env-caution, .skin-hs .env-strategy {
+  padding: 15px 20px; border-radius: 8px; margin: 1.4em 0;
+  border-left-width: 4px; border-left-style: solid;
+}
+.skin-hs .env-caution {
+  --accent: var(--a-caution);
+  background: color-mix(in srgb, var(--a-caution) 7%, var(--paper));
+  border: 1px solid color-mix(in srgb, var(--a-caution) 22%, var(--paper));
+  border-left-color: var(--a-caution);
+}
+.skin-hs .env-strategy {
+  --accent: var(--a-strategy);
+  background: color-mix(in srgb, var(--a-strategy) 7%, var(--paper));
+  border: 1px solid color-mix(in srgb, var(--a-strategy) 22%, var(--paper));
+  border-left-color: var(--a-strategy);
+}
+.skin-hs .env-caution .env-name, .skin-hs .env-strategy .env-name { color: var(--ink-soft); }
+.skin-hs .env-strategy .steps { margin-bottom: 0; }
+.skin-hs.vivid .env { border-left-color: color-mix(in srgb, var(--accent) 70%, var(--paper)); border-left-width: 3px; }
+.skin-hs.vivid .workedexample { border-left-color: color-mix(in srgb, var(--a-practice) 70%, var(--paper)); border-left-width: 3px; }
+.skin-hs.vivid .env-kicker { font-size: .64rem; padding: 3.5px 11px; }
+
+/* ============================================================
+   figs.css — inlined + modified for MathJax
+   ============================================================ */
+.paper .fig-svg { height: auto; max-width: 100%; overflow: visible; }
+.paper .figure-art { display: flex; justify-content: center; align-items: flex-start; gap: 24px; flex-wrap: wrap; }
+.paper .figure-art--pair { gap: 24px; }
+.paper .figure-art--pair .fig-panel { flex: 1 1 220px; max-width: 300px; }
+.paper .figure-art--triple { gap: 18px; }
+.paper .figure-art--triple .fig-panel { flex: 1 1 190px; max-width: 240px; }
+.paper .figure-art--grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; justify-items: center; }
+.paper .figure-art--grid .fig-panel { max-width: 240px; }
+.paper .fig-panel { display: flex; flex-direction: column; align-items: center; }
+.paper .fig-note {
+  font-family: var(--ui); font-size: .8em; line-height: 1.45;
+  color: var(--ink-soft); margin-top: .55em; text-align: center; text-wrap: pretty;
+}
+.paper .fig-note mjx-container { font-size: .98em; }
+.paper .fig-fo { overflow: visible; }
+.paper .fig-lyr { position: relative; width: 100%; height: 100%; font-family: var(--serif); }
+.paper .fig-lbl {
+  position: absolute; white-space: nowrap; line-height: 1; font-size: 15px;
+  text-shadow: 0 0 2px var(--paper), 0 0 2px var(--paper), 0 0 1px var(--paper);
+}
+.paper .fig-lbl mjx-container { font-size: 1em; }
+.paper .fig-lbl.a-curve { color: var(--c-primary); }
+.paper .fig-lbl.a-ref   { color: var(--c-caution); }
+.paper .fig-lbl.a-ax    { color: var(--ink-soft); }
+.paper .fig-lbl.a-pt    { color: var(--ink); }
+.paper .tbl-wrap { overflow-x: auto; overflow-y: hidden; margin: 1em 0; }
+.paper table.tbl {
+  border-collapse: collapse; margin: 0 auto; font-family: var(--ui); font-size: .96em;
+  border-top: 1.7px solid var(--ink); border-bottom: 1.7px solid var(--ink);
+}
+.paper table.tbl th, .paper table.tbl td { padding: .3em .8em; text-align: center; white-space: nowrap; }
+.paper table.tbl thead th { border-bottom: 1.1px solid var(--ink-soft); font-weight: 500; }
+.paper table.tbl .rowlab { text-align: right; padding-right: 1em; color: var(--ink-soft); }
+.paper table.tbl mjx-container { font-size: .98em; }
+.paper .sec + .sec { margin-top: 2.6em; padding-top: 2.2em; border-top: 1px solid var(--rule); }
+.paper .para-head { font-weight: 600; margin: 1.1em 0 .4em; }
+.paper ul { margin: .3em 0 .95em; padding-left: 1.3em; }
+.paper ul li { margin: .35em 0; text-align: justify; }
+.paper ul li::marker { color: var(--a-result); }
+.paper .chapter-head { margin-bottom: 1.6em; }
+.paper .chapter-head .ch-kicker {
+  font-family: var(--ui); font-size: .72rem; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--a-result); font-weight: 700; margin-bottom: .6em;
+}
+.paper .chapter-head .ch-title { font-weight: 600; font-size: 2.5rem; line-height: 1.08; letter-spacing: -.02em; margin: 0; }
+.paper .lead { font-size: 1.05em; }
+
+/* ============================================================
+   print.css — inlined (A4 sheet layout + paginator)
+   ============================================================ */
+@page { size: A4; margin: 0; }
+.sheet {
+  position: relative; box-sizing: border-box;
+  width: 210mm; height: 297mm;
+  padding: 20mm 28mm 20mm 32mm;
+  background: #fff; overflow: hidden;
+}
+.sheet-header {
+  position: absolute; top: 11mm; left: 32mm; right: 28mm;
+  font: 500 8.5pt "Inter", sans-serif; color: #9aa0ac; letter-spacing: .02em;
+}
+.sheet-footer {
+  position: absolute; bottom: 8.5mm; left: 0; right: 0;
+  text-align: center; font: 500 9pt "Inter", sans-serif; color: #82868f;
+}
+.sheet-body { height: 100%; --accent: oklch(0.50 0.13 245); }
+.sheet-body.paper { box-shadow: none; border-radius: 0; max-width: none; background: #fff; }
+.sheet-body .page { padding: 0; max-width: none; margin: 0; }
+.sheet-body.paper { font-size: 12pt; line-height: 1.55; }
+.sheet, .sheet * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.sheet-body > :first-child { margin-top: 0 !important; }
+.sheet-body .sec + .sec { border-top: 0; margin-top: 0; padding-top: 0; }
+.sheet-body .qed { margin-top: -1.55em; height: 1.55em; }
+.sheet-body .env-body::after { display: none; content: none; }
+.sheet-body .env-cont { margin-top: 0; }
+.sheet-body .env-cont > .env-body > :first-child { margin-top: 0; }
+@media screen {
+  body { background: #6f727b; margin: 0; }
+  .sheet { box-shadow: 0 3px 18px rgba(0,0,0,.3); margin: 9mm auto; }
+}
+@media print {
+  body { background: #fff; margin: 0; }
+  .sheet { box-shadow: none; margin: 0; break-after: page; }
+  .sheet:last-child { break-after: auto; }
+  .print-toolbar, #boot { display: none !important; }
+}
+
+/* ============================================================
+   page-level
+   ============================================================ */
+.print-toolbar {
+  position: fixed; top: 14px; right: 16px; z-index: 1000;
+  display: flex; align-items: center; gap: 10px; font-family: "Inter", system-ui, sans-serif;
+}
+.print-toolbar button {
+  font: 600 13px "Inter", sans-serif; color: #fff; background: oklch(0.50 0.13 245);
+  border: 0; padding: 9px 16px; border-radius: 8px; cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0,0,0,.25);
+}
+.print-toolbar button:disabled { opacity: .5; cursor: default; }
+.print-toolbar button:not(:disabled):hover { background: oklch(0.45 0.13 245); }
+.print-toolbar .status {
+  font-size: 12px; color: #e8eaf0; background: rgba(0,0,0,.4);
+  padding: 6px 11px; border-radius: 999px; backdrop-filter: blur(6px);
+}
+#boot {
+  position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: "Inter", system-ui, sans-serif; color: #cdd2dc; background: #6f727b; z-index: 900;
+}
+#source { position: absolute; left: -10000px; top: 0; width: 683px; }
+</style>
+</head>
+<body>
+
+<div id="boot">Preparing …</div>
+
+<div class="print-toolbar">
+  <span class="status" id="status">Preparing …</span>
+  <button id="printBtn" disabled>Print / Save as PDF</button>
+</div>
+
+<div id="source"><div class="paper skin-hs vivid"><div class="page" id="page"></div></div></div>
+<div id="pages"></div>
+
+<!-- Section fragments (inlined) -->
+
+<!-- BEGIN-CONTENT-FRAGMENTS -->
+<template id="figs-only">
+<figure class="figure" data-fig="riemann-lr-x2">
+    <figcaption><span class="fig-no">Figure 6.1</span> Approximating the area under \(y = x^{2}\) on \([0, 1]\) with four equal strips. Reading each rectangle’s height at the <em>left</em> endpoint (left panel) keeps every rectangle below the curve, so \(L_{4} = \tfrac{7}{32}\) underestimates; reading it at the <em>right</em> endpoint (right panel) lifts every rectangle above the curve, so \(R_{4} = \tfrac{15}{32}\) overestimates. The true area is trapped between.</figcaption>
+  </figure>
+<figure class="figure" data-fig="refinement-rn-x2">
+    <figcaption><span class="fig-no">Figure 6.2</span> Refining the right endpoint sum for \(y = x^{2}\) on \([0, 1]\). With \(n = 4, 8, 16\) strips the rectangles overshoot the curve on every strip, but by less and less as \(n\) grows, so the overestimates close in on the true area from above.</figcaption>
+  </figure>
+<figure class="figure" data-fig="velocity-distance-steps">
+    <figcaption><span class="fig-no">Figure 6.3</span> The runner’s recorded speeds at one-second marks (Example 6.3), with the right endpoint rectangles whose areas sum to the overestimate \(R\). Since distance accumulates speed times time, the distance travelled is the area under the speed–time graph; the dashed line only suggests the unrecorded speed between readings.</figcaption>
+  </figure>
+<figure class="figure" data-fig="signed-area-line">
+    <figcaption><span class="fig-no">Figure 6.4</span> The integral \(\int_{0}^{2} (x - 1)\,dx\) as net signed area. The line crosses the axis at \(x = 1\); the triangle below the axis (marked \(-\), area \(\tfrac{1}{2}\)) cancels the congruent triangle above it (marked \(+\), area \(\tfrac{1}{2}\)), so the integral is \(0\) even though the total area enclosed is \(1\).</figcaption>
+  </figure>
+<figure class="figure" data-fig="semicircle-area">
+    <figcaption><span class="fig-no">Figure 6.5</span> Reading \(\int_{-1}^{1} \sqrt{1 - x^{2}}\,dx\) as an area (Example 6.6). The graph \(y = \sqrt{1 - x^{2}}\) is the upper half of the unit circle, so the shaded region is a semicircle of radius \(1\); its area \(\tfrac{\pi}{2}\) is the value of the integral.</figcaption>
+  </figure>
+<figure class="figure" data-fig="minmax-sqrt">
+    <figcaption><span class="fig-no">Figure 6.6</span> Bounding \(\int_{1}^{4} \sqrt{x}\,dx\) without evaluating it (Example 6.8). On \([1, 4]\) the integrand runs from its minimum \(m = 1\) to its maximum \(M = 2\); the inscribed rectangle (area \(1 \cdot 3 = 3\)) and the circumscribed rectangle (area \(2 \cdot 3 = 6\)) trap the integral, so \(3 \le \int_{1}^{4} \sqrt{x}\,dx \le 6\).</figcaption>
+  </figure>
+<figure class="figure" data-fig="accumulation-sliver">
+    <figcaption><span class="fig-no">Figure 6.7</span> The accumulation function \(g(x) = \int_{a}^{x} f(t)\,dt\) is the shaded area up to \(x\). Advancing \(x\) by a small \(h\) adds the thin strip over \([x, x + h]\), of width \(h\) and height about \(f(x)\), so \(g\) grows by roughly \(f(x)\,h\). Its rate of change is the current height \(f(x)\). The strip is widened for visibility.</figcaption>
+  </figure>
+<figure class="figure" data-fig="ftc-trap">
+    <figcaption><span class="fig-no">Figure 6.8</span> The trapping step in the proof of Part 1. Over \([x, x + h]\) the added area \(\int_{x}^{x+h} f\) lies between the inscribed rectangle of height \(m_{h} = \min f\) and the circumscribed rectangle of height \(M_{h} = \max f\), attained at points \(u_{h}, v_{h}\) in the interval. Dividing by \(h\) brackets the difference quotient between \(m_{h}\) and \(M_{h}\); as \(h \to 0\) both tend to \(f(x)\).</figcaption>
+  </figure>
+<figure class="figure" data-fig="velocity-signed-area">
+    <figcaption><span class="fig-no">Figure 6.9</span> Displacement versus distance for \(v(t) = t^{2} - 4\) on \([0, 3]\) (Example 6.16). The velocity is negative on \([0, 2)\) — the region below the axis, marked \(-\), of area \(\tfrac{16}{3}\) — and positive on \((2, 3]\) — the region above, marked \(+\), of area \(\tfrac{7}{3}\). The displacement is the net \(\tfrac{7}{3} - \tfrac{16}{3} = -3\) m, while the total distance adds the magnitudes, \(\tfrac{16}{3} + \tfrac{7}{3} = \tfrac{23}{3}\) m.</figcaption>
+  </figure>
+</template>
+<!-- END-CONTENT-FRAGMENTS -->
+<!-- plot.js — inlined -->
+<script>
+(function () {
+  var uid = 0;
+  var PI = Math.PI;
+  function piTex(v) {
+    var map = {};
+    map[(-2 * PI).toFixed(4)] = "-2\\pi";
+    map[(-PI).toFixed(4)] = "-\\pi";
+    map[(-PI / 2).toFixed(4)] = "-\\tfrac{\\pi}{2}";
+    map[(PI / 2).toFixed(4)] = "\\tfrac{\\pi}{2}";
+    map[PI.toFixed(4)] = "\\pi";
+    map[(2 * PI).toFixed(4)] = "2\\pi";
+    map[(0).toFixed(4)] = "0";
+    var hit = map[v.toFixed(4)];
+    if (hit != null) return hit;
+    if (Math.abs(v - Math.round(v)) < 1e-9) return String(Math.round(v)); // plain integers
+    return undefined;
+  }
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+  function anchorTransform(anchor, vAnchor) {
+    var tx = anchor === "start" ? "0" : anchor === "end" ? "-100%" : "-50%";
+    var ty = vAnchor === "top" ? "0" : vAnchor === "bottom" ? "-100%" : "-50%";
+    return "translate(" + tx + "," + ty + ")";
+  }
+  function buildPlot(cfg) {
+    var w = cfg.w, h = cfg.h;
+    var pad = Object.assign({ t: 16, r: 18, b: 20, l: 22 }, cfg.pad || {});
+    var xmin = cfg.xmin, xmax = cfg.xmax, ymin = cfg.ymin, ymax = cfg.ymax;
+    var iw = w - pad.l - pad.r, ih = h - pad.t - pad.b;
+    var SX = function(x) { return pad.l + ((x - xmin) / (xmax - xmin)) * iw; };
+    var SY = function(y) { return h - pad.b - ((y - ymin) / (ymax - ymin)) * ih; };
+    var id = "pl" + (++uid);
+    var parts = [], labels = [];
+    function pushLabel(o) { labels.push(o); }
+    parts.push('<svg viewBox="0 0 ' + w + ' ' + h + '" style="width:' + w + 'px" class="fig-svg" role="img" aria-label="' + esc(cfg.aria || "graph") + '" preserveAspectRatio="xMidYMid meet">');
+    parts.push('<defs><marker id="' + id + 'a" markerWidth="8" markerHeight="8" refX="5.4" refY="2.8" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L5.4,2.8 L0,5.6" fill="none" stroke="var(--c-axis)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>');
+    if (cfg.axes !== false) {
+      var x0 = Math.min(Math.max(0, xmin), xmax), y0 = Math.min(Math.max(0, ymin), ymax);
+      var ax0 = SX(xmin), ax1 = SX(xmax), ayBase = SY(y0);
+      parts.push('<path d="M' + ax0.toFixed(1) + ',' + ayBase.toFixed(1) + ' H' + (ax1 - 1).toFixed(1) + '" class="axis" marker-end="url(#' + id + 'a)"/>');
+      var ay0 = SY(ymin), ay1 = SY(ymax), axBase = SX(x0);
+      parts.push('<path d="M' + axBase.toFixed(1) + ',' + ay0.toFixed(1) + ' V' + (ay1 + 1).toFixed(1) + '" class="axis" marker-end="url(#' + id + 'a)"/>');
+      if (cfg.xlabel) pushLabel({ px: ax1 + 1, py: ayBase + 4, tex: cfg.xlabel, anchor: "start", vAnchor: "top", cls: "a-ax", size: 13 });
+      if (cfg.ylabel) pushLabel({ px: axBase - 5, py: ay1 + 1, tex: cfg.ylabel, anchor: "end", vAnchor: "top", cls: "a-ax", size: 13 });
+      (cfg.xticks || []).forEach(function(t) {
+        var px = SX(t.x);
+        parts.push('<line x1="' + px.toFixed(1) + '" y1="' + (ayBase - 3).toFixed(1) + '" x2="' + px.toFixed(1) + '" y2="' + (ayBase + 3).toFixed(1) + '" class="axis"/>');
+        var tex = t.tex != null ? t.tex : (t.label != null ? null : piTex(t.x));
+        if (tex != null) pushLabel({ px: px, py: ayBase + 6, tex: tex, anchor: "middle", vAnchor: "top", cls: "a-pt", size: 12 });
+        else if (t.label != null) pushLabel({ px: px, py: ayBase + 6, text: t.label, anchor: "middle", vAnchor: "top", cls: "a-pt", size: 12 });
+      });
+      (cfg.yticks || []).forEach(function(t) {
+        var py = SY(t.y);
+        parts.push('<line x1="' + (axBase - 3).toFixed(1) + '" y1="' + py.toFixed(1) + '" x2="' + (axBase + 3).toFixed(1) + '" y2="' + py.toFixed(1) + '" class="axis"/>');
+        var tex = t.tex != null ? t.tex : (t.label != null ? null : piTex(t.y));
+        if (tex != null) pushLabel({ px: axBase - 6, py: py, tex: tex, anchor: "end", vAnchor: "middle", cls: "a-pt", size: 12 });
+        else if (t.label != null) pushLabel({ px: axBase - 6, py: py, text: t.label, anchor: "end", vAnchor: "middle", cls: "a-pt", size: 12 });
+      });
+    }
+    (cfg.items || []).forEach(function(it) {
+      if (it.type === "curve") {
+        var cls = it.cls || "curve", n = it.samples || 240, a = it.domain[0], b = it.domain[1];
+        var d = "", pen = false;
+        for (var i = 0; i <= n; i++) {
+          var x = a + (b - a) * (i / n), y = it.fn(x);
+          if (!isFinite(y) || y < ymin - (ymax - ymin) * 0.04 || y > ymax + (ymax - ymin) * 0.04) { pen = false; continue; }
+          var px = SX(x).toFixed(2), py = SY(y).toFixed(2);
+          d += (pen ? "L" : "M") + px + "," + py + " "; pen = true;
+        }
+        if (d) parts.push('<path d="' + d.trim() + '" class="' + cls + '"/>');
+      } else if (it.type === "vline") {
+        parts.push('<line x1="' + SX(it.x).toFixed(1) + '" y1="' + SY(ymin).toFixed(1) + '" x2="' + SX(it.x).toFixed(1) + '" y2="' + SY(ymax).toFixed(1) + '" class="' + (it.cls || "refline") + '"/>');
+      } else if (it.type === "hline") {
+        var ha = it.from != null ? it.from : xmin, hb = it.to != null ? it.to : xmax;
+        parts.push('<line x1="' + SX(ha).toFixed(1) + '" y1="' + SY(it.y).toFixed(1) + '" x2="' + SX(hb).toFixed(1) + '" y2="' + SY(it.y).toFixed(1) + '" class="' + (it.cls || "refline") + '"/>');
+      } else if (it.type === "seg") {
+        parts.push('<line x1="' + SX(it.x1).toFixed(1) + '" y1="' + SY(it.y1).toFixed(1) + '" x2="' + SX(it.x2).toFixed(1) + '" y2="' + SY(it.y2).toFixed(1) + '" class="' + (it.cls || "curve") + '"/>');
+      } else if (it.type === "dot") {
+        var r = it.r || 3.0;
+        if (it.hollow) parts.push('<circle cx="' + SX(it.x).toFixed(1) + '" cy="' + SY(it.y).toFixed(1) + '" r="' + r + '" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.5"/>');
+        else parts.push('<circle cx="' + SX(it.x).toFixed(1) + '" cy="' + SY(it.y).toFixed(1) + '" r="' + r + '" class="dot"/>');
+      } else if (it.type === "rect") {
+        var rTop = SY(it.y1), rBot = SY(it.y0 != null ? it.y0 : 0), rL = SX(it.x1), rR = SX(it.x2);
+        parts.push('<rect x="' + Math.min(rL, rR).toFixed(1) + '" y="' + Math.min(rTop, rBot).toFixed(1) + '" width="' + Math.abs(rR - rL).toFixed(1) + '" height="' + Math.abs(rBot - rTop).toFixed(1) + '" class="' + (it.cls || "fill-area") + '"/>');
+      } else if (it.type === "area") {
+        var aN = it.samples || 160, aA = it.domain[0], aB = it.domain[1], aBase = (it.base != null ? it.base : 0);
+        var aD = "M" + SX(aA).toFixed(2) + "," + SY(aBase).toFixed(2) + " ";
+        for (var aI = 0; aI <= aN; aI++) { var aX = aA + (aB - aA) * (aI / aN); aD += "L" + SX(aX).toFixed(2) + "," + SY(it.fn(aX)).toFixed(2) + " "; }
+        aD += "L" + SX(aB).toFixed(2) + "," + SY(aBase).toFixed(2) + " Z";
+        parts.push('<path d="' + aD.trim() + '" class="' + (it.cls || "fill-area") + '"/>');
+      } else if (it.type === "arrow") {
+        parts.push('<line x1="' + SX(it.x1).toFixed(1) + '" y1="' + SY(it.y1).toFixed(1) + '" x2="' + SX(it.x2).toFixed(1) + '" y2="' + SY(it.y2).toFixed(1) + '" class="axis" marker-end="url(#' + id + 'a)"/>');
+      } else if (it.type === "text") {
+        pushLabel({ px: SX(it.x), py: SY(it.y), tex: it.tex, text: it.tex == null ? it.text : null, anchor: it.anchor || "middle", vAnchor: it.vAnchor || "middle", dx: it.dx || 0, dy: it.dy || 0, cls: it.cls || "a-pt", size: it.size });
+      }
+    });
+    if (labels.length) {
+      var M = 52;
+      var spans = labels.map(function(L) {
+        var left = (L.px + (L.dx || 0) + M).toFixed(1);
+        var top = (L.py + (L.dy || 0) + M).toFixed(1);
+        var tf = anchorTransform(L.anchor, L.vAnchor);
+        var fs = L.size ? "font-size:" + L.size + "px;" : "";
+        var body = L.tex != null ? "\\(" + L.tex + "\\)" : esc(L.text == null ? "" : L.text);
+        return '<span class="fig-lbl ' + (L.cls || "") + '" style="left:' + left + 'px;top:' + top + 'px;transform:' + tf + ';' + fs + '">' + body + '</span>';
+      }).join("");
+      parts.push('<foreignObject x="' + (-M) + '" y="' + (-M) + '" width="' + (w + 2 * M) + '" height="' + (h + 2 * M) + '" class="fig-fo" requiredExtensions="http://www.w3.org/1999/xhtml"><div xmlns="http://www.w3.org/1999/xhtml" class="fig-lyr">' + spans + '</div></foreignObject>');
+    }
+    parts.push('</svg>');
+    return parts.join("");
+  }
+  window.buildPlot = buildPlot;
+  window.PIVAL = PI;
+})();
+</script>
+
+<!-- ============================================================
+     figures.js — inlined (Chapter 6 figure registry)
+     ============================================================ -->
+<script>
+/* ============================================================
+   figures.js — Chapter 6 figure registry.
+   Each entry returns { layout, panels:[{svg, note}] }.
+   Most chapter figures use buildPlot() (shared/plot.js) for
+   function graphs. buildPlot has NO fill/sector primitive, so
+   region-area schematics (e.g. the §3.1 sector inequality) are
+   hand-built raw SVG here, inheriting the figure vocabulary
+   (.fig-svg, .ptlab, var(--c-primary)/--ink…) from skin-hs.css.
+   Labels are kept to single symbols (O, A, B, C, θ, 1); the
+   areas and the inequality live in the caption and body prose
+   (CONTENT_SPEC §10 "Label economy").
+   Appended across sections — never overwrite.
+   ============================================================ */
+(function () {
+
+  const FIGS = {
+
+    /* §6.1 Figure 6.1 — Riemann rectangles under y=x² on [0,1], n=4, left vs right.
+       Left endpoints sit BELOW the increasing curve (L₄ under); right endpoints poke
+       ABOVE it (R₄ over) — the bracket L₄ < A < R₄. Leftmost left-rectangle has height
+       f(0)=0 (absent). Numeric sums 7/32, 15/32 live in Example 6.1 (label economy).
+       Uses the ch6 rect fill primitive. */
+    "riemann-lr-x2": () => {
+      const f = (x) => x * x, dx = 0.25;
+      const mk = (side) => {
+        const rects = [];
+        for (let k = 0; k < 4; k++) {
+          const xL = k * dx, xR = (k + 1) * dx, hgt = side === "L" ? f(xL) : f(xR);
+          if (hgt > 0) rects.push({ type: "rect", x1: xL, x2: xR, y1: hgt, y0: 0, cls: "rect-sum" });
+        }
+        return buildPlot({
+          w: 250, h: 205, xmin: -0.09, xmax: 1.17, ymin: -0.09, ymax: 1.17,
+          xlabel: "x", ylabel: "y", xticks: [{ x: 1, tex: "1" }], yticks: [{ y: 1, tex: "1" }],
+          aria: side === "L"
+            ? "Four left-endpoint rectangles under the curve y equals x squared on zero to one; each rectangle lies below the curve, so the left sum underestimates the area."
+            : "Four right-endpoint rectangles on the curve y equals x squared on zero to one; each rectangle rises above the curve, so the right sum overestimates the area.",
+          items: [
+            ...rects,
+            { type: "curve", fn: f, domain: [0, 1.13], samples: 200 },
+            { type: "text", x: 0.5, y: 1.0, tex: "y=x^{2}", anchor: "start", cls: "a-pt", size: 12 },
+          ],
+        });
+      };
+      return { layout: "pair", panels: [
+        { svg: mk("L"), note: "Left endpoints — under" },
+        { svg: mk("R"), note: "Right endpoints — over" },
+      ] };
+    },
+
+    /* §6.1 Figure 6.2 — refinement of the right sum R₄→R₈→R₁₆ under y=x² on [0,1].
+       The over-estimate's overshoot above the curve is a single end rectangle of
+       area 1/n, so it shrinks as n grows: the three panels show the bracket closing.
+       NO "=1/3" or limit value on the figure (that is Example 6.2's answer — no-spoiler,
+       D7). Same curve, same rect fill as Figure 6.1; only n varies across panels. */
+    "refinement-rn-x2": () => {
+      const f = (x) => x * x;
+      const mk = (n) => {
+        const dx = 1 / n, rects = [];
+        for (let k = 1; k <= n; k++) {
+          rects.push({ type: "rect", x1: (k - 1) * dx, x2: k * dx, y1: f(k * dx), y0: 0, cls: "rect-sum" });
+        }
+        return buildPlot({
+          w: 215, h: 182, xmin: -0.09, xmax: 1.16, ymin: -0.09, ymax: 1.16,
+          xlabel: "x", ylabel: "y", xticks: [{ x: 1, tex: "1" }], yticks: [{ y: 1, tex: "1" }],
+          aria: "Right-endpoint rectangles under the curve y equals x squared on zero to one with "
+            + n + " strips; each rectangle rises just above the curve, and the total overshoot shrinks as the number of strips grows.",
+          items: [
+            ...rects,
+            { type: "curve", fn: f, domain: [0, 1.12], samples: 200 },
+          ],
+        });
+      };
+      return { layout: "triple", panels: [
+        { svg: mk(4), note: "n=4" },
+        { svg: mk(8), note: "n=8" },
+        { svg: mk(16), note: "n=16" },
+      ] };
+    },
+
+    /* §6.1 Figure 6.3 — velocity–time step graph (Example 6.3). Six discrete speed
+       readings (0,0)(1,4)(2,7)(3,9)(4,10)(5,10); RIGHT-endpoint rectangles of width
+       Δt=1 whose total area estimates the distance. Right-sum heights are the readings
+       at t=1..5, so the last two rectangles ([3,4] and [4,5]) are BOTH height 10.
+       The data are discrete: the run-to-run interpolation is drawn as a soft DASHED
+       polyline (a modelling assumption), never a solid curve. Numbers 30 m / 40 m stay
+       in the Example (label economy). Message: distance = area under the v–t graph. */
+    "velocity-distance-steps": () => {
+      const pts = [[0, 0], [1, 4], [2, 7], [3, 9], [4, 10], [5, 10]];
+      const rects = [], segs = [];
+      for (let k = 1; k <= 5; k++) rects.push({ type: "rect", x1: k - 1, x2: k, y1: pts[k][1], y0: 0, cls: "rect-sum" });
+      for (let k = 0; k < 5; k++) segs.push({ type: "seg", x1: pts[k][0], y1: pts[k][1], x2: pts[k + 1][0], y2: pts[k + 1][1], cls: "secant" });
+      const svg = buildPlot({
+        w: 305, h: 225, xmin: -0.5, xmax: 5.75, ymin: -0.95, ymax: 11.7,
+        xlabel: "t\\,(\\text{s})", ylabel: "v\\,(\\text{m/s})",
+        xticks: [1, 2, 3, 4, 5].map((x) => ({ x, tex: String(x) })),
+        yticks: [{ y: 5, tex: "5" }, { y: 10, tex: "10" }],
+        aria: "A velocity versus time step graph: six speed readings from zero up to ten metres per second at times zero through five seconds, with right-endpoint rectangles of width one second whose combined area estimates the distance travelled; a dashed line links the readings.",
+        items: [
+          ...rects,
+          ...segs,
+          ...pts.map((p) => ({ type: "dot", x: p[0], y: p[1], r: 2.6 })),
+        ],
+      });
+      return { layout: "single", panels: [{ svg }] };
+    },
+
+    /* §6.2 Figure 6.4 — net signed area of y=x−1 on [0,2] (Example 6.5). The line
+       crosses the axis at x=1: on [0,1] it is BELOW (a triangle of area ½, marked "−",
+       red tone fill-neg), on [1,2] ABOVE (a congruent triangle of area ½, marked "+",
+       blue tone fill-pos). The +/− glyphs carry the sign independently of colour, so the
+       figure survives grayscale (D8). Net 0 vs total 1 live in the caption / Example. */
+    "signed-area-line": () => {
+      const f = (x) => x - 1;
+      const svg = buildPlot({
+        w: 300, h: 232, xmin: -0.3, xmax: 2.35, ymin: -1.4, ymax: 1.4,
+        xlabel: "x", ylabel: "y",
+        xticks: [{ x: 1, tex: "1" }, { x: 2, tex: "2" }],
+        yticks: [{ y: 1, tex: "1" }, { y: -1, tex: "-1" }],
+        aria: "The line y equals x minus one on zero to two crosses the axis at x equals one; the triangle below the axis on the left is marked minus and the congruent triangle above the axis on the right is marked plus, so the two signed areas cancel.",
+        items: [
+          { type: "area", fn: f, domain: [0, 1], base: 0, cls: "fill-neg" },
+          { type: "area", fn: f, domain: [1, 2], base: 0, cls: "fill-pos" },
+          { type: "curve", fn: f, domain: [0, 2], samples: 2 },
+          { type: "dot", x: 1, y: 0, r: 2.6 },
+          { type: "text", x: 0.4, y: -0.36, tex: "-", cls: "a-pt", size: 21 },
+          { type: "text", x: 1.62, y: 0.34, tex: "+", cls: "a-pt", size: 19 },
+          { type: "text", x: 0.1, y: 0.86, tex: "y=x-1", anchor: "start", cls: "a-curve", size: 12 },
+        ],
+      });
+      return { layout: "single", panels: [{ svg }] };
+    },
+
+    /* §6.2 Figure 6.5 — min/max bounding rectangles of √x on [1,4] (Example 6.6).
+       √x is increasing and concave down; its minimum on [1,4] is m=1 (left end) and its
+       maximum M=2 (right end). The inscribed rectangle (height 1, solid border rect-lo)
+       lies under the curve, touching only at (1,1); the circumscribed rectangle (height 2,
+       DASHED border rect-hi) covers it, touching only at (4,2). Solid vs dashed borders
+       distinguish the two in grayscale (D8). Areas 1·3=3 and 2·3=6 stay in the caption. */
+    "minmax-sqrt": () => {
+      const f = (x) => Math.sqrt(x);
+      const svg = buildPlot({
+        w: 300, h: 225, xmin: -0.25, xmax: 4.6, ymin: -0.28, ymax: 2.5,
+        xlabel: "x", ylabel: "y",
+        xticks: [{ x: 1, tex: "1" }, { x: 4, tex: "4" }],
+        yticks: [{ y: 1, tex: "1" }, { y: 2, tex: "2" }],
+        aria: "The increasing concave-down curve y equals root x on the interval one to four, boxed below by an inscribed rectangle of height one and above by a dashed circumscribed rectangle of height two; the curve touches the lower rectangle only at the left end and the upper rectangle only at the right end.",
+        items: [
+          { type: "rect", x1: 1, x2: 4, y1: 2, y0: 0, cls: "rect-hi" },
+          { type: "rect", x1: 1, x2: 4, y1: 1, y0: 0, cls: "rect-lo" },
+          { type: "curve", fn: f, domain: [1, 4], samples: 200 },
+          { type: "dot", x: 1, y: 1, r: 2.6 },
+          { type: "dot", x: 4, y: 2, r: 2.6 },
+          { type: "text", x: 1.12, y: 1.12, tex: "m", anchor: "start", cls: "a-pt", size: 12 },
+          { type: "text", x: 1.12, y: 2.12, tex: "M", anchor: "start", cls: "a-pt", size: 12 },
+          { type: "text", x: 3.05, y: 1.46, tex: "y=\\sqrt{x}", anchor: "start", cls: "a-curve", size: 12 },
+        ],
+      });
+      return { layout: "single", panels: [{ svg }] };
+    },
+
+    /* §6.3 Figure 6.6 — the accumulation function g(x)=∫ₐˣ f and the added sliver
+       (FTC-1 anchor). f>0; the area from a to x is shaded (fill-area) as g(x); nudging
+       x by h appends a thin strip [x,x+h] (rect-sum) of width h and height ≈ f(x), so g
+       gains about f(x)·h. The strip is drawn WIDE (not to scale) so it is visible. Axis
+       ticks a, x, x+h. Schematic f, no y-values (label economy). */
+    "accumulation-sliver": () => {
+      const f = (t) => 1 + 0.45 * t - 0.05 * t * t;
+      const a = 0.6, X = 2.4, h = 0.8;
+      const svg = buildPlot({
+        w: 320, h: 228, xmin: -0.2, xmax: 4.15, ymin: -0.35, ymax: 2.45,
+        xlabel: "t", ylabel: "y",
+        xticks: [{ x: a, tex: "a" }, { x: X, tex: "x" }, { x: X + h, tex: "x+h" }],
+        yticks: [],
+        aria: "A positive curve y equals f of t; the area under it from a to x is shaded as the accumulated value g of x, and a narrow strip from x to x plus h — drawn wide and not to scale — is the extra area added, of width h and height about f of x.",
+        items: [
+          { type: "area", fn: f, domain: [a, X], base: 0, cls: "fill-area" },
+          { type: "rect", x1: X, x2: X + h, y1: f(X), y0: 0, cls: "rect-sum" },
+          { type: "curve", fn: f, domain: [-0.1, 4.05], samples: 200 },
+          { type: "text", x: 1.35, y: 0.6, tex: "g(x)", cls: "a-pt", size: 13 },
+          { type: "text", x: X + h + 0.07, y: f(X) * 0.5, tex: "f(x)", anchor: "start", cls: "a-pt", size: 12 },
+          { type: "text", x: 3.35, y: 2.2, tex: "y=f(t)", anchor: "start", cls: "a-curve", size: 12 },
+        ],
+      });
+      return { layout: "single", panels: [{ svg, note: "The strip is drawn wide — not to scale." }] };
+    },
+
+    /* §6.3 Figure 6.7 — the trapped difference quotient in the FTC-1 proof. On the short
+       window [x,x+h] the true added area ∫ₓ^{x+h} f (blue, fill-area, top = curve) is
+       trapped between an inscribed rectangle of height m_h=min f (solid border rect-lo)
+       and a circumscribed rectangle of height M_h=max f (DASHED border rect-hi). For this
+       increasing sample the minimum sits at u_h (left) and the maximum at v_h (right).
+       As h→0 both m_h and M_h close on f(x) — the squeeze (rest of the statement in caption). */
+    "ftc-trap": () => {
+      const f = (t) => 0.9 + 0.62 * t - 0.05 * t * t;
+      const X = 1, h = 1.4, xh = X + h;
+      const mh = f(X), Mh = f(xh);
+      const svg = buildPlot({
+        w: 320, h: 235, xmin: 0.3, xmax: 3.2, ymin: 0, ymax: 2.5,
+        xlabel: "t", ylabel: "y",
+        xticks: [{ x: X, tex: "x" }, { x: xh, tex: "x+h" }],
+        yticks: [{ y: mh, tex: "m_h" }, { y: Mh, tex: "M_h" }],
+        aria: "On the short interval from x to x plus h the thin area under the curve is trapped between an inscribed rectangle of height m sub h, the minimum of f, and a taller dashed circumscribed rectangle of height M sub h, the maximum; as h shrinks both heights close on f of x.",
+        items: [
+          { type: "area", fn: f, domain: [X, xh], base: 0, cls: "fill-area" },
+          { type: "rect", x1: X, x2: xh, y1: mh, y0: 0, cls: "rect-lo" },
+          { type: "rect", x1: X, x2: xh, y1: Mh, y0: 0, cls: "rect-hi" },
+          { type: "curve", fn: f, domain: [0.35, 3.15], samples: 220 },
+          { type: "dot", x: X, y: mh, r: 2.6 },
+          { type: "dot", x: xh, y: Mh, r: 2.6 },
+          { type: "text", x: X, y: mh, tex: "u_h", anchor: "end", vAnchor: "top", dx: -3, dy: 3, cls: "a-pt", size: 12 },
+          { type: "text", x: xh, y: Mh, tex: "v_h", anchor: "start", vAnchor: "bottom", dx: 3, dy: -3, cls: "a-pt", size: 12 },
+          { type: "text", x: 1.7, y: 2.34, tex: "m_h,\\,M_h\\to f(x)", anchor: "middle", cls: "a-pt", size: 11 },
+        ],
+      });
+      return { layout: "single", panels: [{ svg }] };
+    },
+
+    /* §6.4 Figure 6.8 — velocity v=t²−4 on [0,3], signed regions (Example 6.12).
+       v(0)=−4, root at t=2, v(3)=5. On [0,2) the velocity is negative (motion backward):
+       region BELOW the axis, marked "−" (red tone fill-neg), area 16/3. On (2,3] positive:
+       region ABOVE the axis, marked "+" (blue tone fill-pos), area 7/3. The two regions
+       meet at (2,0). The +/− glyphs carry the sign in grayscale (D8). Displacement −3 vs
+       total distance 23/3 live in the caption / Example. */
+    "velocity-signed-area": () => {
+      const v = (t) => t * t - 4;
+      const svg = buildPlot({
+        w: 300, h: 268, xmin: -0.35, xmax: 3.45, ymin: -4.9, ymax: 6.5,
+        xlabel: "t", ylabel: "v",
+        xticks: [{ x: 2, tex: "2" }, { x: 3, tex: "3" }],
+        yticks: [{ y: -4, tex: "-4" }, { y: 5, tex: "5" }],
+        aria: "The velocity v equals t squared minus four on zero to three starts at minus four, crosses zero at t equals two, and rises to five; the larger region below the axis on zero to two is marked minus and the smaller region above the axis on two to three is marked plus.",
+        items: [
+          { type: "area", fn: v, domain: [0, 2], base: 0, cls: "fill-neg" },
+          { type: "area", fn: v, domain: [2, 3], base: 0, cls: "fill-pos" },
+          { type: "curve", fn: v, domain: [0, 3], samples: 200 },
+          { type: "dot", x: 2, y: 0, r: 2.6 },
+          { type: "text", x: 0.75, y: -2.15, tex: "-", cls: "a-pt", size: 23 },
+          { type: "text", x: 2.62, y: 1.5, tex: "+", cls: "a-pt", size: 20 },
+          { type: "text", x: 1.05, y: 3.7, tex: "v=t^{2}-4", anchor: "start", cls: "a-curve", size: 12 },
+        ],
+      });
+      return { layout: "single", panels: [{ svg }] };
+    },
+
+    /* §6.2 Figure 6.5 — the semicircle y=√(1−x²) on [−1,1] (Example 6.6, M4 supplement).
+       Reading ∫₋₁¹√(1−x²)dx as the area of the upper unit half-circle = π/2. Shaded region =
+       the semicircular disc; a gray radius to the arc marks r=1. The value π/2 lives in the
+       caption / Example (label economy). Uses the ch6 area fill primitive. */
+    "semicircle-area": () => {
+      const f = (x) => Math.sqrt(Math.max(1 - x * x, 0));
+      const svg = buildPlot({
+        w: 300, h: 200, xmin: -1.3, xmax: 1.3, ymin: -0.34, ymax: 1.3,
+        xlabel: "x", ylabel: "y",
+        xticks: [{ x: -1, tex: "-1" }, { x: 1, tex: "1" }],
+        yticks: [{ y: 1, tex: "1" }],
+        aria: "The upper half of the unit circle, y equals the square root of one minus x squared, on minus one to one; the shaded semicircular region beneath it has area pi over two, the value of the integral.",
+        items: [
+          { type: "area", fn: f, domain: [-1, 1], base: 0, cls: "fill-area" },
+          { type: "curve", fn: f, domain: [-1, 1], samples: 260 },
+          { type: "seg", x1: 0, y1: 0, x2: 0.707, y2: 0.707, cls: "bubble" },
+          { type: "dot", x: 0, y: 0, r: 2.2 },
+          { type: "text", x: 0.5, y: 0.3, tex: "1", cls: "a-pt", size: 12 },
+          { type: "text", x: 0.12, y: 1.12, tex: "y=\\sqrt{1-x^{2}}", anchor: "start", cls: "a-curve", size: 12 },
+        ],
+      });
+      return { layout: "single", panels: [{ svg }] };
+    },
+
+  };
+
+  /* ---- hydrateFigures: fills every <figure data-fig="id"> ---- */
+  function hydrateFigures(root) {
+    (root || document).querySelectorAll("[data-fig]").forEach(function (el) {
+      var def = FIGS[el.dataset.fig];
+      if (!def || el.dataset.figDone) return;
+      var r = def();
+      var layout = r.layout, panels = r.panels;
+      var html;
+      if (layout === "single" && panels.length === 1 && !panels[0].note) {
+        html = '<div class="figure-art">' + panels[0].svg + '</div>';
+      } else {
+        var cls = { pair: "figure-art--pair", triple: "figure-art--triple", grid: "figure-art--grid" }[layout] || "";
+        html = '<div class="figure-art ' + cls + '">' +
+          panels.map(function (p) {
+            return '<div class="fig-panel">' + p.svg + (p.note ? '<div class="fig-note">' + p.note + '</div>' : '') + '</div>';
+          }).join("") + '</div>';
+      }
+      el.insertAdjacentHTML("afterbegin", html);
+      el.dataset.figDone = "1";
+    });
+  }
+  window.hydrateFigures = hydrateFigures;
+})();
+</script>
+
+<!-- Main build script (paginator + MathJax) -->
+<script>
+(function () {
+  function waitFor(test, tries) {
+    return new Promise(function (res) {
+      var i = 0;
+      (function tick() {
+        if (test()) return res(true);
+        if (++i > tries) return res(false);
+        setTimeout(tick, 150);
+      })();
+    });
+  }
+  function build() {
+    var page = document.getElementById("page");
+    var tpl = document.getElementById("figs-only");
+    page.innerHTML = tpl ? tpl.innerHTML : "";
+    if (window.hydrateFigures) window.hydrateFigures(page);
+    waitFor(function () { return window.MathJax && window.MathJax.typesetPromise; }, 400)
+      .then(function (ok) {
+        if (!ok) { document.getElementById("boot").textContent = "MathJax load timeout"; return; }
+        return MathJax.typesetPromise([page]).catch(function (e) { console.warn("mathjax", e); });
+      })
+      .then(function () {
+        return document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+      })
+      .then(function () {
+        var boot = document.getElementById("boot");
+        if (boot) boot.remove();
+      });
+  }
+  window.addEventListener("DOMContentLoaded", build);
+})();
+</script>
+</body>
+</html>

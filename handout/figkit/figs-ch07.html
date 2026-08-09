@@ -1,0 +1,1358 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Chapter 7 — Print build</title>
+
+<!-- ════════════════════════════════════════════════════════════════
+     圖片寬度控制面板 —— 直接改下面的數字即可（px 固定寬 / % 相對頁寬）
+     並排或多格圖（1.1 / 1.7 / 1.9）控制的是「每一格」的寬度。
+     ════════════════════════════════════════════════════════════════ -->
+<style>
+:root {
+}
+
+</style>
+
+<!-- Google Fonts: Inter for UI -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<!-- New Computer Modern (prose/text faces) — matches MathJax 4 "mathjax-newcm" math font.
+     Source: npm web-computer-modern@1.1.0-new-cm-7-0-2 via jsDelivr. License: GUST Font License.
+     10pt optical size ("Serif 10"). NOTE: filenames contain %20-encoded spaces — keep them. -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<style>
+@font-face {
+  font-family: "New Computer Modern";
+  font-style: normal; font-weight: 400; font-display: swap;
+  src: url("https://cdn.jsdelivr.net/npm/web-computer-modern@1.1.0-new-cm-7-0-2/woff2/WebCM%20Serif%2010%20Regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "New Computer Modern";
+  font-style: italic; font-weight: 400; font-display: swap;
+  src: url("https://cdn.jsdelivr.net/npm/web-computer-modern@1.1.0-new-cm-7-0-2/woff2/WebCM%20Serif%2010%20Italic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "New Computer Modern";
+  font-style: normal; font-weight: 700; font-display: swap;
+  src: url("https://cdn.jsdelivr.net/npm/web-computer-modern@1.1.0-new-cm-7-0-2/woff2/WebCM%20Serif%2010%20Bold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "New Computer Modern";
+  font-style: italic; font-weight: 700; font-display: swap;
+  src: url("https://cdn.jsdelivr.net/npm/web-computer-modern@1.1.0-new-cm-7-0-2/woff2/WebCM%20Serif%2010%20BoldItalic.woff2") format("woff2");
+}
+</style>
+
+<!-- MathJax 4 (CHTML output with inline line-breaking) -->
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']],
+    macros: {
+      arccsc: '\\operatorname{arccsc}',
+      arcsec: '\\operatorname{arcsec}',
+      arccot: '\\operatorname{arccot}'
+    }
+  },
+  chtml: {
+    mtextInheritFont: true,
+    matchFontHeight: true
+  },
+  output: {
+    displayOverflow: 'linebreak',
+    linebreaks: {
+      inline: true,
+      width: '100%',
+      lineleading: 0.2
+    }
+  },
+  startup: { typeset: false }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js"></script>
+
+<style>
+/* ============================================================
+   skin-hs.css — inlined + modified: Times New Roman + MathJax
+   ============================================================ */
+.paper {
+  --c-primary: oklch(0.50 0.13 245);
+  --c-caution: oklch(0.50 0.155 25);
+  --c-aux: oklch(0.55 0.01 260);
+  --c-axis: #474b54;
+  --ink: #1b1c1f;
+  --ink-soft: #565a63;
+  --ink-faint: #8a8e98;
+  --paper: #ffffff;
+  --rule: #e5e7eb;
+  --fig-w-pair: 250px;     /* 並排(pair)圖每張的預設寬度（整體一次調） */
+  --fig-w-single: 100%;    /* 單張/triple/grid 圖的預設最大寬度（整體一次調） */
+  /* 個別覆寫：在任一 <figure> 標籤加 style="--fig-w: 320px" 即可只改那一張 */
+  --serif: "New Computer Modern", "Latin Modern Roman", "Times New Roman", Times, Georgia, serif;
+  --ui: "Inter", -apple-system, system-ui, sans-serif;
+  --a-concept:  oklch(0.50 0.13 55);
+  --a-result:   oklch(0.50 0.13 245);
+  --a-practice: oklch(0.50 0.13 152);
+  --a-aside:    oklch(0.50 0.02 260);
+  --a-caution:  oklch(0.50 0.155 25);
+  --a-strategy: oklch(0.50 0.13 290);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: var(--fs-base, 17.5px);
+  line-height: var(--lh-base, 1.62);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  box-sizing: border-box;
+}
+.paper *, .paper *::before, .paper *::after { box-sizing: border-box; }
+.paper .page { padding: 52px 58px 64px; max-width: 760px; margin: 0 auto; }
+.skin-hs .page { hyphens: auto; -webkit-hyphens: auto; }
+.skin-hs p, .skin-hs li { text-align: justify; text-justify: inter-word; }
+.paper p { margin: 0 0 .85em; text-wrap: pretty; }
+.paper em { font-style: italic; }
+.paper .informal { font-style: italic; color: var(--ink-soft); }
+.paper ol { margin: .2em 0 .9em; padding-left: 1.5em; }
+.paper li { margin: .35em 0; text-wrap: pretty; }
+.paper .warmup { counter-reset: wu; list-style: none; padding-left: 0; }
+.paper .warmup > li { counter-increment: wu; position: relative; padding-left: 2.1em; }
+.paper .warmup > li::before {
+  content: "(" counter(wu, lower-alpha) ")";
+  position: absolute; left: 0; top: 0;
+  font-family: var(--ui); font-size: .82em; color: var(--ink-faint); line-height: 1.85;
+}
+.paper mjx-container[display="true"] { margin: .55em 0 !important; overflow-x: auto; overflow-y: hidden; }
+.paper mjx-container[display="true"]::-webkit-scrollbar { display: none; }
+.paper .qed { display: block; text-align: right; margin: -1.62em 0 0; height: 1.62em; pointer-events: none; }
+.paper .qed::after {
+  content: ""; display: inline-block; width: .56em; height: .56em;
+  border: 1.3px solid var(--ink-soft);
+}
+.paper .env-body > :has(+ .qed) { margin-bottom: 0; display: flow-root; }
+.paper .env-body::after { content: ""; display: block; clear: both; }
+.paper .sec-head {
+  margin-top: 2.7em; padding-top: 1.35em;
+  border-top: 1px solid var(--rule); margin-bottom: 1.5em;
+}
+.sheet-body > .sec-head:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+.paper .sec-kicker {
+  font-family: var(--ui); font-size: .7rem; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--c-primary); font-weight: 700; margin-bottom: .55em;
+}
+.paper .sec-title { font-weight: 600; font-size: 2rem; line-height: 1.12; letter-spacing: -.012em; margin: 0; }
+.paper .sec-no { color: var(--c-primary); margin-right: .5em; font-weight: 600; }
+.paper .subsec-head {
+  font-family: var(--ui); font-weight: 600; font-size: 1.08rem; margin: 1.9em 0 .65em;
+  display: flex; align-items: center; gap: .55em; color: var(--ink);
+}
+.paper .subsec-head::before { content: ""; width: 18px; height: 3px; background: var(--c-primary); border-radius: 2px; }
+.paper .figure { margin: 1.7em 0; text-align: center; }
+.paper .figure-art { display: flex; justify-content: center; }
+.paper .figure-art--pair { gap: 26px; }
+.paper .fig-svg { width: 100%; max-width: var(--fig-w, var(--fig-w-pair)); height: auto; }
+.paper .figure-art:not(.figure-art--pair) .fig-svg { max-width: var(--fig-w, var(--fig-w-single)); }
+.paper figcaption {
+  font-family: var(--ui); font-size: .8em; line-height: 1.5;
+  color: var(--ink-soft); margin-top: .7em; text-wrap: pretty;
+  max-width: none; text-align: left; display: table; margin-inline: auto;
+}
+.paper .fig-no { font-weight: 600; color: var(--ink); margin-right: .4em; }
+.paper figcaption mjx-container { font-size: .95em; }
+.paper .axis { stroke: var(--c-axis); stroke-width: 1.25; fill: none; stroke-linecap: round; }
+.paper .curve { stroke: var(--c-primary); stroke-width: 2.2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.paper .refline { stroke: var(--c-caution); stroke-width: 1.3; stroke-dasharray: 4.5 3.5; fill: none; stroke-linecap: round; opacity: .85; }
+.paper .secant { stroke: var(--c-aux); stroke-width: 1.6; stroke-dasharray: 5 3.5; fill: none; stroke-linecap: round; }
+.paper .tangent { stroke: var(--c-caution); stroke-width: 2; fill: none; stroke-linecap: round; }
+/* fill primitives (ch6 M2: rect + area items in buildPlot) */
+.paper .fill-area { fill: color-mix(in srgb, var(--c-primary) 15%, transparent); stroke: none; }
+.paper .fill-pos  { fill: color-mix(in srgb, var(--c-primary) 17%, transparent); stroke: none; }
+.paper .fill-neg  { fill: color-mix(in srgb, var(--c-caution) 22%, transparent); stroke: none; }
+.paper .rect-lo   { fill: color-mix(in srgb, var(--ink) 9%, transparent); stroke: var(--c-primary); stroke-width: 1.1; }
+.paper .rect-hi   { fill: none; stroke: var(--c-primary); stroke-width: 1.4; stroke-dasharray: 4 2.5; }
+.paper .rect-sum  { fill: color-mix(in srgb, var(--c-primary) 13%, transparent); stroke: var(--c-primary); stroke-width: 1.1; }
+.paper .curve-log { stroke: var(--c-caution); stroke-width: 2.2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.paper .idline { stroke: var(--c-aux); stroke-width: 1.3; stroke-dasharray: 4.5 3.5; fill: none; stroke-linecap: round; opacity: .85; }
+.paper .dot { fill: var(--ink); }
+.paper .bubble { stroke: var(--c-aux); stroke-width: 1.4; fill: none; }
+.paper .arrow-fwd { stroke: var(--c-primary); stroke-width: 2; fill: none; }
+.paper .arrow-bwd { stroke: var(--c-caution); stroke-width: 2; fill: none; }
+.paper .fig-svg text { font-family: var(--ui); font-size: 13px; }
+.paper .axlab { fill: var(--c-aux); font-style: italic; }
+.paper .lab-curve { fill: var(--c-primary); font-style: italic; }
+.paper .lab-ref, .paper .lab-ref-b { fill: var(--c-caution); }
+.paper .ptlab { fill: var(--ink-soft); font-size: 12px; }
+.paper .setlab { fill: var(--ink); font-weight: 600; font-size: 14.5px; text-anchor: middle; }
+
+/* env blocks */
+.skin-hs .env {
+  --accent: var(--a-aside);
+  margin: 1.2em 0; padding-left: 16px;
+  border-left: 2.5px solid color-mix(in srgb, var(--accent) 38%, var(--paper));
+}
+.skin-hs .env-definition  { --accent: var(--a-concept); }
+.skin-hs .env-theorem, .skin-hs .env-proposition, .skin-hs .env-corollary { --accent: var(--a-result); }
+.skin-hs .env-example, .skin-hs .env-solution, .skin-hs .env-exercise { --accent: var(--a-practice); }
+.skin-hs .env-remark { --accent: var(--a-aside); }
+.skin-hs .env-head {
+  display: flex; align-items: baseline; gap: .5em; flex-wrap: wrap;
+  margin: 0 0 .55em; font-family: var(--ui);
+}
+.skin-hs .env-kicker {
+  font-size: .62rem; letter-spacing: .07em; text-transform: uppercase; font-weight: 700;
+  color: var(--paper); background: var(--accent); padding: 3px 10px; border-radius: 999px; line-height: 1.5;
+}
+.skin-hs .env-num { font-weight: 700; color: var(--accent); font-size: .94em; }
+.skin-hs .env-name { font-style: italic; font-weight: 400; color: var(--ink-soft); font-family: var(--serif); font-size: 1em; }
+.skin-hs .env-body > p:first-child { margin-top: 0; }
+.skin-hs .env-body > :last-child { margin-bottom: 0; }
+.skin-hs .env-theorem .env-body, .skin-hs .env-proposition .env-body { font-style: italic; }
+.skin-hs .env-theorem .env-body mjx-container, .skin-hs .env-proposition .env-body mjx-container { font-style: normal; }
+.skin-hs .env-definition em { font-style: italic; }
+.skin-hs .env-remark { color: var(--ink-soft); font-size: .97em; }
+.skin-hs .env-remark .env-kicker { background: transparent; color: var(--a-aside); border: 1px solid color-mix(in srgb, var(--a-aside) 45%, var(--paper)); }
+.skin-hs .env-proof { --accent: var(--a-result); }
+.skin-hs .env-proof .env-kicker {
+  background: transparent; color: var(--a-result); font-style: italic; letter-spacing: .04em;
+  border: 1px solid color-mix(in srgb, var(--a-result) 45%, var(--paper));
+}
+.skin-hs .qed-proof::after { border-color: var(--ink); }
+.skin-hs .workedexample {
+  margin: 1.6em 0; padding-left: 16px;
+  border-left: 2.5px solid color-mix(in srgb, var(--a-practice) 38%, var(--paper));
+  display: flow-root;
+}
+.skin-hs .workedexample .env { margin: .7em 0; padding-left: 0; border-left: 0; }
+.skin-hs .env-solution .env-kicker { background: transparent; color: var(--a-practice); border: 1px solid color-mix(in srgb, var(--a-practice) 45%, var(--paper)); }
+.skin-hs > .env-cont { margin-top: 0; padding-top: .82em; }
+.skin-hs > .env:has(+ .env-cont) { margin-bottom: 0; display: flow-root; }
+.skin-hs > .env-example:has(+ .env-solution) { margin-bottom: 0; }
+.skin-hs > .env-example + .env-solution { margin-top: 0; padding-top: .72em; }
+.skin-hs > .env-cont, .skin-hs > .env-example, .skin-hs > .env-solution { display: flow-root; }
+.skin-hs .env-exercise .env-kicker { background: transparent; color: var(--a-practice); border: 1px solid var(--a-practice); }
+.skin-hs .env-caution, .skin-hs .env-strategy {
+  padding: 15px 20px; border-radius: 8px; margin: 1.4em 0;
+  border-left-width: 4px; border-left-style: solid;
+}
+.skin-hs .env-caution {
+  --accent: var(--a-caution);
+  background: color-mix(in srgb, var(--a-caution) 7%, var(--paper));
+  border: 1px solid color-mix(in srgb, var(--a-caution) 22%, var(--paper));
+  border-left-color: var(--a-caution);
+}
+.skin-hs .env-strategy {
+  --accent: var(--a-strategy);
+  background: color-mix(in srgb, var(--a-strategy) 7%, var(--paper));
+  border: 1px solid color-mix(in srgb, var(--a-strategy) 22%, var(--paper));
+  border-left-color: var(--a-strategy);
+}
+.skin-hs .env-caution .env-name, .skin-hs .env-strategy .env-name { color: var(--ink-soft); }
+.skin-hs .env-strategy .steps { margin-bottom: 0; }
+.skin-hs.vivid .env { border-left-color: color-mix(in srgb, var(--accent) 70%, var(--paper)); border-left-width: 3px; }
+.skin-hs.vivid .workedexample { border-left-color: color-mix(in srgb, var(--a-practice) 70%, var(--paper)); border-left-width: 3px; }
+.skin-hs.vivid .env-kicker { font-size: .64rem; padding: 3.5px 11px; }
+
+/* ============================================================
+   figs.css — inlined + modified for MathJax
+   ============================================================ */
+.paper .fig-svg { height: auto; max-width: 100%; overflow: visible; }
+.paper .figure-art { display: flex; justify-content: center; align-items: flex-start; gap: 24px; flex-wrap: wrap; }
+.paper .figure-art--pair { gap: 24px; }
+.paper .figure-art--pair .fig-panel { flex: 1 1 220px; max-width: 300px; }
+.paper .figure-art--triple { gap: 18px; }
+.paper .figure-art--triple .fig-panel { flex: 1 1 190px; max-width: 240px; }
+.paper .figure-art--grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; justify-items: center; }
+.paper .figure-art--grid .fig-panel { max-width: 240px; }
+.paper .fig-panel { display: flex; flex-direction: column; align-items: center; }
+.paper .fig-note {
+  font-family: var(--ui); font-size: .8em; line-height: 1.45;
+  color: var(--ink-soft); margin-top: .55em; text-align: center; text-wrap: pretty;
+}
+.paper .fig-note mjx-container { font-size: .98em; }
+.paper .fig-fo { overflow: visible; }
+.paper .fig-lyr { position: relative; width: 100%; height: 100%; font-family: var(--serif); }
+.paper .fig-lbl {
+  position: absolute; white-space: nowrap; line-height: 1; font-size: 15px;
+  text-shadow: 0 0 2px var(--paper), 0 0 2px var(--paper), 0 0 1px var(--paper);
+}
+.paper .fig-lbl mjx-container { font-size: 1em; }
+.paper .fig-lbl.a-curve { color: var(--c-primary); }
+.paper .fig-lbl.a-ref   { color: var(--c-caution); }
+.paper .fig-lbl.a-ax    { color: var(--ink-soft); }
+.paper .fig-lbl.a-pt    { color: var(--ink); }
+.paper .tbl-wrap { overflow-x: auto; overflow-y: hidden; margin: 1em 0; }
+.paper table.tbl {
+  border-collapse: collapse; margin: 0 auto; font-family: var(--ui); font-size: .96em;
+  border-top: 1.7px solid var(--ink); border-bottom: 1.7px solid var(--ink);
+}
+.paper table.tbl th, .paper table.tbl td { padding: .3em .8em; text-align: center; white-space: nowrap; }
+.paper table.tbl thead th { border-bottom: 1.1px solid var(--ink-soft); font-weight: 500; }
+.paper table.tbl .rowlab { text-align: right; padding-right: 1em; color: var(--ink-soft); }
+.paper table.tbl mjx-container { font-size: .98em; }
+.paper .sec + .sec { margin-top: 2.6em; padding-top: 2.2em; border-top: 1px solid var(--rule); }
+.paper .para-head { font-weight: 600; margin: 1.1em 0 .4em; }
+.paper ul { margin: .3em 0 .95em; padding-left: 1.3em; }
+.paper ul li { margin: .35em 0; text-align: justify; }
+.paper ul li::marker { color: var(--a-result); }
+.paper .chapter-head { margin-bottom: 1.6em; }
+.paper .chapter-head .ch-kicker {
+  font-family: var(--ui); font-size: .72rem; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--a-result); font-weight: 700; margin-bottom: .6em;
+}
+.paper .chapter-head .ch-title { font-weight: 600; font-size: 2.5rem; line-height: 1.08; letter-spacing: -.02em; margin: 0; }
+.paper .lead { font-size: 1.05em; }
+
+/* ============================================================
+   print.css — inlined (A4 sheet layout + paginator)
+   ============================================================ */
+@page { size: A4; margin: 0; }
+.sheet {
+  position: relative; box-sizing: border-box;
+  width: 210mm; height: 297mm;
+  padding: 20mm 28mm 20mm 32mm;
+  background: #fff; overflow: hidden;
+}
+.sheet-header {
+  position: absolute; top: 11mm; left: 32mm; right: 28mm;
+  font: 500 8.5pt "Inter", sans-serif; color: #9aa0ac; letter-spacing: .02em;
+}
+.sheet-footer {
+  position: absolute; bottom: 8.5mm; left: 0; right: 0;
+  text-align: center; font: 500 9pt "Inter", sans-serif; color: #82868f;
+}
+.sheet-body { height: 100%; --accent: oklch(0.50 0.13 245); }
+.sheet-body.paper { box-shadow: none; border-radius: 0; max-width: none; background: #fff; }
+.sheet-body .page { padding: 0; max-width: none; margin: 0; }
+.sheet-body.paper { font-size: 12pt; line-height: 1.55; }
+.sheet, .sheet * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.sheet-body > :first-child { margin-top: 0 !important; }
+.sheet-body .sec + .sec { border-top: 0; margin-top: 0; padding-top: 0; }
+.sheet-body .qed { margin-top: -1.55em; height: 1.55em; }
+.sheet-body .env-body::after { display: none; content: none; }
+.sheet-body .env-cont { margin-top: 0; }
+.sheet-body .env-cont > .env-body > :first-child { margin-top: 0; }
+@media screen {
+  body { background: #6f727b; margin: 0; }
+  .sheet { box-shadow: 0 3px 18px rgba(0,0,0,.3); margin: 9mm auto; }
+}
+@media print {
+  body { background: #fff; margin: 0; }
+  .sheet { box-shadow: none; margin: 0; break-after: page; }
+  .sheet:last-child { break-after: auto; }
+  .print-toolbar, #boot { display: none !important; }
+}
+
+/* ============================================================
+   page-level
+   ============================================================ */
+.print-toolbar {
+  position: fixed; top: 14px; right: 16px; z-index: 1000;
+  display: flex; align-items: center; gap: 10px; font-family: "Inter", system-ui, sans-serif;
+}
+.print-toolbar button {
+  font: 600 13px "Inter", sans-serif; color: #fff; background: oklch(0.50 0.13 245);
+  border: 0; padding: 9px 16px; border-radius: 8px; cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0,0,0,.25);
+}
+.print-toolbar button:disabled { opacity: .5; cursor: default; }
+.print-toolbar button:not(:disabled):hover { background: oklch(0.45 0.13 245); }
+.print-toolbar .status {
+  font-size: 12px; color: #e8eaf0; background: rgba(0,0,0,.4);
+  padding: 6px 11px; border-radius: 999px; backdrop-filter: blur(6px);
+}
+#boot {
+  position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: "Inter", system-ui, sans-serif; color: #cdd2dc; background: #6f727b; z-index: 900;
+}
+#source { position: absolute; left: -10000px; top: 0; width: 683px; }
+</style>
+</head>
+<body>
+
+<div id="boot">Preparing …</div>
+
+<div class="print-toolbar">
+  <span class="status" id="status">Preparing …</span>
+  <button id="printBtn" disabled>Print / Save as PDF</button>
+</div>
+
+<div id="source"><div class="paper skin-hs vivid"><div class="page" id="page"></div></div></div>
+<div id="pages"></div>
+
+<!-- Section fragments (inlined) -->
+
+<!-- BEGIN-CONTENT-FRAGMENTS -->
+<template id="figs-only">
+<figure class="figure" data-fig="gap-strip">
+    <figcaption><span class="fig-no">Figure 7.1</span> The region between an upper curve and a lower one, cut into vertical strips. The strip’s height is the gap \(f(x_i^{*}) - g(x_i^{*})\) between the graphs, not a height above the axis, which passes through the region without playing any role.</figcaption>
+  </figure>
+<figure class="figure" data-fig="enclosed-lens">
+    <figcaption><span class="fig-no">Figure 7.2</span> The region enclosed by \(y = x^{2}\) and \(y = 2x - x^{2}\). No vertical sides are given or needed: the two intersection points close the region by themselves, and they become the limits of integration.</figcaption>
+  </figure>
+<figure class="figure" data-fig="sincos-lobes">
+    <figcaption><span class="fig-no">Figure 7.3</span> The two lobes between \(y = \cos x\) and \(y = \sin x\) on \([0, \pi/2]\). The roles of roof and floor swap at the crossing \(x = \pi/4\), which is why one fixed order of subtraction would cancel; the identity \(\cos x = \sin\bigl(\tfrac{\pi}{2} - x\bigr)\) makes the second lobe the mirror image of the first.</figcaption>
+  </figure>
+<figure class="figure" data-fig="horizontal-slice">
+    <figcaption><span class="fig-no">Figure 7.4</span> The region enclosed by \(x = y^{2}\) and \(x = 2 - y^{2}\), sliced horizontally. Every horizontal strip enters on one parabola and leaves on the other, whereas a vertical strip would change character at \(x = 1\).</figcaption>
+  </figure>
+<figure class="figure" data-fig="slab-face">
+    <figcaption><span class="fig-no">Figure 7.5</span> A solid sliced like a loaf: the slab at \(x_i^{*}\) is nearly a cylinder, a flat face of area \(A(x_i^{*})\) swept through the small thickness \(\Delta x\), here exaggerated for visibility. The solid is deliberately irregular: nothing in Definition 7.2 asks for symmetry, only for a measurable cross-section at each station between \(a\) and \(b\).</figcaption>
+  </figure>
+<figure class="figure" data-fig="strip-to-disk">
+    <figcaption><span class="fig-no">Figure 7.6</span> The same station twice: a vertical strip of height \(f(x)\), and the thin disk it sweeps out when the region rotates about the \(x\)-axis. The disk’s radius is the function value \(f(x)\), its centre sits on the axis, and the solid extends symmetrically below the axis.</figcaption>
+  </figure>
+<figure class="figure" data-fig="washer-annulus">
+    <figcaption><span class="fig-no">Figure 7.7</span> A washer face-on: the ring between an outer circle of radius \(R\) and an inner one of radius \(r\), both measured from the axis of rotation at the centre. Its area is the big disk minus the small one, \(\pi\bigl(R^{2} - r^{2}\bigr)\), visibly not the disk of radius \(R - r\).</figcaption>
+  </figure>
+<figure class="figure" data-fig="pyramid-similar">
+    <figcaption><span class="fig-no">Figure 7.8</span> The pyramid sliced through its central axis: apex at the origin, base at \(x = h\). The exposed triangle carries the whole solution. The half-widths \(s(x)/2\) and \(b/2\) stand over \(x\) and \(h\) in the same ratio, and the inset shows the square cross-section of side \(s(x)\) face-on.</figcaption>
+  </figure>
+<figure class="figure" data-fig="shell-motivation">
+    <figcaption><span class="fig-no">Figure 7.9</span> The region under \(y = 2x^{2} - x^{3}\) is awkward to describe with slices perpendicular to the axis of rotation: a horizontal strip’s two ends lie on the curve, so reading its radii means solving the cubic for \(x\). A vertical strip reads its height \(f(x)\) straight off the graph, the strip the shell method keeps.</figcaption>
+  </figure>
+<figure class="figure" data-fig="strip-to-shell">
+    <figcaption><span class="fig-no">Figure 7.10</span> The vertical strip at distance \(x\) from the axis, swept into a thin-walled cylindrical shell: radius \(x\) read <em>radially</em> from the axis, height \(f(x)\) read from the graph, thickness \(\Delta x\) between the walls. A shallower shell sits dotted inside. The solid is built of nested tubes, not stacked slices.</figcaption>
+  </figure>
+<figure class="figure" data-fig="shell-unrolled">
+    <figcaption><span class="fig-no">Figure 7.11</span> The shell slit open and unrolled, <em>as if</em> its curved wall lay flat: a slab of length \(2\pi\,\bar x_i\) (the circumference), height \(f(\bar x_i)\), and thickness \(\Delta x\). The picture explains where the \(2\pi\) comes from; the exact statement is the midpoint identity displayed above, not the flattening itself.</figcaption>
+  </figure>
+<figure class="figure" data-fig="washer-vs-shell">
+    <figcaption><span class="fig-no">Figure 7.12</span> One solid, two slicings. The solid of Example 7.12 is a cylinder with a paraboloid bowl carved from its top. A horizontal slice at height \(y\) is a washer from \(\sqrt{y}\) out to \(1\); a vertical slice at radius \(x\) is a shell of height \(x^{2}\). Both decompositions must — and do — measure the same volume.</figcaption>
+  </figure>
+<figure class="figure" data-fig="spring-force-area">
+    <figcaption><span class="fig-no">Figure 7.13</span> Hooke’s law drawn: the applied force \(F = kx\) against the stretch \(x\) beyond natural length. The work of stretching from \(a\) to \(b\) is the shaded area under the force line, accumulated strip by strip, and the strips grow taller toward \(b\), which is why the last centimetre costs the most.</figcaption>
+  </figure>
+<figure class="figure" data-fig="cable-slice">
+    <figcaption><span class="fig-no">Figure 7.14</span> One slice of the hanging cable, at depth \(x\) below the winch. The winch carries its weight through the distance \(x\) that this slice alone must rise: slices near the bottom travel farthest and cost the most.</figcaption>
+  </figure>
+<figure class="figure" data-fig="tank-pump">
+    <figcaption><span class="fig-no">Figure 7.15</span> The conical tank in side view: vertex at height \(0\), rim at \(4\), water to depth \(3\). The slab at height \(y\) has radius \(y/2\) by similar triangles and rises \(4 - y\) to the rim. The water surface bounds the integral at \(3\), while the rim height \(4\) enters each slab’s distance.</figcaption>
+  </figure>
+<figure class="figure" data-fig="levelling-rectangle">
+    <figcaption><span class="fig-no">Figure 7.16</span> Levelling the region under \(y = 1 + x^{2}\) on \([-1, 2]\): the rectangle of height \(f_{\text{ave}}\) holds the same area as the region under the curve. The deficit above the curve on \([-1, 1]\) exactly balances the surplus above the lid on \([1, 2]\), so the levelling rectangle and the region hold the same area.</figcaption>
+  </figure>
+<figure class="figure" data-fig="polygon-refinement">
+    <figcaption><span class="fig-no">Figure 7.17</span> Inscribed polygons hugging the curve. With the same horizontal spacing, chords come out long where the curve is steep and short where it is flat; doubling \(n\) keeps the old corners and visibly tightens the fit. The polygon under-measures every arc it cuts.</figcaption>
+  </figure>
+<figure class="figure" data-fig="mvt-chord-strip">
+    <figcaption><span class="fig-no">Figure 7.18</span> One strip of the proof of Theorem 7.3. The chord is the hypotenuse over the legs \(\Delta x\) and \(\Delta y_i\), and the Mean Value Theorem supplies the interior point \(x_i^{*}\) whose tangent runs parallel to the chord, the picture of Theorem 4.12, now put to work strip by strip.</figcaption>
+  </figure>
+<figure class="figure" data-fig="ds-triangle">
+    <figcaption><span class="fig-no">Figure 7.19</span> The differential triangle: \(ds^{2} = dx^{2} + dy^{2}\). A memory device for the proved formula of Theorem 7.3: the chord picture shrunk to a point. It is not a derivation of that formula.</figcaption>
+  </figure>
+<figure class="figure" data-fig="frustum-unrolled">
+    <figcaption><span class="fig-no">Figure 7.20</span> The frustum band slit open and unrolled: an annular sector, not a rectangle. Its inner and outer edges keep different lengths. The dashed midline arc has length \(2\pi \bar r\), and midline times width \(\ell\) is exactly the band’s area; only the cylinder band (\(r_1 = r_2\)) unrolls into a true rectangle. A picture of the formula the cones already proved, not a second derivation.</figcaption>
+  </figure>
+<figure class="figure" data-fig="chord-to-band">
+    <figcaption><span class="fig-no">Figure 7.21</span> Definition 7.6’s approximant made visible: one chord \(P_{i-1}P_i\) of the curve, and the frustum band it sweeps about the \(x\)-axis. The band’s slant edge <em>is</em> the chord, not the arc. Its end radii are the endpoint heights \(f(x_{i-1})\) and \(f(x_i)\), and its slant length is \(\ell = \lvert P_{i-1}P_i\rvert\).</figcaption>
+  </figure>
+<figure class="figure" data-fig="zone-bands">
+    <figcaption><span class="fig-no">Figure 7.22</span> Two slabs of the same width \(w\) cut the sphere’s profile, one at the equator and one out toward the pole, both strictly inside \((-r, r)\). The polar arc is longer and steeper but sits at a smaller radius; the equatorial arc is shorter and flatter at a larger one. Swept about the axis, the two arcs generate zones of <em>equal</em> area: the compensation Example 7.22 computed.</figcaption>
+  </figure>
+<figure class="figure" data-fig="dual-axis-radius">
+    <figcaption><span class="fig-no">Figure 7.23</span> One point of the arc \(y = x^{2}\), two radii: rotation about the \(x\)-axis reads the vertical distance \(f(x)\), rotation about the \(y\)-axis reads the horizontal distance \(x\). The radius is always the distance to the axis of rotation, one principle and not a memorized pair.</figcaption>
+  </figure>
+</template>
+<!-- END-CONTENT-FRAGMENTS -->
+<!-- plot.js — inlined -->
+<script>
+(function () {
+  var uid = 0;
+  var PI = Math.PI;
+  function piTex(v) {
+    var map = {};
+    map[(-2 * PI).toFixed(4)] = "-2\\pi";
+    map[(-PI).toFixed(4)] = "-\\pi";
+    map[(-PI / 2).toFixed(4)] = "-\\tfrac{\\pi}{2}";
+    map[(PI / 2).toFixed(4)] = "\\tfrac{\\pi}{2}";
+    map[PI.toFixed(4)] = "\\pi";
+    map[(2 * PI).toFixed(4)] = "2\\pi";
+    map[(0).toFixed(4)] = "0";
+    var hit = map[v.toFixed(4)];
+    if (hit != null) return hit;
+    if (Math.abs(v - Math.round(v)) < 1e-9) return String(Math.round(v)); // plain integers
+    return undefined;
+  }
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+  function anchorTransform(anchor, vAnchor) {
+    var tx = anchor === "start" ? "0" : anchor === "end" ? "-100%" : "-50%";
+    var ty = vAnchor === "top" ? "0" : vAnchor === "bottom" ? "-100%" : "-50%";
+    return "translate(" + tx + "," + ty + ")";
+  }
+  function buildPlot(cfg) {
+    var w = cfg.w, h = cfg.h;
+    var pad = Object.assign({ t: 16, r: 18, b: 20, l: 22 }, cfg.pad || {});
+    var xmin = cfg.xmin, xmax = cfg.xmax, ymin = cfg.ymin, ymax = cfg.ymax;
+    var iw = w - pad.l - pad.r, ih = h - pad.t - pad.b;
+    var SX = function(x) { return pad.l + ((x - xmin) / (xmax - xmin)) * iw; };
+    var SY = function(y) { return h - pad.b - ((y - ymin) / (ymax - ymin)) * ih; };
+    var id = "pl" + (++uid);
+    var parts = [], labels = [];
+    function pushLabel(o) { labels.push(o); }
+    parts.push('<svg viewBox="0 0 ' + w + ' ' + h + '" style="width:' + w + 'px" class="fig-svg" role="img" aria-label="' + esc(cfg.aria || "graph") + '" preserveAspectRatio="xMidYMid meet">');
+    parts.push('<defs><marker id="' + id + 'a" markerWidth="8" markerHeight="8" refX="5.4" refY="2.8" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L5.4,2.8 L0,5.6" fill="none" stroke="var(--c-axis)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>');
+    if (cfg.axes !== false) {
+      var x0 = Math.min(Math.max(0, xmin), xmax), y0 = Math.min(Math.max(0, ymin), ymax);
+      var ax0 = SX(xmin), ax1 = SX(xmax), ayBase = SY(y0);
+      parts.push('<path d="M' + ax0.toFixed(1) + ',' + ayBase.toFixed(1) + ' H' + (ax1 - 1).toFixed(1) + '" class="axis" marker-end="url(#' + id + 'a)"/>');
+      var ay0 = SY(ymin), ay1 = SY(ymax), axBase = SX(x0);
+      parts.push('<path d="M' + axBase.toFixed(1) + ',' + ay0.toFixed(1) + ' V' + (ay1 + 1).toFixed(1) + '" class="axis" marker-end="url(#' + id + 'a)"/>');
+      if (cfg.xlabel) pushLabel({ px: ax1 + 1, py: ayBase + 4, tex: cfg.xlabel, anchor: "start", vAnchor: "top", cls: "a-ax", size: 13 });
+      if (cfg.ylabel) pushLabel({ px: axBase - 5, py: ay1 + 1, tex: cfg.ylabel, anchor: "end", vAnchor: "top", cls: "a-ax", size: 13 });
+      (cfg.xticks || []).forEach(function(t) {
+        var px = SX(t.x);
+        parts.push('<line x1="' + px.toFixed(1) + '" y1="' + (ayBase - 3).toFixed(1) + '" x2="' + px.toFixed(1) + '" y2="' + (ayBase + 3).toFixed(1) + '" class="axis"/>');
+        var tex = t.tex != null ? t.tex : (t.label != null ? null : piTex(t.x));
+        if (tex != null) pushLabel({ px: px, py: ayBase + 6, tex: tex, anchor: "middle", vAnchor: "top", cls: "a-pt", size: 12 });
+        else if (t.label != null) pushLabel({ px: px, py: ayBase + 6, text: t.label, anchor: "middle", vAnchor: "top", cls: "a-pt", size: 12 });
+      });
+      (cfg.yticks || []).forEach(function(t) {
+        var py = SY(t.y);
+        parts.push('<line x1="' + (axBase - 3).toFixed(1) + '" y1="' + py.toFixed(1) + '" x2="' + (axBase + 3).toFixed(1) + '" y2="' + py.toFixed(1) + '" class="axis"/>');
+        var tex = t.tex != null ? t.tex : (t.label != null ? null : piTex(t.y));
+        if (tex != null) pushLabel({ px: axBase - 6, py: py, tex: tex, anchor: "end", vAnchor: "middle", cls: "a-pt", size: 12 });
+        else if (t.label != null) pushLabel({ px: axBase - 6, py: py, text: t.label, anchor: "end", vAnchor: "middle", cls: "a-pt", size: 12 });
+      });
+    }
+    (cfg.items || []).forEach(function(it) {
+      if (it.type === "curve") {
+        var cls = it.cls || "curve", n = it.samples || 240, a = it.domain[0], b = it.domain[1];
+        var d = "", pen = false;
+        for (var i = 0; i <= n; i++) {
+          var x = a + (b - a) * (i / n), y = it.fn(x);
+          if (!isFinite(y) || y < ymin - (ymax - ymin) * 0.04 || y > ymax + (ymax - ymin) * 0.04) { pen = false; continue; }
+          var px = SX(x).toFixed(2), py = SY(y).toFixed(2);
+          d += (pen ? "L" : "M") + px + "," + py + " "; pen = true;
+        }
+        if (d) parts.push('<path d="' + d.trim() + '" class="' + cls + '"/>');
+      } else if (it.type === "vline") {
+        parts.push('<line x1="' + SX(it.x).toFixed(1) + '" y1="' + SY(ymin).toFixed(1) + '" x2="' + SX(it.x).toFixed(1) + '" y2="' + SY(ymax).toFixed(1) + '" class="' + (it.cls || "refline") + '"/>');
+      } else if (it.type === "hline") {
+        var ha = it.from != null ? it.from : xmin, hb = it.to != null ? it.to : xmax;
+        parts.push('<line x1="' + SX(ha).toFixed(1) + '" y1="' + SY(it.y).toFixed(1) + '" x2="' + SX(hb).toFixed(1) + '" y2="' + SY(it.y).toFixed(1) + '" class="' + (it.cls || "refline") + '"/>');
+      } else if (it.type === "seg") {
+        parts.push('<line x1="' + SX(it.x1).toFixed(1) + '" y1="' + SY(it.y1).toFixed(1) + '" x2="' + SX(it.x2).toFixed(1) + '" y2="' + SY(it.y2).toFixed(1) + '" class="' + (it.cls || "curve") + '"/>');
+      } else if (it.type === "dot") {
+        var r = it.r || 3.0;
+        if (it.hollow) parts.push('<circle cx="' + SX(it.x).toFixed(1) + '" cy="' + SY(it.y).toFixed(1) + '" r="' + r + '" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.5"/>');
+        else parts.push('<circle cx="' + SX(it.x).toFixed(1) + '" cy="' + SY(it.y).toFixed(1) + '" r="' + r + '" class="dot"/>');
+      } else if (it.type === "rect") {
+        var rTop = SY(it.y1), rBot = SY(it.y0 != null ? it.y0 : 0), rL = SX(it.x1), rR = SX(it.x2);
+        parts.push('<rect x="' + Math.min(rL, rR).toFixed(1) + '" y="' + Math.min(rTop, rBot).toFixed(1) + '" width="' + Math.abs(rR - rL).toFixed(1) + '" height="' + Math.abs(rBot - rTop).toFixed(1) + '" class="' + (it.cls || "fill-area") + '"/>');
+      } else if (it.type === "area") {
+        var aN = it.samples || 160, aA = it.domain[0], aB = it.domain[1], aBase = (it.base != null ? it.base : 0);
+        var aD = "M" + SX(aA).toFixed(2) + "," + SY(aBase).toFixed(2) + " ";
+        for (var aI = 0; aI <= aN; aI++) { var aX = aA + (aB - aA) * (aI / aN); aD += "L" + SX(aX).toFixed(2) + "," + SY(it.fn(aX)).toFixed(2) + " "; }
+        aD += "L" + SX(aB).toFixed(2) + "," + SY(aBase).toFixed(2) + " Z";
+        parts.push('<path d="' + aD.trim() + '" class="' + (it.cls || "fill-area") + '"/>');
+      } else if (it.type === "areaBetween") {
+        /* ch7 extension (M2 figure batch): fill between two curves y=fnTop(x), y=fnBot(x) over domain.
+           Same one-off-kit-extension move as ch06's rect/area (see PLAN-ch06 "M2 figure batch"). */
+        var bN = it.samples || 160, bA = it.domain[0], bB = it.domain[1], bD = "";
+        for (var bI = 0; bI <= bN; bI++) { var bX = bA + (bB - bA) * (bI / bN); bD += (bI ? "L" : "M") + SX(bX).toFixed(2) + "," + SY(it.fnTop(bX)).toFixed(2) + " "; }
+        for (var bJ = bN; bJ >= 0; bJ--) { var bX2 = bA + (bB - bA) * (bJ / bN); bD += "L" + SX(bX2).toFixed(2) + "," + SY(it.fnBot(bX2)).toFixed(2) + " "; }
+        parts.push('<path d="' + bD.trim() + ' Z" class="' + (it.cls || "fill-area") + '"/>');
+      } else if (it.type === "arrow") {
+        parts.push('<line x1="' + SX(it.x1).toFixed(1) + '" y1="' + SY(it.y1).toFixed(1) + '" x2="' + SX(it.x2).toFixed(1) + '" y2="' + SY(it.y2).toFixed(1) + '" class="axis" marker-end="url(#' + id + 'a)"/>');
+      } else if (it.type === "text") {
+        pushLabel({ px: SX(it.x), py: SY(it.y), tex: it.tex, text: it.tex == null ? it.text : null, anchor: it.anchor || "middle", vAnchor: it.vAnchor || "middle", dx: it.dx || 0, dy: it.dy || 0, cls: it.cls || "a-pt", size: it.size });
+      }
+    });
+    if (labels.length) {
+      var M = 52;
+      var spans = labels.map(function(L) {
+        var left = (L.px + (L.dx || 0) + M).toFixed(1);
+        var top = (L.py + (L.dy || 0) + M).toFixed(1);
+        var tf = anchorTransform(L.anchor, L.vAnchor);
+        var fs = L.size ? "font-size:" + L.size + "px;" : "";
+        var body = L.tex != null ? "\\(" + L.tex + "\\)" : esc(L.text == null ? "" : L.text);
+        return '<span class="fig-lbl ' + (L.cls || "") + '" style="left:' + left + 'px;top:' + top + 'px;transform:' + tf + ';' + fs + '">' + body + '</span>';
+      }).join("");
+      parts.push('<foreignObject x="' + (-M) + '" y="' + (-M) + '" width="' + (w + 2 * M) + '" height="' + (h + 2 * M) + '" class="fig-fo" requiredExtensions="http://www.w3.org/1999/xhtml"><div xmlns="http://www.w3.org/1999/xhtml" class="fig-lyr">' + spans + '</div></foreignObject>');
+    }
+    parts.push('</svg>');
+    return parts.join("");
+  }
+  window.buildPlot = buildPlot;
+  window.PIVAL = PI;
+})();
+</script>
+
+<!-- ============================================================
+     figures.js — inlined (Chapter 7 figure registry)
+     ============================================================ -->
+<script>
+/* ============================================================
+   figures.js — Chapter 7 figure registry.
+   Each entry returns { layout, panels:[{svg, note}] }.
+   Most chapter figures use buildPlot() (shared/plot.js) for
+   function graphs. buildPlot has NO fill/sector primitive, so
+   region-area schematics (e.g. the §3.1 sector inequality) are
+   hand-built raw SVG here, inheriting the figure vocabulary
+   (.fig-svg, .ptlab, var(--c-primary)/--ink…) from skin-hs.css.
+   Labels are kept to single symbols (O, A, B, C, θ, 1); the
+   areas and the inequality live in the caption and body prose
+   (CONTENT_SPEC §10 "Label economy").
+   Appended across sections — never overwrite.
+   ============================================================ */
+(function () {
+
+  /* ---- tiny helpers for the few hand-built raw-SVG schematics ----
+     (labels replicate buildPlot's foreignObject/MathJax span mechanism) */
+  var FO_M = 52;
+  function svgOpen(w, h, aria) {
+    return '<svg viewBox="0 0 ' + w + ' ' + h + '" style="width:' + w + 'px" class="fig-svg" role="img" aria-label="' + aria + '" preserveAspectRatio="xMidYMid meet">';
+  }
+  function texLbl(px, py, tex, anchor, size) {
+    var tf = anchor === "start" ? "translate(0,-50%)" : anchor === "end" ? "translate(-100%,-50%)" : "translate(-50%,-50%)";
+    var fs = size ? "font-size:" + size + "px;" : "font-size:12px;";
+    return '<span class="fig-lbl a-pt" style="left:' + (px + FO_M).toFixed(1) + 'px;top:' + (py + FO_M).toFixed(1) + 'px;transform:' + tf + ';' + fs + '">\\(' + tex + '\\)</span>';
+  }
+  function txtLbl(px, py, text, anchor, size) {
+    var tf = anchor === "start" ? "translate(0,-50%)" : anchor === "end" ? "translate(-100%,-50%)" : "translate(-50%,-50%)";
+    var fs = size ? "font-size:" + size + "px;" : "font-size:12px;";
+    return '<span class="fig-lbl a-pt" style="left:' + (px + FO_M).toFixed(1) + 'px;top:' + (py + FO_M).toFixed(1) + 'px;transform:' + tf + ';' + fs + '">' + text + '</span>';
+  }
+  function foWrap(w, h, spans) {
+    return '<foreignObject x="' + (-FO_M) + '" y="' + (-FO_M) + '" width="' + (w + 2 * FO_M) + '" height="' + (h + 2 * FO_M) + '" class="fig-fo" requiredExtensions="http://www.w3.org/1999/xhtml"><div xmlns="http://www.w3.org/1999/xhtml" class="fig-lyr">' + spans + '</div></foreignObject>';
+  }
+
+  const FIGS = {
+
+    /* §7.1 Figure 7.1 — region between two generic curves, one representative strip.
+       Load-bearing intuition: strip height = the GAP f−g; the x-axis passes through the
+       region (visible through the translucent fill) so axis-independence registers.
+       f ≥ g throughout; no crossing inside [a,b]. Numbers live in prose (label economy). */
+    "gap-strip": function () {
+      var f = function (x) { return 2.15 + 0.5 * Math.sin(1.15 * x); };
+      var g = function (x) { return -0.55 + 0.45 * Math.cos(1.3 * x - 0.5); };
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 300, h: 235, xmin: 0, xmax: 5.05, ymin: -1.5, ymax: 3.0,
+        aria: "region between an upper curve f and a lower curve g with one vertical strip",
+        xticks: [{ x: 0.6, tex: "a" }, { x: 4.4, tex: "b" }],
+        items: [
+          { type: "areaBetween", fnTop: f, fnBot: g, domain: [0.6, 4.4] },
+          { type: "seg", x1: 0.6, y1: g(0.6), x2: 0.6, y2: f(0.6), cls: "axis" },
+          { type: "seg", x1: 4.4, y1: g(4.4), x2: 4.4, y2: f(4.4), cls: "axis" },
+          { type: "rect", x1: 2.95, x2: 3.15, y0: g(3.05), y1: f(3.05), cls: "rect-lo" },
+          { type: "curve", fn: f, domain: [0.6, 4.4] },
+          { type: "curve", fn: g, domain: [0.6, 4.4] },
+          { type: "text", x: 4.55, y: f(4.4), tex: "y = f(x)", anchor: "start", size: 12, dy: -6 },
+          { type: "text", x: 4.55, y: g(4.4), tex: "y = g(x)", anchor: "start", size: 12, dy: 12 },
+          { type: "text", x: 3.05, y: -1.22, tex: "\\Delta x", size: 11 },
+          { type: "text", x: 3.24, y: 0.55, tex: "f(x_i^{*}) - g(x_i^{*})", anchor: "start", size: 11 }
+        ] }) }] };
+    },
+
+    /* §7.1 Figure 7.2 — the ENCLOSED lens: y=x² and y=2x−x², sides collapsed to the two
+       intersection points (0,0),(1,1) — each the vertex of one parabola, crossings transversal.
+       No area value printed (D7). */
+    "enclosed-lens": function () {
+      var p1 = function (x) { return x * x; };
+      var p2 = function (x) { return 2 * x - x * x; };
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 265, h: 225, xmin: -0.55, xmax: 1.6, ymin: -0.34, ymax: 1.24,
+        aria: "lens-shaped region enclosed by the parabolas y equals x squared and y equals 2x minus x squared",
+        xticks: [{ x: 1, tex: "1" }],
+        yticks: [{ y: 1, tex: "1" }],
+        items: [
+          { type: "areaBetween", fnTop: p2, fnBot: p1, domain: [0, 1] },
+          { type: "curve", fn: p1, domain: [-0.5, 1.1] },
+          { type: "curve", fn: p2, domain: [-0.16, 1.55], cls: "curve-log" },
+          { type: "dot", x: 0, y: 0 }, { type: "dot", x: 1, y: 1 },
+          { type: "text", x: -0.52, y: 0.28, tex: "y = x^{2}", anchor: "start", size: 12, dy: -12 },
+          { type: "text", x: 1.42, y: 0.62, tex: "y = 2x - x^{2}", anchor: "end", size: 12, dy: 12 }
+        ] }) }] };
+    },
+
+    /* §7.1 Figure 7.3 — sin vs cos on [0,π/2]: the two lobes, roof/floor swapping at the
+       crossing (π/4, √2/2); mirror symmetry about x=π/4. Post-solution; no areas printed. */
+    "sincos-lobes": function () {
+      var s = Math.sin, c = Math.cos, HP = Math.PI / 2, QP = Math.PI / 4;
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 285, h: 210, xmin: -0.16, xmax: 1.92, ymin: -0.2, ymax: 1.22,
+        aria: "sine and cosine on zero to pi over two with the two enclosed lobes shaded and the crossing at pi over four marked",
+        xticks: [{ x: QP, tex: "\\tfrac{\\pi}{4}" }, { x: HP, tex: "\\tfrac{\\pi}{2}" }],
+        yticks: [{ y: 1, tex: "1" }],
+        items: [
+          { type: "areaBetween", fnTop: c, fnBot: s, domain: [0, QP] },
+          { type: "areaBetween", fnTop: s, fnBot: c, domain: [QP, HP], cls: "fill-pos" },
+          { type: "curve", fn: c, domain: [0, HP], cls: "curve-log" },
+          { type: "curve", fn: s, domain: [0, HP] },
+          { type: "dot", x: QP, y: Math.SQRT1_2 },
+          { type: "text", x: 0.1, y: 1.12, tex: "y = \\cos x", anchor: "start", size: 12 },
+          { type: "text", x: 1.62, y: 1.09, tex: "y = \\sin x", anchor: "end", size: 12 }
+        ] }) }] };
+    },
+
+    /* §7.1 Figure 7.4 — horizontal slicing: x=y² (opens right) vs x=2−y² (opens left),
+       one horizontal representative strip entering on x=y², leaving on x=2−y².
+       Intersections (1,±1); region symmetric about the x-axis; strip at generic height. */
+    "horizontal-slice": function () {
+      var sq = Math.sqrt;
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 285, h: 235, xmin: -0.35, xmax: 2.5, ymin: -1.42, ymax: 1.42,
+        aria: "region enclosed by the sideways parabolas x equals y squared and x equals two minus y squared with one horizontal strip",
+        xticks: [{ x: 1, tex: "1" }],
+        yticks: [{ y: 1, tex: "1" }, { y: -1, tex: "-1" }],
+        items: [
+          { type: "areaBetween", fnTop: function (x) { return sq(x); }, fnBot: function (x) { return -sq(x); }, domain: [0, 1] },
+          { type: "areaBetween", fnTop: function (x) { return sq(2 - x); }, fnBot: function (x) { return -sq(2 - x); }, domain: [1, 2] },
+          { type: "rect", x1: 0.25, x2: 1.75, y0: 0.44, y1: 0.56, cls: "rect-lo" },
+          { type: "curve", fn: function (x) { return sq(x); }, domain: [0, 1.32] },
+          { type: "curve", fn: function (x) { return -sq(x); }, domain: [0, 1.32] },
+          { type: "curve", fn: function (x) { return sq(2 - x); }, domain: [0.68, 2], cls: "curve-log" },
+          { type: "curve", fn: function (x) { return -sq(2 - x); }, domain: [0.68, 2], cls: "curve-log" },
+          { type: "dot", x: 1, y: 1 }, { type: "dot", x: 1, y: -1 },
+          { type: "text", x: 1.42, y: -1.28, tex: "x = y^{2}", anchor: "start", size: 12 },
+          { type: "text", x: 0.68, y: -1.28, tex: "x = 2 - y^{2}", size: 12 }
+        ] }) }] };
+    },
+
+    /* §7.2 Figure 7.7 — washer cross-section face-on: annulus with outer radius R to the far
+       boundary, inner radius r to the near one, both from the rotation axis (centre marked).
+       Interior station: 0 < r < R strictly. Pure 2D. */
+    "washer-annulus": function () {
+      var W = 235, H = 200, cx = 112, cy = 100, R = 82, r = 40;
+      var aR = 0.72, ar = 2.42; /* arrow angles (rad) */
+      var spans = texLbl(cx + 0.55 * R * Math.cos(aR) + 5, cy - 0.55 * R * Math.sin(aR) - 13, "R", "middle", 13)
+                + texLbl(cx + 0.52 * r * Math.cos(ar) - 5, cy - 0.52 * r * Math.sin(ar) - 12, "r", "middle", 13)
+                + txtLbl(cx + 6, cy + 10, "axis", "start", 11);
+      var svg = svgOpen(W, H, "washer cross-section: an annulus, the ring between an inner and an outer circle")
+        + '<path d="M' + (cx - R) + ',' + cy + ' a' + R + ',' + R + ' 0 1,0 ' + (2 * R) + ',0 a' + R + ',' + R + ' 0 1,0 ' + (-2 * R) + ',0 Z M' + (cx - r) + ',' + cy + ' a' + r + ',' + r + ' 0 1,1 ' + (2 * r) + ',0 a' + r + ',' + r + ' 0 1,1 ' + (-2 * r) + ',0 Z" fill-rule="evenodd" class="fill-area"/>'
+        + '<circle cx="' + cx + '" cy="' + cy + '" r="' + R + '" class="curve" fill="none"/>'
+        + '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" class="curve" fill="none"/>'
+        + '<line x1="' + cx + '" y1="' + cy + '" x2="' + (cx + R * Math.cos(aR)).toFixed(1) + '" y2="' + (cy - R * Math.sin(aR)).toFixed(1) + '" class="axis"/>'
+        + '<line x1="' + cx + '" y1="' + cy + '" x2="' + (cx + r * Math.cos(ar)).toFixed(1) + '" y2="' + (cy - r * Math.sin(ar)).toFixed(1) + '" class="axis"/>'
+        + '<circle cx="' + cx + '" cy="' + cy + '" r="2.6" class="dot"/>'
+        + foWrap(W, H, spans) + '</svg>';
+      return { layout: "single", panels: [{ svg: svg }] };
+    },
+
+    /* §7.3 Figure 7.9 — the motivating failure: region under y=2x²−x³ on [0,2]. A horizontal
+       strip's two ends sit ON the curve (washer radii would need the cubic inverted — callout
+       "solve for x?"); a vertical strip reads its height f(x) straight off the graph.
+       Max at (4/3, 32/27); no numeric answers printed. */
+    "shell-motivation": function () {
+      var f = function (x) { return 2 * x * x - x * x * x; };
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 295, h: 220, xmin: -0.3, xmax: 2.55, ymin: -0.22, ymax: 1.5,
+        aria: "region under y equals 2 x squared minus x cubed with one awkward horizontal strip and one direct vertical strip",
+        xticks: [{ x: 2, tex: "2" }],
+        items: [
+          { type: "area", fn: f, domain: [0, 2] },
+          { type: "rect", x1: 0.585, x2: 0.655, y0: 0, y1: f(0.62), cls: "rect-lo" },
+          { type: "rect", x1: 0.694, x2: 1.812, y0: 0.585, y1: 0.655, cls: "rect-sum" },
+          { type: "curve", fn: f, domain: [-0.15, 2.0] },
+          { type: "dot", x: 0.694, y: 0.62, r: 2.4 }, { type: "dot", x: 1.812, y: 0.62, r: 2.4 },
+          { type: "text", x: 1.86, y: 0.9, text: "solve for x?", anchor: "start", size: 11 },
+          { type: "text", x: 0.585, y: 0.4, tex: "f(x)", anchor: "end", size: 11, dx: -6 },
+          { type: "text", x: 1.55, y: 1.38, tex: "y = 2x^{2} - x^{3}", anchor: "start", size: 12 }
+        ] }) }] };
+    },
+
+    /* §7.3 Figure 7.11 — the shell slit open and unrolled: a flat slab, length ≈ 2π x̄ᵢ (the
+       circumference), height f(x̄ᵢ), thickness Δx. The unrolling is the prose's "as-if"
+       HEURISTIC — exactness lives in the midpoint identity display (caption carries this). */
+    "shell-unrolled": function () {
+      var W = 300, H = 150;
+      var x0 = 26, y0 = 118, L = 212, Ht = 56, dx = 17, dy = 9; /* front face + oblique depth */
+      var spans = texLbl(x0 + L / 2, y0 + 14, "2\\pi\\,\\bar x_i", "middle", 12)
+                + texLbl(x0 + L + dx + 7, y0 - dy - Ht / 2, "f(\\bar x_i)", "start", 12)
+                + texLbl(x0 + L + dx / 2 + 10, y0 - Ht - dy / 2 - 12, "\\Delta x", "start", 11);
+      var svg = svgOpen(W, H, "the unrolled shell: a flat slab of length two pi x bar, height f of x bar, thickness delta x")
+        + '<path d="M' + x0 + ',' + y0 + ' h' + L + ' v-' + Ht + ' h-' + L + ' Z" class="rect-sum"/>'
+        + '<path d="M' + x0 + ',' + (y0 - Ht) + ' l' + dx + ',-' + dy + ' h' + L + ' l-' + dx + ',' + dy + ' Z" class="fill-pos"/>'
+        + '<path d="M' + (x0 + L) + ',' + y0 + ' l' + dx + ',-' + dy + ' v-' + Ht + ' l-' + dx + ',' + dy + ' Z" class="fill-area"/>'
+        + '<path d="M' + x0 + ',' + y0 + ' h' + L + ' v-' + Ht + ' h-' + L + ' Z M' + x0 + ',' + (y0 - Ht) + ' l' + dx + ',-' + dy + ' h' + L + ' M' + (x0 + L + dx) + ',' + (y0 - Ht - dy) + ' v' + Ht + ' l-' + dx + ',' + dy + '" class="bubble" fill="none"/>'
+        + foWrap(W, H, spans) + '</svg>';
+      return { layout: "single", panels: [{ svg: svg }] };
+    },
+
+    /* §7.4 Figure 7.13 — Hooke's law force–displacement graph: F = kx through the origin;
+       work = area under the force line between a and b; one representative strip (the
+       Def 7.3 Riemann reading folded in). Named ticks a, b get explicit tex. */
+    "spring-force-area": function () {
+      var k = 0.88;
+      var F = function (x) { return k * x; };
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 265, h: 205, xmin: -0.18, xmax: 1.62, ymin: -0.22, ymax: 1.5,
+        aria: "force displacement graph of Hooke's law with the work shaded as area under the line between a and b",
+        xlabel: "x", ylabel: "F",
+        xticks: [{ x: 0.55, tex: "a" }, { x: 1.1, tex: "b" }],
+        items: [
+          { type: "area", fn: F, domain: [0.55, 1.1] },
+          { type: "rect", x1: 0.79, x2: 0.86, y0: 0, y1: F(0.825), cls: "rect-lo" },
+          { type: "curve", fn: F, domain: [0, 1.45] },
+          { type: "text", x: 1.45, y: F(1.45), tex: "F = kx", anchor: "end", size: 12, dx: -4, dy: -14 }
+        ] }) }] };
+    },
+
+    /* §7.4 Figure 7.14 — the hanging cable: one slice at depth x below the winch, thickness Δx,
+       and the arrow of length x it must rise. x measured DOWNWARD from the winch (0 top,
+       20 bottom); cable hangs straight, no end load. */
+    "cable-slice": function () {
+      var W = 185, H = 250;
+      var cxC = 78, yTop = 34, yBot = 226, ySl = 142, th = 13;
+      var spans = txtLbl(cxC - 14, yTop - 12, "winch", "end", 11)
+                + txtLbl(cxC - 12, yTop + 6, "0", "end", 11)
+                + txtLbl(cxC - 12, yBot - 2, "20", "end", 11)
+                + texLbl(cxC + 40, (yTop + ySl) / 2, "x", "start", 13)
+                + texLbl(cxC + 13, ySl + th / 2 + 1, "\\Delta x", "start", 11);
+      var svg = svgOpen(W, H, "a cable hanging from a winch with one slice at depth x and its lift arrow")
+        + '<line x1="' + (cxC - 34) + '" y1="' + yTop + '" x2="' + (cxC + 34) + '" y2="' + yTop + '" class="axis" stroke-width="3"/>'
+        + '<line x1="' + cxC + '" y1="' + yTop + '" x2="' + cxC + '" y2="' + yBot + '" class="curve"/>'
+        + '<line x1="' + cxC + '" y1="' + yBot + '" x2="' + cxC + '" y2="' + yBot + '" class="curve"/>'
+        + '<rect x="' + (cxC - 5.5) + '" y="' + (ySl - th / 2) + '" width="11" height="' + th + '" class="rect-lo"/>'
+        + '<line x1="' + (cxC + 33) + '" y1="' + ySl + '" x2="' + (cxC + 33) + '" y2="' + (yTop + 5) + '" class="axis" marker-end="url(#cbl-a)"/>'
+        + '<defs><marker id="cbl-a" markerWidth="8" markerHeight="8" refX="5.4" refY="2.8" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L5.4,2.8 L0,5.6" fill="none" stroke="var(--c-axis)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>'
+        + foWrap(W, H, spans) + '</svg>';
+      return { layout: "single", panels: [{ svg: svg }] };
+    },
+
+    /* §7.4 Figure 7.15 — the conical tank, side view: vertex at y=0 (bottom), rim at y=4,
+       water to y=3 (strictly below the rim); one slab at height y (strictly inside the water,
+       0<y<3) of radius y/2 by similar triangles; its lift arrow runs to the RIM (length 4−y).
+       Both the 3-line and the 4-line must be readable (the integral stops at 3, the distance
+       reaches 4). Built with buildPlot in tank coordinates. */
+    "tank-pump": function () {
+      var yS = 1.6; /* slab height, strictly inside 0<y<3 */
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 265, h: 235, xmin: -2.7, xmax: 3.1, ymin: -0.45, ymax: 4.6, axes: false,
+        aria: "side view of an inverted conical tank: vertex at the bottom, rim at height four, water to depth three, one slab with its lift arrow",
+        items: [
+          { type: "areaBetween", fnTop: function () { return 3; }, fnBot: function (x) { return 2 * Math.abs(x); }, domain: [-1.5, 1.5] },
+          { type: "seg", x1: 0, y1: 0, x2: -2, y2: 4, cls: "curve" },
+          { type: "seg", x1: 0, y1: 0, x2: 2, y2: 4, cls: "curve" },
+          { type: "seg", x1: -2, y1: 4, x2: 2, y2: 4, cls: "curve" },
+          { type: "vline", x: 0, cls: "idline" },
+          { type: "hline", y: 3, from: -1.5, to: 1.85, cls: "idline" },
+          { type: "rect", x1: -yS / 2, x2: yS / 2, y0: yS - 0.09, y1: yS + 0.09, cls: "rect-lo" },
+          { type: "arrow", x1: 1.05, y1: yS, x2: 1.05, y2: 3.93 },
+          { type: "seg", x1: 0, y1: yS, x2: yS / 2, y2: yS, cls: "axis" },
+          { type: "dot", x: 0, y: 0, r: 2.4 },
+          { type: "text", x: 0.06, y: -0.3, text: "0", anchor: "start", size: 11 },
+          { type: "text", x: 1.95, y: 3, text: "3", anchor: "start", size: 11, dx: 6 },
+          { type: "text", x: 2.12, y: 4, text: "4", anchor: "start", size: 11, dx: 6 },
+          { type: "text", x: 1.05, y: (yS + 4) / 2, tex: "4 - y", anchor: "start", size: 12, dx: 15 },
+          { type: "text", x: 0.42, y: 1.97, tex: "y/2", size: 11 },
+          { type: "text", x: -yS / 2, y: yS, tex: "y", anchor: "end", size: 12, dx: -8 }
+        ] }) }] };
+    },
+
+    /* §7.5 Figure 7.16 — the levelling rectangle: f(x)=1+x² on [−1,2] with the lid at the
+       average height 2; deficit (lid above curve, on [−1,1]) and surplus (curve above lid,
+       on [1,2]) shaded in CONTRASTING tones — equal areas; crossings at x=±1 where f = f_ave
+       (the left crossing sits at the interval's left endpoint = the rectangle's top-left
+       corner). y-window includes f(2)=5. */
+    "levelling-rectangle": function () {
+      var f = function (x) { return 1 + x * x; };
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 270, h: 250, xmin: -1.55, xmax: 2.62, ymin: -0.75, ymax: 5.55,
+        aria: "the graph of one plus x squared over minus one to two with the mean height rectangle of height two: deficit and surplus regions shaded, equal in area",
+        xticks: [{ x: -1, tex: "-1" }, { x: 1, tex: "1" }, { x: 2, tex: "2" }],
+        yticks: [{ y: 2, tex: "2" }, { y: 5, tex: "5" }],
+        items: [
+          { type: "areaBetween", fnTop: function () { return 2; }, fnBot: f, domain: [-1, 1] },
+          { type: "areaBetween", fnTop: f, fnBot: function () { return 2; }, domain: [1, 2], cls: "fill-neg" },
+          { type: "rect", x1: -1, x2: 2, y0: 0, y1: 2, cls: "rect-hi" },
+          { type: "curve", fn: f, domain: [-1.38, 2.1] },
+          { type: "dot", x: -1, y: 2 }, { type: "dot", x: 1, y: 2 },
+          { type: "text", x: 2.18, y: 2, tex: "f_{\\text{ave}}", anchor: "start", size: 12 },
+          { type: "text", x: -1.45, y: 3.3, tex: "y = 1 + x^{2}", anchor: "start", size: 12 }
+        ] }) }] };
+    },
+
+    /* §7.6 Figure 7.17 — inscribed polygon refinement (pair): the same single-bend curve with
+       4 chords, then 8 (old nodes kept: n doubles). Chord endpoints ON the curve at REGULAR
+       x-spacing (so chord lengths differ: long where steep, short where flat — the stretch
+       factor pre-taught for free). Polygon strictly inside the bend (concave-down window). */
+    "polygon-refinement": function () {
+      var f = function (x) { var u = (x - 2) / 2.2; return 2.42 * Math.sqrt(Math.max(0, 1 - u * u)); };
+      function panel(n) {
+        var a = 0.1, b = 3.9, dx = (b - a) / n;
+        var items = [{ type: "curve", fn: f, domain: [a, b] }];
+        for (var i = 0; i < n; i++) {
+          items.push({ type: "seg", x1: a + i * dx, y1: f(a + i * dx), x2: a + (i + 1) * dx, y2: f(a + (i + 1) * dx), cls: "axis" });
+        }
+        for (var j = 0; j <= n; j++) {
+          items.push({ type: "dot", x: a + j * dx, y: f(a + j * dx), r: 2.1 });
+        }
+        return buildPlot({ w: 235, h: 165, xmin: -0.25, xmax: 4.3, ymin: -0.3, ymax: 2.8,
+          aria: "an arch-shaped curve with an inscribed polygon of " + n + " chords", items: items });
+      }
+      return { layout: "pair", panels: [
+        { svg: panel(4), note: "\\(n = 4\\)" },
+        { svg: panel(8), note: "\\(n = 8\\)" }
+      ] };
+    },
+
+    /* §7.6 Figure 7.18 — one strip of the arc length proof, blown up: run Δx, rise Δy_i, the
+       chord as hypotenuse; the Mean Value Theorem point x_i* strictly interior, its tangent
+       segment PARALLEL to the chord. Labels only Δx, Δy_i, x_i* (label economy). */
+    "mvt-chord-strip": function () {
+      var f = function (x) { return 1.05 + 1.5 * Math.sin(0.9 * (x - 0.55)); };
+      var x0 = 1, x1 = 3, xs = 2.038; /* f'(xs) = chord slope ≈ 0.31 */
+      var m = (f(x1) - f(x0)) / (x1 - x0);
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 275, h: 205, xmin: 0.45, xmax: 3.75, ymin: 1.05, ymax: 3.0, axes: false,
+        aria: "one strip of the arc length proof: chord as hypotenuse over legs delta x and delta y, with the mean value theorem point's tangent parallel to the chord",
+        items: [
+          { type: "seg", x1: x0, y1: f(x0), x2: x1, y2: f(x0), cls: "idline" },
+          { type: "seg", x1: x1, y1: f(x0), x2: x1, y2: f(x1), cls: "idline" },
+          { type: "seg", x1: x0, y1: f(x0), x2: x1, y2: f(x1), cls: "axis" },
+          { type: "seg", x1: xs - 0.55, y1: f(xs) - 0.55 * m, x2: xs + 0.55, y2: f(xs) + 0.55 * m, cls: "refline" },
+          { type: "curve", fn: f, domain: [0.68, 3.2] },
+          { type: "dot", x: x0, y: f(x0) }, { type: "dot", x: x1, y: f(x1) },
+          { type: "dot", x: xs, y: f(xs) },
+          { type: "text", x: (x0 + x1) / 2, y: f(x0), tex: "\\Delta x", size: 12, dy: 13 },
+          { type: "text", x: x1, y: (f(x0) + f(x1)) / 2, tex: "\\Delta y_i", anchor: "start", size: 12, dx: 8 },
+          { type: "text", x: xs - 0.12, y: f(xs), tex: "x_i^{*}", size: 12, dy: -17 }
+        ] }) }] };
+    },
+
+    /* §7.6 Figure 7.19 — the ds right triangle: legs dx and dy, hypotenuse ds. Standalone
+       schematic — no axes, no scale (the caption states its MNEMONIC status: a memory device
+       for the proved Theorem 7.3, not a derivation). Right-angle mark at the dx–dy corner. */
+    "ds-triangle": function () {
+      var W = 185, H = 130;
+      var Ax = 30, Ay = 102, Bx = 152, By = 102, Cy = 30; /* right angle at B */
+      var spans = texLbl((Ax + Bx) / 2, Ay + 13, "dx", "middle", 13)
+                + texLbl(Bx + 10, (By + Cy) / 2, "dy", "start", 13)
+                + texLbl((Ax + Bx) / 2 - 8, (Ay + Cy) / 2 - 10, "ds", "middle", 13);
+      var svg = svgOpen(W, H, "right triangle with legs d x and d y and hypotenuse d s")
+        + '<line x1="' + Ax + '" y1="' + Ay + '" x2="' + Bx + '" y2="' + By + '" class="axis"/>'
+        + '<line x1="' + Bx + '" y1="' + By + '" x2="' + Bx + '" y2="' + Cy + '" class="axis"/>'
+        + '<line x1="' + Ax + '" y1="' + Ay + '" x2="' + Bx + '" y2="' + Cy + '" class="curve"/>'
+        + '<path d="M' + (Bx - 11) + ',' + By + ' v-11 h11" fill="none" class="bubble"/>'
+        + foWrap(W, H, spans) + '</svg>';
+      return { layout: "single", panels: [{ svg: svg }] };
+    },
+
+    /* §7.7 Figure 7.20 — the frustum band slit open and unrolled: an ANNULAR SECTOR, not a
+       rectangle (inner and outer arcs differ — the curvature is the point; the r₁=r₂ cylinder
+       special case unrolls to a rectangle instead). Midline arc 2π r̄ dashed; width ℓ at one
+       radial end. Caption: visualization of the compression reading, not a re-derivation. */
+    "frustum-unrolled": function () {
+      var W = 290, H = 175;
+      var cx = 145, cy = -78, rIn = 168, rOut = 218, rMid = 193;
+      var a1 = 62 * Math.PI / 180, a2 = 118 * Math.PI / 180;
+      function pt(r, a) { return [(cx + r * Math.cos(a)).toFixed(1), (cy + r * Math.sin(a)).toFixed(1)]; }
+      var o1 = pt(rOut, a1), o2 = pt(rOut, a2), i1 = pt(rIn, a1), i2 = pt(rIn, a2);
+      var m1 = pt(rMid, a1), m2 = pt(rMid, a2);
+      var spans = texLbl(cx, cy + rMid + 11, "2\\pi\\,\\bar r", "middle", 13)
+                + texLbl(parseFloat(o2[0]) - 1, (parseFloat(o2[1]) + parseFloat(i2[1])) / 2 - 8, "\\ell", "end", 13);
+      var svg = svgOpen(W, H, "the unrolled frustum band: an annular sector with midline arc two pi r bar and width ell")
+        + '<path d="M' + o1.join(',') + ' A' + rOut + ',' + rOut + ' 0 0,1 ' + o2.join(',') + ' L' + i2.join(',') + ' A' + rIn + ',' + rIn + ' 0 0,0 ' + i1.join(',') + ' Z" class="fill-area"/>'
+        + '<path d="M' + o1.join(',') + ' A' + rOut + ',' + rOut + ' 0 0,1 ' + o2.join(',') + ' L' + i2.join(',') + ' A' + rIn + ',' + rIn + ' 0 0,0 ' + i1.join(',') + ' Z" class="bubble" fill="none"/>'
+        + '<path d="M' + m1.join(',') + ' A' + rMid + ',' + rMid + ' 0 0,1 ' + m2.join(',') + '" class="idline" fill="none"/>'
+        + foWrap(W, H, spans) + '</svg>';
+      return { layout: "single", panels: [{ svg: svg }] };
+    },
+
+    /* ============ 2.5D solid-of-revolution figures (wave 2) ============
+       Pattern per the Codex-converged design (ch07_25d-pattern-codex-audit.md):
+       axis-relative parallel-oblique glyph, ellipse minor:major = 0.35 with the major
+       semiaxis ⊥ the rotation axis = the true radius; x-axis scenes horizontal (profile
+       above), y-axis scenes upright (profile to the right); front/lower arcs solid, rear/
+       upper arcs dashed; exposed cut faces = full solid outline + light fill; stations on
+       the rotation axis only for along-axis stacking, shell radii as radial arrows;
+       stroke hierarchy: profile 2.2 / swept silhouette 1.5 / rims 1.25 / hidden dashed /
+       axis dash-dot; red never a depth cue. */
+
+    /* §7.2 Figure 7.5 — GENERIC solid (NOT of revolution: irregular kidney sections, no
+       mirror symmetry, no axis of rotation drawn) with end planes x=a, x=b and ONE
+       highlighted slab at x_i*: front face A(x_i*) lightly filled with a few hatches,
+       Δx bracket outside; x-direction dimension line BELOW the figure (not an axis). */
+    "slab-face": function () {
+      var W = 300, H = 185;
+      var spans = texLbl(63, 172, "a", "middle", 12)
+                + texLbl(157, 172, "x_i^{*}", "middle", 12)
+                + texLbl(243, 172, "b", "middle", 12)
+                + texLbl(196, 52, "A(x_i^{*})", "start", 12)
+                + texLbl(157, 34, "\\Delta x", "middle", 11);
+      var svg = svgOpen(W, H, "a generic solid between two end planes with one thin slab highlighted, its planar face marked A of x i star")
+        /* body outline: irregular loaf, top and bottom contours deliberately unrelated */
+        + '<path d="M63,105 C70,70 105,52 150,56 C195,60 232,50 246,78 C258,100 250,126 232,136 C200,152 150,158 112,150 C82,144 58,132 63,105 Z" class="bubble" fill="none" stroke-width="1.6"/>'
+        /* end plane x=a (oblique parallelogram, gray) */
+        + '<path d="M63,105 C60,88 62,74 70,66 L82,59 C74,70 72,86 75,102 Z" class="fill-area" stroke="var(--c-axis)" stroke-width="1.1"/>'
+        /* end plane x=b */
+        + '<path d="M246,78 C252,96 250,116 240,128 L228,134 C238,120 240,98 234,82 Z" class="fill-area" stroke="var(--c-axis)" stroke-width="1.1"/>'
+        /* slab: two close parallel cuts; front face = irregular kidney, filled + hatched */
+        + '<path d="M150,56 C168,58 178,74 176,96 C174,120 166,140 148,148 C138,140 134,116 136,94 C138,74 142,60 150,56 Z" class="fill-pos" stroke="var(--c-primary)" stroke-width="1.4"/>'
+        + '<path d="M163,58 C179,62 188,78 186,98 C184,120 176,138 160,146" fill="none" class="bubble"/>'
+        + '<line x1="146" y1="80" x2="168" y2="84" class="axis" stroke-width="0.9"/>'
+        + '<line x1="143" y1="102" x2="167" y2="106" class="axis" stroke-width="0.9"/>'
+        + '<line x1="144" y1="124" x2="164" y2="126" class="axis" stroke-width="0.9"/>'
+        /* Δx bracket above the slab (hugging its top edge) */
+        + '<path d="M148,50 v-5 h17 v5" fill="none" class="axis"/>'
+        /* leader from A(x_i*) label to the face */
+        + '<line x1="193" y1="55" x2="168" y2="76" class="axis" stroke-width="0.9"/>'
+        /* x-direction dimension line below (NOT an axis: plain, end bars, three ticks) */
+        + '<line x1="50" y1="162" x2="258" y2="162" class="axis"/>'
+        + '<line x1="63" y1="158" x2="63" y2="166" class="axis"/>'
+        + '<line x1="157" y1="158" x2="157" y2="166" class="axis"/>'
+        + '<line x1="243" y1="158" x2="243" y2="166" class="axis"/>'
+        + foWrap(W, H, spans) + '</svg>';
+      return { layout: "single", panels: [{ svg: svg }] };
+    },
+
+    /* §7.2 Figure 7.6 — strip → disk (pair). Left: the flat strip under y=f(x). Right: the
+       same station after rotation about the x-axis — the solid's silhouette (profile above,
+       mirror below, 1.5px), end rims, and the disk = FULL filled ellipse centred on the
+       axis, extending below it; radius f(x) arrow, Δx on the slab thickness. */
+    "strip-to-disk": function () {
+      var f = function (x) { return 1.12 + 0.42 * Math.sin(1.25 * x - 0.35); };
+      var left = buildPlot({
+        w: 225, h: 175, xmin: -0.15, xmax: 4.35, ymin: -0.4, ymax: 1.95,
+        aria: "a region under a curve with one vertical strip at station x",
+        xlabel: "x",
+        xticks: [{ x: 2.2, tex: "x" }],
+        items: [
+          { type: "area", fn: f, domain: [0.5, 3.5] },
+          { type: "rect", x1: 2.09, x2: 2.31, y0: 0, y1: f(2.2), cls: "rect-lo" },
+          { type: "curve", fn: f, domain: [0.5, 3.5] },
+          { type: "text", x: 2.62, y: 0.62, tex: "f(x)", anchor: "start", size: 11 }
+        ] });
+      /* right: oblique swept solid, horizontal axis */
+      var W = 225, H = 175, cy = 92;
+      var X = function (x) { return 18 + (x - 0.2) * 50; };   /* plot-x -> px */
+      var RY = function (v) { return v * 46; };                /* radius -> px (major, vertical) */
+      var K = 0.35;                                            /* ellipse aspect */
+      function profPath(sgn) {
+        var d = "";
+        for (var i = 0; i <= 60; i++) { var x = 0.5 + 3.0 * i / 60; d += (i ? "L" : "M") + X(x).toFixed(1) + "," + (cy - sgn * RY(f(x))).toFixed(1) + " "; }
+        return d.trim();
+      }
+      var xs = 2.2, pxs = X(xs), rs = RY(f(xs)), rk = K * rs, thick = 11;
+      var r0 = RY(f(0.5)), r1 = RY(f(3.5));
+      var arrX = pxs + thick / 2;
+      var spans = texLbl(pxs - rk - 4, cy - rs / 2, "f(x)", "end", 11)
+                + texLbl(pxs + thick / 2, cy - rs - 16, "\\Delta x", "middle", 11);
+      var right = svgOpen(W, H, "the same strip swept about the x axis into a thin disk inside the solid of revolution")
+        + '<line x1="6" y1="' + cy + '" x2="' + (W - 8) + '" y2="' + cy + '" class="idline"/>'
+        + '<path d="' + profPath(1) + '" class="curve" stroke-width="1.5" fill="none"/>'
+        + '<path d="' + profPath(-1) + '" class="curve" stroke-width="1.5" fill="none"/>'
+        + '<ellipse cx="' + X(0.5) + '" cy="' + cy + '" rx="' + (K * r0).toFixed(1) + '" ry="' + r0.toFixed(1) + '" class="bubble" fill="none"/>'
+        + '<ellipse cx="' + X(3.5) + '" cy="' + cy + '" rx="' + (K * r1).toFixed(1) + '" ry="' + r1.toFixed(1) + '" class="bubble" fill="none"/>'
+        /* the disk: thin slab = two ellipses + filled band, full solid outline (exposed cut) */
+        + '<ellipse cx="' + (pxs + thick) + '" cy="' + cy + '" rx="' + rk.toFixed(1) + '" ry="' + rs.toFixed(1) + '" class="fill-pos" stroke="var(--c-primary)" stroke-width="1.25"/>'
+        + '<rect x="' + pxs + '" y="' + (cy - rs) + '" width="' + thick + '" height="' + (2 * rs) + '" fill="none" stroke="none"/>'
+        + '<path d="M' + pxs + ',' + (cy - rs) + ' l' + thick + ',0 M' + pxs + ',' + (cy + rs) + ' l' + thick + ',0" class="bubble"/>'
+        + '<ellipse cx="' + pxs + '" cy="' + cy + '" rx="' + rk.toFixed(1) + '" ry="' + rs.toFixed(1) + '" class="fill-pos" stroke="var(--c-primary)" stroke-width="1.25"/>'
+        /* radius arrow from the axis to the disk's top rim, drawn AT the station (inside the disk) */
+        + '<line x1="' + arrX + '" y1="' + cy + '" x2="' + arrX + '" y2="' + (cy - rs + 1.5) + '" class="axis" marker-end="url(#std-a)"/>'
+        /* Δx bracket above the disk */
+        + '<path d="M' + pxs + ',' + (cy - rs - 6) + ' v-4 h' + thick + ' v4" fill="none" class="axis"/>'
+        + '<defs><marker id="std-a" markerWidth="8" markerHeight="8" refX="5.4" refY="2.8" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L5.4,2.8 L0,5.6" fill="none" stroke="var(--c-axis)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>'
+        + foWrap(W, H, spans) + '</svg>';
+      return { layout: "pair", panels: [
+        { svg: left, note: "Strip" },
+        { svg: right, note: "Disk" }
+      ] };
+    },
+
+    /* §7.2 Figure 7.8 — pyramid, 2D through-axis fallback (per the pattern consult): apex at
+       the origin, central axis along x (idline), base at x=h; cross-section at x with
+       HALF-width s(x)/2 against the base's b/2 (half-widths — full sides would falsify the
+       ratio); face-on inset square of side s(x). */
+    "pyramid-similar": function () {
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 285, h: 205, xmin: -0.55, xmax: 5.1, ymin: -2.6, ymax: 2.35, axes: false,
+        aria: "through axis cross-section of a pyramid: apex at the origin, base at x equals h, one interior cross-section with half-width s of x over two",
+        items: [
+          { type: "hline", y: 0, from: -0.3, to: 4.55, cls: "idline" },
+          { type: "seg", x1: 0, y1: 0, x2: 4, y2: 1.5, cls: "curve" },
+          { type: "seg", x1: 0, y1: 0, x2: 4, y2: -1.5, cls: "curve" },
+          { type: "seg", x1: 4, y1: -1.5, x2: 4, y2: 1.5, cls: "curve" },
+          { type: "seg", x1: 2.4, y1: -0.9, x2: 2.4, y2: 0.9, cls: "refline" },
+          { type: "seg", x1: 2.62, y1: 0, x2: 2.62, y2: 0.9, cls: "axis" },
+          { type: "seg", x1: 2.54, y1: 0, x2: 2.7, y2: 0, cls: "axis" },
+          { type: "seg", x1: 2.54, y1: 0.9, x2: 2.7, y2: 0.9, cls: "axis" },
+          { type: "seg", x1: 4.18, y1: 0, x2: 4.18, y2: 1.5, cls: "axis" },
+          { type: "seg", x1: 4.1, y1: 0, x2: 4.26, y2: 0, cls: "axis" },
+          { type: "seg", x1: 4.1, y1: 1.5, x2: 4.26, y2: 1.5, cls: "axis" },
+          { type: "dot", x: 0, y: 0, r: 2.4 },
+          { type: "text", x: 2.72, y: 0.45, tex: "s(x)/2", anchor: "start", size: 11 },
+          { type: "text", x: 4.28, y: 0.75, tex: "b/2", anchor: "start", size: 11 },
+          { type: "seg", x1: 0, y1: -1.95, x2: 2.4, y2: -1.95, cls: "axis" },
+          { type: "seg", x1: 0, y1: -1.85, x2: 0, y2: -2.05, cls: "axis" },
+          { type: "seg", x1: 2.4, y1: -1.85, x2: 2.4, y2: -2.05, cls: "axis" },
+          { type: "text", x: 1.2, y: -1.95, tex: "x", size: 11, dy: -10 },
+          { type: "seg", x1: 0, y1: -2.42, x2: 4, y2: -2.42, cls: "axis" },
+          { type: "seg", x1: 4, y1: -2.32, x2: 4, y2: -2.52, cls: "axis" },
+          { type: "seg", x1: 0, y1: -2.32, x2: 0, y2: -2.52, cls: "axis" },
+          { type: "text", x: 3.2, y: -2.42, tex: "h", size: 11, dy: 14 },
+          /* inset square: width compensates the unequal axis scales (0.9 y-units ≈ 30.7px, so the
+             x-width must be 0.9·(34.14/43.36) ≈ 0.709 units for the RENDERED shape to be square —
+             the caption's whole claim; caught by the D1–D8 gate as a D5 blocking) */
+          { type: "rect", x1: -0.5, x2: 0.209, y0: 1.3, y1: 2.2, cls: "rect-hi" },
+          { type: "text", x: -0.145, y: 1.05, tex: "s(x)", size: 11 }
+        ] }) }] };
+    },
+
+    /* §7.3 Figure 7.10 — strip → shell (upright, y-axis vertical per the pattern): the
+       vertical strip at radial distance x sweeps a thin-walled cylindrical shell; radius as
+       a RADIAL arrow from the axis (not a station tick), Δx between the two walls; one
+       smaller nested shell dotted gray. Front/lower arcs solid, rear/upper dashed. */
+    "strip-to-shell": function () {
+      var W = 285, H = 205, cx = 128, K = 0.35;
+      var d = 92, half = 6, topY = 56, botY = 172;
+      var rIn = d - half, rOut = d + half;
+      function rimPair(rx, cyE, cls, dashTop) {
+        var ry = (K * rx).toFixed(1);
+        var right = (cx + rx).toFixed(1), leftp = (cx - rx).toFixed(1);
+        var front = '<path d="M' + leftp + ',' + cyE + ' A' + rx + ',' + ry + ' 0 0,0 ' + right + ',' + cyE + '" fill="none" class="' + cls + '"/>';
+        var rear = '<path d="M' + leftp + ',' + cyE + ' A' + rx + ',' + ry + ' 0 0,1 ' + right + ',' + cyE + '" fill="none" class="' + (dashTop || "idline") + '"/>';
+        return front + rear;
+      }
+      var spans = texLbl(cx + d * 0.62, 106 + 13, "x", "middle", 12)
+                + texLbl(cx + rOut + 7, (topY + botY) / 2, "f(x)", "start", 12)
+                + texLbl(cx + d, 25, "\\Delta x", "middle", 11);
+      var svg = svgOpen(W, H, "a vertical strip at distance x from the upright axis swept into a thin cylindrical shell, with one smaller shell nested inside")
+        + '<line x1="' + cx + '" y1="14" x2="' + cx + '" y2="' + (botY + 18) + '" class="idline"/>'
+        /* nested smaller shell (gray dotted): walls + top rim */
+        + '<line x1="' + (cx - 48) + '" y1="' + (topY + 26) + '" x2="' + (cx - 48) + '" y2="' + botY + '" class="bubble" stroke-dasharray="2 3"/>'
+        + '<line x1="' + (cx + 48) + '" y1="' + (topY + 26) + '" x2="' + (cx + 48) + '" y2="' + botY + '" class="bubble" stroke-dasharray="2 3"/>'
+        + '<ellipse cx="' + cx + '" cy="' + (topY + 26) + '" rx="48" ry="' + (K * 48).toFixed(1) + '" fill="none" class="bubble" stroke-dasharray="2 3"/>'
+        /* main shell walls (outer + inner) */
+        + '<line x1="' + (cx - rOut) + '" y1="' + topY + '" x2="' + (cx - rOut) + '" y2="' + botY + '" class="curve" stroke-width="1.5"/>'
+        + '<line x1="' + (cx + rOut) + '" y1="' + topY + '" x2="' + (cx + rOut) + '" y2="' + botY + '" class="curve" stroke-width="1.5"/>'
+        + '<line x1="' + (cx - rIn) + '" y1="' + topY + '" x2="' + (cx - rIn) + '" y2="' + botY + '" class="curve" stroke-width="1.25"/>'
+        + '<line x1="' + (cx + rIn) + '" y1="' + topY + '" x2="' + (cx + rIn) + '" y2="' + botY + '" class="curve" stroke-width="1.25"/>'
+        /* top rims: outer + inner (front solid, rear dashed) */
+        + rimPair(rOut, topY, "curve")
+        + rimPair(rIn, topY, "curve")
+        /* base front arcs */
+        + '<path d="M' + (cx - rOut) + ',' + botY + ' A' + rOut + ',' + (K * rOut).toFixed(1) + ' 0 0,0 ' + (cx + rOut) + ',' + botY + '" fill="none" class="bubble"/>'
+        /* highlighted strip (the generator) on the right wall */
+        + '<rect x="' + (cx + rIn) + '" y="' + topY + '" width="' + (2 * half) + '" height="' + (botY - topY) + '" class="rect-lo"/>'
+        /* radius arrow from the axis to the shell mid-surface */
+        + '<line x1="' + cx + '" y1="106" x2="' + (cx + d - 2) + '" y2="106" class="axis" marker-end="url(#sts-a)"/>'
+        /* Δx bracket above the strip (clear of the rear rim arc) */
+        + '<path d="M' + (cx + rIn) + ',37 v-4 h' + (2 * half) + ' v4" fill="none" class="axis"/>'
+        + '<defs><marker id="sts-a" markerWidth="8" markerHeight="8" refX="5.4" refY="2.8" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L5.4,2.8 L0,5.6" fill="none" stroke="var(--c-axis)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>'
+        + foWrap(W, H, spans) + '</svg>';
+      return { layout: "single", panels: [{ svg: svg }] };
+    },
+
+    /* §7.3 Figure 7.12 — the SAME solid sliced both ways (pair; same base geometry, only the
+       overlay changes). Base: the solid from rotating {0≤x≤1, 0≤y≤x²} about the y-axis =
+       cylinder of radius 1 with a paraboloid bowl carved from the top. Left overlay: one
+       horizontal washer at height y (outer 1, inner √y — exposed cut, full solid outlines).
+       Right overlay: one vertical shell at radius x, height x². No numeric answer printed. */
+    "washer-vs-shell": function () {
+      var W = 225, H = 195, cx = 112, K = 0.35;
+      var R = 78, botY = 158, topY = 66;
+      function base() {
+        var s = '<line x1="' + cx + '" y1="16" x2="' + cx + '" y2="' + (botY + 16) + '" class="idline"/>'
+          + '<line x1="' + (cx - R) + '" y1="' + topY + '" x2="' + (cx - R) + '" y2="' + botY + '" class="curve" stroke-width="1.5"/>'
+          + '<line x1="' + (cx + R) + '" y1="' + topY + '" x2="' + (cx + R) + '" y2="' + botY + '" class="curve" stroke-width="1.5"/>'
+          /* top rim of the cylinder */
+          + '<path d="M' + (cx - R) + ',' + topY + ' A' + R + ',' + (K * R).toFixed(1) + ' 0 0,0 ' + (cx + R) + ',' + topY + '" fill="none" class="curve" stroke-width="1.25"/>'
+          + '<path d="M' + (cx - R) + ',' + topY + ' A' + R + ',' + (K * R).toFixed(1) + ' 0 0,1 ' + (cx + R) + ',' + topY + '" fill="none" class="idline"/>'
+          /* base front arc */
+          + '<path d="M' + (cx - R) + ',' + botY + ' A' + R + ',' + (K * R).toFixed(1) + ' 0 0,0 ' + (cx + R) + ',' + botY + '" fill="none" class="bubble"/>';
+        /* carved paraboloid: interior profile curves from the rim down to the centre bottom */
+        var dL = "M" + (cx - R) + "," + topY + " ", dR = "M" + (cx + R) + "," + topY + " ";
+        for (var i = 1; i <= 24; i++) {
+          var t = i / 24, xr = R * (1 - t);            /* radius shrinks */
+          var py = topY + (botY - topY) * (1 - (xr / R) * (xr / R));
+          dL += "L" + (cx - xr).toFixed(1) + "," + py.toFixed(1) + " ";
+          dR += "L" + (cx + xr).toFixed(1) + "," + py.toFixed(1) + " ";
+        }
+        return s + '<path d="' + dL.trim() + '" fill="none" class="curve" stroke-width="1.5"/>'
+                 + '<path d="' + dR.trim() + '" fill="none" class="curve" stroke-width="1.5"/>';
+      }
+      /* washer overlay at height y=0.55: py, inner radius √0.55 */
+      var yw = 0.55, pyw = botY + (topY - botY) * yw, rw = R * Math.sqrt(yw);
+      var washer = '<path d="M' + (cx - R) + ',' + pyw + ' A' + R + ',' + (K * R).toFixed(1) + ' 0 0,0 ' + (cx + R) + ',' + pyw + ' A' + R + ',' + (K * R).toFixed(1) + ' 0 0,1 ' + (cx - R) + ',' + pyw + ' Z M' + (cx - rw).toFixed(1) + ',' + pyw + ' A' + rw.toFixed(1) + ',' + (K * rw).toFixed(1) + ' 0 0,0 ' + (cx + rw).toFixed(1) + ',' + pyw + ' A' + rw.toFixed(1) + ',' + (K * rw).toFixed(1) + ' 0 0,1 ' + (cx - rw).toFixed(1) + ',' + pyw + ' Z" fill-rule="evenodd" class="fill-pos"/>'
+        + '<ellipse cx="' + cx + '" cy="' + pyw + '" rx="' + R + '" ry="' + (K * R).toFixed(1) + '" fill="none" stroke="var(--c-primary)" stroke-width="1.25"/>'
+        + '<ellipse cx="' + cx + '" cy="' + pyw + '" rx="' + rw.toFixed(1) + '" ry="' + (K * rw).toFixed(1) + '" fill="none" stroke="var(--c-primary)" stroke-width="1.25"/>';
+      var spansA = texLbl(cx + R + 6, pyw - 8, "1", "start", 11)
+                 + texLbl(cx + rw - 4, pyw + 0.35 * rw + 10, "\\sqrt{y}", "start", 11);
+      /* shell overlay at radius x=0.7: height x²=0.49 */
+      var xsh = 0.7, dsh = R * xsh, halfsh = 5, hsh = (botY - topY) * xsh * xsh;
+      var shellTop = botY - hsh;
+      var shell = '<rect x="' + (cx + dsh - halfsh).toFixed(1) + '" y="' + shellTop.toFixed(1) + '" width="' + (2 * halfsh) + '" height="' + hsh.toFixed(1) + '" class="rect-lo"/>'
+        + '<line x1="' + (cx - dsh + halfsh).toFixed(1) + '" y1="' + shellTop.toFixed(1) + '" x2="' + (cx - dsh + halfsh).toFixed(1) + '" y2="' + botY + '" class="curve" stroke-width="1.25"/>'
+        + '<path d="M' + (cx - dsh).toFixed(1) + ',' + shellTop.toFixed(1) + ' A' + dsh.toFixed(1) + ',' + (K * dsh).toFixed(1) + ' 0 0,0 ' + (cx + dsh).toFixed(1) + ',' + shellTop.toFixed(1) + '" fill="none" class="curve" stroke-width="1.25"/>'
+        + '<path d="M' + (cx - dsh).toFixed(1) + ',' + shellTop.toFixed(1) + ' A' + dsh.toFixed(1) + ',' + (K * dsh).toFixed(1) + ' 0 0,1 ' + (cx + dsh).toFixed(1) + ',' + shellTop.toFixed(1) + '" fill="none" class="idline"/>'
+        + '<line x1="' + cx + '" y1="' + (botY - 14) + '" x2="' + (cx + dsh - halfsh - 1).toFixed(1) + '" y2="' + (botY - 14) + '" class="axis" marker-end="url(#wvs-a)"/>';
+      var spansB = texLbl(cx + dsh / 2, botY - 14 + 11, "x", "middle", 11)
+                 + texLbl(cx + dsh + halfsh + 5, shellTop + hsh / 2, "x^{2}", "start", 11);
+      var svgA = svgOpen(W, H, "the solid sliced by one horizontal washer at height y") + base() + washer + foWrap(W, H, spansA) + '</svg>';
+      var svgB = svgOpen(W, H, "the same solid sliced by one vertical cylindrical shell at radius x") + base() + shell
+        + '<defs><marker id="wvs-a" markerWidth="8" markerHeight="8" refX="5.4" refY="2.8" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L5.4,2.8 L0,5.6" fill="none" stroke="var(--c-axis)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>'
+        + foWrap(W, H, spansB) + '</svg>';
+      return { layout: "pair", panels: [
+        { svg: svgA, note: "Washers" },
+        { svg: svgB, note: "Shells" }
+      ] };
+    },
+
+    /* §7.7 Figure 7.21 — chord → frustum band (pair). Left: the curve with ONE chord
+       P_{i−1}P_i. Right: the chord swept about the x-axis into a frustum band — lateral
+       surface only (rims open, no caps), the near generator IS the slanted chord, r1 ≠ r2. */
+    "chord-to-band": function () {
+      var f = function (x) { return 1.6 - 0.34 * (x - 1.9) * (x - 1.9); };
+      var x1 = 0.95, x2 = 2.55;
+      var left = buildPlot({
+        w: 225, h: 165, xmin: 0.1, xmax: 3.6, ymin: -0.3, ymax: 1.95,
+        aria: "a curve with one chord between two marked points, the chord visibly below the arc",
+        xticks: [{ x: x1, tex: "x_{i-1}" }, { x: x2, tex: "x_i" }],
+        items: [
+          { type: "seg", x1: x1, y1: 0, x2: x1, y2: f(x1), cls: "idline" },
+          { type: "seg", x1: x2, y1: 0, x2: x2, y2: f(x2), cls: "idline" },
+          { type: "curve", fn: f, domain: [0.45, 3.3] },
+          { type: "seg", x1: x1, y1: f(x1), x2: x2, y2: f(x2), cls: "axis" },
+          { type: "dot", x: x1, y: f(x1) }, { type: "dot", x: x2, y: f(x2) }
+        ] });
+      var W = 225, H = 165, cy = 88, K = 0.35;
+      var px1 = 62, px2 = 148, r1 = 46, r2 = 62;
+      var spans = texLbl((px1 + px2) / 2 + 4, cy - (r1 + r2) / 2 - 12, "\\ell", "middle", 12);
+      var right = svgOpen(W, H, "the chord swept about the x axis into a frustum band: two open rims of different radii joined by the slanted chord")
+        + '<line x1="10" y1="' + cy + '" x2="' + (W - 10) + '" y2="' + cy + '" class="idline"/>'
+        /* lateral surface fill: near-half rims + generators */
+        + '<path d="M' + px1 + ',' + (cy - r1) + ' L' + px2 + ',' + (cy - r2) + ' A' + (K * r2).toFixed(1) + ',' + r2 + ' 0 0,1 ' + px2 + ',' + (cy + r2) + ' L' + px1 + ',' + (cy + r1) + ' A' + (K * r1).toFixed(1) + ',' + r1 + ' 0 0,0 ' + px1 + ',' + (cy - r1) + ' Z" class="fill-area"/>'
+        /* rims: near halves solid, far halves dashed (open ends — no caps) */
+        + '<path d="M' + px1 + ',' + (cy - r1) + ' A' + (K * r1).toFixed(1) + ',' + r1 + ' 0 0,0 ' + px1 + ',' + (cy + r1) + '" fill="none" class="curve" stroke-width="1.25"/>'
+        + '<path d="M' + px1 + ',' + (cy - r1) + ' A' + (K * r1).toFixed(1) + ',' + r1 + ' 0 0,1 ' + px1 + ',' + (cy + r1) + '" fill="none" class="idline"/>'
+        + '<path d="M' + px2 + ',' + (cy - r2) + ' A' + (K * r2).toFixed(1) + ',' + r2 + ' 0 0,0 ' + px2 + ',' + (cy + r2) + '" fill="none" class="curve" stroke-width="1.25"/>'
+        + '<path d="M' + px2 + ',' + (cy - r2) + ' A' + (K * r2).toFixed(1) + ',' + r2 + ' 0 0,1 ' + px2 + ',' + (cy + r2) + '" fill="none" class="idline"/>'
+        /* generators: near (top) = THE chord, emphasized; far (bottom) lighter */
+        + '<line x1="' + px1 + '" y1="' + (cy - r1) + '" x2="' + px2 + '" y2="' + (cy - r2) + '" class="curve"/>'
+        + '<line x1="' + px1 + '" y1="' + (cy + r1) + '" x2="' + px2 + '" y2="' + (cy + r2) + '" class="curve" stroke-width="1.5"/>'
+        + '<circle cx="' + px1 + '" cy="' + (cy - r1) + '" r="2.6" class="dot"/>'
+        + '<circle cx="' + px2 + '" cy="' + (cy - r2) + '" r="2.6" class="dot"/>'
+        + foWrap(W, H, spans) + '</svg>';
+      return { layout: "pair", panels: [
+        { svg: left, note: "Chord" },
+        { svg: right, note: "Frustum band" }
+      ] };
+    },
+
+    /* §7.7 Figure 7.22 — sphere zones of equal width (2D profile per the pattern consult):
+       circle + horizontal axis; two pairs of vertical cuts of the SAME width w — one
+       straddling the equator, one near (but strictly off) the pole; the two cut PROFILE
+       ARCS emphasized; vertical radius guides to each arc's midpoint. No areas printed. */
+    "zone-bands": function () {
+      var W = 265, H = 205, cx = 125, cy = 103, R = 88;
+      function arcPath(xa, xb) {
+        var ya = -Math.sqrt(R * R - xa * xa), yb = -Math.sqrt(R * R - xb * xb);
+        return 'M' + (cx + xa).toFixed(1) + ',' + (cy + ya).toFixed(1) + ' A' + R + ',' + R + ' 0 0,1 ' + (cx + xb).toFixed(1) + ',' + (cy + yb).toFixed(1) + '';
+      }
+      function cut(xo) {
+        var yv = Math.sqrt(R * R - xo * xo);
+        return '<line x1="' + (cx + xo) + '" y1="' + (cy - yv - 8).toFixed(1) + '" x2="' + (cx + xo) + '" y2="' + (cy + 14).toFixed(1) + '" class="idline"/>';
+      }
+      var w = 30, e1 = -15, e2 = 15, p1 = 50, p2 = 80;
+      var me = 0, mp = 65;
+      var rye = Math.sqrt(R * R - me * me), ryp = Math.sqrt(R * R - mp * mp);
+      var spans = texLbl(cx + (e1 + e2) / 2, cy + 26, "w", "middle", 12)
+                + texLbl(cx + (p1 + p2) / 2, cy + 26, "w", "middle", 12);
+      var svg = svgOpen(W, H, "a circle profile of the sphere with two vertical slabs of equal width, one at the equator and one near the pole, their upper arcs emphasized")
+        + '<circle cx="' + cx + '" cy="' + cy + '" r="' + R + '" class="bubble" fill="none" stroke-width="1.6"/>'
+        + '<line x1="' + (cx - R - 16) + '" y1="' + cy + '" x2="' + (cx + R + 16) + '" y2="' + cy + '" class="idline"/>'
+        + cut(e1) + cut(e2) + cut(p1) + cut(p2)
+        + '<path d="' + arcPath(e1, e2) + '" fill="none" class="curve" stroke-width="2.6"/>'
+        + '<path d="' + arcPath(p1, p2) + '" fill="none" class="curve" stroke-width="2.6"/>'
+        /* vertical radius guides to each emphasized arc's midpoint */
+        + '<line x1="' + (cx + me) + '" y1="' + cy + '" x2="' + (cx + me) + '" y2="' + (cy - rye).toFixed(1) + '" class="bubble" stroke-dasharray="2 3"/>'
+        + '<line x1="' + (cx + mp) + '" y1="' + cy + '" x2="' + (cx + mp) + '" y2="' + (cy - ryp).toFixed(1) + '" class="bubble" stroke-dasharray="2 3"/>'
+        /* equal-width brackets below the axis */
+        + '<path d="M' + (cx + e1) + ',' + (cy + 18) + ' v4 h' + w + ' v-4" fill="none" class="axis"/>'
+        + '<path d="M' + (cx + p1) + ',' + (cy + 18) + ' v4 h' + w + ' v-4" fill="none" class="axis"/>'
+        + foWrap(W, H, spans) + '</svg>';
+      return { layout: "single", panels: [{ svg: svg }] };
+    },
+
+    /* §7.7 Figure 7.23 — dual-axis radius readout: the arc y=x² with ONE sample point and TWO
+       radius arrows from it — vertical distance f(x) to the x-axis, horizontal distance x to
+       the y-axis. Radius = distance to THE axis of rotation; sample point strictly inside. */
+    "dual-axis-radius": function () {
+      var f = function (x) { return x * x; };
+      var xs = 0.72;
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 250, h: 215, xmin: -0.24, xmax: 1.32, ymin: -0.2, ymax: 1.22,
+        aria: "the arc y equals x squared with one point and two radius arrows: down to the x axis and across to the y axis",
+        xticks: [{ x: 1, tex: "1" }],
+        yticks: [{ y: 1, tex: "1" }],
+        items: [
+          { type: "curve", fn: f, domain: [0, 1.05] },
+          { type: "arrow", x1: xs, y1: f(xs), x2: xs, y2: 0.015 },
+          { type: "arrow", x1: xs, y1: f(xs), x2: 0.012, y2: f(xs) },
+          { type: "dot", x: xs, y: f(xs) },
+          { type: "text", x: xs, y: f(xs) / 2, tex: "f(x)", anchor: "start", size: 12, dx: 7 },
+          { type: "text", x: xs / 2, y: f(xs), tex: "x", size: 12, dy: -11 },
+          { type: "text", x: 1.09, y: 0.92, tex: "y = x^{2}", anchor: "start", size: 12 }
+        ] }) }] };
+    }
+
+  };
+
+  /* ---- hydrateFigures: fills every <figure data-fig="id"> ---- */
+  function hydrateFigures(root) {
+    (root || document).querySelectorAll("[data-fig]").forEach(function (el) {
+      var def = FIGS[el.dataset.fig];
+      if (!def || el.dataset.figDone) return;
+      var r = def();
+      var layout = r.layout, panels = r.panels;
+      var html;
+      if (layout === "single" && panels.length === 1 && !panels[0].note) {
+        html = '<div class="figure-art">' + panels[0].svg + '</div>';
+      } else {
+        var cls = { pair: "figure-art--pair", triple: "figure-art--triple", grid: "figure-art--grid" }[layout] || "";
+        html = '<div class="figure-art ' + cls + '">' +
+          panels.map(function (p) {
+            return '<div class="fig-panel">' + p.svg + (p.note ? '<div class="fig-note">' + p.note + '</div>' : '') + '</div>';
+          }).join("") + '</div>';
+      }
+      el.insertAdjacentHTML("afterbegin", html);
+      el.dataset.figDone = "1";
+    });
+  }
+  window.hydrateFigures = hydrateFigures;
+})();
+</script>
+
+<!-- Main build script (paginator + MathJax) -->
+<script>
+(function () {
+  function waitFor(test, tries) {
+    return new Promise(function (res) {
+      var i = 0;
+      (function tick() {
+        if (test()) return res(true);
+        if (++i > tries) return res(false);
+        setTimeout(tick, 150);
+      })();
+    });
+  }
+  function build() {
+    var page = document.getElementById("page");
+    var tpl = document.getElementById("figs-only");
+    page.innerHTML = tpl ? tpl.innerHTML : "";
+    if (window.hydrateFigures) window.hydrateFigures(page);
+    waitFor(function () { return window.MathJax && window.MathJax.typesetPromise; }, 400)
+      .then(function (ok) {
+        if (!ok) { document.getElementById("boot").textContent = "MathJax load timeout"; return; }
+        return MathJax.typesetPromise([page]).catch(function (e) { console.warn("mathjax", e); });
+      })
+      .then(function () {
+        return document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+      })
+      .then(function () {
+        var boot = document.getElementById("boot");
+        if (boot) boot.remove();
+      });
+  }
+  window.addEventListener("DOMContentLoaded", build);
+})();
+</script>
+</body>
+</html>

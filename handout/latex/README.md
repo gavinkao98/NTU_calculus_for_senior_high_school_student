@@ -1,90 +1,61 @@
 # latex —— LaTeX 講義線（唯一內容源＋出版排版）
 
-> **⚠️ 2026-08-09 拍板（LaTeX 統一）**：本線升格為**唯一內容源＋唯一工作線**——`src/<ch>/<name>.tex`
-> 是手改／LLM 改的源（ch03 pilot 已收，升格自 dist 自足 tex），HTML 撰稿線退役、fragment 凍結。
-> 權威計畫＝[`KICKOFF-latex-unification.md`](KICKOFF-latex-unification.md)；未升格章遷移期間仍照下述
-> 「fragment→轉換」流程（ch08＋appA/C/D 首轉即最後一批）。
->
-> **（以下為 2026-07-17 兩線時代的線導覽，P1 源接管完成後改寫）**：定稿時把 HTML 線的 fragment
-> **確定性轉換**成出版級 A4 PDF（見 [`../PIPELINE.md`](../PIPELINE.md) §出版排版線）。
-> 沿革、D1–D10 拍板、rollout 計畫的權威文檔＝[`KICKOFF-latex-pilot.md`](KICKOFF-latex-pilot.md)。
+> **2026-08-09 LaTeX 統一（U1）**：本線＝**唯一內容源＋唯一工作線**。內容住
+> `src/<ch>/<name>.tex`（手改／LLM 改；升格自原 dist 自足 tex），HTML 撰稿線已凍結
+> （[`../html/README.md`](../html/README.md)）。權威計畫與拍板＝
+> [`KICKOFF-latex-unification.md`](KICKOFF-latex-unification.md)；模板沿革（D1–D10）＝
+> [`KICKOFF-latex-pilot.md`](KICKOFF-latex-pilot.md)。
 
-## 哪個章節的講義在哪裡：看 `dist/`（成品夾）
-
-**成品只看 [`dist/`](dist/)——每單元一夾、夾內乾乾淨淨兩個檔**：`<name>.pdf`（成品）＋
-`<name>.tex`（自足成品源，對它直接編譯就重現 PDF）。中間物一律不在這裡（方言表、對照
-報告、匯出圖住 `chapters/<ch>/`；編譯殘渣住 gitignored 的 `build/`）。
-
-| 單元 | 狀態 | 成品夾 | 工作資產（中間物） |
-|---|---|---|---|
-| appB | ✅ **pilot GO**（25 頁，四閘全綠） | [`dist/appB/`](dist/appB/)：`appendixB.pdf`＋`appendixB.tex` | [`chapters/appB/`](chapters/appB/)：DIALECT、driver、對照報告 |
-| ch01 | ✅ 四閘全綠（44 頁） | [`dist/ch01/`](dist/ch01/) | [`chapters/ch01/`](chapters/ch01/) |
-| ch02 | ✅ 四閘全綠（35 頁） | [`dist/ch02/`](dist/ch02/) | [`chapters/ch02/`](chapters/ch02/) |
-| ch03 | ✅ 四閘全綠（22 頁） | [`dist/ch03/`](dist/ch03/) | [`chapters/ch03/`](chapters/ch03/) |
-| ch04 | ✅ 四閘全綠（32 頁） | [`dist/ch04/`](dist/ch04/) | [`chapters/ch04/`](chapters/ch04/) |
-| ch05 | ✅ 四閘全綠（36 頁） | [`dist/ch05/`](dist/ch05/) | [`chapters/ch05/`](chapters/ch05/) |
-| ch06 | ✅ 四閘全綠（28 頁） | [`dist/ch06/`](dist/ch06/) | [`chapters/ch06/`](chapters/ch06/) |
-| ch07 | ✅ 四閘全綠（39 頁） | [`dist/ch07/`](dist/ch07/) | [`chapters/ch07/`](chapters/ch07/) |
-| appA／appC／appD | ⬜ 未轉換（rollout 依定稿排程；建議順序見 KICKOFF §9） | 屆時 `dist/<ch>/` | 屆時 `chapters/<ch>/` |
-
-> 上線日與各章的方言差集／已知坑，以 [`../PIPELINE.md`](../PIPELINE.md) 的 rollout 現況表為準（那份是唯一速查）。
-
-**重編成品**（改了 fragment 之後）：
+## 日常工作流
 
 ```powershell
+# 改課文：編輯 src/<ch>/<name>.tex（語意指令層＝template/calcbook.sty；勿手排樣式）
 cd handout/latex
-python make_dist.py appB      # 轉換＋內嵌＋編譯＋log 驗收，成品夾維持兩檔
+python build.py ch08        # 編譯＋log 閘＋字形閘＋成品 PDF 進 dist/ch08/
+python build.py all         # 全部 12 單元
 ```
 
-或不經工具、直接編譯成品 `.tex`（在 `dist/<ch>/` 下；aux 導去 build/、資料夾不留殘渣）：
+改圖：見 [`../figkit/README.md`](../figkit/README.md)（JS 圖 kit harness → `export_figs.mjs`
+匯向量 PDF 到 `chapters/<ch>/figs/`；匯出品 gitignored、換機重匯）。
 
-```powershell
-latexmk -lualatex -auxdir=../../build/aux-appB appendixB.tex
-```
+## 12 單元狀態（P1 源接管完成，2026-08-09）
+
+| 單元 | 源 | 成品 | 備註 |
+|---|---|---|---|
+| ch01–ch08 | `src/ch{NN}/chapter{N}.tex` | `dist/ch{NN}/chapter{N}.pdf` | ch08 為 P1 首轉（方言差集 0、四自動閘綠、**人眼閘待過目**） |
+| appA／appC／appD | `src/app{X}/appendix{X}.tex` | `dist/app{X}/appendix{X}.pdf` | P1 首轉（同上，人眼閘待過目；appA 3 條＋appD 1 條 overfull 待裁決） |
+| appB | `src/appB/appendixB.tex` | `dist/appB/appendixB.pdf` | 原 pilot 章 |
+
+內容閘家族狀態（Mode A／數學／圖／散文／難度）以 [`../PIPELINE.md`](../PIPELINE.md)
+dashboard 為準；Ch8 三閘 gate-2 債在 P5 於本線源上償還。
 
 ## 目錄結構
 
 ```
 latex/
-  README.md               # 本檔：線導覽＋章節狀態表
-  KICKOFF-latex-pilot.md  # 沿革＋D1–D10 拍板＋rollout 計畫（權威）
-  make_dist.py            # 產成品夾：轉換＋內嵌＋編譯＋三閘驗收（1/3/4）→ dist/<ch>/ 兩檔
-  convert.py              # fragment → 語意層 LaTeX（數學逐位元組 pass-through、表外標記硬錯）
-  test_convert.py         # golden tests＋數學逐位元組不變式
-  dialect_inventory.py    # 方言盤點器（rollout 逐章：python dialect_inventory.py ch04）
-  check_prose.py          # 完整性閘：散文子序列＋圖內文字（pdftotext）
-  check_glyphs.py         # 字形閘：嵌入字形的輪廓是不是它宣稱的字（pdftotext 那層看不到）
-  export_figs.mjs         # 圖匯出：standalone → 每 panel 一張向量 PDF
-  print_html.mjs          # HTML 印 A4 PDF（對照報告的 HTML 側）
-  dist/<ch>/              # ★ 成品夾：<name>.pdf＋<name>.tex（自足成品源），永遠只有兩檔
-  template/               # 共用模板：calcbook.sty（語意＋樣式層）、sampler.tex（拍板樣張）、
-                          # fonts/inter/（vendored）、M-B1-DECISIONS.md（模板拍板紀錄）
-  chapters/<ch>/          # 章節工作資產：DIALECT-<ch>.md（方言凍結表）＋ driver .tex
-                          # ＋ REVIEW 對照報告（含 img/）＋ figs/（匯出圖＋figures.json）
-  build/                  # lualatex 工作目錄（gitignored；含 aux-<ch>/ 編譯殘渣）
+  README.md               # 本檔：線導覽
+  KICKOFF-latex-unification.md  # U1–U7 拍板＋P0–P5 遷移計畫（權威）
+  KICKOFF-latex-pilot.md  # 模板時代沿革（D1–D10；D2/D7 已被 supersede）
+  build.py                # ★ 日常編譯入口：src → 閘 → dist
+  src/<ch>/<name>.tex     # ★ 唯一內容源（手改）
+  template/               # calcbook.sty（語意＋樣式層）、fonts/、M-B1-DECISIONS.md
+  dist/<ch>/<name>.pdf    # 成品 PDF（build.py 產）
+  chapters/<ch>/          # 章工作資產：figs/（匯出圖，gitignored）＋DIALECT-*.md（凍結存檔）
+  check_glyphs.py         # 字形閘（現役；build.py 內建呼叫）
+  export_figs.mjs         # 圖匯出（現役；輸入＝../figkit/figs-<ch>.html）
+  print_html.mjs          # HTML 印 A4（對照報告用，偶用）
+  convert.py／test_convert.py／dialect_inventory.py／check_prose.py／make_dist.py
+                          # 已退役（fragment→LaTeX 首轉產線；P1 完畢後留檔參照）
+  build/                  # lualatex 工作目錄（gitignored）
   _dev-archive/           # v1 book-class shell 歸檔
 ```
 
-## 開發／除錯用的分步建置（成品請一律走 `make_dist.py`）
+## 驗收閘（源時代）
 
-```powershell
-# 1. 轉換（在 latex/ 下；fragment 唯讀，輸出到 build/）
-python convert.py appB --out build/appendixB-body.tex
+1. **編譯閘**：`latexmk -lualatex` 0 error／0 missing character（build.py 內建）。
+2. **版面閘**：overfull hbox 逐條列出待裁決（build.py 印出）。
+3. **字形閘**：`check_glyphs.py`——嵌入字形輪廓＝其宣稱的字（build.py 內建）。
+4. **人眼閘**：改版面級的變更後抽頁過目（首轉單元的首次人眼閘由使用者 GO）。
 
-# 2. 編譯 chapters/ 的 driver（CWD 在 template/——它 \input build/ 的 body，適合迭代模板）
-cd template && latexmk -lualatex -output-directory=../build/appB ../chapters/appB/appendixB.tex
-
-# 3. 完整性閘（散文子序列＋圖內文字；對 dist 或 build 的 PDF 皆可跑）
-python check_prose.py appB dist/appB/appendixB.pdf
-```
-
-四閘驗收（編譯／版面／完整性／人眼）定義見 KICKOFF §4.5；golden tests＝`python test_convert.py`。
-
-## rollout 每章的固定流程
-
-1. `python dialect_inventory.py <ch>` 盤點 → 凍結 `chapters/<ch>/DIALECT-<ch>.md`（差集相對既有 mapping）。
-2. 補 emitter mapping＋golden tests（`convert.py`／`test_convert.py`）。
-3. 有圖章：`export_figs.mjs` 匯出到 `chapters/<ch>/figs/`（寬度 mm 由 figures.json 驅動；
-   dist 的 \graphicspath 接線在 `make_dist.py`，首個有圖章時補——見檔頭註記）。
-4. 建 driver `chapters/<ch>/<name>.tex` → 編譯 → 四閘 → 對照報告 → 使用者 GO。
-5. GO 後 `make_dist.py <ch>`（先在 NAMES 表補檔名）→ `dist/<ch>/` 兩檔即成品。
+（原「完整性閘 check_prose」驗「轉換不丟內容」，隨轉換產線退役；內容正確性由
+內容閘鏈把關——見 [`../PIPELINE.md`](../PIPELINE.md)。）

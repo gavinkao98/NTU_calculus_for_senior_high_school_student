@@ -1,0 +1,80 @@
+#!/usr/bin/env python3
+r"""build.py —— LaTeX 統一（U1）後的日常編譯入口：src/<ch>/*.tex → dist/<ch>/*.pdf。
+
+    python build.py ch08          # 編譯一個單元
+    python build.py all           # 編譯全部 12 單元
+
+每單元流程：latexmk -lualatex（aux 進 build/aux-<ch>/）→ log 閘（0 error／
+0 missing character；overfull 逐條列出供裁決）→ 字形閘（check_glyphs.py）→
+成品 PDF 移入 dist/<ch>/。任何一閘不過即以非零退出碼停下。
+
+沿革：取代 make_dist.py（fragment→轉換→內嵌 的產線，隨 HTML 撰稿線於 P1 退役；
+留檔供歷史參照，勿再對已升格單元使用——它會用凍結的 fragment 覆寫 dist）。
+"""
+
+import re
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+
+UNITS = {
+    "appA": "appendixA", "appB": "appendixB", "appC": "appendixC", "appD": "appendixD",
+    "ch01": "chapter1", "ch02": "chapter2", "ch03": "chapter3", "ch04": "chapter4",
+    "ch05": "chapter5", "ch06": "chapter6", "ch07": "chapter7", "ch08": "chapter8",
+}
+
+
+def build(ch):
+    name = UNITS[ch]
+    srcdir = HERE / "src" / ch
+    tex = srcdir / f"{name}.tex"
+    if not tex.exists():
+        sys.exit(f"{ch}: 找不到源 {tex}")
+
+    r = subprocess.run(
+        ["latexmk", "-lualatex", f"-auxdir=../../build/aux-{ch}", f"{name}.tex"],
+        cwd=srcdir, capture_output=True, text=True, encoding="utf-8", errors="replace")
+    log_path = HERE / "build" / f"aux-{ch}" / f"{name}.log"
+    log = log_path.read_text(encoding="utf-8", errors="replace") if log_path.exists() else ""
+
+    errors = len(re.findall(r"^!", log, re.M))
+    missing = log.count("Missing character")
+    overfull = [ln for ln in log.splitlines() if ln.startswith("Overfull")]
+    pdf = srcdir / f"{name}.pdf"
+
+    if r.returncode != 0 or errors or missing or not pdf.exists():
+        print(f"{ch}: FAIL  latexmk rc={r.returncode} error={errors} missing-char={missing}")
+        for ln in re.findall(r"^!.*", log, re.M)[:5]:
+            print("   ", ln)
+        sys.exit(1)
+
+    g = subprocess.run([sys.executable, "check_glyphs.py", f"src/{ch}/{name}.pdf"],
+                       cwd=HERE, capture_output=True, text=True, encoding="utf-8", errors="replace")
+    if "字形閘 PASS" not in g.stdout:
+        print(f"{ch}: FAIL  字形閘——")
+        print("\n".join(g.stdout.strip().splitlines()[-6:]))
+        sys.exit(1)
+
+    dist = HERE / "dist" / ch
+    dist.mkdir(parents=True, exist_ok=True)
+    shutil.move(str(pdf), str(dist / f"{name}.pdf"))
+
+    note = f"；overfull {len(overfull)} 條待裁決" if overfull else ""
+    print(f"{ch}: PASS  0 err／0 missing-char／字形閘綠 → dist/{ch}/{name}.pdf{note}")
+    for ln in overfull:
+        print("   ", ln)
+
+
+def main():
+    if len(sys.argv) != 2 or (sys.argv[1] != "all" and sys.argv[1] not in UNITS):
+        sys.exit(__doc__)
+    targets = list(UNITS) if sys.argv[1] == "all" else [sys.argv[1]]
+    for ch in targets:
+        build(ch)
+
+
+if __name__ == "__main__":
+    main()

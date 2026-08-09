@@ -1,0 +1,1030 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Chapter 8 — Print build</title>
+
+<!-- ════════════════════════════════════════════════════════════════
+     圖片寬度控制面板 —— 直接改下面的數字即可（px 固定寬 / % 相對頁寬）
+     並排或多格圖（1.1 / 1.7 / 1.9）控制的是「每一格」的寬度。
+     ════════════════════════════════════════════════════════════════ -->
+<style>
+:root {
+}
+
+</style>
+
+<!-- Google Fonts: Inter for UI -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<!-- New Computer Modern (prose/text faces) — matches MathJax 4 "mathjax-newcm" math font.
+     Source: npm web-computer-modern@1.1.0-new-cm-7-0-2 via jsDelivr. License: GUST Font License.
+     10pt optical size ("Serif 10"). NOTE: filenames contain %20-encoded spaces — keep them. -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<style>
+@font-face {
+  font-family: "New Computer Modern";
+  font-style: normal; font-weight: 400; font-display: swap;
+  src: url("https://cdn.jsdelivr.net/npm/web-computer-modern@1.1.0-new-cm-7-0-2/woff2/WebCM%20Serif%2010%20Regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "New Computer Modern";
+  font-style: italic; font-weight: 400; font-display: swap;
+  src: url("https://cdn.jsdelivr.net/npm/web-computer-modern@1.1.0-new-cm-7-0-2/woff2/WebCM%20Serif%2010%20Italic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "New Computer Modern";
+  font-style: normal; font-weight: 700; font-display: swap;
+  src: url("https://cdn.jsdelivr.net/npm/web-computer-modern@1.1.0-new-cm-7-0-2/woff2/WebCM%20Serif%2010%20Bold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "New Computer Modern";
+  font-style: italic; font-weight: 700; font-display: swap;
+  src: url("https://cdn.jsdelivr.net/npm/web-computer-modern@1.1.0-new-cm-7-0-2/woff2/WebCM%20Serif%2010%20BoldItalic.woff2") format("woff2");
+}
+</style>
+
+<!-- MathJax 4 (CHTML output with inline line-breaking) -->
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']],
+    macros: {
+      arccsc: '\\operatorname{arccsc}',
+      arcsec: '\\operatorname{arcsec}',
+      arccot: '\\operatorname{arccot}'
+    }
+  },
+  chtml: {
+    mtextInheritFont: true,
+    matchFontHeight: true
+  },
+  output: {
+    displayOverflow: 'linebreak',
+    linebreaks: {
+      inline: true,
+      width: '100%',
+      lineleading: 0.2
+    }
+  },
+  startup: { typeset: false }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js"></script>
+
+<style>
+/* ============================================================
+   skin-hs.css — inlined + modified: Times New Roman + MathJax
+   ============================================================ */
+.paper {
+  --c-primary: oklch(0.50 0.13 245);
+  --c-caution: oklch(0.50 0.155 25);
+  --c-aux: oklch(0.55 0.01 260);
+  --c-axis: #474b54;
+  --ink: #1b1c1f;
+  --ink-soft: #565a63;
+  --ink-faint: #8a8e98;
+  --paper: #ffffff;
+  --rule: #e5e7eb;
+  --fig-w-pair: 250px;     /* 並排(pair)圖每張的預設寬度（整體一次調） */
+  --fig-w-single: 100%;    /* 單張/triple/grid 圖的預設最大寬度（整體一次調） */
+  /* 個別覆寫：在任一 <figure> 標籤加 style="--fig-w: 320px" 即可只改那一張 */
+  --serif: "New Computer Modern", "Latin Modern Roman", "Times New Roman", Times, Georgia, serif;
+  --ui: "Inter", -apple-system, system-ui, sans-serif;
+  --a-concept:  oklch(0.50 0.13 55);
+  --a-result:   oklch(0.50 0.13 245);
+  --a-practice: oklch(0.50 0.13 152);
+  --a-aside:    oklch(0.50 0.02 260);
+  --a-caution:  oklch(0.50 0.155 25);
+  --a-strategy: oklch(0.50 0.13 290);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: var(--fs-base, 17.5px);
+  line-height: var(--lh-base, 1.62);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  box-sizing: border-box;
+}
+.paper *, .paper *::before, .paper *::after { box-sizing: border-box; }
+.paper .page { padding: 52px 58px 64px; max-width: 760px; margin: 0 auto; }
+.skin-hs .page { hyphens: auto; -webkit-hyphens: auto; }
+.skin-hs p, .skin-hs li { text-align: justify; text-justify: inter-word; }
+.paper p { margin: 0 0 .85em; text-wrap: pretty; }
+.paper em { font-style: italic; }
+.paper .informal { font-style: italic; color: var(--ink-soft); }
+.paper ol { margin: .2em 0 .9em; padding-left: 1.5em; }
+.paper li { margin: .35em 0; text-wrap: pretty; }
+.paper .warmup { counter-reset: wu; list-style: none; padding-left: 0; }
+.paper .warmup > li { counter-increment: wu; position: relative; padding-left: 2.1em; }
+.paper .warmup > li::before {
+  content: "(" counter(wu, lower-alpha) ")";
+  position: absolute; left: 0; top: 0;
+  font-family: var(--ui); font-size: .82em; color: var(--ink-faint); line-height: 1.85;
+}
+.paper mjx-container[display="true"] { margin: .55em 0 !important; overflow-x: auto; overflow-y: hidden; }
+.paper mjx-container[display="true"]::-webkit-scrollbar { display: none; }
+.paper .qed { display: block; text-align: right; margin: -1.62em 0 0; height: 1.62em; pointer-events: none; }
+.paper .qed::after {
+  content: ""; display: inline-block; width: .56em; height: .56em;
+  border: 1.3px solid var(--ink-soft);
+}
+.paper .env-body > :has(+ .qed) { margin-bottom: 0; display: flow-root; }
+.paper .env-body::after { content: ""; display: block; clear: both; }
+.paper .sec-head {
+  margin-top: 2.7em; padding-top: 1.35em;
+  border-top: 1px solid var(--rule); margin-bottom: 1.5em;
+}
+.sheet-body > .sec-head:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+.paper .sec-kicker {
+  font-family: var(--ui); font-size: .7rem; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--c-primary); font-weight: 700; margin-bottom: .55em;
+}
+.paper .sec-title { font-weight: 600; font-size: 2rem; line-height: 1.12; letter-spacing: -.012em; margin: 0; }
+.paper .sec-no { color: var(--c-primary); margin-right: .5em; font-weight: 600; }
+.paper .subsec-head {
+  font-family: var(--ui); font-weight: 600; font-size: 1.08rem; margin: 1.9em 0 .65em;
+  display: flex; align-items: center; gap: .55em; color: var(--ink);
+}
+.paper .subsec-head::before { content: ""; width: 18px; height: 3px; background: var(--c-primary); border-radius: 2px; }
+.paper .figure { margin: 1.7em 0; text-align: center; }
+.paper .figure-art { display: flex; justify-content: center; }
+.paper .figure-art--pair { gap: 26px; }
+.paper .fig-svg { width: 100%; max-width: var(--fig-w, var(--fig-w-pair)); height: auto; }
+.paper .figure-art:not(.figure-art--pair) .fig-svg { max-width: var(--fig-w, var(--fig-w-single)); }
+.paper figcaption {
+  font-family: var(--ui); font-size: .8em; line-height: 1.5;
+  color: var(--ink-soft); margin-top: .7em; text-wrap: pretty;
+  max-width: none; text-align: left; display: table; margin-inline: auto;
+}
+.paper .fig-no { font-weight: 600; color: var(--ink); margin-right: .4em; }
+.paper figcaption mjx-container { font-size: .95em; }
+.paper .axis { stroke: var(--c-axis); stroke-width: 1.25; fill: none; stroke-linecap: round; }
+.paper .curve { stroke: var(--c-primary); stroke-width: 2.2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.paper .refline { stroke: var(--c-caution); stroke-width: 1.3; stroke-dasharray: 4.5 3.5; fill: none; stroke-linecap: round; opacity: .85; }
+.paper .secant { stroke: var(--c-aux); stroke-width: 1.6; stroke-dasharray: 5 3.5; fill: none; stroke-linecap: round; }
+.paper .tangent { stroke: var(--c-caution); stroke-width: 2; fill: none; stroke-linecap: round; }
+/* fill primitives (ch6 M2: rect + area items in buildPlot) */
+.paper .fill-area { fill: color-mix(in srgb, var(--c-primary) 15%, transparent); stroke: none; }
+.paper .fill-pos  { fill: color-mix(in srgb, var(--c-primary) 17%, transparent); stroke: none; }
+.paper .fill-neg  { fill: color-mix(in srgb, var(--c-caution) 22%, transparent); stroke: none; }
+.paper .rect-lo   { fill: color-mix(in srgb, var(--ink) 9%, transparent); stroke: var(--c-primary); stroke-width: 1.1; }
+.paper .rect-hi   { fill: none; stroke: var(--c-primary); stroke-width: 1.4; stroke-dasharray: 4 2.5; }
+.paper .rect-sum  { fill: color-mix(in srgb, var(--c-primary) 13%, transparent); stroke: var(--c-primary); stroke-width: 1.1; }
+.paper .curve-log { stroke: var(--c-caution); stroke-width: 2.2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.paper .idline { stroke: var(--c-aux); stroke-width: 1.3; stroke-dasharray: 4.5 3.5; fill: none; stroke-linecap: round; opacity: .85; }
+.paper .dot { fill: var(--ink); }
+.paper .bubble { stroke: var(--c-aux); stroke-width: 1.4; fill: none; }
+.paper .arrow-fwd { stroke: var(--c-primary); stroke-width: 2; fill: none; }
+.paper .arrow-bwd { stroke: var(--c-caution); stroke-width: 2; fill: none; }
+.paper .fig-svg text { font-family: var(--ui); font-size: 13px; }
+.paper .axlab { fill: var(--c-aux); font-style: italic; }
+.paper .lab-curve { fill: var(--c-primary); font-style: italic; }
+/* ch08 M2: light fills (ghost tails / auxiliary mass) + per-figure widths */
+.paper .fill-ghost { fill: color-mix(in srgb, var(--c-primary) 6%, transparent); stroke: none; }
+.paper .fill-aux { fill: color-mix(in srgb, var(--ink) 10%, transparent); stroke: none; }
+.paper figure[data-fig="parts-uv-rectangle"] { --fig-w: 300px; }
+.paper figure[data-fig="washer-split-monotone"] { --fig-w: 430px; }
+.paper figure[data-fig="sin-squared-midline"] { --fig-w: 460px; }
+.paper figure[data-fig="ellipse-quarter-area"] { --fig-w: 380px; }
+.paper figure[data-fig="tail-comparison"] { --fig-w: 460px; }
+.paper figure[data-fig="type2-truncation"] { --fig-w: 430px; }
+.paper figure[data-fig="interior-singularity"] { --fig-w: 450px; }
+.paper figure[data-fig="monotone-sampling"] { --fig-w: 460px; }
+.paper figure[data-fig="comparison-trap"] { --fig-w: 440px; }
+.paper figure[data-fig="midpoint-tangent-trap"] { --fig-w: 340px; }
+.paper figure[data-fig="simpson-data-speed"] { --fig-w: 470px; }
+.paper .lab-ref, .paper .lab-ref-b { fill: var(--c-caution); }
+.paper .ptlab { fill: var(--ink-soft); font-size: 12px; }
+.paper .setlab { fill: var(--ink); font-weight: 600; font-size: 14.5px; text-anchor: middle; }
+
+/* env blocks */
+.skin-hs .env {
+  --accent: var(--a-aside);
+  margin: 1.2em 0; padding-left: 16px;
+  border-left: 2.5px solid color-mix(in srgb, var(--accent) 38%, var(--paper));
+}
+.skin-hs .env-definition  { --accent: var(--a-concept); }
+.skin-hs .env-theorem, .skin-hs .env-proposition, .skin-hs .env-corollary { --accent: var(--a-result); }
+.skin-hs .env-example, .skin-hs .env-solution, .skin-hs .env-exercise { --accent: var(--a-practice); }
+.skin-hs .env-remark { --accent: var(--a-aside); }
+.skin-hs .env-head {
+  display: flex; align-items: baseline; gap: .5em; flex-wrap: wrap;
+  margin: 0 0 .55em; font-family: var(--ui);
+}
+.skin-hs .env-kicker {
+  font-size: .62rem; letter-spacing: .07em; text-transform: uppercase; font-weight: 700;
+  color: var(--paper); background: var(--accent); padding: 3px 10px; border-radius: 999px; line-height: 1.5;
+}
+.skin-hs .env-num { font-weight: 700; color: var(--accent); font-size: .94em; }
+.skin-hs .env-name { font-style: italic; font-weight: 400; color: var(--ink-soft); font-family: var(--serif); font-size: 1em; }
+.skin-hs .env-body > p:first-child { margin-top: 0; }
+.skin-hs .env-body > :last-child { margin-bottom: 0; }
+.skin-hs .env-theorem .env-body, .skin-hs .env-proposition .env-body { font-style: italic; }
+.skin-hs .env-theorem .env-body mjx-container, .skin-hs .env-proposition .env-body mjx-container { font-style: normal; }
+.skin-hs .env-definition em { font-style: italic; }
+.skin-hs .env-remark { color: var(--ink-soft); font-size: .97em; }
+.skin-hs .env-remark .env-kicker { background: transparent; color: var(--a-aside); border: 1px solid color-mix(in srgb, var(--a-aside) 45%, var(--paper)); }
+.skin-hs .env-proof { --accent: var(--a-result); }
+.skin-hs .env-proof .env-kicker {
+  background: transparent; color: var(--a-result); font-style: italic; letter-spacing: .04em;
+  border: 1px solid color-mix(in srgb, var(--a-result) 45%, var(--paper));
+}
+.skin-hs .qed-proof::after { border-color: var(--ink); }
+.skin-hs .workedexample {
+  margin: 1.6em 0; padding-left: 16px;
+  border-left: 2.5px solid color-mix(in srgb, var(--a-practice) 38%, var(--paper));
+  display: flow-root;
+}
+.skin-hs .workedexample .env { margin: .7em 0; padding-left: 0; border-left: 0; }
+.skin-hs .env-solution .env-kicker { background: transparent; color: var(--a-practice); border: 1px solid color-mix(in srgb, var(--a-practice) 45%, var(--paper)); }
+.skin-hs > .env-cont { margin-top: 0; padding-top: .82em; }
+.skin-hs > .env:has(+ .env-cont) { margin-bottom: 0; display: flow-root; }
+.skin-hs > .env-example:has(+ .env-solution) { margin-bottom: 0; }
+.skin-hs > .env-example + .env-solution { margin-top: 0; padding-top: .72em; }
+.skin-hs > .env-cont, .skin-hs > .env-example, .skin-hs > .env-solution { display: flow-root; }
+.skin-hs .env-exercise .env-kicker { background: transparent; color: var(--a-practice); border: 1px solid var(--a-practice); }
+.skin-hs .env-caution, .skin-hs .env-strategy {
+  padding: 15px 20px; border-radius: 8px; margin: 1.4em 0;
+  border-left-width: 4px; border-left-style: solid;
+}
+.skin-hs .env-caution {
+  --accent: var(--a-caution);
+  background: color-mix(in srgb, var(--a-caution) 7%, var(--paper));
+  border: 1px solid color-mix(in srgb, var(--a-caution) 22%, var(--paper));
+  border-left-color: var(--a-caution);
+}
+.skin-hs .env-strategy {
+  --accent: var(--a-strategy);
+  background: color-mix(in srgb, var(--a-strategy) 7%, var(--paper));
+  border: 1px solid color-mix(in srgb, var(--a-strategy) 22%, var(--paper));
+  border-left-color: var(--a-strategy);
+}
+.skin-hs .env-caution .env-name, .skin-hs .env-strategy .env-name { color: var(--ink-soft); }
+.skin-hs .env-strategy .steps { margin-bottom: 0; }
+.skin-hs.vivid .env { border-left-color: color-mix(in srgb, var(--accent) 70%, var(--paper)); border-left-width: 3px; }
+.skin-hs.vivid .workedexample { border-left-color: color-mix(in srgb, var(--a-practice) 70%, var(--paper)); border-left-width: 3px; }
+.skin-hs.vivid .env-kicker { font-size: .64rem; padding: 3.5px 11px; }
+
+/* ============================================================
+   figs.css — inlined + modified for MathJax
+   ============================================================ */
+.paper .fig-svg { height: auto; max-width: 100%; overflow: visible; }
+.paper .figure-art { display: flex; justify-content: center; align-items: flex-start; gap: 24px; flex-wrap: wrap; }
+.paper .figure-art--pair { gap: 24px; }
+.paper .figure-art--pair .fig-panel { flex: 1 1 220px; max-width: 300px; }
+.paper .figure-art--triple { gap: 18px; }
+.paper .figure-art--triple .fig-panel { flex: 1 1 165px; max-width: 176px; } /* ch08: 3*176+2*18 <= 567 */
+.paper .figure-art--grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; justify-items: center; }
+.paper .figure-art--grid .fig-panel { max-width: 240px; }
+.paper .fig-panel { display: flex; flex-direction: column; align-items: center; }
+.paper .fig-note {
+  font-family: var(--ui); font-size: .8em; line-height: 1.45;
+  color: var(--ink-soft); margin-top: .55em; text-align: center; text-wrap: pretty;
+}
+.paper .fig-note mjx-container { font-size: .98em; }
+.paper .fig-fo { overflow: visible; }
+.paper .fig-lyr { position: relative; width: 100%; height: 100%; font-family: var(--serif); }
+.paper .fig-lbl {
+  position: absolute; white-space: nowrap; line-height: 1; font-size: 15px;
+  text-shadow: 0 0 2px var(--paper), 0 0 2px var(--paper), 0 0 1px var(--paper);
+}
+.paper .fig-lbl mjx-container { font-size: 1em; }
+.paper .fig-lbl.a-curve { color: var(--c-primary); }
+.paper .fig-lbl.a-ref   { color: var(--c-caution); }
+.paper .fig-lbl.a-ax    { color: var(--ink-soft); }
+.paper .fig-lbl.a-pt    { color: var(--ink); }
+.paper .tbl-wrap { overflow-x: auto; overflow-y: hidden; margin: 1em 0; }
+.paper table.tbl {
+  border-collapse: collapse; margin: 0 auto; font-family: var(--ui); font-size: .96em;
+  border-top: 1.7px solid var(--ink); border-bottom: 1.7px solid var(--ink);
+}
+.paper table.tbl th, .paper table.tbl td { padding: .3em .8em; text-align: center; white-space: nowrap; }
+.paper table.tbl thead th { border-bottom: 1.1px solid var(--ink-soft); font-weight: 500; }
+.paper table.tbl .rowlab { text-align: right; padding-right: 1em; color: var(--ink-soft); }
+.paper table.tbl mjx-container { font-size: .98em; }
+.paper .sec + .sec { margin-top: 2.6em; padding-top: 2.2em; border-top: 1px solid var(--rule); }
+.paper .para-head { font-weight: 600; margin: 1.1em 0 .4em; }
+.paper ul { margin: .3em 0 .95em; padding-left: 1.3em; }
+.paper ul li { margin: .35em 0; text-align: justify; }
+.paper ul li::marker { color: var(--a-result); }
+.paper .chapter-head { margin-bottom: 1.6em; }
+.paper .chapter-head .ch-kicker {
+  font-family: var(--ui); font-size: .72rem; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--a-result); font-weight: 700; margin-bottom: .6em;
+}
+.paper .chapter-head .ch-title { font-weight: 600; font-size: 2.5rem; line-height: 1.08; letter-spacing: -.02em; margin: 0; }
+.paper .lead { font-size: 1.05em; }
+
+/* ============================================================
+   print.css — inlined (A4 sheet layout + paginator)
+   ============================================================ */
+@page { size: A4; margin: 0; }
+.sheet {
+  position: relative; box-sizing: border-box;
+  width: 210mm; height: 297mm;
+  padding: 20mm 28mm 20mm 32mm;
+  background: #fff; overflow: hidden;
+}
+.sheet-header {
+  position: absolute; top: 11mm; left: 32mm; right: 28mm;
+  font: 500 8.5pt "Inter", sans-serif; color: #9aa0ac; letter-spacing: .02em;
+}
+.sheet-footer {
+  position: absolute; bottom: 8.5mm; left: 0; right: 0;
+  text-align: center; font: 500 9pt "Inter", sans-serif; color: #82868f;
+}
+.sheet-body { height: 100%; --accent: oklch(0.50 0.13 245); }
+.sheet-body.paper { box-shadow: none; border-radius: 0; max-width: none; background: #fff; }
+.sheet-body .page { padding: 0; max-width: none; margin: 0; }
+.sheet-body.paper { font-size: 12pt; line-height: 1.55; }
+.sheet, .sheet * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.sheet-body > :first-child { margin-top: 0 !important; }
+.sheet-body .sec + .sec { border-top: 0; margin-top: 0; padding-top: 0; }
+.sheet-body .qed { margin-top: -1.55em; height: 1.55em; }
+.sheet-body .env-body::after { display: none; content: none; }
+.sheet-body .env-cont { margin-top: 0; }
+.sheet-body .env-cont > .env-body > :first-child { margin-top: 0; }
+@media screen {
+  body { background: #6f727b; margin: 0; }
+  .sheet { box-shadow: 0 3px 18px rgba(0,0,0,.3); margin: 9mm auto; }
+}
+@media print {
+  body { background: #fff; margin: 0; }
+  .sheet { box-shadow: none; margin: 0; break-after: page; }
+  .sheet:last-child { break-after: auto; }
+  .print-toolbar, #boot { display: none !important; }
+}
+
+/* ============================================================
+   page-level
+   ============================================================ */
+.print-toolbar {
+  position: fixed; top: 14px; right: 16px; z-index: 1000;
+  display: flex; align-items: center; gap: 10px; font-family: "Inter", system-ui, sans-serif;
+}
+.print-toolbar button {
+  font: 600 13px "Inter", sans-serif; color: #fff; background: oklch(0.50 0.13 245);
+  border: 0; padding: 9px 16px; border-radius: 8px; cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0,0,0,.25);
+}
+.print-toolbar button:disabled { opacity: .5; cursor: default; }
+.print-toolbar button:not(:disabled):hover { background: oklch(0.45 0.13 245); }
+.print-toolbar .status {
+  font-size: 12px; color: #e8eaf0; background: rgba(0,0,0,.4);
+  padding: 6px 11px; border-radius: 999px; backdrop-filter: blur(6px);
+}
+#boot {
+  position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: "Inter", system-ui, sans-serif; color: #cdd2dc; background: #6f727b; z-index: 900;
+}
+#source { position: absolute; left: -10000px; top: 0; width: 683px; }
+</style>
+</head>
+<body>
+
+<div id="boot">Preparing …</div>
+
+<div class="print-toolbar">
+  <span class="status" id="status">Preparing …</span>
+  <button id="printBtn" disabled>Print / Save as PDF</button>
+</div>
+
+<div id="source"><div class="paper skin-hs vivid"><div class="page" id="page"></div></div></div>
+<div id="pages"></div>
+
+<!-- Section fragments (inlined) -->
+
+<!-- BEGIN-CONTENT-FRAGMENTS -->
+<template id="figs-only">
+<figure class="figure" data-fig="parts-uv-rectangle">
+    <figcaption><span class="fig-no">Figure 8.1</span> The parts formula as area bookkeeping. For a curve in the \(uv\)-plane climbing from the origin to \((u_{1}, v_{1})\) with \(u\) and \(v\) increasing together, the rectangle of area \(u_{1}v_{1}\) splits into \(\int v\,du\), below the curve, and \(\int u\,dv\), beside it; subtracting either from the rectangle leaves the other. The picture illustrates the formula; the proof remains that of Theorem 8.1.</figcaption>
+  </figure>
+<figure class="figure" data-fig="washer-split-monotone">
+    <figcaption><span class="fig-no">Figure 8.2</span> The washer reading of the shell–washer comparison, for \(f\) strictly increasing with \(0 &lt; a\). Below \(y = c = f(a)\) every horizontal slice is the full annulus from \(a\) to \(b\); between \(c\) and \(d = f(b)\) the slice runs from \(x = g(y)\) out to \(b\). The two bands are the two terms of \(V_{\text{washer}}\).</figcaption>
+  </figure>
+<figure class="figure" data-fig="sin-squared-midline">
+    <figcaption><span class="fig-no">Figure 8.3</span> The graph of \(\sin^{2}x\) oscillates about the midline \(y = \tfrac{1}{2}\) with period \(\pi\): the identity’s constant term is the average height, and each valley exactly fills a peak. The zeros touch the axis without crossing it.</figcaption>
+  </figure>
+<figure class="figure" data-fig="trig-sub-triangles">
+    <figcaption><span class="fig-no">Figure 8.4</span> The three reference triangles of Strategy 8.4, one per substitution. Label the sides so that the substitution’s ratio holds; the remaining side, by the Pythagorean theorem, is the radical, and every trigonometric function of \(\theta\) can be read off as a ratio of sides. The triangles are a mnemonic for identities that the stated \(\theta\)-ranges make valid.</figcaption>
+  </figure>
+<figure class="figure" data-fig="ellipse-quarter-area">
+    <figcaption><span class="fig-no">Figure 8.5</span> The quarter-ellipse region behind Example 8.13. Solving for the upper half doubles the region once, evenness doubles it again, so the enclosed area is four times the shaded first-quadrant integral. The intercepts sit at \((a, 0)\) and \((0, b)\).</figcaption>
+  </figure>
+<figure class="figure" data-fig="tail-comparison">
+    <figcaption><span class="fig-no">Figure 8.6</span> The tails of \(y = 1/x\) and \(y = 1/x^{2}\) on \([1, \infty)\). The curves meet only at \((1, 1)\) and both decay to \(0\); the darker region under \(1/x^{2}\) stalls at total area \(1\), while the region under \(1/x\) keeps growing as the cutoff \(t\) moves right. How fast the tail thins decides the verdict.</figcaption>
+  </figure>
+<figure class="figure" data-fig="type2-truncation">
+    <figcaption><span class="fig-no">Figure 8.7</span> The truncation of Definition 8.2(b) for \(\int_{2}^{5} dx/\sqrt{x - 2}\): the region from \(t\) to \(5\) is a proper integral, and as \(t \to 2^{+}\) the limit captures the lighter sliver against the asymptote. The spike at \(x = 2\) is tall but thin enough for the limit to stay finite.</figcaption>
+  </figure>
+<figure class="figure" data-fig="interior-singularity">
+    <figcaption><span class="fig-no">Figure 8.8</span> The integrand of Example 8.31: two branches of \(y = 1/x^{2}\) climbing the same vertical asymptote, which coincides with the \(y\)-axis. The limits \(-1\) and \(3\) sit harmlessly on the axis while the singularity waits between them. Scan the whole interval before applying the Fundamental Theorem.</figcaption>
+  </figure>
+<figure class="figure" data-fig="monotone-sampling">
+    <figcaption><span class="fig-no">Figure 8.9</span> The proof of Theorem 8.3(a) in one schematic picture: the increasing accumulation \(F\) stays below its ceiling \(M\), the integer samples \(F(a + n)\) climb to their limit \(L\) (Theorem 4.1), and every \(t\) is bracketed between consecutive samples, so \(F(t)\) is squeezed to \(L\) as well. The curve’s shape is schematic.</figcaption>
+  </figure>
+<figure class="figure" data-fig="comparison-trap">
+    <figcaption><span class="fig-no">Figure 8.10</span> The Comparison Theorem’s trap in Example 8.32: on \([1, \infty)\) the graph of \(e^{-x^{2}}\) runs below \(e^{-x}\), whose tail holds the finite area \(1/e\), so the darker region is confined below a finite roof. The curves meet at \(x = 1\) and separate at a visible angle.</figcaption>
+  </figure>
+<figure class="figure" data-fig="three-rules-panel">
+    <figcaption><span class="fig-no">Figure 8.11</span> The three rules on one integrand, \(y = 1/x\) on \([1, 3]\) with \(n = 4\): constants at the midpoints, chords at the nodes, and a parabola through each triple of nodes. The first triple’s arc is shaded; the open dots mark the second triple, whose arc lies too close to the curve to separate by eye, which is the point: each replacement follows the bending of the curve more closely than the last.</figcaption>
+  </figure>
+<figure class="figure" data-fig="midpoint-tangent-trap">
+    <figcaption><span class="fig-no">Figure 8.12</span> One slice of Example 8.34’s integrand. Tilting the midpoint rectangle’s lid about the point of tangency onto the tangent line exchanges two equal triangles, so the rectangle and the tangent trapezoid hold the same area. On this upward-bending curve the tangent lies below the curve away from the midpoint while the chord lies above it, which is why the midpoint and trapezoidal errors pull in opposite directions.</figcaption>
+  </figure>
+<figure class="figure" data-fig="simpson-data-speed">
+    <figcaption><span class="fig-no">Figure 8.13</span> Example 8.38’s data: seven speedometer readings and the three parabolic arcs that Simpson’s Rule fits through consecutive triples, meeting at the shared nodes \(t = 60\) and \(t = 120\). No curve is drawn between the readings, because none is known; the first triple happens to be collinear, so its arc is a straight segment.</figcaption>
+  </figure>
+</template>
+<!-- END-CONTENT-FRAGMENTS -->
+<!-- plot.js — inlined -->
+<script>
+(function () {
+  var uid = 0;
+  var PI = Math.PI;
+  function piTex(v) {
+    var map = {};
+    map[(-2 * PI).toFixed(4)] = "-2\\pi";
+    map[(-PI).toFixed(4)] = "-\\pi";
+    map[(-PI / 2).toFixed(4)] = "-\\tfrac{\\pi}{2}";
+    map[(PI / 2).toFixed(4)] = "\\tfrac{\\pi}{2}";
+    map[PI.toFixed(4)] = "\\pi";
+    map[(2 * PI).toFixed(4)] = "2\\pi";
+    map[(0).toFixed(4)] = "0";
+    var hit = map[v.toFixed(4)];
+    if (hit != null) return hit;
+    if (Math.abs(v - Math.round(v)) < 1e-9) return String(Math.round(v)); // plain integers
+    return undefined;
+  }
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+  function anchorTransform(anchor, vAnchor) {
+    var tx = anchor === "start" ? "0" : anchor === "end" ? "-100%" : "-50%";
+    var ty = vAnchor === "top" ? "0" : vAnchor === "bottom" ? "-100%" : "-50%";
+    return "translate(" + tx + "," + ty + ")";
+  }
+  function buildPlot(cfg) {
+    var w = cfg.w, h = cfg.h;
+    var pad = Object.assign({ t: 16, r: 18, b: 20, l: 22 }, cfg.pad || {});
+    var xmin = cfg.xmin, xmax = cfg.xmax, ymin = cfg.ymin, ymax = cfg.ymax;
+    var iw = w - pad.l - pad.r, ih = h - pad.t - pad.b;
+    var SX = function(x) { return pad.l + ((x - xmin) / (xmax - xmin)) * iw; };
+    var SY = function(y) { return h - pad.b - ((y - ymin) / (ymax - ymin)) * ih; };
+    var id = "pl" + (++uid);
+    var parts = [], labels = [];
+    function pushLabel(o) { labels.push(o); }
+    parts.push('<svg viewBox="0 0 ' + w + ' ' + h + '" style="width:' + w + 'px" class="fig-svg" role="img" aria-label="' + esc(cfg.aria || "graph") + '" preserveAspectRatio="xMidYMid meet">');
+    parts.push('<defs><marker id="' + id + 'a" markerWidth="8" markerHeight="8" refX="5.4" refY="2.8" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L5.4,2.8 L0,5.6" fill="none" stroke="var(--c-axis)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>');
+    if (cfg.axes !== false) {
+      var x0 = Math.min(Math.max(0, xmin), xmax), y0 = Math.min(Math.max(0, ymin), ymax);
+      var ax0 = SX(xmin), ax1 = SX(xmax), ayBase = SY(y0);
+      parts.push('<path d="M' + ax0.toFixed(1) + ',' + ayBase.toFixed(1) + ' H' + (ax1 - 1).toFixed(1) + '" class="axis" marker-end="url(#' + id + 'a)"/>');
+      var ay0 = SY(ymin), ay1 = SY(ymax), axBase = SX(x0);
+      parts.push('<path d="M' + axBase.toFixed(1) + ',' + ay0.toFixed(1) + ' V' + (ay1 + 1).toFixed(1) + '" class="axis" marker-end="url(#' + id + 'a)"/>');
+      if (cfg.xlabel) pushLabel({ px: ax1 + 1, py: ayBase + 4, tex: cfg.xlabel, anchor: "start", vAnchor: "top", cls: "a-ax", size: 13 });
+      if (cfg.ylabel) pushLabel({ px: axBase - 5, py: ay1 + 1, tex: cfg.ylabel, anchor: "end", vAnchor: "top", cls: "a-ax", size: 13 });
+      (cfg.xticks || []).forEach(function(t) {
+        var px = SX(t.x);
+        parts.push('<line x1="' + px.toFixed(1) + '" y1="' + (ayBase - 3).toFixed(1) + '" x2="' + px.toFixed(1) + '" y2="' + (ayBase + 3).toFixed(1) + '" class="axis"/>');
+        var tex = t.tex != null ? t.tex : (t.label != null ? null : piTex(t.x));
+        if (tex != null) pushLabel({ px: px, py: ayBase + 6, tex: tex, anchor: "middle", vAnchor: "top", cls: "a-pt", size: 12 });
+        else if (t.label != null) pushLabel({ px: px, py: ayBase + 6, text: t.label, anchor: "middle", vAnchor: "top", cls: "a-pt", size: 12 });
+      });
+      (cfg.yticks || []).forEach(function(t) {
+        var py = SY(t.y);
+        parts.push('<line x1="' + (axBase - 3).toFixed(1) + '" y1="' + py.toFixed(1) + '" x2="' + (axBase + 3).toFixed(1) + '" y2="' + py.toFixed(1) + '" class="axis"/>');
+        var tex = t.tex != null ? t.tex : (t.label != null ? null : piTex(t.y));
+        if (tex != null) pushLabel({ px: axBase - 6, py: py, tex: tex, anchor: "end", vAnchor: "middle", cls: "a-pt", size: 12 });
+        else if (t.label != null) pushLabel({ px: axBase - 6, py: py, text: t.label, anchor: "end", vAnchor: "middle", cls: "a-pt", size: 12 });
+      });
+    }
+    (cfg.items || []).forEach(function(it) {
+      if (it.type === "curve") {
+        var cls = it.cls || "curve", n = it.samples || 240, a = it.domain[0], b = it.domain[1];
+        var d = "", pen = false;
+        for (var i = 0; i <= n; i++) {
+          var x = a + (b - a) * (i / n), y = it.fn(x);
+          if (!isFinite(y) || y < ymin - (ymax - ymin) * 0.04 || y > ymax + (ymax - ymin) * 0.04) { pen = false; continue; }
+          var px = SX(x).toFixed(2), py = SY(y).toFixed(2);
+          d += (pen ? "L" : "M") + px + "," + py + " "; pen = true;
+        }
+        if (d) parts.push('<path d="' + d.trim() + '" class="' + cls + '"/>');
+      } else if (it.type === "vline") {
+        parts.push('<line x1="' + SX(it.x).toFixed(1) + '" y1="' + SY(ymin).toFixed(1) + '" x2="' + SX(it.x).toFixed(1) + '" y2="' + SY(ymax).toFixed(1) + '" class="' + (it.cls || "refline") + '"/>');
+      } else if (it.type === "hline") {
+        var ha = it.from != null ? it.from : xmin, hb = it.to != null ? it.to : xmax;
+        parts.push('<line x1="' + SX(ha).toFixed(1) + '" y1="' + SY(it.y).toFixed(1) + '" x2="' + SX(hb).toFixed(1) + '" y2="' + SY(it.y).toFixed(1) + '" class="' + (it.cls || "refline") + '"/>');
+      } else if (it.type === "seg") {
+        parts.push('<line x1="' + SX(it.x1).toFixed(1) + '" y1="' + SY(it.y1).toFixed(1) + '" x2="' + SX(it.x2).toFixed(1) + '" y2="' + SY(it.y2).toFixed(1) + '" class="' + (it.cls || "curve") + '"/>');
+      } else if (it.type === "dot") {
+        var r = it.r || 3.0;
+        if (it.hollow) parts.push('<circle cx="' + SX(it.x).toFixed(1) + '" cy="' + SY(it.y).toFixed(1) + '" r="' + r + '" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.5"/>');
+        else parts.push('<circle cx="' + SX(it.x).toFixed(1) + '" cy="' + SY(it.y).toFixed(1) + '" r="' + r + '" class="dot"/>');
+      } else if (it.type === "rect") {
+        var rTop = SY(it.y1), rBot = SY(it.y0 != null ? it.y0 : 0), rL = SX(it.x1), rR = SX(it.x2);
+        parts.push('<rect x="' + Math.min(rL, rR).toFixed(1) + '" y="' + Math.min(rTop, rBot).toFixed(1) + '" width="' + Math.abs(rR - rL).toFixed(1) + '" height="' + Math.abs(rBot - rTop).toFixed(1) + '" class="' + (it.cls || "fill-area") + '"/>');
+      } else if (it.type === "area") {
+        var aN = it.samples || 160, aA = it.domain[0], aB = it.domain[1], aBase = (it.base != null ? it.base : 0);
+        var aD = "M" + SX(aA).toFixed(2) + "," + SY(aBase).toFixed(2) + " ";
+        for (var aI = 0; aI <= aN; aI++) { var aX = aA + (aB - aA) * (aI / aN); aD += "L" + SX(aX).toFixed(2) + "," + SY(it.fn(aX)).toFixed(2) + " "; }
+        aD += "L" + SX(aB).toFixed(2) + "," + SY(aBase).toFixed(2) + " Z";
+        parts.push('<path d="' + aD.trim() + '" class="' + (it.cls || "fill-area") + '"/>');
+      } else if (it.type === "areaBetween") {
+        /* ch7 extension (M2 figure batch): fill between two curves y=fnTop(x), y=fnBot(x) over domain.
+           Same one-off-kit-extension move as ch06's rect/area (see PLAN-ch06 "M2 figure batch"). */
+        var bN = it.samples || 160, bA = it.domain[0], bB = it.domain[1], bD = "";
+        for (var bI = 0; bI <= bN; bI++) { var bX = bA + (bB - bA) * (bI / bN); bD += (bI ? "L" : "M") + SX(bX).toFixed(2) + "," + SY(it.fnTop(bX)).toFixed(2) + " "; }
+        for (var bJ = bN; bJ >= 0; bJ--) { var bX2 = bA + (bB - bA) * (bJ / bN); bD += "L" + SX(bX2).toFixed(2) + "," + SY(it.fnBot(bX2)).toFixed(2) + " "; }
+        parts.push('<path d="' + bD.trim() + ' Z" class="' + (it.cls || "fill-area") + '"/>');
+      } else if (it.type === "arrow") {
+        parts.push('<line x1="' + SX(it.x1).toFixed(1) + '" y1="' + SY(it.y1).toFixed(1) + '" x2="' + SX(it.x2).toFixed(1) + '" y2="' + SY(it.y2).toFixed(1) + '" class="axis" marker-end="url(#' + id + 'a)"/>');
+      } else if (it.type === "text") {
+        pushLabel({ px: SX(it.x), py: SY(it.y), tex: it.tex, text: it.tex == null ? it.text : null, anchor: it.anchor || "middle", vAnchor: it.vAnchor || "middle", dx: it.dx || 0, dy: it.dy || 0, cls: it.cls || "a-pt", size: it.size });
+      }
+    });
+    if (labels.length) {
+      var M = 52;
+      var spans = labels.map(function(L) {
+        var left = (L.px + (L.dx || 0) + M).toFixed(1);
+        var top = (L.py + (L.dy || 0) + M).toFixed(1);
+        var tf = anchorTransform(L.anchor, L.vAnchor);
+        var fs = L.size ? "font-size:" + L.size + "px;" : "";
+        var body = L.tex != null ? "\\(" + L.tex + "\\)" : esc(L.text == null ? "" : L.text);
+        return '<span class="fig-lbl ' + (L.cls || "") + '" style="left:' + left + 'px;top:' + top + 'px;transform:' + tf + ';' + fs + '">' + body + '</span>';
+      }).join("");
+      parts.push('<foreignObject x="' + (-M) + '" y="' + (-M) + '" width="' + (w + 2 * M) + '" height="' + (h + 2 * M) + '" class="fig-fo" requiredExtensions="http://www.w3.org/1999/xhtml"><div xmlns="http://www.w3.org/1999/xhtml" class="fig-lyr">' + spans + '</div></foreignObject>');
+    }
+    parts.push('</svg>');
+    return parts.join("");
+  }
+  window.buildPlot = buildPlot;
+  window.PIVAL = PI;
+})();
+</script>
+
+<!-- ============================================================
+     figures.js — inlined (Chapter 7 figure registry)
+     ============================================================ -->
+<script>
+/* ============================================================
+   figures.js — Chapter 7 figure registry.
+   Each entry returns { layout, panels:[{svg, note}] }.
+   Most chapter figures use buildPlot() (shared/plot.js) for
+   function graphs. buildPlot has NO fill/sector primitive, so
+   region-area schematics (e.g. the §3.1 sector inequality) are
+   hand-built raw SVG here, inheriting the figure vocabulary
+   (.fig-svg, .ptlab, var(--c-primary)/--ink…) from skin-hs.css.
+   Labels are kept to single symbols (O, A, B, C, θ, 1); the
+   areas and the inequality live in the caption and body prose
+   (CONTENT_SPEC §10 "Label economy").
+   Appended across sections — never overwrite.
+   ============================================================ */
+(function () {
+
+  /* ---- tiny helpers for the few hand-built raw-SVG schematics ----
+     (labels replicate buildPlot's foreignObject/MathJax span mechanism) */
+  var FO_M = 52;
+  function svgOpen(w, h, aria) {
+    return '<svg viewBox="0 0 ' + w + ' ' + h + '" style="width:' + w + 'px" class="fig-svg" role="img" aria-label="' + aria + '" preserveAspectRatio="xMidYMid meet">';
+  }
+  function texLbl(px, py, tex, anchor, size) {
+    var tf = anchor === "start" ? "translate(0,-50%)" : anchor === "end" ? "translate(-100%,-50%)" : "translate(-50%,-50%)";
+    var fs = size ? "font-size:" + size + "px;" : "font-size:12px;";
+    return '<span class="fig-lbl a-pt" style="left:' + (px + FO_M).toFixed(1) + 'px;top:' + (py + FO_M).toFixed(1) + 'px;transform:' + tf + ';' + fs + '">\\(' + tex + '\\)</span>';
+  }
+  function txtLbl(px, py, text, anchor, size) {
+    var tf = anchor === "start" ? "translate(0,-50%)" : anchor === "end" ? "translate(-100%,-50%)" : "translate(-50%,-50%)";
+    var fs = size ? "font-size:" + size + "px;" : "font-size:12px;";
+    return '<span class="fig-lbl a-pt" style="left:' + (px + FO_M).toFixed(1) + 'px;top:' + (py + FO_M).toFixed(1) + 'px;transform:' + tf + ';' + fs + '">' + text + '</span>';
+  }
+  function foWrap(w, h, spans) {
+    return '<foreignObject x="' + (-FO_M) + '" y="' + (-FO_M) + '" width="' + (w + 2 * FO_M) + '" height="' + (h + 2 * FO_M) + '" class="fig-fo" requiredExtensions="http://www.w3.org/1999/xhtml"><div xmlns="http://www.w3.org/1999/xhtml" class="fig-lyr">' + spans + '</div></foreignObject>';
+  }
+
+  /* ch08 M2 helpers: 3-point Lagrange parabola + piecewise-linear interpolant */
+  function lag3(x0, y0, x1, y1, x2, y2) {
+    return function (x) {
+      return y0 * ((x - x1) * (x - x2)) / ((x0 - x1) * (x0 - x2))
+           + y1 * ((x - x0) * (x - x2)) / ((x1 - x0) * (x1 - x2))
+           + y2 * ((x - x0) * (x - x1)) / ((x2 - x0) * (x2 - x1));
+    };
+  }
+  function lerpNodes(xs, ys) {
+    return function (x) {
+      for (var i = 1; i < xs.length; i++) {
+        if (x <= xs[i]) {
+          var t = (x - xs[i - 1]) / (xs[i] - xs[i - 1]);
+          return ys[i - 1] + t * (ys[i] - ys[i - 1]);
+        }
+      }
+      return ys[ys.length - 1];
+    };
+  }
+  /* one right-triangle panel for Fig 8.4 (axes off; θ at the a-adjacent vertex, right angle at B) */
+  function triPanel(labBottom, labRight, labHyp) {
+    return buildPlot({
+      w: 205, h: 158, axes: false, xmin: -0.14, xmax: 1.98, ymin: -0.3, ymax: 1.06,
+      aria: "reference right triangle",
+      items: [
+        { type: "seg", x1: 0, y1: 0, x2: 1.5, y2: 0, cls: "curve" },
+        { type: "seg", x1: 1.5, y1: 0, x2: 1.5, y2: 0.9, cls: "curve" },
+        { type: "seg", x1: 0, y1: 0, x2: 1.5, y2: 0.9, cls: "curve" },
+        { type: "seg", x1: 1.38, y1: 0, x2: 1.38, y2: 0.1, cls: "axis" },
+        { type: "seg", x1: 1.38, y1: 0.1, x2: 1.5, y2: 0.1, cls: "axis" },
+        { type: "text", x: 0.34, y: 0.085, tex: "\\theta", size: 13 },
+        { type: "text", x: 0.75, y: -0.05, tex: labBottom, vAnchor: "top", size: 12 },
+        { type: "text", x: 1.58, y: 0.45, tex: labRight, anchor: "start", size: 12 },
+        { type: "text", x: 0.6, y: 0.56, tex: labHyp, anchor: "end", size: 12 }
+      ]
+    });
+  }
+
+  const FIGS = {
+
+    /* §8.1 Figure 8.1 — uv-rectangle bookkeeping for integration by parts.
+       Orientation per opportunity-gate MODIFY (labels as corrected): u horizontal, v vertical;
+       monotone curve from the ORIGIN to the far corner (u1,v1); region BELOW the curve = ∫v du,
+       region between the curve and the v-axis = ∫u dv. Caption states the origin-start special
+       case and the area reading (not a second proof). */
+    "parts-uv-rectangle": function () {
+      var f = function (x) { return Math.pow(x, 1.7); };
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 300, h: 230, xmin: -0.1, xmax: 1.3, ymin: -0.1, ymax: 1.3,
+        xlabel: "u", ylabel: "v", aria: "uv rectangle split by a monotone curve",
+        xticks: [{ x: 1, tex: "u_1" }], yticks: [{ y: 1, tex: "v_1" }],
+        items: [
+          { type: "areaBetween", fnTop: function (x) { return 1; }, fnBot: f, domain: [0, 1], cls: "fill-aux" },
+          { type: "area", fn: f, domain: [0, 1], cls: "fill-area" },
+          { type: "seg", x1: 0, y1: 1, x2: 1, y2: 1, cls: "idline" },
+          { type: "seg", x1: 1, y1: 0, x2: 1, y2: 1, cls: "idline" },
+          { type: "curve", fn: f, domain: [0, 1], cls: "curve" },
+          { type: "text", x: 0.74, y: 0.26, tex: "\\int v\\,du", size: 13 },
+          { type: "text", x: 0.3, y: 0.72, tex: "\\int u\\,dv", size: 13 }
+        ]
+      }) }] };
+    },
+
+    /* §8.1 Figure 8.2 — the two-regime washer split for the shell–washer subsection.
+       f strictly increasing, a>0 (MUST: a>0 so the full-annulus band exists — the figure's
+       reason to exist); dashed heights c=f(a), d=f(b); two representative slices. */
+    "washer-split-monotone": function () {
+      var f = function (x) { return 0.25 + 0.35 * Math.pow(x, 1.6); };
+      var a = 0.6, b = 2, c = f(0.6), d = f(2), gy = 1.4006, ySlice = 0.85;
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 430, h: 250, xmin: -0.15, xmax: 2.45, ymin: -0.12, ymax: 1.52,
+        xlabel: "x", ylabel: "y", aria: "region under an increasing curve split at height c",
+        xticks: [{ x: a, tex: "a" }, { x: b, tex: "b" }],
+        yticks: [{ y: c, tex: "c" }, { y: d, tex: "d" }],
+        items: [
+          { type: "area", fn: f, domain: [a, b], cls: "fill-area" },
+          { type: "seg", x1: a, y1: 0, x2: a, y2: c, cls: "idline" },
+          { type: "seg", x1: b, y1: 0, x2: b, y2: d, cls: "idline" },
+          { type: "hline", y: c, from: 0, to: b, cls: "idline" },
+          { type: "hline", y: d, from: 0, to: b, cls: "idline" },
+          { type: "curve", fn: f, domain: [a, b], cls: "curve" },
+          { type: "seg", x1: a, y1: 0.22, x2: b, y2: 0.22, cls: "tangent" },
+          { type: "seg", x1: gy, y1: ySlice, x2: b, y2: ySlice, cls: "tangent" },
+          { type: "dot", x: gy, y: ySlice },
+          { type: "text", x: gy - 0.04, y: ySlice + 0.1, tex: "x = g(y)", anchor: "end", size: 12 },
+          { type: "text", x: 2.06, y: 1.44, tex: "y = f(x)", anchor: "start", cls: "lab-curve", size: 12 }
+        ]
+      }) }] };
+    },
+
+    /* §8.2 Figure 8.3 — sin²x with its midline y = 1/2 (power reduction as a picture).
+       Period π (halved!), touching zeros at 0, π, 2π; midline crossings at odd multiples of π/4. */
+    "sin-squared-midline": function () {
+      var f = function (x) { var s = Math.sin(x); return s * s; };
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 460, h: 210, xmin: -0.35, xmax: 6.75, ymin: -0.14, ymax: 1.24,
+        xlabel: "x", ylabel: "y", aria: "sine squared oscillating about the midline one half",
+        xticks: [{ x: Math.PI }, { x: 2 * Math.PI }],
+        yticks: [{ y: 0.5, tex: "\\tfrac{1}{2}" }, { y: 1, tex: "1" }],
+        items: [
+          { type: "hline", y: 0.5, from: -0.1, to: 6.6, cls: "refline" },
+          { type: "curve", fn: f, domain: [-0.15, 6.6], cls: "curve" },
+          { type: "text", x: 2.18, y: 1.1, tex: "y = \\sin^{2}x", anchor: "start", cls: "lab-curve", size: 12 },
+          { type: "text", x: 6.62, y: 0.44, tex: "y = \\tfrac{1}{2}", anchor: "end", vAnchor: "top", size: 12 }
+        ]
+      }) }] };
+    },
+
+    /* §8.3 Figure 8.4 — the three reference right triangles (back-substitution device).
+       Side assignments verified against Strategy 8.4 rows and Ex 8.12/8.14/8.15 readings.
+       θ acute = mnemonic convention; captions keep the "mnemonic" wording. */
+    "trig-sub-triangles": function () {
+      return { layout: "triple", panels: [
+        { svg: triPanel("\\sqrt{a^{2}-x^{2}}", "x", "a"), note: "\\(x = a\\sin\\theta\\)" },
+        { svg: triPanel("a", "x", "\\sqrt{a^{2}+x^{2}}"), note: "\\(x = a\\tan\\theta\\)" },
+        { svg: triPanel("a", "\\sqrt{x^{2}-a^{2}}", "x"), note: "\\(x = a\\sec\\theta\\)" }
+      ] };
+    },
+
+    /* §8.3 Figure 8.5 — quarter-ellipse area region; ×2 (upper half) ×2 (evenness) = ×4.
+       a > b drawn (horizontal major axis); named ticks a, b with explicit tex; ghost quadrants. */
+    "ellipse-quarter-area": function () {
+      var a = 1.1, b = 0.7;
+      var up = function (x) { return b * Math.sqrt(Math.max(0, 1 - (x * x) / (a * a))); };
+      var dn = function (x) { return -up(x); };
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 380, h: 250, xmin: -1.38, xmax: 1.38, ymin: -0.95, ymax: 0.95,
+        xlabel: "x", ylabel: "y", aria: "ellipse with the first-quadrant quarter shaded",
+        xticks: [{ x: a, label: "" }], yticks: [{ y: b, tex: "b" }],
+        items: [
+          { type: "area", fn: up, domain: [0, a], cls: "fill-area" },
+          { type: "curve", fn: up, domain: [-a, -0.001], cls: "idline" },
+          { type: "curve", fn: dn, domain: [-a, a], cls: "idline" },
+          { type: "curve", fn: up, domain: [0, a], cls: "curve" },
+          { type: "text", x: 0.42, y: 0.3, tex: "\\displaystyle\\int_{0}^{a}", size: 13 },
+          { type: "text", x: 1.16, y: -0.13, tex: "a", anchor: "start", cls: "a-pt", size: 12 }
+        ]
+      }) }] };
+    },
+
+    /* §8.6 Figure 8.6 — 1/x vs 1/x² tails: same look, opposite verdicts.
+       Curves meet ONLY at (1,1); 1/x on top for x>1. Nested coding: deep fill under 1/x²,
+       light fill between the curves (the extra divergent mass), ghost beyond the cutoff t. */
+    "tail-comparison": function () {
+      var f1 = function (x) { return 1 / x; };
+      var f2 = function (x) { return 1 / (x * x); };
+      var t = 4;
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 460, h: 235, xmin: 0.45, xmax: 6.55, ymin: -0.12, ymax: 1.22,
+        xlabel: "x", ylabel: "y", aria: "one over x and one over x squared with shaded tails",
+        xticks: [{ x: 1 }, { x: t, tex: "t" }], yticks: [{ y: 1 }],
+        items: [
+          { type: "area", fn: f2, domain: [1, t], cls: "fill-pos" },
+          { type: "areaBetween", fnTop: f1, fnBot: f2, domain: [1, t], cls: "fill-aux" },
+          { type: "area", fn: f1, domain: [t, 6.4], cls: "fill-ghost" },
+          { type: "seg", x1: t, y1: 0, x2: t, y2: 1.18, cls: "idline" },
+          { type: "curve", fn: f1, domain: [0.85, 6.4], cls: "curve-log" },
+          { type: "curve", fn: f2, domain: [0.9, 6.4], cls: "curve" },
+          { type: "dot", x: 1, y: 1 },
+          { type: "text", x: 2.35, y: 0.52, tex: "y = \\tfrac{1}{x}", anchor: "start", size: 12 },
+          { type: "text", x: 1.75, y: 0.14, tex: "y = \\tfrac{1}{x^{2}}", anchor: "start", size: 12 }
+        ]
+      }) }] };
+    },
+
+    /* §8.6 Figure 8.7 — Type 2 truncation for 1/√(x−2) on (2,5]: red dashed asymptote at x=2,
+       solid fill on [t,5], GHOST fill (not hatch — kit-native, matches Fig 8.6's language) on the
+       sliver (2,t) that the limit has not yet captured. Nothing drawn AT x=2. */
+    "type2-truncation": function () {
+      var f = function (x) { return 1 / Math.sqrt(x - 2); };
+      var t = 2.5;
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 430, h: 235, xmin: 1.45, xmax: 5.65, ymin: -0.2, ymax: 3.1,
+        xlabel: "x", ylabel: "y", aria: "unbounded spike at x equals two with truncated region",
+        xticks: [{ x: 2 }, { x: t, tex: "t" }, { x: 3 }, { x: 5 }], yticks: [{ y: 1 }],
+        items: [
+          { type: "area", fn: function (x) { return Math.min(f(x), 3.05); }, domain: [2.02, t], cls: "fill-ghost" },
+          { type: "area", fn: f, domain: [t, 5], cls: "fill-area" },
+          { type: "seg", x1: 2, y1: 0, x2: 2, y2: 3.06, cls: "refline" },
+          { type: "curve", fn: f, domain: [2.045, 5], cls: "curve" },
+          { type: "dot", x: 5, y: f(5) },
+          { type: "text", x: 3.55, y: 1.02, tex: "y = \\tfrac{1}{\\sqrt{x-2}}", anchor: "start", cls: "lab-curve", size: 12 }
+        ]
+      }) }] };
+    },
+
+    /* §8.6 Figure 8.8 — the interior singularity of Ex 8.31: two back-to-back branches of 1/x²,
+       endpoints −1 and 3 look harmless on the axis; the vertical asymptote COINCIDES with the
+       y-axis (render fact: refline overlaid on the axis). Light fills only — the right half is
+       proved divergent, shading must not suggest finite area. Placed AFTER the caution (D6). */
+    "interior-singularity": function () {
+      var f = function (x) { return 1 / (x * x); };
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 450, h: 235, xmin: -1.5, xmax: 3.5, ymin: -0.25, ymax: 4.35,
+        xlabel: "x", ylabel: "y", aria: "one over x squared with an interior singularity at zero",
+        xticks: [{ x: -1 }, { x: 3 }], yticks: [{ y: 1 }],
+        items: [
+          { type: "area", fn: function (x) { return Math.min(f(x), 4.3); }, domain: [-1, -0.15], cls: "fill-ghost" },
+          { type: "area", fn: function (x) { return Math.min(f(x), 4.3); }, domain: [0.15, 3], cls: "fill-ghost" },
+          { type: "vline", x: 0, cls: "refline" },
+          { type: "curve", fn: f, domain: [-1.35, -0.48], cls: "curve" },
+          { type: "curve", fn: f, domain: [0.48, 3.4], cls: "curve" },
+          { type: "dot", x: -1, y: 1 },
+          { type: "dot", x: 3, y: f(3) },
+          { type: "text", x: 1.55, y: 1.3, tex: "y = \\tfrac{1}{x^{2}}", anchor: "start", cls: "lab-curve", size: 12 }
+        ]
+      }) }] };
+    },
+
+    /* §8.6 Figure 8.9 — proof schematic for Thm 8.3: increasing F saturating toward L (below the
+       ceiling M), integer sample points climbing to L, a generic t bracketed in [a+n, a+n+1].
+       Shape is schematic (caption says so); F starts at (a,0), never exceeds L, L < M generic. */
+    "monotone-sampling": function () {
+      var a = 0.5, L = 1, M = 1.15;
+      var F = function (t) { return L * (1 - Math.exp(-0.8 * (t - a))); };
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 460, h: 225, xmin: -0.1, xmax: 5.85, ymin: -0.14, ymax: 1.42,
+        xlabel: "t", ylabel: "y", aria: "increasing saturating accumulation function with integer samples",
+        xticks: [{ x: a, tex: "a" }, { x: a + 3, tex: "a+n" }, { x: 3.9, tex: "t" }, { x: a + 4, tex: "a+n+1" }],
+        yticks: [{ y: L, tex: "L" }, { y: M, tex: "M" }],
+        items: [
+          { type: "hline", y: M, from: 0, to: 5.7, cls: "refline" },
+          { type: "hline", y: L, from: 0, to: 5.7, cls: "idline" },
+          { type: "seg", x1: a + 3, y1: 0, x2: a + 3, y2: 1.3, cls: "idline" },
+          { type: "seg", x1: a + 4, y1: 0, x2: a + 4, y2: 1.3, cls: "idline" },
+          { type: "curve", fn: F, domain: [a, 5.7], cls: "curve" },
+          { type: "dot", x: a + 1, y: F(a + 1) }, { type: "dot", x: a + 2, y: F(a + 2) },
+          { type: "dot", x: a + 3, y: F(a + 3) }, { type: "dot", x: a + 4, y: F(a + 4) },
+          { type: "dot", x: 3.9, y: F(3.9), hollow: true },
+          { type: "text", x: 5.05, y: 0.83, tex: "y = F(t)", anchor: "start", cls: "lab-curve", size: 12 }
+        ]
+      }) }] };
+    },
+
+    /* §8.6 Figure 8.10 — the Comparison Theorem's trap: e^{−x²} under the finite roof of e^{−x}.
+       Meeting at x=1 is TRANSVERSAL, not tangent (slopes −e^{−1} vs −2e^{−1}); window starts
+       exactly at x=1 (curves cross sides for x<1). Ghost fill under the roof, deeper under subject. */
+    "comparison-trap": function () {
+      var roof = function (x) { return Math.exp(-x); };
+      var sub = function (x) { return Math.exp(-x * x); };
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 440, h: 225, xmin: 0.82, xmax: 3.32, ymin: -0.035, ymax: 0.475,
+        xlabel: "x", ylabel: "y", aria: "e to the minus x squared trapped below e to the minus x",
+        xticks: [{ x: 1 }, { x: 2 }, { x: 3 }], yticks: [{ y: Math.exp(-1), tex: "e^{-1}" }],
+        items: [
+          { type: "area", fn: roof, domain: [1, 3.25], cls: "fill-ghost" },
+          { type: "area", fn: sub, domain: [1, 3.25], cls: "fill-pos" },
+          { type: "curve", fn: roof, domain: [1, 3.25], cls: "curve-log" },
+          { type: "curve", fn: sub, domain: [1, 3.25], cls: "curve" },
+          { type: "dot", x: 1, y: Math.exp(-1) },
+          { type: "text", x: 1.62, y: 0.27, tex: "y = e^{-x}", anchor: "start", size: 12 },
+          { type: "text", x: 1.18, y: 0.058, tex: "y = e^{-x^{2}}", anchor: "start", size: 12 }
+        ]
+      }) }] };
+    },
+
+    /* §8.7 Figure 8.11 — the three rules as three pictures: SAME f = 1/x on [1,2], SAME n = 4.
+       Concave-up decreasing (pinned per gate MODIFY): chords lie ABOVE the curve, matching
+       Ex 8.33's sign story. Panel 3: solid parabola through the first node triple (shaded pair),
+       ghost parabola through the second triple. Parabola hugs but does not coincide with 1/x. */
+    "three-rules-panel": function () {
+      /* Interval [1,3] (gate suggested [1,2]; widened so the chord-curve separation is VISIBLE
+         at print size - n = 4 and f = 1/x kept per gate pin; deviation recorded in the fragment
+         source comment). Nodes 1, 1.5, 2, 2.5, 3. */
+      var f = function (x) { return 1 / x; };
+      var xs = [1, 1.5, 2, 2.5, 3], ys = xs.map(f);
+      var mids = [1.25, 1.75, 2.25, 2.75];
+      var lin = lerpNodes(xs, ys);
+      var p1 = lag3(1, f(1), 1.5, f(1.5), 2, f(2));
+      var p2 = lag3(2, f(2), 2.5, f(2.5), 3, f(3));
+      function base(extra) {
+        return {
+          w: 210, h: 175, xmin: 0.78, xmax: 3.3, ymin: -0.1, ymax: 1.2,
+          xlabel: "x", ylabel: "", aria: "approximation rule panel",
+          xticks: [{ x: 1 }, { x: 3 }], yticks: [],
+          items: extra
+        };
+      }
+      var pa = [];
+      for (var i = 0; i < 4; i++) pa.push({ type: "rect", x1: xs[i], x2: xs[i + 1], y0: 0, y1: f(mids[i]), cls: "rect-sum" });
+      pa.push({ type: "curve", fn: f, domain: [0.9, 3.2], cls: "curve" });
+      var pb = [
+        { type: "area", fn: lin, domain: [1, 3], cls: "fill-area" },
+        { type: "seg", x1: 1.5, y1: 0, x2: 1.5, y2: lin(1.5), cls: "idline" },
+        { type: "seg", x1: 2, y1: 0, x2: 2, y2: lin(2), cls: "idline" },
+        { type: "seg", x1: 2.5, y1: 0, x2: 2.5, y2: lin(2.5), cls: "idline" },
+        { type: "seg", x1: 1, y1: 0, x2: 1, y2: 1, cls: "idline" },
+        { type: "seg", x1: 3, y1: 0, x2: 3, y2: f(3), cls: "idline" },
+        { type: "curve", fn: lin, domain: [1, 3], cls: "tangent" },
+        { type: "curve", fn: f, domain: [0.9, 3.2], cls: "curve" }
+      ];
+      var pc = [
+        { type: "area", fn: p1, domain: [1, 2], cls: "fill-pos" },
+        { type: "seg", x1: 1, y1: 0, x2: 1, y2: 1, cls: "idline" },
+        { type: "seg", x1: 2, y1: 0, x2: 2, y2: f(2), cls: "idline" },
+        { type: "curve", fn: p1, domain: [1, 2], cls: "tangent" },
+        { type: "curve", fn: p2, domain: [2, 3], cls: "secant" },
+        { type: "curve", fn: f, domain: [0.9, 3.2], cls: "curve" },
+        { type: "dot", x: 1, y: 1 }, { type: "dot", x: 1.5, y: f(1.5) }, { type: "dot", x: 2, y: f(2) },
+        { type: "dot", x: 2.5, y: f(2.5), hollow: true }, { type: "dot", x: 3, y: f(3), hollow: true }
+      ];
+      return { layout: "triple", panels: [
+        { svg: buildPlot(base(pa)), note: "Constants at the midpoints" },
+        { svg: buildPlot(base(pb)), note: "Chords at the nodes" },
+        { svg: buildPlot(base(pc)), note: "Parabolas through node triples" }
+      ] };
+    },
+
+    /* §8.7 Figure 8.12 — midpoint rectangle = tangent trapezoid (equal areas; the drawing shows
+       the tilt, the caption states the equality). Concave-up slice: tangent below the curve away
+       from the point of tangency (M underestimates, E_M > 0), chord above (T overestimates).
+       Placed AFTER Ex 8.33 per gate MODIFY. */
+    "midpoint-tangent-trap": function () {
+      var f = function (x) { return 1 / x; };
+      var x0 = 1.15, x1 = 1.85, m = 1.5, fm = f(m), sl = -1 / (m * m);
+      var tl = function (x) { return fm + sl * (x - m); };
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 340, h: 235, xmin: 0.98, xmax: 2.1, ymin: -0.06, ymax: 1.05,
+        xlabel: "x", ylabel: "", aria: "midpoint rectangle tilted into the tangent trapezoid",
+        xticks: [{ x: x0, tex: "x_{i-1}" }, { x: m, tex: "\\bar{x}_{i}" }, { x: x1, tex: "x_{i}" }],
+        yticks: [],
+        items: [
+          { type: "rect", x1: x0, x2: x1, y0: 0, y1: fm, cls: "rect-lo" },
+          { type: "areaBetween", fnTop: tl, fnBot: function (x) { return fm; }, domain: [x0, m], cls: "fill-pos" },
+          { type: "areaBetween", fnTop: function (x) { return fm; }, fnBot: tl, domain: [m, x1], cls: "fill-neg" },
+          { type: "seg", x1: x0, y1: tl(x0), x2: x1, y2: tl(x1), cls: "tangent" },
+          { type: "seg", x1: x0, y1: f(x0), x2: x1, y2: f(x1), cls: "secant" },
+          { type: "curve", fn: f, domain: [1.02, 2.04], cls: "curve" },
+          { type: "dot", x: m, y: fm },
+          { type: "text", x: 1.9, y: 0.63, tex: "y = \\tfrac{1}{x}", anchor: "start", cls: "lab-curve", size: 12 }
+        ]
+      }) }] };
+    },
+
+    /* §8.7 Figure 8.13 — Simpson on data (Ex 8.36): seven readings, three interpolating arcs
+       meeting (possibly with corners) at the shared even nodes t = 60, 120; NO underlying curve
+       (the truth between readings is unknown — that is the point). First triple is collinear
+       (8,10,12): its "parabola" is honestly a straight segment. */
+    "simpson-data-speed": function () {
+      var ts = [0, 30, 60, 90, 120, 150, 180], vs = [8, 10, 12, 11, 13, 14, 12];
+      var a1 = lag3(0, 8, 30, 10, 60, 12);
+      var a2 = lag3(60, 12, 90, 11, 120, 13);
+      var a3 = lag3(120, 13, 150, 14, 180, 12);
+      var items = [
+        { type: "area", fn: a1, domain: [0, 60], cls: "fill-area" },
+        { type: "area", fn: a2, domain: [60, 120], cls: "fill-area" },
+        { type: "area", fn: a3, domain: [120, 180], cls: "fill-area" },
+        { type: "curve", fn: a1, domain: [0, 60], cls: "tangent" },
+        { type: "curve", fn: a2, domain: [60, 120], cls: "tangent" },
+        { type: "curve", fn: a3, domain: [120, 180], cls: "tangent" }
+      ];
+      for (var i = 0; i < ts.length; i++) items.push({ type: "dot", x: ts[i], y: vs[i] });
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 470, h: 235, xmin: -14, xmax: 200, ymin: -1.2, ymax: 18,
+        xlabel: "t\\ (\\mathrm{s})", ylabel: "v\\ (\\mathrm{m/s})", aria: "speed readings with Simpson interpolating arcs",
+        xticks: [{ x: 0 }, { x: 30 }, { x: 60 }, { x: 90 }, { x: 120 }, { x: 150 }, { x: 180 }],
+        yticks: [{ y: 5 }, { y: 10 }, { y: 15 }],
+        items: items
+      }) }] };
+    }
+  };
+
+  /* ---- hydrateFigures: fills every <figure data-fig="id"> ---- */
+  function hydrateFigures(root) {
+    (root || document).querySelectorAll("[data-fig]").forEach(function (el) {
+      var def = FIGS[el.dataset.fig];
+      if (!def || el.dataset.figDone) return;
+      var r = def();
+      var layout = r.layout, panels = r.panels;
+      var html;
+      if (layout === "single" && panels.length === 1 && !panels[0].note) {
+        html = '<div class="figure-art">' + panels[0].svg + '</div>';
+      } else {
+        var cls = { pair: "figure-art--pair", triple: "figure-art--triple", grid: "figure-art--grid" }[layout] || "";
+        html = '<div class="figure-art ' + cls + '">' +
+          panels.map(function (p) {
+            return '<div class="fig-panel">' + p.svg + (p.note ? '<div class="fig-note">' + p.note + '</div>' : '') + '</div>';
+          }).join("") + '</div>';
+      }
+      el.insertAdjacentHTML("afterbegin", html);
+      el.dataset.figDone = "1";
+    });
+  }
+  window.hydrateFigures = hydrateFigures;
+})();
+</script>
+
+<!-- Main build script (paginator + MathJax) -->
+<script>
+(function () {
+  function waitFor(test, tries) {
+    return new Promise(function (res) {
+      var i = 0;
+      (function tick() {
+        if (test()) return res(true);
+        if (++i > tries) return res(false);
+        setTimeout(tick, 150);
+      })();
+    });
+  }
+  function build() {
+    var page = document.getElementById("page");
+    var tpl = document.getElementById("figs-only");
+    page.innerHTML = tpl ? tpl.innerHTML : "";
+    if (window.hydrateFigures) window.hydrateFigures(page);
+    waitFor(function () { return window.MathJax && window.MathJax.typesetPromise; }, 400)
+      .then(function (ok) {
+        if (!ok) { document.getElementById("boot").textContent = "MathJax load timeout"; return; }
+        return MathJax.typesetPromise([page]).catch(function (e) { console.warn("mathjax", e); });
+      })
+      .then(function () {
+        return document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+      })
+      .then(function () {
+        var boot = document.getElementById("boot");
+        if (boot) boot.remove();
+      });
+  }
+  window.addEventListener("DOMContentLoaded", build);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,930 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Chapter 5 — Print build</title>
+
+<!-- ════════════════════════════════════════════════════════════════
+     圖片寬度控制面板 —— 直接改下面的數字即可（px 固定寬 / % 相對頁寬）
+     並排或多格圖（1.1 / 1.7 / 1.9）控制的是「每一格」的寬度。
+     ════════════════════════════════════════════════════════════════ -->
+<style>
+:root {
+  --fig-5-1:  100%;    /* Figure 5.1  Circle tangent-radius */
+  --fig-5-2:  100%;    /* Figure 5.2  Ladder right triangle */
+  --fig-5-3:  100%;    /* Figure 5.3  Streetlight similar triangles */
+  --fig-5-4:  100%;    /* Figure 5.4  sqrt(x) linearization */
+  --fig-5-5:  100%;    /* Figure 5.5  dy vs Delta-y */
+  --fig-5-6:  100%;    /* Figure 5.6  Riverside fence */
+  --fig-5-7:  100%;    /* Figure 5.7  Semicircle rectangle */
+  --fig-5-8:  100%;    /* Figure 5.8  Concavity vs tangents (pair) */
+  --fig-5-9:  100%;    /* Figure 5.9  Rational full sketch */
+  --fig-5-10: 100%;    /* Figure 5.10 Slant asymptote */
+  --fig-5-11: 100%;    /* Figure 5.11 Newton step */
+}
+
+.paper figure[data-fig="tangent-radius-circle"] { --fig-w: var(--fig-5-1); }
+.paper figure[data-fig="ladder-triangle"] { --fig-w: var(--fig-5-2); }
+.paper figure[data-fig="streetlight-similar"] { --fig-w: var(--fig-5-3); }
+.paper figure[data-fig="sqrt-linearization"] { --fig-w: var(--fig-5-4); }
+.paper figure[data-fig="dy-vs-deltay"] { --fig-w: var(--fig-5-5); }
+.paper figure[data-fig="fence-river"] { --fig-w: var(--fig-5-6); }
+.paper figure[data-fig="semicircle-rectangle"] { --fig-w: var(--fig-5-7); }
+.paper figure[data-fig="concavity-tangents"] { --fig-w: var(--fig-5-8); }
+.paper figure[data-fig="rational-asymptotes"] { --fig-w: var(--fig-5-9); }
+.paper figure[data-fig="slant-asymptote"] { --fig-w: var(--fig-5-10); }
+.paper figure[data-fig="newton-step"] { --fig-w: var(--fig-5-11); }
+</style>
+
+<!-- Google Fonts: Inter for UI -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<!-- New Computer Modern (prose/text faces) — matches MathJax 4 "mathjax-newcm" math font.
+     Source: npm web-computer-modern@1.1.0-new-cm-7-0-2 via jsDelivr. License: GUST Font License.
+     10pt optical size ("Serif 10"). NOTE: filenames contain %20-encoded spaces — keep them. -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<style>
+@font-face {
+  font-family: "New Computer Modern";
+  font-style: normal; font-weight: 400; font-display: swap;
+  src: url("https://cdn.jsdelivr.net/npm/web-computer-modern@1.1.0-new-cm-7-0-2/woff2/WebCM%20Serif%2010%20Regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "New Computer Modern";
+  font-style: italic; font-weight: 400; font-display: swap;
+  src: url("https://cdn.jsdelivr.net/npm/web-computer-modern@1.1.0-new-cm-7-0-2/woff2/WebCM%20Serif%2010%20Italic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "New Computer Modern";
+  font-style: normal; font-weight: 700; font-display: swap;
+  src: url("https://cdn.jsdelivr.net/npm/web-computer-modern@1.1.0-new-cm-7-0-2/woff2/WebCM%20Serif%2010%20Bold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "New Computer Modern";
+  font-style: italic; font-weight: 700; font-display: swap;
+  src: url("https://cdn.jsdelivr.net/npm/web-computer-modern@1.1.0-new-cm-7-0-2/woff2/WebCM%20Serif%2010%20BoldItalic.woff2") format("woff2");
+}
+</style>
+
+<!-- MathJax 4 (CHTML output with inline line-breaking) -->
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']],
+    macros: {
+      arccsc: '\\operatorname{arccsc}',
+      arcsec: '\\operatorname{arcsec}',
+      arccot: '\\operatorname{arccot}'
+    }
+  },
+  chtml: {
+    mtextInheritFont: true,
+    matchFontHeight: true
+  },
+  output: {
+    displayOverflow: 'linebreak',
+    linebreaks: {
+      inline: true,
+      width: '100%',
+      lineleading: 0.2
+    }
+  },
+  startup: { typeset: false }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js"></script>
+
+<style>
+/* ============================================================
+   skin-hs.css — inlined + modified: Times New Roman + MathJax
+   ============================================================ */
+.paper {
+  --c-primary: oklch(0.50 0.13 245);
+  --c-caution: oklch(0.50 0.155 25);
+  --c-aux: oklch(0.55 0.01 260);
+  --c-axis: #474b54;
+  --ink: #1b1c1f;
+  --ink-soft: #565a63;
+  --ink-faint: #8a8e98;
+  --paper: #ffffff;
+  --rule: #e5e7eb;
+  --fig-w-pair: 250px;     /* 並排(pair)圖每張的預設寬度（整體一次調） */
+  --fig-w-single: 100%;    /* 單張/triple/grid 圖的預設最大寬度（整體一次調） */
+  /* 個別覆寫：在任一 <figure> 標籤加 style="--fig-w: 320px" 即可只改那一張 */
+  --serif: "New Computer Modern", "Latin Modern Roman", "Times New Roman", Times, Georgia, serif;
+  --ui: "Inter", -apple-system, system-ui, sans-serif;
+  --a-concept:  oklch(0.50 0.13 55);
+  --a-result:   oklch(0.50 0.13 245);
+  --a-practice: oklch(0.50 0.13 152);
+  --a-aside:    oklch(0.50 0.02 260);
+  --a-caution:  oklch(0.50 0.155 25);
+  --a-strategy: oklch(0.50 0.13 290);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: var(--fs-base, 17.5px);
+  line-height: var(--lh-base, 1.62);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  box-sizing: border-box;
+}
+.paper *, .paper *::before, .paper *::after { box-sizing: border-box; }
+.paper .page { padding: 52px 58px 64px; max-width: 760px; margin: 0 auto; }
+.skin-hs .page { hyphens: auto; -webkit-hyphens: auto; }
+.skin-hs p, .skin-hs li { text-align: justify; text-justify: inter-word; }
+.paper p { margin: 0 0 .85em; text-wrap: pretty; }
+.paper em { font-style: italic; }
+.paper .informal { font-style: italic; color: var(--ink-soft); }
+.paper ol { margin: .2em 0 .9em; padding-left: 1.5em; }
+.paper li { margin: .35em 0; text-wrap: pretty; }
+.paper .warmup { counter-reset: wu; list-style: none; padding-left: 0; }
+.paper .warmup > li { counter-increment: wu; position: relative; padding-left: 2.1em; }
+.paper .warmup > li::before {
+  content: "(" counter(wu, lower-alpha) ")";
+  position: absolute; left: 0; top: 0;
+  font-family: var(--ui); font-size: .82em; color: var(--ink-faint); line-height: 1.85;
+}
+.paper mjx-container[display="true"] { margin: .55em 0 !important; overflow-x: auto; overflow-y: hidden; }
+.paper mjx-container[display="true"]::-webkit-scrollbar { display: none; }
+.paper .qed { display: block; text-align: right; margin: -1.62em 0 0; height: 1.62em; pointer-events: none; }
+.paper .qed::after {
+  content: ""; display: inline-block; width: .56em; height: .56em;
+  border: 1.3px solid var(--ink-soft);
+}
+.paper .env-body > :has(+ .qed) { margin-bottom: 0; display: flow-root; }
+.paper .env-body::after { content: ""; display: block; clear: both; }
+.paper .sec-head {
+  margin-top: 2.7em; padding-top: 1.35em;
+  border-top: 1px solid var(--rule); margin-bottom: 1.5em;
+}
+.sheet-body > .sec-head:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+.paper .sec-kicker {
+  font-family: var(--ui); font-size: .7rem; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--c-primary); font-weight: 700; margin-bottom: .55em;
+}
+.paper .sec-title { font-weight: 600; font-size: 2rem; line-height: 1.12; letter-spacing: -.012em; margin: 0; }
+.paper .sec-no { color: var(--c-primary); margin-right: .5em; font-weight: 600; }
+.paper .subsec-head {
+  font-family: var(--ui); font-weight: 600; font-size: 1.08rem; margin: 1.9em 0 .65em;
+  display: flex; align-items: center; gap: .55em; color: var(--ink);
+}
+.paper .subsec-head::before { content: ""; width: 18px; height: 3px; background: var(--c-primary); border-radius: 2px; }
+.paper .figure { margin: 1.7em 0; text-align: center; }
+.paper .figure-art { display: flex; justify-content: center; }
+.paper .figure-art--pair { gap: 26px; }
+.paper .fig-svg { width: 100%; max-width: var(--fig-w, var(--fig-w-pair)); height: auto; }
+.paper .figure-art:not(.figure-art--pair) .fig-svg { max-width: var(--fig-w, var(--fig-w-single)); }
+.paper figcaption {
+  font-family: var(--ui); font-size: .8em; line-height: 1.5;
+  color: var(--ink-soft); margin-top: .7em; text-wrap: pretty;
+  max-width: none; text-align: left; display: table; margin-inline: auto;
+}
+.paper .fig-no { font-weight: 600; color: var(--ink); margin-right: .4em; }
+.paper figcaption mjx-container { font-size: .95em; }
+.paper .axis { stroke: var(--c-axis); stroke-width: 1.25; fill: none; stroke-linecap: round; }
+.paper .curve { stroke: var(--c-primary); stroke-width: 2.2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.paper .refline { stroke: var(--c-caution); stroke-width: 1.3; stroke-dasharray: 4.5 3.5; fill: none; stroke-linecap: round; opacity: .85; }
+.paper .secant { stroke: var(--c-aux); stroke-width: 1.6; stroke-dasharray: 5 3.5; fill: none; stroke-linecap: round; }
+.paper .tangent { stroke: var(--c-caution); stroke-width: 2; fill: none; stroke-linecap: round; }
+.paper .curve-log { stroke: var(--c-caution); stroke-width: 2.2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.paper .idline { stroke: var(--c-aux); stroke-width: 1.3; stroke-dasharray: 4.5 3.5; fill: none; stroke-linecap: round; opacity: .85; }
+.paper .dot { fill: var(--ink); }
+.paper .bubble { stroke: var(--c-aux); stroke-width: 1.4; fill: none; }
+.paper .arrow-fwd { stroke: var(--c-primary); stroke-width: 2; fill: none; }
+.paper .arrow-bwd { stroke: var(--c-caution); stroke-width: 2; fill: none; }
+.paper .fig-svg text { font-family: var(--ui); font-size: 13px; }
+.paper .axlab { fill: var(--c-aux); font-style: italic; }
+.paper .lab-curve { fill: var(--c-primary); font-style: italic; }
+.paper .lab-ref, .paper .lab-ref-b { fill: var(--c-caution); }
+.paper .ptlab { fill: var(--ink-soft); font-size: 12px; }
+.paper .setlab { fill: var(--ink); font-weight: 600; font-size: 14.5px; text-anchor: middle; }
+
+/* env blocks */
+.skin-hs .env {
+  --accent: var(--a-aside);
+  margin: 1.2em 0; padding-left: 16px;
+  border-left: 2.5px solid color-mix(in srgb, var(--accent) 38%, var(--paper));
+}
+.skin-hs .env-definition  { --accent: var(--a-concept); }
+.skin-hs .env-theorem, .skin-hs .env-proposition, .skin-hs .env-corollary { --accent: var(--a-result); }
+.skin-hs .env-example, .skin-hs .env-solution, .skin-hs .env-exercise { --accent: var(--a-practice); }
+.skin-hs .env-remark { --accent: var(--a-aside); }
+.skin-hs .env-head {
+  display: flex; align-items: baseline; gap: .5em; flex-wrap: wrap;
+  margin: 0 0 .55em; font-family: var(--ui);
+}
+.skin-hs .env-kicker {
+  font-size: .62rem; letter-spacing: .07em; text-transform: uppercase; font-weight: 700;
+  color: var(--paper); background: var(--accent); padding: 3px 10px; border-radius: 999px; line-height: 1.5;
+}
+.skin-hs .env-num { font-weight: 700; color: var(--accent); font-size: .94em; }
+.skin-hs .env-name { font-style: italic; font-weight: 400; color: var(--ink-soft); font-family: var(--serif); font-size: 1em; }
+.skin-hs .env-body > p:first-child { margin-top: 0; }
+.skin-hs .env-body > :last-child { margin-bottom: 0; }
+.skin-hs .env-theorem .env-body, .skin-hs .env-proposition .env-body { font-style: italic; }
+.skin-hs .env-theorem .env-body mjx-container, .skin-hs .env-proposition .env-body mjx-container { font-style: normal; }
+.skin-hs .env-definition em { font-style: italic; }
+.skin-hs .env-remark { color: var(--ink-soft); font-size: .97em; }
+.skin-hs .env-remark .env-kicker { background: transparent; color: var(--a-aside); border: 1px solid color-mix(in srgb, var(--a-aside) 45%, var(--paper)); }
+.skin-hs .env-proof { --accent: var(--a-result); }
+.skin-hs .env-proof .env-kicker {
+  background: transparent; color: var(--a-result); font-style: italic; letter-spacing: .04em;
+  border: 1px solid color-mix(in srgb, var(--a-result) 45%, var(--paper));
+}
+.skin-hs .qed-proof::after { border-color: var(--ink); }
+.skin-hs .workedexample {
+  margin: 1.6em 0; padding-left: 16px;
+  border-left: 2.5px solid color-mix(in srgb, var(--a-practice) 38%, var(--paper));
+  display: flow-root;
+}
+.skin-hs .workedexample .env { margin: .7em 0; padding-left: 0; border-left: 0; }
+.skin-hs .env-solution .env-kicker { background: transparent; color: var(--a-practice); border: 1px solid color-mix(in srgb, var(--a-practice) 45%, var(--paper)); }
+.skin-hs > .env-cont { margin-top: 0; padding-top: .82em; }
+.skin-hs > .env:has(+ .env-cont) { margin-bottom: 0; display: flow-root; }
+.skin-hs > .env-example:has(+ .env-solution) { margin-bottom: 0; }
+.skin-hs > .env-example + .env-solution { margin-top: 0; padding-top: .72em; }
+.skin-hs > .env-cont, .skin-hs > .env-example, .skin-hs > .env-solution { display: flow-root; }
+.skin-hs .env-exercise .env-kicker { background: transparent; color: var(--a-practice); border: 1px solid var(--a-practice); }
+.skin-hs .env-caution, .skin-hs .env-strategy {
+  padding: 15px 20px; border-radius: 8px; margin: 1.4em 0;
+  border-left-width: 4px; border-left-style: solid;
+}
+.skin-hs .env-caution {
+  --accent: var(--a-caution);
+  background: color-mix(in srgb, var(--a-caution) 7%, var(--paper));
+  border: 1px solid color-mix(in srgb, var(--a-caution) 22%, var(--paper));
+  border-left-color: var(--a-caution);
+}
+.skin-hs .env-strategy {
+  --accent: var(--a-strategy);
+  background: color-mix(in srgb, var(--a-strategy) 7%, var(--paper));
+  border: 1px solid color-mix(in srgb, var(--a-strategy) 22%, var(--paper));
+  border-left-color: var(--a-strategy);
+}
+.skin-hs .env-caution .env-name, .skin-hs .env-strategy .env-name { color: var(--ink-soft); }
+.skin-hs .env-strategy .steps { margin-bottom: 0; }
+.skin-hs.vivid .env { border-left-color: color-mix(in srgb, var(--accent) 70%, var(--paper)); border-left-width: 3px; }
+.skin-hs.vivid .workedexample { border-left-color: color-mix(in srgb, var(--a-practice) 70%, var(--paper)); border-left-width: 3px; }
+.skin-hs.vivid .env-kicker { font-size: .64rem; padding: 3.5px 11px; }
+
+/* ============================================================
+   figs.css — inlined + modified for MathJax
+   ============================================================ */
+.paper .fig-svg { height: auto; max-width: 100%; overflow: visible; }
+.paper .figure-art { display: flex; justify-content: center; align-items: flex-start; gap: 24px; flex-wrap: wrap; }
+.paper .figure-art--pair { gap: 24px; }
+.paper .figure-art--pair .fig-panel { flex: 1 1 220px; max-width: 300px; }
+.paper .figure-art--triple { gap: 18px; }
+.paper .figure-art--triple .fig-panel { flex: 1 1 190px; max-width: 240px; }
+.paper .figure-art--grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; justify-items: center; }
+.paper .figure-art--grid .fig-panel { max-width: 240px; }
+.paper .fig-panel { display: flex; flex-direction: column; align-items: center; }
+.paper .fig-note {
+  font-family: var(--ui); font-size: .8em; line-height: 1.45;
+  color: var(--ink-soft); margin-top: .55em; text-align: center; text-wrap: pretty;
+}
+.paper .fig-note mjx-container { font-size: .98em; }
+.paper .fig-fo { overflow: visible; }
+.paper .fig-lyr { position: relative; width: 100%; height: 100%; font-family: var(--serif); }
+.paper .fig-lbl {
+  position: absolute; white-space: nowrap; line-height: 1; font-size: 15px;
+  text-shadow: 0 0 2px var(--paper), 0 0 2px var(--paper), 0 0 1px var(--paper);
+}
+.paper .fig-lbl mjx-container { font-size: 1em; }
+.paper .fig-lbl.a-curve { color: var(--c-primary); }
+.paper .fig-lbl.a-ref   { color: var(--c-caution); }
+.paper .fig-lbl.a-ax    { color: var(--ink-soft); }
+.paper .fig-lbl.a-pt    { color: var(--ink); }
+.paper .tbl-wrap { overflow-x: auto; overflow-y: hidden; margin: 1em 0; }
+.paper table.tbl {
+  border-collapse: collapse; margin: 0 auto; font-family: var(--ui); font-size: .96em;
+  border-top: 1.7px solid var(--ink); border-bottom: 1.7px solid var(--ink);
+}
+.paper table.tbl th, .paper table.tbl td { padding: .3em .8em; text-align: center; white-space: nowrap; }
+.paper table.tbl thead th { border-bottom: 1.1px solid var(--ink-soft); font-weight: 500; }
+.paper table.tbl .rowlab { text-align: right; padding-right: 1em; color: var(--ink-soft); }
+.paper table.tbl mjx-container { font-size: .98em; }
+.paper .sec + .sec { margin-top: 2.6em; padding-top: 2.2em; border-top: 1px solid var(--rule); }
+.paper .para-head { font-weight: 600; margin: 1.1em 0 .4em; }
+.paper ul { margin: .3em 0 .95em; padding-left: 1.3em; }
+.paper ul li { margin: .35em 0; text-align: justify; }
+.paper ul li::marker { color: var(--a-result); }
+.paper .chapter-head { margin-bottom: 1.6em; }
+.paper .chapter-head .ch-kicker {
+  font-family: var(--ui); font-size: .72rem; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--a-result); font-weight: 700; margin-bottom: .6em;
+}
+.paper .chapter-head .ch-title { font-weight: 600; font-size: 2.5rem; line-height: 1.08; letter-spacing: -.02em; margin: 0; }
+.paper .lead { font-size: 1.05em; }
+
+/* ============================================================
+   print.css — inlined (A4 sheet layout + paginator)
+   ============================================================ */
+@page { size: A4; margin: 0; }
+.sheet {
+  position: relative; box-sizing: border-box;
+  width: 210mm; height: 297mm;
+  padding: 20mm 28mm 20mm 32mm;
+  background: #fff; overflow: hidden;
+}
+.sheet-header {
+  position: absolute; top: 11mm; left: 32mm; right: 28mm;
+  font: 500 8.5pt "Inter", sans-serif; color: #9aa0ac; letter-spacing: .02em;
+}
+.sheet-footer {
+  position: absolute; bottom: 8.5mm; left: 0; right: 0;
+  text-align: center; font: 500 9pt "Inter", sans-serif; color: #82868f;
+}
+.sheet-body { height: 100%; --accent: oklch(0.50 0.13 245); }
+.sheet-body.paper { box-shadow: none; border-radius: 0; max-width: none; background: #fff; }
+.sheet-body .page { padding: 0; max-width: none; margin: 0; }
+.sheet-body.paper { font-size: 12pt; line-height: 1.55; }
+.sheet, .sheet * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.sheet-body > :first-child { margin-top: 0 !important; }
+.sheet-body .sec + .sec { border-top: 0; margin-top: 0; padding-top: 0; }
+.sheet-body .qed { margin-top: -1.55em; height: 1.55em; }
+.sheet-body .env-body::after { display: none; content: none; }
+.sheet-body .env-cont { margin-top: 0; }
+.sheet-body .env-cont > .env-body > :first-child { margin-top: 0; }
+@media screen {
+  body { background: #6f727b; margin: 0; }
+  .sheet { box-shadow: 0 3px 18px rgba(0,0,0,.3); margin: 9mm auto; }
+}
+@media print {
+  body { background: #fff; margin: 0; }
+  .sheet { box-shadow: none; margin: 0; break-after: page; }
+  .sheet:last-child { break-after: auto; }
+  .print-toolbar, #boot { display: none !important; }
+}
+
+/* ============================================================
+   page-level
+   ============================================================ */
+.print-toolbar {
+  position: fixed; top: 14px; right: 16px; z-index: 1000;
+  display: flex; align-items: center; gap: 10px; font-family: "Inter", system-ui, sans-serif;
+}
+.print-toolbar button {
+  font: 600 13px "Inter", sans-serif; color: #fff; background: oklch(0.50 0.13 245);
+  border: 0; padding: 9px 16px; border-radius: 8px; cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0,0,0,.25);
+}
+.print-toolbar button:disabled { opacity: .5; cursor: default; }
+.print-toolbar button:not(:disabled):hover { background: oklch(0.45 0.13 245); }
+.print-toolbar .status {
+  font-size: 12px; color: #e8eaf0; background: rgba(0,0,0,.4);
+  padding: 6px 11px; border-radius: 999px; backdrop-filter: blur(6px);
+}
+#boot {
+  position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: "Inter", system-ui, sans-serif; color: #cdd2dc; background: #6f727b; z-index: 900;
+}
+#source { position: absolute; left: -10000px; top: 0; width: 683px; }
+</style>
+</head>
+<body>
+
+<div id="boot">Preparing …</div>
+
+<div class="print-toolbar">
+  <span class="status" id="status">Preparing …</span>
+  <button id="printBtn" disabled>Print / Save as PDF</button>
+</div>
+
+<div id="source"><div class="paper skin-hs vivid"><div class="page" id="page"></div></div></div>
+<div id="pages"></div>
+
+<!-- Section fragments (inlined) -->
+
+<!-- BEGIN-CONTENT-FRAGMENTS -->
+<template id="figs-only">
+<figure class="figure" data-fig="tangent-radius-circle">
+    <figcaption><span class="fig-no">Figure 5.1</span> The circle \(x^{2} + y^{2} = 25\) with its tangent line at \((3, 4)\): the tangent is perpendicular to the radius, so its slope is the negative reciprocal of the radius’s slope \(\tfrac{4}{3}\).</figcaption>
+  </figure>
+<figure class="figure" data-fig="ladder-triangle">
+    <figcaption><span class="fig-no">Figure 5.2</span> The sliding ladder of Example 5.5: wall, ground, and ladder form a right triangle with legs \(x\) and \(y\) and fixed hypotenuse \(10\); the base slides outward at \(1\ \text{ft/s}\) while the top slides down.</figcaption>
+  </figure>
+<figure class="figure" data-fig="streetlight-similar">
+    <figcaption><span class="fig-no">Figure 5.3</span> The streetlight of Example 5.7: the lamp of height \(15\), the walker of height \(6\), and the shadow tip line up, so the large triangle with base \(x + s\) and the small one with base \(s\) are similar.</figcaption>
+  </figure>
+<figure class="figure" data-fig="sqrt-linearization">
+    <figcaption><span class="fig-no">Figure 5.4</span> Linear approximation near \(x = 4\): the tangent line \(L\) is barely distinguishable from \(y = \sqrt{x}\) close to the point of tangency and drifts away far from it. Compare the two at \(x = 9\).</figcaption>
+  </figure>
+<figure class="figure" data-fig="dy-vs-deltay">
+    <figcaption><span class="fig-no">Figure 5.5</span> Over the same step \(dx\), the differential \(dy\) is the rise of the tangent line, while \(\Delta y\) is the rise of the curve; their gap is the remainder \(R\), which dies away faster than \(dx\).</figcaption>
+  </figure>
+<figure class="figure" data-fig="fence-river">
+    <figcaption><span class="fig-no">Figure 5.6</span> The riverside field of Example 5.15: only three sides are fenced — two of length \(x\) and one of length \(y\) — because the river bounds the fourth.</figcaption>
+  </figure>
+<figure class="figure" data-fig="semicircle-rectangle">
+    <figcaption><span class="fig-no">Figure 5.7</span> A rectangle inscribed in a semicircle of radius \(R\) (Example 5.17): the upper corner \((x, y)\) rides on the arc, so the width is \(2x\) and the height is \(y = \sqrt{R^{2} - x^{2}}\).</figcaption>
+  </figure>
+<figure class="figure" data-fig="concavity-tangents">
+    <figcaption><span class="fig-no">Figure 5.8</span> Concavity read from tangent lines: a concave-up arc lies above every tangent and its slopes increase from left to right; a concave-down arc lies below its tangents, with decreasing slopes.</figcaption>
+  </figure>
+<figure class="figure" data-fig="rational-asymptotes">
+    <figcaption><span class="fig-no">Figure 5.9</span> The completed graph of \(y = x^{2}/(x^{2} - 1)\) from Example 5.24: vertical asymptotes \(x = \pm 1\), horizontal asymptote \(y = 1\), a central arch with its local maximum at the origin, and two outer branches, all read off the checklist.</figcaption>
+  </figure>
+<figure class="figure" data-fig="slant-asymptote">
+    <figcaption><span class="fig-no">Figure 5.10</span> The graph of \(y = x + 1/x\) from Example 5.25 hugs the slant asymptote \(y = x\) at both ends, with the \(y\)-axis as its vertical asymptote; the local maximum value \(-2\) sits below the local minimum value \(2\).</figcaption>
+  </figure>
+<figure class="figure" data-fig="newton-step">
+    <figcaption><span class="fig-no">Figure 5.11</span> One step of Newton’s method: from the guess \(x_{0}\), slide down the tangent line to where it crosses the axis; that crossing \(x_{1}\) is already much closer to the root \(r\).</figcaption>
+  </figure>
+</template>
+<!-- END-CONTENT-FRAGMENTS -->
+<!-- plot.js — inlined -->
+<script>
+(function () {
+  var uid = 0;
+  var PI = Math.PI;
+  function piTex(v) {
+    var map = {};
+    map[(-2 * PI).toFixed(4)] = "-2\\pi";
+    map[(-PI).toFixed(4)] = "-\\pi";
+    map[(-PI / 2).toFixed(4)] = "-\\tfrac{\\pi}{2}";
+    map[(PI / 2).toFixed(4)] = "\\tfrac{\\pi}{2}";
+    map[PI.toFixed(4)] = "\\pi";
+    map[(2 * PI).toFixed(4)] = "2\\pi";
+    map[(0).toFixed(4)] = "0";
+    var hit = map[v.toFixed(4)];
+    if (hit != null) return hit;
+    if (Math.abs(v - Math.round(v)) < 1e-9) return String(Math.round(v)); // plain integers
+    return undefined;
+  }
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+  function anchorTransform(anchor, vAnchor) {
+    var tx = anchor === "start" ? "0" : anchor === "end" ? "-100%" : "-50%";
+    var ty = vAnchor === "top" ? "0" : vAnchor === "bottom" ? "-100%" : "-50%";
+    return "translate(" + tx + "," + ty + ")";
+  }
+  function buildPlot(cfg) {
+    var w = cfg.w, h = cfg.h;
+    var pad = Object.assign({ t: 16, r: 18, b: 20, l: 22 }, cfg.pad || {});
+    var xmin = cfg.xmin, xmax = cfg.xmax, ymin = cfg.ymin, ymax = cfg.ymax;
+    var iw = w - pad.l - pad.r, ih = h - pad.t - pad.b;
+    var SX = function(x) { return pad.l + ((x - xmin) / (xmax - xmin)) * iw; };
+    var SY = function(y) { return h - pad.b - ((y - ymin) / (ymax - ymin)) * ih; };
+    var id = "pl" + (++uid);
+    var parts = [], labels = [];
+    function pushLabel(o) { labels.push(o); }
+    parts.push('<svg viewBox="0 0 ' + w + ' ' + h + '" style="width:' + w + 'px" class="fig-svg" role="img" aria-label="' + esc(cfg.aria || "graph") + '" preserveAspectRatio="xMidYMid meet">');
+    parts.push('<defs><marker id="' + id + 'a" markerWidth="8" markerHeight="8" refX="5.4" refY="2.8" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L5.4,2.8 L0,5.6" fill="none" stroke="var(--c-axis)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>');
+    if (cfg.axes !== false) {
+      var x0 = Math.min(Math.max(0, xmin), xmax), y0 = Math.min(Math.max(0, ymin), ymax);
+      var ax0 = SX(xmin), ax1 = SX(xmax), ayBase = SY(y0);
+      parts.push('<path d="M' + ax0.toFixed(1) + ',' + ayBase.toFixed(1) + ' H' + (ax1 - 1).toFixed(1) + '" class="axis" marker-end="url(#' + id + 'a)"/>');
+      var ay0 = SY(ymin), ay1 = SY(ymax), axBase = SX(x0);
+      parts.push('<path d="M' + axBase.toFixed(1) + ',' + ay0.toFixed(1) + ' V' + (ay1 + 1).toFixed(1) + '" class="axis" marker-end="url(#' + id + 'a)"/>');
+      if (cfg.xlabel) pushLabel({ px: ax1 + 1, py: ayBase + 4, tex: cfg.xlabel, anchor: "start", vAnchor: "top", cls: "a-ax", size: 13 });
+      if (cfg.ylabel) pushLabel({ px: axBase - 5, py: ay1 + 1, tex: cfg.ylabel, anchor: "end", vAnchor: "top", cls: "a-ax", size: 13 });
+      (cfg.xticks || []).forEach(function(t) {
+        var px = SX(t.x);
+        parts.push('<line x1="' + px.toFixed(1) + '" y1="' + (ayBase - 3).toFixed(1) + '" x2="' + px.toFixed(1) + '" y2="' + (ayBase + 3).toFixed(1) + '" class="axis"/>');
+        var tex = t.tex != null ? t.tex : (t.label != null ? null : piTex(t.x));
+        if (tex != null) pushLabel({ px: px, py: ayBase + 6, tex: tex, anchor: "middle", vAnchor: "top", cls: "a-pt", size: 12 });
+        else if (t.label != null) pushLabel({ px: px, py: ayBase + 6, text: t.label, anchor: "middle", vAnchor: "top", cls: "a-pt", size: 12 });
+      });
+      (cfg.yticks || []).forEach(function(t) {
+        var py = SY(t.y);
+        parts.push('<line x1="' + (axBase - 3).toFixed(1) + '" y1="' + py.toFixed(1) + '" x2="' + (axBase + 3).toFixed(1) + '" y2="' + py.toFixed(1) + '" class="axis"/>');
+        var tex = t.tex != null ? t.tex : (t.label != null ? null : piTex(t.y));
+        if (tex != null) pushLabel({ px: axBase - 6, py: py, tex: tex, anchor: "end", vAnchor: "middle", cls: "a-pt", size: 12 });
+        else if (t.label != null) pushLabel({ px: axBase - 6, py: py, text: t.label, anchor: "end", vAnchor: "middle", cls: "a-pt", size: 12 });
+      });
+    }
+    (cfg.items || []).forEach(function(it) {
+      if (it.type === "curve") {
+        var cls = it.cls || "curve", n = it.samples || 240, a = it.domain[0], b = it.domain[1];
+        var d = "", pen = false;
+        for (var i = 0; i <= n; i++) {
+          var x = a + (b - a) * (i / n), y = it.fn(x);
+          if (!isFinite(y) || y < ymin - (ymax - ymin) * 0.04 || y > ymax + (ymax - ymin) * 0.04) { pen = false; continue; }
+          var px = SX(x).toFixed(2), py = SY(y).toFixed(2);
+          d += (pen ? "L" : "M") + px + "," + py + " "; pen = true;
+        }
+        if (d) parts.push('<path d="' + d.trim() + '" class="' + cls + '"/>');
+      } else if (it.type === "vline") {
+        parts.push('<line x1="' + SX(it.x).toFixed(1) + '" y1="' + SY(ymin).toFixed(1) + '" x2="' + SX(it.x).toFixed(1) + '" y2="' + SY(ymax).toFixed(1) + '" class="' + (it.cls || "refline") + '"/>');
+      } else if (it.type === "hline") {
+        var ha = it.from != null ? it.from : xmin, hb = it.to != null ? it.to : xmax;
+        parts.push('<line x1="' + SX(ha).toFixed(1) + '" y1="' + SY(it.y).toFixed(1) + '" x2="' + SX(hb).toFixed(1) + '" y2="' + SY(it.y).toFixed(1) + '" class="' + (it.cls || "refline") + '"/>');
+      } else if (it.type === "seg") {
+        parts.push('<line x1="' + SX(it.x1).toFixed(1) + '" y1="' + SY(it.y1).toFixed(1) + '" x2="' + SX(it.x2).toFixed(1) + '" y2="' + SY(it.y2).toFixed(1) + '" class="' + (it.cls || "curve") + '"/>');
+      } else if (it.type === "dot") {
+        var r = it.r || 3.0;
+        if (it.hollow) parts.push('<circle cx="' + SX(it.x).toFixed(1) + '" cy="' + SY(it.y).toFixed(1) + '" r="' + r + '" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.5"/>');
+        else parts.push('<circle cx="' + SX(it.x).toFixed(1) + '" cy="' + SY(it.y).toFixed(1) + '" r="' + r + '" class="dot"/>');
+      } else if (it.type === "arrow") {
+        parts.push('<line x1="' + SX(it.x1).toFixed(1) + '" y1="' + SY(it.y1).toFixed(1) + '" x2="' + SX(it.x2).toFixed(1) + '" y2="' + SY(it.y2).toFixed(1) + '" class="axis" marker-end="url(#' + id + 'a)"/>');
+      } else if (it.type === "text") {
+        pushLabel({ px: SX(it.x), py: SY(it.y), tex: it.tex, text: it.tex == null ? it.text : null, anchor: it.anchor || "middle", vAnchor: it.vAnchor || "middle", dx: it.dx || 0, dy: it.dy || 0, cls: it.cls || "a-pt", size: it.size });
+      }
+    });
+    if (labels.length) {
+      var M = 52;
+      var spans = labels.map(function(L) {
+        var left = (L.px + (L.dx || 0) + M).toFixed(1);
+        var top = (L.py + (L.dy || 0) + M).toFixed(1);
+        var tf = anchorTransform(L.anchor, L.vAnchor);
+        var fs = L.size ? "font-size:" + L.size + "px;" : "";
+        var body = L.tex != null ? "\\(" + L.tex + "\\)" : esc(L.text == null ? "" : L.text);
+        return '<span class="fig-lbl ' + (L.cls || "") + '" style="left:' + left + 'px;top:' + top + 'px;transform:' + tf + ';' + fs + '">' + body + '</span>';
+      }).join("");
+      parts.push('<foreignObject x="' + (-M) + '" y="' + (-M) + '" width="' + (w + 2 * M) + '" height="' + (h + 2 * M) + '" class="fig-fo" requiredExtensions="http://www.w3.org/1999/xhtml"><div xmlns="http://www.w3.org/1999/xhtml" class="fig-lyr">' + spans + '</div></foreignObject>');
+    }
+    parts.push('</svg>');
+    return parts.join("");
+  }
+  window.buildPlot = buildPlot;
+  window.PIVAL = PI;
+})();
+</script>
+
+<!-- ============================================================
+     figures.js — inlined (Chapter 5 figure registry)
+     ============================================================ -->
+<script>
+/* ============================================================
+   figures.js — Chapter 5 figure registry.
+   Each entry returns { layout, panels:[{svg, note}] }.
+   Most chapter figures use buildPlot() (shared/plot.js) for
+   function graphs. buildPlot has NO fill/sector primitive, so
+   region-area schematics (e.g. the §3.1 sector inequality) are
+   hand-built raw SVG here, inheriting the figure vocabulary
+   (.fig-svg, .ptlab, var(--c-primary)/--ink…) from skin-hs.css.
+   Labels are kept to single symbols (O, A, B, C, θ, 1); the
+   areas and the inequality live in the caption and body prose
+   (CONTENT_SPEC §10 "Label economy").
+   Appended across sections — never overwrite.
+   ============================================================ */
+(function () {
+
+  const FIGS = {
+
+    /* §5.1 — The circle x^2+y^2=25 with tangent at (3,4).
+       Implicit differentiation gives dy/dx = -x/y = -3/4 there; the picture
+       grounds it: tangent ⊥ radius, slopes negative reciprocals. Circle drawn
+       as two half-curves (buildPlot has no circle primitive); radius as a gray
+       auxiliary segment; right-angle tick at the point of tangency. Labels
+       limited to the equation and the point (CONTENT_SPEC §10 label economy);
+       the slope values live in Example 5.1's solution. */
+    "tangent-radius-circle": () => {
+      const svg = buildPlot({
+        w: 290, h: 260, xmin: -6.8, xmax: 7.8, ymin: -6.35, ymax: 6.73,
+        xlabel: "x", ylabel: "y",
+        aria: "Circle of radius five centred at the origin, with the radius to the point three comma four and the tangent line at that point; a small square marks the right angle between radius and tangent.",
+        items: [
+          { type: "curve", fn: (x) => Math.sqrt(Math.max(25 - x * x, 0)), domain: [-5, 5], samples: 300 },
+          { type: "curve", fn: (x) => -Math.sqrt(Math.max(25 - x * x, 0)), domain: [-5, 5], samples: 300 },
+          { type: "seg", x1: 0, y1: 0, x2: 3, y2: 4, cls: "bubble" },
+          { type: "seg", x1: 0.2, y1: 6.1, x2: 7.4, y2: 0.7, cls: "tangent" },
+          { type: "seg", x1: 2.67, y1: 3.56, x2: 2.23, y2: 3.89, cls: "bubble" },
+          { type: "seg", x1: 2.23, y1: 3.89, x2: 2.56, y2: 4.33, cls: "bubble" },
+          { type: "dot", x: 3, y: 4 },
+          { type: "dot", x: 0, y: 0, r: 2.2 },
+          { type: "text", x: 4.4, y: -4.6, tex: "x^{2}+y^{2}=25", anchor: "start", cls: "a-pt", size: 12 },
+          { type: "text", x: 3.35, y: 4.75, tex: "(3,4)", anchor: "start", cls: "a-pt", size: 12 },
+        ],
+      });
+      return { layout: "single", panels: [{ svg }] };
+    },
+
+    /* §5.2 — The sliding ladder (Example 5.5), raw SVG schematic.
+       Wall–ground–ladder right triangle: legs x (ground) and y (wall),
+       hypotenuse 10 fixed. The base arrow carries the given rate 1 ft/s;
+       the wall arrow shows the top sliding down (rate hidden — it is the
+       thing the example computes). */
+    "ladder-triangle": () => {
+      const svg =
+        `<svg viewBox="0 0 300 230" style="width:280px" class="fig-svg" role="img"` +
+        ` aria-label="A ladder leaning against a wall forms a right triangle: vertical leg y along the wall, horizontal leg x along the ground, hypotenuse ten. An arrow at the base points away from the wall labelled one foot per second; an arrow beside the wall points downward.">` +
+        `<line x1="20" y1="200" x2="285" y2="200" stroke="var(--ink)" stroke-width="1.3"/>` +
+        `<line x1="60" y1="30" x2="60" y2="200" stroke="var(--ink)" stroke-width="1.3"/>` +
+        `<path d="M72,200 L72,188 L60,188" fill="none" stroke="var(--ink-soft)" stroke-width="1"/>` +
+        `<line x1="60" y1="72" x2="210" y2="200" stroke="var(--c-primary)" stroke-width="2.2" stroke-linecap="round"/>` +
+        `<circle cx="60" cy="72" r="2.5" class="dot"/>` +
+        `<circle cx="210" cy="200" r="2.5" class="dot"/>` +
+        `<line x1="216" y1="192" x2="248" y2="192" stroke="var(--ink)" stroke-width="1.3"/>` +
+        `<polygon points="252,192 244,188.6 244,195.4" fill="var(--ink)"/>` +
+        `<text x="254" y="187" text-anchor="start" class="ptlab">1 ft/s</text>` +
+        `<line x1="48" y1="84" x2="48" y2="114" stroke="var(--ink)" stroke-width="1.3"/>` +
+        `<polygon points="48,118 44.6,110 51.4,110" fill="var(--ink)"/>` +
+        `<text x="40" y="145" text-anchor="end" class="ptlab" font-style="italic">y</text>` +
+        `<text x="135" y="217" text-anchor="middle" class="ptlab" font-style="italic">x</text>` +
+        `<text x="143" y="128" text-anchor="start" class="ptlab">10</text>` +
+        `</svg>`;
+      return { layout: "single", panels: [{ svg }] };
+    },
+
+    /* §5.2 — The streetlight and the walking shadow (Example 5.7), raw SVG.
+       Lamp top (height 15), the walker's head (height 6) and the shadow tip
+       are collinear — the dashed sight line makes the similar triangles
+       visible: big base x+s, small base s. Pixel geometry is exact
+       (pole 150 px : person 60 px = 15 : 6; s = 80 px solves 15/(120+s)=6/s),
+       so the three points truly align. Only the given constants 15 and 6 are
+       shown; s = (2/3)x and both rates stay in the solution (no-spoiler). */
+    "streetlight-similar": () => {
+      const svg =
+        `<svg viewBox="0 0 320 240" style="width:300px" class="fig-svg" role="img"` +
+        ` aria-label="A streetlight of height fifteen on the left, a walker of height six to its right, and the tip of the walker's shadow further right on the ground. A dashed line runs from the lamp over the walker's head to the shadow tip, showing two similar right triangles with bases x plus s and s.">` +
+        `<line x1="20" y1="205" x2="300" y2="205" stroke="var(--ink)" stroke-width="1.3"/>` +
+        `<line x1="55" y1="205" x2="55" y2="55" stroke="var(--ink)" stroke-width="2"/>` +
+        `<circle cx="55" cy="52" r="3.5" class="dot"/>` +
+        `<line x1="175" y1="205" x2="175" y2="145" stroke="var(--ink)" stroke-width="2"/>` +
+        `<circle cx="175" cy="141" r="3" class="dot"/>` +
+        `<line x1="55" y1="55" x2="255" y2="205" stroke="var(--c-aux)" stroke-width="1.3" stroke-dasharray="4.5 3.5"/>` +
+        `<circle cx="255" cy="205" r="2.5" class="dot"/>` +
+        `<line x1="55" y1="215" x2="55" y2="223" stroke="var(--ink-soft)" stroke-width="1"/>` +
+        `<line x1="175" y1="215" x2="175" y2="223" stroke="var(--ink-soft)" stroke-width="1"/>` +
+        `<line x1="255" y1="215" x2="255" y2="223" stroke="var(--ink-soft)" stroke-width="1"/>` +
+        `<line x1="55" y1="219" x2="175" y2="219" stroke="var(--ink-soft)" stroke-width="1"/>` +
+        `<line x1="175" y1="219" x2="255" y2="219" stroke="var(--ink-soft)" stroke-width="1"/>` +
+        `<text x="115" y="234" text-anchor="middle" class="ptlab" font-style="italic">x</text>` +
+        `<text x="215" y="234" text-anchor="middle" class="ptlab" font-style="italic">s</text>` +
+        `<text x="43" y="133" text-anchor="end" class="ptlab">15</text>` +
+        `<text x="183" y="178" text-anchor="start" class="ptlab">6</text>` +
+        `</svg>`;
+      return { layout: "single", panels: [{ svg }] };
+    },
+
+    /* §5.3 — Linearization of sqrt(x) at x=4 (Definition 5.1 / Example 5.8).
+       The tangent line L(x) = 2 + (x-4)/4 is visually indistinguishable from
+       the curve near x=4 and visibly above it by x=9 (hollow dot on the curve,
+       short dashed gap up to the tangent) — near good, far bad, the section's
+       whole message. The numbers (2.0125 vs 3 vs 3.25) stay in the prose. */
+    "sqrt-linearization": () => {
+      const svg = buildPlot({
+        w: 300, h: 225, xmin: 0, xmax: 9.6, ymin: 0, ymax: 3.5,
+        xlabel: "x", ylabel: "y",
+        xticks: [{ x: 4, tex: "4" }, { x: 9, tex: "9" }],
+        aria: "The curve y equals square root of x with its tangent line at the point four comma two. Near x equals four the two are indistinguishable; at x equals nine the tangent sits visibly above the curve, the gap marked by a short dashed segment.",
+        items: [
+          { type: "curve", fn: (x) => Math.sqrt(Math.max(x, 0)), domain: [0, 9.35], samples: 300 },
+          { type: "seg", x1: 0.5, y1: 1.125, x2: 9.2, y2: 3.3, cls: "tangent" },
+          { type: "seg", x1: 9, y1: 3, x2: 9, y2: 3.25, cls: "refline" },
+          { type: "dot", x: 4, y: 2 },
+          { type: "dot", x: 9, y: 3, hollow: true },
+          { type: "text", x: 6.9, y: 2.42, tex: "y=\\sqrt{x}", anchor: "start", vAnchor: "top", cls: "a-pt", size: 12 },
+          { type: "text", x: 1.6, y: 1.6, tex: "L", anchor: "end", cls: "a-pt", size: 13 },
+        ],
+      });
+      return { layout: "single", panels: [{ svg }] };
+    },
+
+    /* §5.3 — dy along the tangent vs Δy along the curve (Definition 5.2).
+       One step dx from a: the tangent rises by dy (solid caution segment),
+       the concave-up curve rises by Δy (bracketed at the right); the leftover
+       piece between tangent height and curve height is the remainder R of
+       Definition 3.1. Curve chosen concave up so Δy > dy visibly. Generic
+       labels only — a, a+dx, dx, dy, Δy. */
+    "dy-vs-deltay": () => {
+      const f = (x) => 0.55 + 0.28 * (x - 0.8) * (x - 0.8);
+      const svg = buildPlot({
+        w: 300, h: 240, xmin: 0, xmax: 3.25, ymin: 0, ymax: 2.6,
+        xlabel: "x", ylabel: "y",
+        xticks: [{ x: 1.2, tex: "a" }, { x: 2.4, tex: "a+dx" }],
+        aria: "A concave-up curve with its tangent line at the point above a. Over the step d x, the tangent rises by d y while the curve rises by the larger amount delta y; the difference between the two heights is the remainder.",
+        items: [
+          { type: "curve", fn: f, domain: [0.15, 3.05], samples: 260 },
+          { type: "seg", x1: 0.7, y1: 0.483, x2: 2.85, y2: 0.9646, cls: "tangent" },
+          { type: "seg", x1: 1.2, y1: 0, x2: 1.2, y2: 0.5948, cls: "idline" },
+          { type: "seg", x1: 2.4, y1: 0, x2: 2.4, y2: 1.2668, cls: "idline" },
+          { type: "seg", x1: 1.2, y1: 0.5948, x2: 2.4, y2: 0.5948, cls: "idline" },
+          { type: "seg", x1: 2.4, y1: 0.5948, x2: 2.4, y2: 0.8636, cls: "tangent" },
+          { type: "seg", x1: 2.52, y1: 0.5948, x2: 2.64, y2: 0.5948, cls: "bubble" },
+          { type: "seg", x1: 2.52, y1: 1.2668, x2: 2.64, y2: 1.2668, cls: "bubble" },
+          { type: "seg", x1: 2.58, y1: 0.5948, x2: 2.58, y2: 1.2668, cls: "bubble" },
+          { type: "dot", x: 1.2, y: 0.5948 },
+          { type: "dot", x: 2.4, y: 1.2668 },
+          { type: "dot", x: 2.4, y: 0.8636, hollow: true },
+          { type: "text", x: 1.8, y: 0.53, tex: "dx", anchor: "middle", vAnchor: "top", cls: "a-pt", size: 12 },
+          { type: "text", x: 2.33, y: 0.73, tex: "dy", anchor: "end", cls: "a-pt", size: 12 },
+          { type: "text", x: 2.66, y: 1.14, tex: "\\Delta y", anchor: "start", cls: "a-pt", size: 12 },
+          { type: "text", x: 3.0, y: 2.12, tex: "y=f(x)", anchor: "end", cls: "a-pt", size: 12 },
+        ],
+      });
+      return { layout: "single", panels: [{ svg }] };
+    },
+
+    /* §5.5 — The riverside fence (Example 5.15), raw SVG schematic.
+       River along the top; the field's fourth side is the river bank, drawn
+       dashed (unfenced). Three solid fenced sides: two of length x, one of
+       length y. The optimal numbers stay in the solution (no-spoiler). */
+    "fence-river": () => {
+      const wave = (y) =>
+        `<path d="M20,${y} q20,-6 40,0 t40,0 t40,0 t40,0 t40,0 t40,0 t20,0" fill="none" stroke="var(--c-primary)" stroke-width="1.2" opacity="0.55"/>`;
+      const svg =
+        `<svg viewBox="0 0 300 205" style="width:280px" class="fig-svg" role="img"` +
+        ` aria-label="A rectangular field beside a river. The river runs along the top; the top side of the rectangle is dashed because it is not fenced. The two vertical sides are labelled x and the bottom side is labelled y.">` +
+        wave(34) + wave(46) +
+        `<text x="266" y="22" text-anchor="start" class="ptlab" font-style="italic">river</text>` +
+        `<line x1="70" y1="52" x2="230" y2="52" stroke="var(--c-aux)" stroke-width="1.3" stroke-dasharray="4.5 3.5"/>` +
+        `<line x1="70" y1="52" x2="70" y2="160" stroke="var(--ink)" stroke-width="1.8"/>` +
+        `<line x1="230" y1="52" x2="230" y2="160" stroke="var(--ink)" stroke-width="1.8"/>` +
+        `<line x1="70" y1="160" x2="230" y2="160" stroke="var(--ink)" stroke-width="1.8"/>` +
+        `<text x="58" y="110" text-anchor="end" class="ptlab" font-style="italic">x</text>` +
+        `<text x="242" y="110" text-anchor="start" class="ptlab" font-style="italic">x</text>` +
+        `<text x="150" y="178" text-anchor="middle" class="ptlab" font-style="italic">y</text>` +
+        `</svg>`;
+      return { layout: "single", panels: [{ svg }] };
+    },
+
+    /* §5.5 — Rectangle inscribed in a semicircle of radius R (Example 5.17).
+       The upper-right corner (x, y) rides on the arc; the dashed radius R to
+       that corner shows why y = sqrt(R^2 - x^2). Width 2x is implicit in the
+       symmetric base; the optimal x = R/sqrt2 stays in the solution. */
+    "semicircle-rectangle": () => {
+      const x0 = 0.62, y0 = Math.sqrt(1 - 0.62 * 0.62);
+      const svg = buildPlot({
+        w: 300, h: 175, xmin: -1.35, xmax: 1.35, ymin: -0.14, ymax: 1.30,
+        xlabel: "x",
+        xticks: [{ x: 0.62, tex: "x" }],
+        aria: "A semicircle of radius R on the horizontal axis with an inscribed rectangle. The rectangle's upper right corner sits on the arc at the point x comma y, and a dashed radius of length R runs from the centre to that corner.",
+        items: [
+          { type: "curve", fn: (x) => Math.sqrt(Math.max(1 - x * x, 0)), domain: [-1, 1], samples: 300 },
+          { type: "seg", x1: -x0, y1: 0, x2: -x0, y2: y0, cls: "bubble" },
+          { type: "seg", x1: -x0, y1: y0, x2: x0, y2: y0, cls: "bubble" },
+          { type: "seg", x1: x0, y1: 0, x2: x0, y2: y0, cls: "bubble" },
+          { type: "seg", x1: 0, y1: 0, x2: x0, y2: y0, cls: "idline" },
+          { type: "dot", x: x0, y: y0 },
+          { type: "dot", x: 1, y: 0, r: 2.2 },
+          { type: "dot", x: -1, y: 0, r: 2.2 },
+          { type: "text", x: 0.24, y: 0.5, tex: "R", anchor: "end", cls: "a-pt", size: 12 },
+          { type: "text", x: 0.68, y: 0.88, tex: "(x,\\,y)", anchor: "start", cls: "a-pt", size: 12 },
+          { type: "text", x: 0.68, y: 0.38, tex: "y", anchor: "start", cls: "a-pt", size: 12 },
+        ],
+      });
+      return { layout: "single", panels: [{ svg }] };
+    },
+
+    /* §5.6 — Concavity vs tangent lines (Definition 5.5), two panels.
+       Concave up: the arc lies above each of its three tangents and the
+       tangent slopes increase left to right; concave down: mirrored. Pure
+       concept picture — no axes, no numbers. */
+    "concavity-tangents": () => {
+      const up = (x) => 0.4 + 0.35 * (x - 2) * (x - 2);
+      const dn = (x) => 1.8 - 0.35 * (x - 2) * (x - 2);
+      const mk = (fn, tangents, aria) => buildPlot({
+        w: 230, h: 175, xmin: 0, xmax: 4, ymin: 0, ymax: 2.2, axes: false, aria,
+        items: [
+          { type: "curve", fn, domain: [0.35, 3.65], samples: 200 },
+          ...tangents,
+          { type: "dot", x: 1, y: fn(1) }, { type: "dot", x: 2, y: fn(2) }, { type: "dot", x: 3, y: fn(3) },
+        ],
+      });
+      const svgUp = mk(up, [
+        { type: "seg", x1: 0.35, y1: 1.205, x2: 1.75, y2: 0.225, cls: "tangent" },
+        { type: "seg", x1: 1.25, y1: 0.4, x2: 2.75, y2: 0.4, cls: "tangent" },
+        { type: "seg", x1: 2.25, y1: 0.225, x2: 3.65, y2: 1.205, cls: "tangent" },
+      ], "A concave-up arc with tangent lines at three points; the arc stays above every tangent and the tangent slopes increase from left to right.");
+      const svgDn = mk(dn, [
+        { type: "seg", x1: 0.35, y1: 0.995, x2: 1.75, y2: 1.975, cls: "tangent" },
+        { type: "seg", x1: 1.25, y1: 1.8, x2: 2.75, y2: 1.8, cls: "tangent" },
+        { type: "seg", x1: 2.25, y1: 1.975, x2: 3.65, y2: 0.995, cls: "tangent" },
+      ], "A concave-down arc with tangent lines at three points; the arc stays below every tangent and the tangent slopes decrease from left to right.");
+      return { layout: "pair", panels: [
+        { svg: svgUp, note: "Concave up: above its tangents, slopes increasing." },
+        { svg: svgDn, note: "Concave down: below its tangents, slopes decreasing." },
+      ] };
+    },
+
+    /* §5.8 — The finished sketch of y = x^2/(x^2-1) (Example 5.24).
+       Flagship synthesis figure: central arch peaking at the origin, vertical
+       asymptotes x = ±1, horizontal asymptote y = 1, two outer branches
+       descending toward it from above. buildPlot's window clipping breaks the
+       curve at the poles automatically. */
+    "rational-asymptotes": () => {
+      const svg = buildPlot({
+        w: 320, h: 250, xmin: -3.6, xmax: 3.6, ymin: -3.2, ymax: 4.2,
+        xlabel: "x", ylabel: "y",
+        aria: "The graph of y equals x squared over x squared minus one: a central arch between the vertical asymptotes x equals minus one and x equals one, peaking at the origin, and two outer branches falling from plus infinity toward the horizontal asymptote y equals one.",
+        items: [
+          { type: "curve", fn: (x) => (x * x) / (x * x - 1), domain: [-3.5, 3.5], samples: 560 },
+          { type: "vline", x: 1, cls: "refline" },
+          { type: "vline", x: -1, cls: "refline" },
+          { type: "hline", y: 1, cls: "refline" },
+          { type: "dot", x: 0, y: 0 },
+          { type: "text", x: 3.45, y: 0.66, tex: "y=1", anchor: "end", cls: "a-ax", size: 12 },
+          { type: "text", x: -1.12, y: -2.75, tex: "x=-1", anchor: "end", cls: "a-ax", size: 12 },
+          { type: "text", x: 1.12, y: -2.75, tex: "x=1", anchor: "start", cls: "a-ax", size: 12 },
+        ],
+      });
+      return { layout: "single", panels: [{ svg }] };
+    },
+
+    /* §5.8 — y = x + 1/x and its slant asymptote y = x (Example 5.25).
+       Both ends hug the dashed line y = x; the y-axis is the vertical
+       asymptote (the axis itself — no extra line drawn). The two marked
+       extrema make the surprising order visible: the local maximum value -2
+       sits below the local minimum value 2. */
+    "slant-asymptote": () => {
+      const svg = buildPlot({
+        w: 300, h: 265, xmin: -4.3, xmax: 4.3, ymin: -5.3, ymax: 5.3,
+        xlabel: "x", ylabel: "y",
+        xticks: [{ x: 1, tex: "1" }, { x: -1, tex: "-1" }],
+        yticks: [{ y: 2, tex: "2" }, { y: -2, tex: "-2" }],
+        aria: "The two branches of y equals x plus one over x, hugging the dashed slant asymptote y equals x at both ends, with the vertical axis as vertical asymptote. The local minimum at one comma two and the local maximum at minus one comma minus two are marked.",
+        items: [
+          { type: "seg", x1: -4.15, y1: -4.15, x2: 4.15, y2: 4.15, cls: "idline" },
+          { type: "curve", fn: (x) => x + 1 / x, domain: [-4.15, 4.15], samples: 560 },
+          { type: "dot", x: 1, y: 2 },
+          { type: "dot", x: -1, y: -2 },
+          { type: "text", x: 3.3, y: 2.72, tex: "y=x", anchor: "start", cls: "a-ax", size: 12 },
+        ],
+      });
+      return { layout: "single", panels: [{ svg }] };
+    },
+
+    /* §5.9 — One Newton step (opener / Strategy 5.7).
+       Generic convex increasing curve (drawn with f(x) = x^2 - 2, but no
+       formula shown): from the guess x0, ride the tangent down to the axis;
+       the crossing x1 lands much nearer the root r. Axis ticks name x0, x1, r;
+       the iteration formula lives in the prose above. f'(x0) is visibly
+       nonzero (steep tangent). */
+    "newton-step": () => {
+      const svg = buildPlot({
+        w: 320, h: 235, xmin: -0.15, xmax: 2.95, ymin: -2.5, ymax: 4.9,
+        xlabel: "x", ylabel: "y",
+        xticks: [{ x: 1.4142, tex: "r" }, { x: 1.6006 }, { x: 2.35, tex: "x_{0}" }],
+        aria: "An increasing curve crossing the axis at the root r. From the guess x zero, a dashed vertical rises to the curve; the tangent line there slides down and crosses the axis at x one, which lies much closer to r than x zero did.",
+        items: [
+          { type: "curve", fn: (x) => x * x - 2, domain: [0, 2.6], samples: 240 },
+          { type: "seg", x1: 1.5, y1: -0.47, x2: 2.6, y2: 4.7, cls: "tangent" },
+          { type: "seg", x1: 2.35, y1: 0, x2: 2.35, y2: 3.5225, cls: "idline" },
+          { type: "dot", x: 2.35, y: 3.5225 },
+          { type: "dot", x: 1.6006, y: 0, r: 2.6 },
+          { type: "text", x: 1.62, y: -0.62, tex: "x_{1}", anchor: "middle", vAnchor: "top", cls: "a-pt", size: 12 },
+          { type: "dot", x: 1.4142, y: 0, r: 2.6 },
+          { type: "text", x: 0.32, y: -2.1, tex: "y=f(x)", anchor: "start", cls: "a-pt", size: 12 },
+        ],
+      });
+      return { layout: "single", panels: [{ svg }] };
+    },
+  };
+
+  /* ---- hydrateFigures: fills every <figure data-fig="id"> ---- */
+  function hydrateFigures(root) {
+    (root || document).querySelectorAll("[data-fig]").forEach(function (el) {
+      var def = FIGS[el.dataset.fig];
+      if (!def || el.dataset.figDone) return;
+      var r = def();
+      var layout = r.layout, panels = r.panels;
+      var html;
+      if (layout === "single" && panels.length === 1 && !panels[0].note) {
+        html = '<div class="figure-art">' + panels[0].svg + '</div>';
+      } else {
+        var cls = { pair: "figure-art--pair", triple: "figure-art--triple", grid: "figure-art--grid" }[layout] || "";
+        html = '<div class="figure-art ' + cls + '">' +
+          panels.map(function (p) {
+            return '<div class="fig-panel">' + p.svg + (p.note ? '<div class="fig-note">' + p.note + '</div>' : '') + '</div>';
+          }).join("") + '</div>';
+      }
+      el.insertAdjacentHTML("afterbegin", html);
+      el.dataset.figDone = "1";
+    });
+  }
+  window.hydrateFigures = hydrateFigures;
+})();
+</script>
+
+<!-- Main build script (paginator + MathJax) -->
+<script>
+(function () {
+  function waitFor(test, tries) {
+    return new Promise(function (res) {
+      var i = 0;
+      (function tick() {
+        if (test()) return res(true);
+        if (++i > tries) return res(false);
+        setTimeout(tick, 150);
+      })();
+    });
+  }
+  function build() {
+    var page = document.getElementById("page");
+    var tpl = document.getElementById("figs-only");
+    page.innerHTML = tpl ? tpl.innerHTML : "";
+    if (window.hydrateFigures) window.hydrateFigures(page);
+    waitFor(function () { return window.MathJax && window.MathJax.typesetPromise; }, 400)
+      .then(function (ok) {
+        if (!ok) { document.getElementById("boot").textContent = "MathJax load timeout"; return; }
+        return MathJax.typesetPromise([page]).catch(function (e) { console.warn("mathjax", e); });
+      })
+      .then(function () {
+        return document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+      })
+      .then(function () {
+        var boot = document.getElementById("boot");
+        if (boot) boot.remove();
+      });
+  }
+  window.addEventListener("DOMContentLoaded", build);
+})();
+</script>
+</body>
+</html>

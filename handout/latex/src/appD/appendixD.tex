@@ -1,0 +1,141 @@
+% !TeX program = lualatex
+% ============================================================
+% appendixD.tex — appD 唯一內容源（2026-08-09 起；LaTeX 統一 U1）
+% 沿革：升格自 dist/appD/appendixD.tex（P1 首轉：make_dist.py 自 fragment 轉換；
+%   fragment 樹已凍結，改課文一律改本檔。拍板見 ../../KICKOFF-latex-unification.md）
+%   樣式源＝../../template/calcbook.sty（M-B1 拍板模板）
+% 編譯（本資料夾為 CWD；aux 進 build/、成品 PDF 移入 ../../dist/appD/）：
+%   latexmk -lualatex -auxdir=../../build/aux-appD appendixD.tex
+% ============================================================
+\documentclass[a4paper,12pt,oneside]{memoir}
+\makeatletter\def\input@path{{../../template/}}\makeatother
+\def\cbfontsdir{../../template/fonts/inter/}
+\usepackage{calcbook}
+% 圖：emitter 射 `<ch>/<stem>`（見 convert.py），故 graphicspath 指向 chapters/ 上層。
+% 模板內的 {../figs/} 是 chapters/<ch>/ 為 CWD 時的路徑，dist/<ch>/ 需這一行覆寫。
+\graphicspath{{../../chapters/}}
+\begin{document}
+\appendixopener{Appendix D}{The Proof Track}
+\begin{lead}
+A handful of theorems in the main text are stated, used at once, and then have their proofs deferred — on credit — to here. The reason is always the same: the result keeps a chapter moving, but its proof is a self-contained analytic construction that would interrupt the line of thought if inserted where the theorem is used. This appendix is the home for those proofs. Nothing in it introduces a new result the chapters depend on: each entry proves a theorem already stated and numbered where it appeared, and you can read it whenever you want the argument behind a result you have been taking on trust.
+\end{lead}
+\parahead{How to use this appendix:}
+\begin{objectives}
+  \item find a deferred proof by the number of the theorem it establishes — entries are indexed by their home theorem, not renumbered;
+  \item use the hypothesis summary in \(\S\)D.1 to see, at a glance, exactly which assumptions each fenced theorem consumes and what deeper fact it rests on;
+  \item read an entry only when you want it — the main text is self-contained on the \emph{statements}, and later material never leans on the proofs collected here.
+\end{objectives}
+\sechead{D.1}{Using the Proof Track}
+The main line of this book proves what it can afford to prove and fences the rest. A \emph{fenced} theorem is stated in full — hypotheses, conclusion, and a note on why it holds — and applied immediately; only its proof is moved here, so that a first reading meets the idea without the machinery. This is a deliberate depth choice rather than an omission: every fenced theorem has a complete proof, and it lives at a fixed address you can always turn to.
+
+Each fenced theorem carries a short record of the assumptions it actually uses and the deeper facts it leans on. Reading that record tells you exactly what you are trusting when you apply the theorem — and, just as usefully, what you are \emph{not} assuming.
+
+\subsechead{Fenced so far}
+\runin{Theorem 4.9(a), the Extreme Value Theorem} — that a continuous function on a closed interval attains a maximum and a minimum. \emph{Uses:} continuity, and a \emph{closed, bounded} interval \([a, b]\); both are essential. \emph{Rests on:} the completeness of \(\mathbb{R}\) (Theorem 4.1), by way of the least-upper-bound lemma and the Bolzano–Weierstrass theorem (Theorem 4.4). \emph{Proved in} \(\S\)D.2.
+
+\runin{Theorem 4.9(b), the Intermediate Value Theorem} — that a continuous function on \([a, b]\) attains every value between \(f(a)\) and \(f(b)\). \emph{Uses:} continuity, and an interval domain with no gaps; a jump discontinuity is exactly what would let a value be skipped. \emph{Rests on:} the completeness of \(\mathbb{R}\) (Theorem 4.1), by repeated bisection. \emph{Proved in} \(\S\)D.2.
+
+\runin{Theorem 5.5, L’Hôpital’s Rule} — that an indeterminate quotient \(f/g\) of type \(\tfrac{0}{0}\) or \(\tfrac{\ast}{\infty}\) has the same limit as \(f'/g'\), when that limit exists. \emph{Uses:} differentiability near the point, \(g' \ne 0\) there, and a genuinely indeterminate form. \emph{Rests on:} the Generalized Mean Value Theorem (Theorem 5.4). The \(\tfrac{0}{0}\) case at a finite point is proved in \(\S\)5.7; the \(\tfrac{\ast}{\infty}\) and infinite-point cases are \emph{proved in} \(\S\)D.3.
+
+This record will lengthen as later chapters fence their own heaviest results — the characterisation of which functions are integrable, the symmetry of mixed partial derivatives, the general change-of-variables formula, and the integral theorems of vector calculus among them. Each will arrive with its hypotheses named here, so that the cost of trusting it is always in plain view.
+
+
+\sechead{D.2}{The Existence Theorems for Continuous Functions}
+Section 4.4 stated the two foundational theorems about a continuous function on a closed interval — that it attains its extreme values (Theorem 4.9(a), the Extreme Value Theorem) and that it takes every value in between (Theorem 4.9(b), the Intermediate Value Theorem) — and deferred both proofs to here. Each rests on the completeness of \(\mathbb{R}\) (Theorem 4.1): the statement that every non-decreasing sequence bounded above converges (and its mirror for non-increasing sequences bounded below). The Extreme Value Theorem needs one further consequence of completeness, which we isolate first, because we invoke it by name and it recurs.
+
+\subsechead{The least upper bound}
+An \emph{upper bound} of a set \(S \subseteq \mathbb{R}\) is a number that is \(\ge\) every element of \(S\). Completeness guarantees that a set bounded above has a \emph{smallest} upper bound.
+
+\begin{envtheorem}{Lemma}{D.1}{Least upper bound}
+Every nonempty set \(S \subseteq \mathbb{R}\) that is bounded above has a \emph{least upper bound} \(M = \sup S\): a number \(M\) that is an upper bound of \(S\) and satisfies \(M \le B\) for every upper bound \(B\) of \(S\).
+\end{envtheorem}
+\begin{envproof}{Proof}{}{}
+Since \(S\) is nonempty, fix a point \(s_{0} \in S\); since \(S\) is bounded above, fix an upper bound \(B\). Set \(a_{0} = s_{0} - 1\) and \(b_{0} = B\). Then \(a_{0}\) is \emph{not} an upper bound of \(S\) — the element \(s_{0}\) exceeds it — while \(b_{0}\) is; and \(a_{0} < b_{0}\), since \(s_{0} \le B\). We halve this interval repeatedly, preserving that contrast.
+
+Given \([a_{n}, b_{n}]\) with \(a_{n}\) not an upper bound of \(S\) and \(b_{n}\) an upper bound, let \(m_{n} = \tfrac{1}{2}(a_{n} + b_{n})\). If \(m_{n}\) is an upper bound of \(S\), set \(a_{n+1} = a_{n}\) and \(b_{n+1} = m_{n}\); otherwise set \(a_{n+1} = m_{n}\) and \(b_{n+1} = b_{n}\). In either case \(a_{n+1}\) is still not an upper bound, \(b_{n+1}\) still is, and
+
+\[ b_{n+1} - a_{n+1} = \tfrac{1}{2}(b_{n} - a_{n}), \qquad \text{so} \qquad b_{n} - a_{n} = \frac{b_{0} - a_{0}}{2^{n}} \to 0. \]
+
+The sequence \(\{a_{n}\}\) is non-decreasing and bounded above (by \(b_{0}\)), so by Theorem 4.1 it converges to some \(M\). Because \(b_{n} - a_{n} \to 0\), the sequence \(\{b_{n}\}\) converges to the same \(M\). We claim \(M = \sup S\).
+
+\emph{\(M\) is an upper bound.} For any \(s \in S\) and any \(n\), \(s \le b_{n}\) because \(b_{n}\) is an upper bound; letting \(n \to \infty\) gives \(s \le M\).
+
+\emph{\(M\) is the least one.} Suppose some \(M' < M\) were also an upper bound. Since \(a_{n} \to M\), there is an \(n\) with \(a_{n} > M'\). But \(a_{n}\) is not an upper bound, so some \(s \in S\) has \(s > a_{n} > M'\), contradicting that \(M'\) bounds \(S\). Hence no upper bound is smaller than \(M\), and \(M = \sup S\). \qedmark
+\end{envproof}
+The mirror statement — a nonempty set bounded below has a \emph{greatest lower bound} \(\inf S\) — follows by applying the lemma to \(\{-s : s \in S\}\).
+
+\subsechead{The Extreme Value Theorem}
+Recall the statement: if \(f\) is continuous on a closed interval \([a, b]\), then \(f\) attains a maximum and a minimum on \([a, b]\). The proof runs in two stages — first that the values are bounded, then that the least upper bound is actually reached — and both stages extract a convergent subsequence with the Bolzano–Weierstrass theorem (Theorem 4.4).
+
+\begin{envproof}{Proof of Theorem 4.9(a)}{}{}
+We show \(f\) attains a maximum; the minimum then follows by applying the result to \(-f\).
+
+\runin{The values are bounded above.} Suppose not. Then for each \(n \in \mathbb{N}\) there is a point \(x_{n} \in [a, b]\) with \(f(x_{n}) > n\). The sequence \(\{x_{n}\}\) lies in \([a, b]\), so it is bounded, and by the Bolzano–Weierstrass theorem (Theorem 4.4) some subsequence \(x_{n_{k}}\) converges to a point \(\xi\). Since \(a \le x_{n_{k}} \le b\) for every \(k\), the limit satisfies \(\xi \in [a, b]\), so \(f\) is defined and continuous there; continuity gives \(f(x_{n_{k}}) \to f(\xi)\), a finite real number. But \(f(x_{n_{k}}) > n_{k} \to \infty\), so the values cannot approach a finite limit — a contradiction. Hence \(f\) is bounded above on \([a, b]\).
+
+\runin{The bound is attained.} The set of values \(f([a, b]) = \{\, f(x) : x \in [a, b] \,\}\) is nonempty and bounded above, so by Lemma D.1 it has a least upper bound \(M = \sup f([a, b])\). For each \(n\), the number \(M - \tfrac{1}{n}\) is smaller than \(M\), hence not an upper bound of the values, so there is a point \(x_{n} \in [a, b]\) with
+
+\[ M - \tfrac{1}{n} < f(x_{n}) \le M. \]
+
+By Bolzano–Weierstrass again, some subsequence \(x_{n_{k}} \to x_{M} \in [a, b]\). Continuity gives \(f(x_{n_{k}}) \to f(x_{M})\); but the displayed inequality forces \(f(x_{n_{k}}) \to M\) as \(k \to \infty\), since \(M - \tfrac{1}{n_{k}}\) and \(M\) both tend to \(M\). A sequence has only one limit, so \(f(x_{M}) = M\). Thus \(f\) attains its maximum value \(M\) at the point \(x_{M}\). \qedmark
+\end{envproof}
+\subsechead{The Intermediate Value Theorem}
+Recall the statement: if \(f\) is continuous on \([a, b]\) and \(y\) lies between \(f(a)\) and \(f(b)\), then \(f(c) = y\) for some \(c \in [a, b]\). Here completeness enters through bisection: we trap the crossing inside a shrinking interval whose endpoints keep \(y\) bracketed, and the shared limit of those endpoints is the point we want.
+
+\begin{envproof}{Proof of Theorem 4.9(b)}{}{}
+If \(y\) equals \(f(a)\) or \(f(b)\) there is nothing to prove, so suppose it lies strictly between them. Relabel so that \(f(a) < y < f(b)\); the opposite case \(f(a) > y > f(b)\) reduces to this one by applying what follows to \(-f\) and \(-y\).
+
+We keep \(y\) bracketed by the two endpoints, maintaining \(f(a_{n}) \le y \le f(b_{n})\) throughout. Start with \(a_{0} = a\) and \(b_{0} = b\), where \(f(a_{0}) < y < f(b_{0})\). Given \([a_{n}, b_{n}]\) with \(f(a_{n}) \le y \le f(b_{n})\), let \(m_{n} = \tfrac{1}{2}(a_{n} + b_{n})\) and compare \(f(m_{n})\) with \(y\):
+
+\begin{itemize}
+  \item if \(f(m_{n}) = y\), the point \(c = m_{n}\) already satisfies the conclusion, and we stop;
+  \item if \(f(m_{n}) < y\), set \(a_{n+1} = m_{n}\) and \(b_{n+1} = b_{n}\);
+  \item if \(f(m_{n}) > y\), set \(a_{n+1} = a_{n}\) and \(b_{n+1} = m_{n}\).
+\end{itemize}
+Each continuing case preserves \(f(a_{n+1}) \le y \le f(b_{n+1})\) and halves the interval, so \(b_{n} - a_{n} = (b - a)/2^{n} \to 0\). If the process ever stops we are done. Otherwise it produces a non-decreasing \(\{a_{n}\}\) and a non-increasing \(\{b_{n}\}\), both confined to \([a, b]\); by Theorem 4.1 each converges, and since their gap shrinks to \(0\) they share a single limit \(c \in [a, b]\).
+
+Continuity gives \(f(a_{n}) \to f(c)\) and \(f(b_{n}) \to f(c)\). Passing to the limit in the standing inequality \(f(a_{n}) \le y \le f(b_{n})\) yields
+
+\[ f(c) \le y \le f(c), \]
+
+so \(f(c) = y\), as required. \qedmark
+\end{envproof}
+
+\sechead{D.3}{L’Hôpital’s Rule: the Remaining Cases}
+Section 5.7 proved L’Hôpital’s rule (Theorem 5.5) for the form \(\tfrac{0}{0}\) at a finite point, where the trick was to \emph{define} \(f(a) = g(a) = 0\) and read the ratio off the Generalized Mean Value Theorem. That trick is unavailable when the functions grow without bound, and the argument must instead control an error term by hand. Here we prove the \(\tfrac{\ast}{\infty}\) form, and then reduce the infinite-point cases to the corresponding finite-point cases.
+
+\subsechead{The \(\tfrac{\ast}{\infty}\) form at a finite point}
+We prove the representative case: \(x \to a^{+}\) at a finite \(a\), with \(g(x) \to +\infty\) and a finite limit \(L = \lim_{x \to a^{+}} f'(x)/g'(x)\). The left-hand version is identical, the case \(g \to -\infty\) follows by replacing \(g\) with \(-g\), and \(L = \pm\infty\) is a routine variant noted at the end.
+
+\begin{envproof}{Proof of Theorem 5.5 (\(\tfrac{\ast}{\infty}\) case)}{}{}
+Let \(\varepsilon > 0\). Since \(f'(x)/g'(x) \to L\) as \(x \to a^{+}\), choose a point \(d\) to the right of \(a\) such that
+
+\[ \left\lvert \frac{f'(t)}{g'(t)} - L \right\rvert < \varepsilon \qquad \text{for all } t \in (a, d). \]
+
+Fix any \(x \in (a, d)\). On the interval \([x, d]\) the Generalized Mean Value Theorem (Theorem 5.4) supplies a point \(\xi \in (x, d)\) with
+
+\[ \frac{f(x) - f(d)}{g(x) - g(d)} = \frac{f'(\xi)}{g'(\xi)}, \]
+
+and since \(\xi \in (a, d)\), the right side lies within \(\varepsilon\) of \(L\). Now split \(f(x)/g(x)\) so this ratio appears:
+
+\[ \frac{f(x)}{g(x)} = \frac{f(d)}{g(x)} + \frac{f(x) - f(d)}{g(x)} = \frac{f(d)}{g(x)} + \frac{f'(\xi)}{g'(\xi)}\left(1 - \frac{g(d)}{g(x)}\right), \]
+
+where the last step multiplied and divided by \(g(x) - g(d)\). Write \(f'(\xi)/g'(\xi) = L + \eta\) with \(\lvert \eta \rvert < \varepsilon\). Subtracting \(L\) and grouping,
+
+\[ \frac{f(x)}{g(x)} - L = \frac{f(d)}{g(x)} - L\,\frac{g(d)}{g(x)} + \eta\left(1 - \frac{g(d)}{g(x)}\right). \]
+
+The point \(d\) is now fixed, while \(g(x) \to +\infty\) as \(x \to a^{+}\). Hence the first two terms tend to \(0\), and \(g(d)/g(x) \to 0\), so \(\lvert 1 - g(d)/g(x) \rvert \to 1\). Taking the limit superior of the absolute value,
+
+\[ \limsup_{x \to a^{+}} \left\lvert \frac{f(x)}{g(x)} - L \right\rvert \le 0 + 0 + \varepsilon \cdot 1 = \varepsilon. \]
+
+Since \(\varepsilon > 0\) was arbitrary, the limit superior is \(0\), which is to say \(\lim_{x \to a^{+}} f(x)/g(x) = L\). \qedmark
+\end{envproof}
+\begin{informal}
+Only \(g(x) \to \infty\) was used, never \(f(x) \to \infty\): the rule holds in the form \(\tfrac{\ast}{\infty}\), whatever the numerator does. This is why Theorem 5.5 states the second hypothesis as a condition on \(g\) alone.
+\end{informal}
+\subsechead{The remaining reductions}
+\begin{itemize}
+  \item \runin{\(L = \pm\infty\).} The same splitting works with the bound “within \(\varepsilon\) of \(L\)” replaced by “eventually larger than any fixed \(M\)”: if \(f'/g' \to +\infty\), then for \(x\) near \(a\) the ratio \((f(x)-f(d))/(g(x)-g(d))\) exceeds any \(M\), and the correction terms, tending to \(0\) and \(1\), leave \(f(x)/g(x) \to +\infty\).
+  \item \runin{\(a = \pm\infty\).} Substitute \(x = 1/t\), so \(x \to +\infty\) becomes \(t \to 0^{+}\). Writing \(F(t) = f(1/t)\) and \(G(t) = g(1/t)\), the chain rule gives \(F'(t)/G'(t) = f'(1/t)/g'(1/t)\) — the \(-1/t^{2}\) factors cancel — so the hypothesis on \(f'/g'\) at \(\infty\) becomes the same hypothesis on \(F'/G'\) at \(0^{+}\). The reduction then follows the form: if the original limit is \(\tfrac{0}{0}\), then \(F, G \to 0\) and the finite-point \(\tfrac{0}{0}\) proof of §5.7 applies to \(F/G\) at \(0^{+}\); if it is \(\tfrac{\ast}{\infty}\), then \(G \to \pm\infty\) and the finite-point \(\tfrac{\ast}{\infty}\) proof above applies. The case \(a = -\infty\) uses \(x = -1/t\).
+\end{itemize}
+With these, Theorem 5.5 holds in full generality: the \(\tfrac{0}{0}\) case from §5.7 and the \(\tfrac{\ast}{\infty}\) and infinite-point cases here, at a finite endpoint or at \(\pm\infty\).
+\end{document}

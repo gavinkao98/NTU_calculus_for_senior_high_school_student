@@ -1,0 +1,926 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Chapter 2 — Print build</title>
+
+<!-- ════════════════════════════════════════════════════════════════
+     圖片寬度控制面板 —— 直接改下面的數字即可（px 固定寬 / % 相對頁寬）
+     並排或多格圖（1.1 / 1.7 / 1.9）控制的是「每一格」的寬度。
+     ════════════════════════════════════════════════════════════════ -->
+<style>
+:root {
+  --fig-2-1:  100%;    /* Figure 2.1   Secant-to-tangent */
+  --fig-2-2:  80%;    /* Figure 2.2   Difference quotient anatomy */
+  --fig-2-3:  100%;    /* Figure 2.3   Tangent approximation */
+  --fig-2-4:  80%;    /* Figure 2.4   f and f-prime */
+  --fig-2-5:  100%;    /* Figure 2.5   |x| corner */
+  --fig-2-6:  80%;    /* Figure 2.6   Cube-root vertical tangent */
+  --fig-2-7:  100%;    /* Figure 2.7   Differentiable vs. continuous */
+  --fig-2-8:  100%;    /* Figure 2.8   e^x self-derivative */
+  --fig-2-9:  100%;    /* Figure 2.9   Product-rule rectangle (inline SVG) */
+  --fig-2-10: 100%;    /* Figure 2.10  Quotient-rule graph */
+}
+
+.paper figure[data-fig="secant-to-tangent"] { --fig-w: var(--fig-2-1); }
+.paper figure[data-fig="difference-quotient-anatomy"] { --fig-w: var(--fig-2-2); }
+.paper figure[data-fig="tangent-approx"] { --fig-w: var(--fig-2-3); }
+.paper figure[data-fig="f-and-fprime"] { --fig-w: var(--fig-2-4); }
+.paper figure[data-fig="abs-corner"] { --fig-w: var(--fig-2-5); }
+.paper figure[data-fig="cbrt-vertical-tangent"] { --fig-w: var(--fig-2-6); }
+.paper figure#fig-diff-cont { --fig-w: var(--fig-2-7); }
+.paper figure[data-fig="exp-self-derivative"] { --fig-w: var(--fig-2-8); }
+.paper figure#fig-product-area { --fig-w: var(--fig-2-9); }
+.paper figure[data-fig="quotient-example-graph"] { --fig-w: var(--fig-2-10); }
+</style>
+
+<!-- Google Fonts: Inter for UI -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<!-- New Computer Modern (prose/text faces) — matches MathJax 4 "mathjax-newcm" math font.
+     Source: npm web-computer-modern@1.1.0-new-cm-7-0-2 via jsDelivr. License: GUST Font License.
+     10pt optical size ("Serif 10"). NOTE: filenames contain %20-encoded spaces — keep them. -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<style>
+@font-face {
+  font-family: "New Computer Modern";
+  font-style: normal; font-weight: 400; font-display: swap;
+  src: url("https://cdn.jsdelivr.net/npm/web-computer-modern@1.1.0-new-cm-7-0-2/woff2/WebCM%20Serif%2010%20Regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "New Computer Modern";
+  font-style: italic; font-weight: 400; font-display: swap;
+  src: url("https://cdn.jsdelivr.net/npm/web-computer-modern@1.1.0-new-cm-7-0-2/woff2/WebCM%20Serif%2010%20Italic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "New Computer Modern";
+  font-style: normal; font-weight: 700; font-display: swap;
+  src: url("https://cdn.jsdelivr.net/npm/web-computer-modern@1.1.0-new-cm-7-0-2/woff2/WebCM%20Serif%2010%20Bold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "New Computer Modern";
+  font-style: italic; font-weight: 700; font-display: swap;
+  src: url("https://cdn.jsdelivr.net/npm/web-computer-modern@1.1.0-new-cm-7-0-2/woff2/WebCM%20Serif%2010%20BoldItalic.woff2") format("woff2");
+}
+</style>
+
+<!-- MathJax 4 (CHTML output with inline line-breaking) -->
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']],
+    macros: {
+      arccsc: '\\operatorname{arccsc}',
+      arcsec: '\\operatorname{arcsec}',
+      arccot: '\\operatorname{arccot}'
+    }
+  },
+  chtml: {
+    mtextInheritFont: true,
+    matchFontHeight: true
+  },
+  output: {
+    displayOverflow: 'linebreak',
+    linebreaks: {
+      inline: true,
+      width: '100%',
+      lineleading: 0.2
+    }
+  },
+  startup: { typeset: false }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js"></script>
+
+<style>
+/* ============================================================
+   skin-hs.css — inlined + modified: Times New Roman + MathJax
+   ============================================================ */
+.paper {
+  --c-primary: oklch(0.50 0.13 245);
+  --c-caution: oklch(0.50 0.155 25);
+  --c-aux: oklch(0.55 0.01 260);
+  --c-axis: #474b54;
+  --ink: #1b1c1f;
+  --ink-soft: #565a63;
+  --ink-faint: #8a8e98;
+  --paper: #ffffff;
+  --rule: #e5e7eb;
+  --fig-w-pair: 250px;     /* 並排(pair)圖每張的預設寬度（整體一次調） */
+  --fig-w-single: 100%;    /* 單張/triple/grid 圖的預設最大寬度（整體一次調） */
+  /* 個別覆寫：在任一 <figure> 標籤加 style="--fig-w: 320px" 即可只改那一張 */
+  --serif: "New Computer Modern", "Latin Modern Roman", "Times New Roman", Times, Georgia, serif;
+  --ui: "Inter", -apple-system, system-ui, sans-serif;
+  --a-concept:  oklch(0.50 0.13 55);
+  --a-result:   oklch(0.50 0.13 245);
+  --a-practice: oklch(0.50 0.13 152);
+  --a-aside:    oklch(0.50 0.02 260);
+  --a-caution:  oklch(0.50 0.155 25);
+  --a-strategy: oklch(0.50 0.13 290);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: var(--fs-base, 17.5px);
+  line-height: var(--lh-base, 1.62);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  box-sizing: border-box;
+}
+.paper *, .paper *::before, .paper *::after { box-sizing: border-box; }
+.paper .page { padding: 52px 58px 64px; max-width: 760px; margin: 0 auto; }
+.skin-hs .page { hyphens: auto; -webkit-hyphens: auto; }
+.skin-hs p, .skin-hs li { text-align: justify; text-justify: inter-word; }
+.paper p { margin: 0 0 .85em; text-wrap: pretty; }
+.paper em { font-style: italic; }
+.paper .informal { font-style: italic; color: var(--ink-soft); }
+.paper ol { margin: .2em 0 .9em; padding-left: 1.5em; }
+.paper li { margin: .35em 0; text-wrap: pretty; }
+.paper .warmup { counter-reset: wu; list-style: none; padding-left: 0; }
+.paper .warmup > li { counter-increment: wu; position: relative; padding-left: 2.1em; }
+.paper .warmup > li::before {
+  content: "(" counter(wu, lower-alpha) ")";
+  position: absolute; left: 0; top: 0;
+  font-family: var(--ui); font-size: .82em; color: var(--ink-faint); line-height: 1.85;
+}
+.paper mjx-container[display="true"] { margin: .55em 0 !important; overflow-x: auto; overflow-y: hidden; }
+.paper mjx-container[display="true"]::-webkit-scrollbar { display: none; }
+.paper .qed { display: block; text-align: right; margin: -1.62em 0 0; height: 1.62em; pointer-events: none; }
+.paper .qed::after {
+  content: ""; display: inline-block; width: .56em; height: .56em;
+  border: 1.3px solid var(--ink-soft);
+}
+.paper .env-body > :has(+ .qed) { margin-bottom: 0; display: flow-root; }
+.paper .env-body::after { content: ""; display: block; clear: both; }
+.paper .sec-head {
+  margin-top: 2.7em; padding-top: 1.35em;
+  border-top: 1px solid var(--rule); margin-bottom: 1.5em;
+}
+.sheet-body > .sec-head:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+.paper .sec-kicker {
+  font-family: var(--ui); font-size: .7rem; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--c-primary); font-weight: 700; margin-bottom: .55em;
+}
+.paper .sec-title { font-weight: 600; font-size: 2rem; line-height: 1.12; letter-spacing: -.012em; margin: 0; }
+.paper .sec-no { color: var(--c-primary); margin-right: .5em; font-weight: 600; }
+.paper .subsec-head {
+  font-family: var(--ui); font-weight: 600; font-size: 1.08rem; margin: 1.9em 0 .65em;
+  display: flex; align-items: center; gap: .55em; color: var(--ink);
+}
+.paper .subsec-head::before { content: ""; width: 18px; height: 3px; background: var(--c-primary); border-radius: 2px; }
+.paper .figure { margin: 1.7em 0; text-align: center; }
+.paper .figure-art { display: flex; justify-content: center; }
+.paper .figure-art--pair { gap: 26px; }
+.paper .fig-svg { width: 100%; max-width: var(--fig-w, var(--fig-w-pair)); height: auto; }
+.paper .figure-art:not(.figure-art--pair) .fig-svg { max-width: var(--fig-w, var(--fig-w-single)); }
+.paper figcaption {
+  font-family: var(--ui); font-size: .8em; line-height: 1.5;
+  color: var(--ink-soft); margin-top: .7em; text-wrap: pretty;
+  max-width: none; text-align: left; display: table; margin-inline: auto;
+}
+.paper .fig-no { font-weight: 600; color: var(--ink); margin-right: .4em; }
+.paper figcaption mjx-container { font-size: .95em; }
+.paper .axis { stroke: var(--c-axis); stroke-width: 1.25; fill: none; stroke-linecap: round; }
+.paper .curve { stroke: var(--c-primary); stroke-width: 2.2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.paper .refline { stroke: var(--c-caution); stroke-width: 1.3; stroke-dasharray: 4.5 3.5; fill: none; stroke-linecap: round; opacity: .85; }
+.paper .dot { fill: var(--ink); }
+.paper .bubble { stroke: var(--c-aux); stroke-width: 1.4; fill: none; }
+.paper .arrow-fwd { stroke: var(--c-primary); stroke-width: 2; fill: none; }
+.paper .arrow-bwd { stroke: var(--c-caution); stroke-width: 2; fill: none; }
+.paper .fig-svg text { font-family: var(--ui); font-size: 13px; }
+.paper .axlab { fill: var(--c-aux); font-style: italic; }
+.paper .lab-curve { fill: var(--c-primary); font-style: italic; }
+.paper .lab-ref, .paper .lab-ref-b { fill: var(--c-caution); }
+.paper .ptlab { fill: var(--ink-soft); font-size: 12px; }
+.paper .setlab { fill: var(--ink); font-weight: 600; font-size: 14.5px; text-anchor: middle; }
+
+/* env blocks */
+.skin-hs .env {
+  --accent: var(--a-aside);
+  margin: 1.2em 0; padding-left: 16px;
+  border-left: 2.5px solid color-mix(in srgb, var(--accent) 38%, var(--paper));
+}
+.skin-hs .env-definition  { --accent: var(--a-concept); }
+.skin-hs .env-theorem, .skin-hs .env-proposition, .skin-hs .env-corollary { --accent: var(--a-result); }
+.skin-hs .env-example, .skin-hs .env-solution, .skin-hs .env-exercise { --accent: var(--a-practice); }
+.skin-hs .env-remark { --accent: var(--a-aside); }
+.skin-hs .env-head {
+  display: flex; align-items: baseline; gap: .5em; flex-wrap: wrap;
+  margin: 0 0 .55em; font-family: var(--ui);
+}
+.skin-hs .env-kicker {
+  font-size: .62rem; letter-spacing: .07em; text-transform: uppercase; font-weight: 700;
+  color: var(--paper); background: var(--accent); padding: 3px 10px; border-radius: 999px; line-height: 1.5;
+}
+.skin-hs .env-num { font-weight: 700; color: var(--accent); font-size: .94em; }
+.skin-hs .env-name { font-style: italic; font-weight: 400; color: var(--ink-soft); font-family: var(--serif); font-size: 1em; }
+.skin-hs .env-body > p:first-child { margin-top: 0; }
+.skin-hs .env-body > :last-child { margin-bottom: 0; }
+.skin-hs .env-theorem .env-body, .skin-hs .env-proposition .env-body { font-style: italic; }
+.skin-hs .env-theorem .env-body mjx-container, .skin-hs .env-proposition .env-body mjx-container { font-style: normal; }
+.skin-hs .env-definition em { font-style: italic; }
+.skin-hs .env-remark { color: var(--ink-soft); font-size: .97em; }
+.skin-hs .env-remark .env-kicker { background: transparent; color: var(--a-aside); border: 1px solid color-mix(in srgb, var(--a-aside) 45%, var(--paper)); }
+.skin-hs .env-proof { --accent: var(--a-result); }
+.skin-hs .env-proof .env-kicker {
+  background: transparent; color: var(--a-result); font-style: italic; letter-spacing: .04em;
+  border: 1px solid color-mix(in srgb, var(--a-result) 45%, var(--paper));
+}
+.skin-hs .qed-proof::after { border-color: var(--ink); }
+.skin-hs .workedexample {
+  margin: 1.6em 0; padding-left: 16px;
+  border-left: 2.5px solid color-mix(in srgb, var(--a-practice) 38%, var(--paper));
+  display: flow-root;
+}
+.skin-hs .workedexample .env { margin: .7em 0; padding-left: 0; border-left: 0; }
+.skin-hs .env-solution .env-kicker { background: transparent; color: var(--a-practice); border: 1px solid color-mix(in srgb, var(--a-practice) 45%, var(--paper)); }
+.skin-hs > .env-cont { margin-top: 0; padding-top: .82em; }
+.skin-hs > .env:has(+ .env-cont) { margin-bottom: 0; display: flow-root; }
+.skin-hs > .env-example:has(+ .env-solution) { margin-bottom: 0; }
+.skin-hs > .env-example + .env-solution { margin-top: 0; padding-top: .72em; }
+.skin-hs > .env-cont, .skin-hs > .env-example, .skin-hs > .env-solution { display: flow-root; }
+.skin-hs .env-exercise .env-kicker { background: transparent; color: var(--a-practice); border: 1px solid var(--a-practice); }
+.skin-hs .env-caution, .skin-hs .env-strategy {
+  padding: 15px 20px; border-radius: 8px; margin: 1.4em 0;
+  border-left-width: 4px; border-left-style: solid;
+}
+.skin-hs .env-caution {
+  --accent: var(--a-caution);
+  background: color-mix(in srgb, var(--a-caution) 7%, var(--paper));
+  border: 1px solid color-mix(in srgb, var(--a-caution) 22%, var(--paper));
+  border-left-color: var(--a-caution);
+}
+.skin-hs .env-strategy {
+  --accent: var(--a-strategy);
+  background: color-mix(in srgb, var(--a-strategy) 7%, var(--paper));
+  border: 1px solid color-mix(in srgb, var(--a-strategy) 22%, var(--paper));
+  border-left-color: var(--a-strategy);
+}
+.skin-hs .env-caution .env-name, .skin-hs .env-strategy .env-name { color: var(--ink-soft); }
+.skin-hs .env-strategy .steps { margin-bottom: 0; }
+.skin-hs.vivid .env { border-left-color: color-mix(in srgb, var(--accent) 70%, var(--paper)); border-left-width: 3px; }
+.skin-hs.vivid .workedexample { border-left-color: color-mix(in srgb, var(--a-practice) 70%, var(--paper)); border-left-width: 3px; }
+.skin-hs.vivid .env-kicker { font-size: .64rem; padding: 3.5px 11px; }
+
+/* ============================================================
+   figs.css — inlined + modified for MathJax
+   ============================================================ */
+.paper .fig-svg { height: auto; overflow: visible; }
+.paper .figure-art { display: flex; justify-content: center; align-items: flex-start; gap: 24px; flex-wrap: wrap; }
+.paper .figure-art--pair { gap: 24px; }
+.paper .figure-art--pair .fig-panel { flex: 1 1 220px; max-width: 300px; }
+.paper .figure-art--triple { gap: 18px; }
+.paper .figure-art--triple .fig-panel { flex: 1 1 190px; max-width: 240px; }
+.paper .figure-art--grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; justify-items: center; }
+.paper .figure-art--grid .fig-panel { max-width: 240px; }
+.paper .fig-panel { display: flex; flex-direction: column; align-items: center; }
+.paper .fig-note {
+  font-family: var(--ui); font-size: .8em; line-height: 1.45;
+  color: var(--ink-soft); margin-top: .55em; text-align: center; text-wrap: pretty;
+}
+.paper .fig-note mjx-container { font-size: .98em; }
+.paper .fig-fo { overflow: visible; }
+.paper .fig-lyr { position: relative; width: 100%; height: 100%; font-family: var(--serif); }
+.paper .fig-lbl {
+  position: absolute; white-space: nowrap; line-height: 1; font-size: 15px;
+  text-shadow: 0 0 2px var(--paper), 0 0 2px var(--paper), 0 0 1px var(--paper);
+}
+.paper .fig-lbl mjx-container { font-size: 1em; }
+.paper .fig-lbl.a-curve { color: var(--c-primary); }
+.paper .fig-lbl.a-ref   { color: var(--c-caution); }
+.paper .fig-lbl.a-ax    { color: var(--ink-soft); }
+.paper .fig-lbl.a-pt    { color: var(--ink); }
+.paper .tbl-wrap { overflow-x: auto; overflow-y: hidden; margin: 1em 0; }
+.paper table.tbl {
+  border-collapse: collapse; margin: 0 auto; font-family: var(--ui); font-size: .96em;
+  border-top: 1.7px solid var(--ink); border-bottom: 1.7px solid var(--ink);
+}
+.paper table.tbl th, .paper table.tbl td { padding: .3em .8em; text-align: center; white-space: nowrap; }
+.paper table.tbl thead th { border-bottom: 1.1px solid var(--ink-soft); font-weight: 500; }
+.paper table.tbl .rowlab { text-align: right; padding-right: 1em; color: var(--ink-soft); }
+.paper table.tbl mjx-container { font-size: .98em; }
+.paper .sec + .sec { margin-top: 2.6em; padding-top: 2.2em; border-top: 1px solid var(--rule); }
+.paper .para-head { font-weight: 600; margin: 1.1em 0 .4em; }
+.paper ul { margin: .3em 0 .95em; padding-left: 1.3em; }
+.paper ul li { margin: .35em 0; text-align: justify; }
+.paper ul li::marker { color: var(--a-result); }
+.paper .chapter-head { margin-bottom: 1.6em; }
+.paper .chapter-head .ch-kicker {
+  font-family: var(--ui); font-size: .72rem; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--a-result); font-weight: 700; margin-bottom: .6em;
+}
+.paper .chapter-head .ch-title { font-weight: 600; font-size: 2.5rem; line-height: 1.08; letter-spacing: -.02em; margin: 0; }
+.paper .lead { font-size: 1.05em; }
+
+/* ============================================================
+   print.css — inlined (A4 sheet layout + paginator)
+   ============================================================ */
+@page { size: A4; margin: 0; }
+.sheet {
+  position: relative; box-sizing: border-box;
+  width: 210mm; height: 297mm;
+  padding: 20mm 28mm 20mm 32mm;
+  background: #fff; overflow: hidden;
+}
+.sheet-header {
+  position: absolute; top: 11mm; left: 32mm; right: 28mm;
+  font: 500 8.5pt "Inter", sans-serif; color: #9aa0ac; letter-spacing: .02em;
+}
+.sheet-footer {
+  position: absolute; bottom: 8.5mm; left: 0; right: 0;
+  text-align: center; font: 500 9pt "Inter", sans-serif; color: #82868f;
+}
+.sheet-body { height: 100%; --accent: oklch(0.50 0.13 245); }
+.sheet-body.paper { box-shadow: none; border-radius: 0; max-width: none; background: #fff; }
+.sheet-body .page { padding: 0; max-width: none; margin: 0; }
+.sheet-body.paper { font-size: 12pt; line-height: 1.55; }
+.sheet, .sheet * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.sheet-body > :first-child { margin-top: 0 !important; }
+.sheet-body .sec + .sec { border-top: 0; margin-top: 0; padding-top: 0; }
+.sheet-body .qed { margin-top: -1.55em; height: 1.55em; }
+.sheet-body .env-body::after { display: none; content: none; }
+.sheet-body .env-cont { margin-top: 0; }
+.sheet-body .env-cont > .env-body > :first-child { margin-top: 0; }
+.sheet-body .split-unit > :first-child { margin-top: 0; }
+.sheet-body .split-unit > :last-child { margin-bottom: 0; }
+@media screen {
+  body { background: #6f727b; margin: 0; }
+  .sheet { box-shadow: 0 3px 18px rgba(0,0,0,.3); margin: 9mm auto; }
+}
+@media print {
+  body { background: #fff; margin: 0; }
+  .sheet { box-shadow: none; margin: 0; break-after: page; }
+  .sheet:last-child { break-after: auto; }
+  .print-toolbar, #boot { display: none !important; }
+}
+
+/* ============================================================
+   page-level
+   ============================================================ */
+.print-toolbar {
+  position: fixed; top: 14px; right: 16px; z-index: 1000;
+  display: flex; align-items: center; gap: 10px; font-family: "Inter", system-ui, sans-serif;
+}
+.print-toolbar button {
+  font: 600 13px "Inter", sans-serif; color: #fff; background: oklch(0.50 0.13 245);
+  border: 0; padding: 9px 16px; border-radius: 8px; cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0,0,0,.25);
+}
+.print-toolbar button:disabled { opacity: .5; cursor: default; }
+.print-toolbar button:not(:disabled):hover { background: oklch(0.45 0.13 245); }
+.print-toolbar .status {
+  font-size: 12px; color: #e8eaf0; background: rgba(0,0,0,.4);
+  padding: 6px 11px; border-radius: 999px; backdrop-filter: blur(6px);
+}
+#boot {
+  position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: "Inter", system-ui, sans-serif; color: #cdd2dc; background: #6f727b; z-index: 900;
+}
+#source { position: absolute; left: -10000px; top: 0; width: 683px; }
+</style>
+</head>
+<body>
+
+<div id="boot">Preparing …</div>
+
+<div class="print-toolbar">
+  <span class="status" id="status">Preparing …</span>
+  <button id="printBtn" disabled>Print / Save as PDF</button>
+</div>
+
+<div id="source"><div class="paper skin-hs vivid"><div class="page" id="page"></div></div></div>
+<div id="pages"></div>
+
+<!-- Section fragments (inlined) -->
+
+<!-- BEGIN-CONTENT-FRAGMENTS -->
+<template id="figs-only">
+<figure class="figure" data-fig="secant-to-tangent">
+    <figcaption><span class="fig-no">Figure 2.1</span> Secant lines \(PQ\) approaching the tangent line at \(P\).</figcaption>
+  </figure>
+<figure class="figure" data-fig="difference-quotient-anatomy">
+    <figcaption><span class="fig-no">Figure 2.2</span> The \(h\)-form difference quotient on one secant: run \(h\), rise \(f(a+h)-f(a)\).</figcaption>
+  </figure>
+<figure class="figure" data-fig="tangent-approx">
+          <figcaption><span class="fig-no">Figure 2.3</span> The curve \(y = \tfrac{1}{x}\) and its tangent line at \(\bigl(2, \tfrac{1}{2}\bigr)\), used for the approximation in Example 2.5.</figcaption>
+        </figure>
+<figure class="figure" data-fig="f-and-fprime">
+    <figcaption><span class="fig-no">Figure 2.4</span> The graph of \(f(x) = x^{2} + 4x - 2\) above its derivative \(f'(x) = 2x + 4\), aligned at \(x = -2\).</figcaption>
+  </figure>
+<figure class="figure" data-fig="abs-corner">
+          <figcaption><span class="fig-no">Figure 2.5</span> The graph of \(f(x) = \lvert x \rvert\) near the origin, with secant lines from each side.</figcaption>
+        </figure>
+<figure class="figure" data-fig="cbrt-vertical-tangent">
+          <figcaption><span class="fig-no">Figure 2.6</span> The graph of \(f(x) = \sqrt[3]{x}\) near the origin, with secants steepening toward a vertical tangent.</figcaption>
+        </figure>
+<figure class="figure" data-fig="exp-self-derivative">
+    <figcaption><span class="fig-no">Figure 2.8</span> The graph of \(y = e^{x}\) with tangent lines at \(x = 0\) and \(x = 1\).</figcaption>
+  </figure>
+<figure class="figure" data-fig="quotient-example-graph">
+          <figcaption><span class="fig-no">Figure 2.10</span> The function \(f(x) = \dfrac{x}{x^{2}+1}\) (top) and its derivative \(f'(x) = \dfrac{1-x^{2}}{(x^{2}+1)^{2}}\) (bottom), from Example 2.20.</figcaption>
+        </figure>
+</template>
+<!-- END-CONTENT-FRAGMENTS -->
+<!-- plot.js — inlined -->
+<script>
+(function () {
+  var uid = 0;
+  var PI = Math.PI;
+  function piTex(v) {
+    var map = {};
+    map[(-2 * PI).toFixed(4)] = "-2\\pi";
+    map[(-PI).toFixed(4)] = "-\\pi";
+    map[(-PI / 2).toFixed(4)] = "-\\tfrac{\\pi}{2}";
+    map[(PI / 2).toFixed(4)] = "\\tfrac{\\pi}{2}";
+    map[PI.toFixed(4)] = "\\pi";
+    map[(2 * PI).toFixed(4)] = "2\\pi";
+    map[(0).toFixed(4)] = "0";
+    var hit = map[v.toFixed(4)];
+    if (hit != null) return hit;
+    if (Math.abs(v - Math.round(v)) < 1e-9) return String(Math.round(v)); // plain integers
+    return undefined;
+  }
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+  function anchorTransform(anchor, vAnchor) {
+    var tx = anchor === "start" ? "0" : anchor === "end" ? "-100%" : "-50%";
+    var ty = vAnchor === "top" ? "0" : vAnchor === "bottom" ? "-100%" : "-50%";
+    return "translate(" + tx + "," + ty + ")";
+  }
+  function buildPlot(cfg) {
+    var w = cfg.w, h = cfg.h;
+    var pad = Object.assign({ t: 16, r: 18, b: 20, l: 22 }, cfg.pad || {});
+    var xmin = cfg.xmin, xmax = cfg.xmax, ymin = cfg.ymin, ymax = cfg.ymax;
+    var iw = w - pad.l - pad.r, ih = h - pad.t - pad.b;
+    var SX = function(x) { return pad.l + ((x - xmin) / (xmax - xmin)) * iw; };
+    var SY = function(y) { return h - pad.b - ((y - ymin) / (ymax - ymin)) * ih; };
+    var id = "pl" + (++uid);
+    var parts = [], labels = [];
+    function pushLabel(o) { labels.push(o); }
+    parts.push('<svg viewBox="0 0 ' + w + ' ' + h + '" style="width:' + w + 'px" class="fig-svg" role="img" aria-label="' + esc(cfg.aria || "graph") + '" preserveAspectRatio="xMidYMid meet">');
+    parts.push('<defs><marker id="' + id + 'a" markerWidth="8" markerHeight="8" refX="5.4" refY="2.8" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L5.4,2.8 L0,5.6" fill="none" stroke="var(--c-axis)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>');
+    if (cfg.axes !== false) {
+      var x0 = Math.min(Math.max(0, xmin), xmax), y0 = Math.min(Math.max(0, ymin), ymax);
+      var ax0 = SX(xmin), ax1 = SX(xmax), ayBase = SY(y0);
+      parts.push('<path d="M' + ax0.toFixed(1) + ',' + ayBase.toFixed(1) + ' H' + (ax1 - 1).toFixed(1) + '" class="axis" marker-end="url(#' + id + 'a)"/>');
+      var ay0 = SY(ymin), ay1 = SY(ymax), axBase = SX(x0);
+      parts.push('<path d="M' + axBase.toFixed(1) + ',' + ay0.toFixed(1) + ' V' + (ay1 + 1).toFixed(1) + '" class="axis" marker-end="url(#' + id + 'a)"/>');
+      if (cfg.xlabel) pushLabel({ px: ax1 + 1, py: ayBase + 4, tex: cfg.xlabel, anchor: "start", vAnchor: "top", cls: "a-ax", size: 13 });
+      if (cfg.ylabel) pushLabel({ px: axBase - 5, py: ay1 + 1, tex: cfg.ylabel, anchor: "end", vAnchor: "top", cls: "a-ax", size: 13 });
+      (cfg.xticks || []).forEach(function(t) {
+        var px = SX(t.x);
+        parts.push('<line x1="' + px.toFixed(1) + '" y1="' + (ayBase - 3).toFixed(1) + '" x2="' + px.toFixed(1) + '" y2="' + (ayBase + 3).toFixed(1) + '" class="axis"/>');
+        var tex = t.tex != null ? t.tex : (t.label != null ? null : piTex(t.x));
+        if (tex != null) pushLabel({ px: px, py: ayBase + 6, tex: tex, anchor: "middle", vAnchor: "top", cls: "a-pt", size: 12 });
+        else if (t.label != null) pushLabel({ px: px, py: ayBase + 6, text: t.label, anchor: "middle", vAnchor: "top", cls: "a-pt", size: 12 });
+      });
+      (cfg.yticks || []).forEach(function(t) {
+        var py = SY(t.y);
+        parts.push('<line x1="' + (axBase - 3).toFixed(1) + '" y1="' + py.toFixed(1) + '" x2="' + (axBase + 3).toFixed(1) + '" y2="' + py.toFixed(1) + '" class="axis"/>');
+        var tex = t.tex != null ? t.tex : (t.label != null ? null : piTex(t.y));
+        if (tex != null) pushLabel({ px: axBase - 6, py: py, tex: tex, anchor: "end", vAnchor: "middle", cls: "a-pt", size: 12 });
+        else if (t.label != null) pushLabel({ px: axBase - 6, py: py, text: t.label, anchor: "end", vAnchor: "middle", cls: "a-pt", size: 12 });
+      });
+    }
+    (cfg.items || []).forEach(function(it) {
+      if (it.type === "curve") {
+        var cls = it.cls || "curve", n = it.samples || 240, a = it.domain[0], b = it.domain[1];
+        var d = "", pen = false;
+        for (var i = 0; i <= n; i++) {
+          var x = a + (b - a) * (i / n), y = it.fn(x);
+          if (!isFinite(y) || y < ymin - (ymax - ymin) * 0.04 || y > ymax + (ymax - ymin) * 0.04) { pen = false; continue; }
+          var px = SX(x).toFixed(2), py = SY(y).toFixed(2);
+          d += (pen ? "L" : "M") + px + "," + py + " "; pen = true;
+        }
+        if (d) parts.push('<path d="' + d.trim() + '" class="' + cls + '"/>');
+      } else if (it.type === "vline") {
+        parts.push('<line x1="' + SX(it.x).toFixed(1) + '" y1="' + SY(ymin).toFixed(1) + '" x2="' + SX(it.x).toFixed(1) + '" y2="' + SY(ymax).toFixed(1) + '" class="' + (it.cls || "refline") + '"/>');
+      } else if (it.type === "hline") {
+        var ha = it.from != null ? it.from : xmin, hb = it.to != null ? it.to : xmax;
+        parts.push('<line x1="' + SX(ha).toFixed(1) + '" y1="' + SY(it.y).toFixed(1) + '" x2="' + SX(hb).toFixed(1) + '" y2="' + SY(it.y).toFixed(1) + '" class="' + (it.cls || "refline") + '"/>');
+      } else if (it.type === "seg") {
+        parts.push('<line x1="' + SX(it.x1).toFixed(1) + '" y1="' + SY(it.y1).toFixed(1) + '" x2="' + SX(it.x2).toFixed(1) + '" y2="' + SY(it.y2).toFixed(1) + '" class="' + (it.cls || "curve") + '"/>');
+      } else if (it.type === "dot") {
+        var r = it.r || 3.0;
+        if (it.hollow) parts.push('<circle cx="' + SX(it.x).toFixed(1) + '" cy="' + SY(it.y).toFixed(1) + '" r="' + r + '" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.5"/>');
+        else parts.push('<circle cx="' + SX(it.x).toFixed(1) + '" cy="' + SY(it.y).toFixed(1) + '" r="' + r + '" class="dot"/>');
+      } else if (it.type === "arrow") {
+        parts.push('<line x1="' + SX(it.x1).toFixed(1) + '" y1="' + SY(it.y1).toFixed(1) + '" x2="' + SX(it.x2).toFixed(1) + '" y2="' + SY(it.y2).toFixed(1) + '" class="axis" marker-end="url(#' + id + 'a)"/>');
+      } else if (it.type === "text") {
+        pushLabel({ px: SX(it.x), py: SY(it.y), tex: it.tex, text: it.tex == null ? it.text : null, anchor: it.anchor || "middle", vAnchor: it.vAnchor || "middle", dx: it.dx || 0, dy: it.dy || 0, cls: it.cls || "a-pt", size: it.size });
+      }
+    });
+    if (labels.length) {
+      var M = 52;
+      var spans = labels.map(function(L) {
+        var left = (L.px + (L.dx || 0) + M).toFixed(1);
+        var top = (L.py + (L.dy || 0) + M).toFixed(1);
+        var tf = anchorTransform(L.anchor, L.vAnchor);
+        var fs = L.size ? "font-size:" + L.size + "px;" : "";
+        var body = L.tex != null ? "\\(" + L.tex + "\\)" : esc(L.text == null ? "" : L.text);
+        return '<span class="fig-lbl ' + (L.cls || "") + '" style="left:' + left + 'px;top:' + top + 'px;transform:' + tf + ';' + fs + '">' + body + '</span>';
+      }).join("");
+      parts.push('<foreignObject x="' + (-M) + '" y="' + (-M) + '" width="' + (w + 2 * M) + '" height="' + (h + 2 * M) + '" class="fig-fo" requiredExtensions="http://www.w3.org/1999/xhtml"><div xmlns="http://www.w3.org/1999/xhtml" class="fig-lyr">' + spans + '</div></foreignObject>');
+    }
+    parts.push('</svg>');
+    return parts.join("");
+  }
+  window.buildPlot = buildPlot;
+  window.PIVAL = PI;
+})();
+</script>
+
+<!-- ============================================================
+     figures.js — inlined (Chapter 2 figure registry)
+     ============================================================ -->
+<script>
+/* ============================================================
+   figures.js — Chapter 2 figure registry.
+   Each entry returns { layout, panels:[{svg, note}] }.
+   Labels carry \( \) TeX, typeset by MathJax.
+   ============================================================ */
+(function () {
+  const sqrt = Math.sqrt;
+
+  const FIGS = {
+
+    /* §2.1 — Secant lines converging to the tangent line at P.
+       Design: P at lower-left on a concave-up parabola; three Q points
+       well-spaced to the right → secant lines fan out; tangent line in
+       a distinct colour (caution/red) below the fan. */
+    "secant-to-tangent": () => {
+      var f = function (x) { return 0.1 * x * x + 0.5; };
+      var c = 1, fc = 0.6, fprime = 0.2;
+      var qxs = [7, 5, 3];                        // Q₁ farthest, Q₃ closest
+      var slopes = qxs.map(function (qx) { return (f(qx) - fc) / (qx - c); });
+      //  slopes = [0.8, 0.6, 0.4] — evenly spaced fan
+
+      var xL = -0.3, xR = 8.5;
+      var items = [
+        // --- secant lines (dashed, extend as full lines) ---
+        { type: "curve", fn: function (x) { return fc + slopes[0] * (x - c); },
+          domain: [xL, xR], samples: 10, cls: "refline" },
+        { type: "curve", fn: function (x) { return fc + slopes[1] * (x - c); },
+          domain: [xL, xR], samples: 10, cls: "refline" },
+        { type: "curve", fn: function (x) { return fc + slopes[2] * (x - c); },
+          domain: [xL, xR], samples: 10, cls: "refline" },
+        // --- tangent line (solid caution/red — visually distinct) ---
+        { type: "curve", fn: function (x) { return fc + fprime * (x - c); },
+          domain: [xL, xR], samples: 10, cls: "arrow-bwd" },
+        // --- main curve (drawn last, on top) ---
+        { type: "curve", fn: f, domain: [0, 8.2], samples: 200, cls: "curve" },
+        // --- dots ---
+        { type: "dot", x: c, y: fc, r: 3.5 },
+        { type: "dot", x: 7, y: f(7), r: 2.5 },
+        { type: "dot", x: 5, y: f(5), r: 2.5 },
+        { type: "dot", x: 3, y: f(3), r: 2.5 },
+        // --- P label (below-left) ---
+        { type: "text", x: c - 0.1, y: fc - 0.4,
+          tex: "P", cls: "a-pt", anchor: "end" },
+        // --- Q labels (above-right of each dot) ---
+        { type: "text", x: 7.25, y: f(7) + 0.35,
+          tex: "Q_1", cls: "a-pt", anchor: "start" },
+        { type: "text", x: 5.25, y: f(5) + 0.35,
+          tex: "Q_2", cls: "a-pt", anchor: "start" },
+        { type: "text", x: 3.25, y: f(3) + 0.35,
+          tex: "Q_3", cls: "a-pt", anchor: "start" },
+        // --- "Secant lines" group label (right side, between l1 and l3) ---
+        { type: "text", x: xR + 0.2, y: fc + slopes[1] * (xR - c),
+          tex: "\\text{Secant lines}", cls: "a-ref", anchor: "start", size: 12 },
+        // --- "Tangent line" full label (right side) ---
+        { type: "text", x: xR + 0.2, y: fc + fprime * (xR - c),
+          tex: "\\text{Tangent line}", cls: "a-ref", anchor: "start", size: 12 },
+        // --- curve label ---
+        { type: "text", x: 8, y: f(8) + 0.8,
+          tex: "y\\!=\\!f(x)", cls: "a-curve", anchor: "start" },
+      ];
+      return {
+        layout: "single",
+        panels: [{
+          svg: buildPlot({
+            w: 460, h: 300, xmin: -1, xmax: 10, ymin: -1, ymax: 7.5,
+            xlabel: "x", ylabel: "y",
+            xticks: [
+              { x: c, tex: "c" },
+              { x: 3, tex: "x_3" },
+              { x: 5, tex: "x_2" },
+              { x: 7, tex: "x_1" },
+            ],
+            aria: "Three secant lines through P fanning out as Q1, Q2, Q3 approach P from the right, converging toward the tangent line at P.",
+            items: items,
+          }),
+        }],
+      };
+    },
+
+    /* §2.1 — Tangent-line approximation: y = 1/x with tangent at (2, 1/2).
+       Shows the curve hugging the tangent near the point of tangency,
+       illustrating local linearity (Remark 2.1) and Example 2.5. */
+    "tangent-approx": () => ({
+      layout: "single",
+      panels: [{
+        svg: buildPlot({
+          w: 380, h: 260, xmin: 0.2, xmax: 4.5, ymin: -0.3, ymax: 2.5,
+          xlabel: "x", ylabel: "y",
+          aria: "Graph of y equals 1 over x with tangent line at (2, one half), showing the curve hugging the tangent near the point of tangency.",
+          xticks: [{ x: 2, tex: "2" }],
+          yticks: [{ y: 0.5, tex: "\\tfrac{1}{2}" }, { y: 1, tex: "1" }],
+          items: [
+            { type: "curve", fn: (x) => 1 / x, domain: [0.45, 4.3], samples: 200, cls: "curve" },
+            { type: "curve", fn: (x) => -0.25 * x + 1, domain: [0.5, 3.8], cls: "refline" },
+            { type: "dot", x: 2, y: 0.5 },
+            { type: "text", x: 3.8, y: 0.55, tex: "y=\\tfrac{1}{x}", cls: "a-curve", anchor: "start" },
+            { type: "text", x: 0.8, y: 0.42, tex: "\\text{tangent}", cls: "a-ref", anchor: "start" },
+          ],
+        }),
+      }],
+    }),
+
+    /* §2.2 — The derivative as a function: f above, f' below, drawn on a
+       common x-axis. Top: parabola f(x)=x²+4x−2 (minimum at x=−2, f=−6).
+       Bottom: line f'(x)=2x+4 (zero at x=−2). A shared dashed vertical at
+       x=−2 links the minimum of f to the zero of f'. Both SVGs use the same
+       w / pad / xmin / xmax, so a given x maps to the same horizontal pixel;
+       returned as ONE panel whose .fig-panel column layout stacks them
+       centred → the x-axes line up. Uses only the in-section result. */
+    /* §2.3 — Non-differentiability at a corner: |x| near 0.
+       Design: V-shape of |x|, two secant lines from the right (slope +1)
+       and two from the left (slope −1), labeled to show disagreement.
+       A dot at the origin marks the corner. */
+    "abs-corner": () => {
+      var f = function (x) { return Math.abs(x); };
+      var dom = [-4, 4];
+      // secant points: two from the right, two from the left
+      var rPts = [3, 1.5];
+      var lPts = [-3, -1.5];
+
+      var items = [
+        // --- secant lines from the right (slope +1, dashed) ---
+        { type: "curve", fn: function (x) { return x; },
+          domain: [-0.5, 4.2], samples: 10, cls: "refline" },
+        // --- secant lines from the left (slope −1, dashed) ---
+        { type: "curve", fn: function (x) { return -x; },
+          domain: [-4.2, 0.5], samples: 10, cls: "refline" },
+        // --- main curve |x| (solid, on top) ---
+        { type: "curve", fn: f, domain: dom, samples: 200, cls: "curve" },
+        // --- dots on secant endpoints ---
+        { type: "dot", x: 3, y: 3, r: 2.5 },
+        { type: "dot", x: 1.5, y: 1.5, r: 2.5 },
+        { type: "dot", x: -3, y: 3, r: 2.5 },
+        { type: "dot", x: -1.5, y: 1.5, r: 2.5 },
+        // --- corner dot (origin) ---
+        { type: "dot", x: 0, y: 0, r: 3.5 },
+        // --- slope labels ---
+        { type: "text", x: 3.2, y: 1.8,
+          tex: "\\text{slope}=+1", cls: "a-pt", anchor: "start", size: 12 },
+        { type: "text", x: -3.2, y: 1.8,
+          tex: "\\text{slope}=-1", cls: "a-pt", anchor: "end", size: 12 },
+        // --- curve label ---
+        { type: "text", x: 3.8, y: 4.1,
+          tex: "y\\!=\\!|x|", cls: "a-curve", anchor: "start" },
+      ];
+      return {
+        layout: "single",
+        panels: [{
+          svg: buildPlot({
+            w: 420, h: 280, xmin: -5, xmax: 5, ymin: -1, ymax: 5,
+            xlabel: "x", ylabel: "y",
+            xticks: [{ x: 0, tex: "0" }],
+            aria: "V-shaped graph of |x| with secant lines from the left having slope -1 and from the right having slope +1, meeting at a corner at the origin where no single tangent exists.",
+            items: items,
+          }),
+        }],
+      };
+    },
+
+    "f-and-fprime": () => {
+      var f  = function (x) { return x * x + 4 * x - 2; };
+      var fp = function (x) { return 2 * x + 4; };
+      var dom = [-6.4, 2.4];
+      var common = { w: 460, xmin: -6.8, xmax: 2.8, xlabel: "x", ylabel: "y" };
+
+      // --- top panel: f ---
+      var top = buildPlot(Object.assign({}, common, {
+        h: 250, ymin: -8, ymax: 14,
+        xticks: [{ x: -2, tex: "-2" }],
+        aria: "Graph of f(x)=x^2+4x-2, a parabola with its minimum at x=-2 where f=-6.",
+        items: [
+          { type: "vline", x: -2, cls: "refline" },
+          { type: "curve", fn: f, domain: dom, samples: 200, cls: "curve" },
+          { type: "dot", x: -2, y: -6, r: 3 },
+          { type: "text", x: 2.45, y: 12, tex: "y\\!=\\!f(x)", cls: "a-curve", anchor: "start" },
+          { type: "text", x: -2.35, y: -6, tex: "\\text{min}", cls: "a-pt", anchor: "end" },
+        ],
+      }));
+
+      // --- bottom panel: f' (same horizontal scale as the top) ---
+      var bot = buildPlot(Object.assign({}, common, {
+        h: 210, ymin: -9, ymax: 9,
+        xticks: [{ x: -2, tex: "-2" }],
+        aria: "Graph of f'(x)=2x+4, a line crossing zero at x=-2; negative to the left, positive to the right.",
+        items: [
+          { type: "vline", x: -2, cls: "refline" },
+          { type: "curve", fn: fp, domain: dom, samples: 12, cls: "curve" },
+          { type: "dot", x: -2, y: 0, r: 3 },
+          { type: "text", x: 2.45, y: 7, tex: "y\\!=\\!f'(x)", cls: "a-curve", anchor: "start" },
+          { type: "text", x: -5.6, y: -4.5, tex: "f'<0", cls: "a-pt", anchor: "start" },
+          { type: "text", x: -1.4, y: 4.5, tex: "f'>0", cls: "a-pt", anchor: "start" },
+        ],
+      }));
+
+      return { layout: "stack", panels: [{ svg: top + bot }] };
+    },
+
+    /* §2.4 — e^x is its own derivative: tangent lines at x=0 and x=1
+       showing that slope = function value at each point. */
+    "exp-self-derivative": () => {
+      var e1 = Math.exp(1);
+      return {
+        layout: "single",
+        panels: [{
+          svg: buildPlot({
+            w: 400, h: 300, xmin: -2, xmax: 3, ymin: -1, ymax: 8.5,
+            xlabel: "x", ylabel: "y",
+            aria: "Graph of y equals e to the x with tangent lines at x equals 0 and x equals 1, showing that the slope at each point equals the function value.",
+            xticks: [{ x: 1, tex: "1" }],
+            yticks: [{ y: 1, tex: "1" }, { y: e1, tex: "e" }],
+            items: [
+              { type: "curve", fn: (x) => Math.exp(x), domain: [-1.8, 2.15], samples: 200, cls: "curve" },
+              { type: "curve", fn: (x) => x + 1, domain: [-1.3, 1.5], cls: "refline" },
+              { type: "curve", fn: (x) => e1 * x, domain: [0, 2.5], cls: "refline" },
+              { type: "dot", x: 0, y: 1 },
+              { type: "dot", x: 1, y: e1 },
+              { type: "text", x: 2.5, y: 7.8, tex: "y=e^{x}", cls: "a-curve", anchor: "start" },
+              { type: "text", x: -1.3, y: 0.2, tex: "\\text{slope}=1=e^{0}", cls: "a-ref", anchor: "start" },
+              { type: "text", x: 1.8, y: 5.2, tex: "\\text{slope}=e=e^{1}", cls: "a-ref", anchor: "start" },
+            ],
+          }),
+        }],
+      };
+    },
+
+    /* §2.5 — f(x)=x/(x²+1) and its derivative, stacked.
+       Top: f with horizontal tangents at x=±1. Bottom: f' with zeros
+       at ±1 and f'(0)=1, confirming Example 2.16's sanity check. */
+    "quotient-example-graph": () => {
+      var f = function (x) { return x / (x * x + 1); };
+      var fp = function (x) { return (1 - x * x) / Math.pow(x * x + 1, 2); };
+      var dom = [-4.5, 4.5];
+      var common = { w: 420, xmin: -5, xmax: 5, xlabel: "x" };
+
+      var top = buildPlot(Object.assign({}, common, {
+        h: 200, ymin: -0.65, ymax: 0.65, ylabel: "y",
+        xticks: [{ x: -1, tex: "-1" }, { x: 1, tex: "1" }],
+        yticks: [{ y: 0.5, tex: "\\tfrac{1}{2}" }, { y: -0.5, tex: "-\\tfrac{1}{2}" }],
+        aria: "Graph of f(x) = x over (x squared plus 1), with horizontal tangents at x = plus or minus 1.",
+        items: [
+          { type: "curve", fn: f, domain: dom, samples: 300, cls: "curve" },
+          { type: "dot", x: 1, y: 0.5 },
+          { type: "dot", x: -1, y: -0.5 },
+          { type: "hline", y: 0.5, from: 0.5, to: 1.5, cls: "refline" },
+          { type: "hline", y: -0.5, from: -1.5, to: -0.5, cls: "refline" },
+          { type: "text", x: 4.2, y: -0.3, tex: "f(x)=\\tfrac{x}{x^{2}+1}", cls: "a-curve", anchor: "end" },
+        ],
+      }));
+
+      var bot = buildPlot(Object.assign({}, common, {
+        h: 200, ymin: -0.5, ymax: 1.2, ylabel: "y",
+        xticks: [{ x: -1, tex: "-1" }, { x: 1, tex: "1" }],
+        aria: "Graph of f prime of x equals (1 minus x squared) over (x squared plus 1) squared, zero at x = plus or minus 1.",
+        items: [
+          { type: "curve", fn: fp, domain: dom, samples: 300, cls: "curve" },
+          { type: "dot", x: 1, y: 0 },
+          { type: "dot", x: -1, y: 0 },
+          { type: "text", x: 4.2, y: 0.6, tex: "f'(x)=\\tfrac{1-x^{2}}{(x^{2}+1)^{2}}", cls: "a-curve", anchor: "end" },
+          { type: "text", x: 0.3, y: 1.1, tex: "f'(0)=1", cls: "a-pt", anchor: "start" },
+        ],
+      }));
+
+      return { layout: "stack", panels: [{ svg: top + bot }] };
+    },
+
+    /* §2.3 (enrichment) — f(x)=∛x: vertical tangent at the origin (Example 2.12).
+       S-shaped curve through the origin (solid dot — f(0) exists); secant lines
+       from the origin steepen toward vertical as Q→0 (slope→∞), so f'(0) does not
+       exist — a non-corner failure of differentiability (contrast Figure 2.3). */
+    "cbrt-vertical-tangent": () => {
+      var f = function (x) { return Math.cbrt(x); };
+      var sec = function (qx) {
+        var m = f(qx) / qx;
+        return { type: "curve", fn: function (x) { return m * x; }, domain: [-4.5, 4.5], samples: 6, cls: "refline" };
+      };
+      var items = [
+        sec(2.6), sec(1.0), sec(0.35),
+        { type: "curve", fn: f, domain: [-4.5, 4.5], samples: 260, cls: "curve" },
+        { type: "dot", x: 0, y: 0, r: 3.5 },
+        { type: "dot", x: 2.6, y: f(2.6), r: 2.2 },
+        { type: "dot", x: 1.0, y: f(1.0), r: 2.2 },
+        { type: "dot", x: 0.35, y: f(0.35), r: 2.2 },
+        { type: "text", x: 3.4, y: f(3.4) + 0.2, tex: "y=\\sqrt[3]{x}", cls: "a-curve", anchor: "start" },
+        { type: "text", x: -0.25, y: 1.62, tex: "\\text{vertical tangent}", cls: "a-ref", anchor: "end", size: 12 },
+        { type: "text", x: -0.25, y: 1.18, tex: "(\\text{slope} \\to \\infty)", cls: "a-ref", anchor: "end", size: 12 },
+      ];
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 420, h: 290, xmin: -4.5, xmax: 4.5, ymin: -1.9, ymax: 1.9,
+        xlabel: "x", ylabel: "y",
+        aria: "Graph of y equals cube root of x, an S-shaped curve through the origin with a vertical tangent there; secant lines from the origin steepen toward vertical as the second point approaches the origin, so the derivative at zero does not exist.",
+        items: items,
+      }) }] };
+    },
+
+    /* §2.1 (enrichment) — anatomy of the difference quotient (h-form + Caution).
+       One secant from P=(a,f(a)) to Q=(a+h,f(a+h)); the run leg h and the rise
+       leg f(a+h)-f(a) make slope = rise/run visible and cement that the
+       numerator is f(a+h)-f(a), not f(h). */
+    "difference-quotient-anatomy": () => {
+      var f = function (x) { return 0.2 * x * x + 0.5; };
+      var a = 1.5, h = 2.5, b = a + h;
+      var fa = f(a), fb = f(b);
+      var m = (fb - fa) / h;
+      var items = [
+        { type: "curve", fn: f, domain: [0.1, 5.05], samples: 200, cls: "curve" },
+        { type: "curve", fn: function (x) { return fa + m * (x - a); }, domain: [0.85, 4.7], samples: 6, cls: "arrow-bwd" },
+        { type: "seg", x1: a, y1: fa, x2: b, y2: fa, cls: "refline" },
+        { type: "seg", x1: b, y1: fa, x2: b, y2: fb, cls: "refline" },
+        { type: "dot", x: a, y: fa, r: 3.2 },
+        { type: "dot", x: b, y: fb, r: 3.2 },
+        { type: "text", x: a - 0.12, y: fa - 0.34, tex: "P", cls: "a-pt", anchor: "end" },
+        { type: "text", x: b + 0.15, y: fb + 0.08, tex: "Q", cls: "a-pt", anchor: "start" },
+        { type: "text", x: (a + b) / 2, y: fa - 0.36, tex: "h", cls: "a-ref", anchor: "middle" },
+        { type: "text", x: b + 0.18, y: (fa + fb) / 2, tex: "f(a+h)-f(a)", cls: "a-ref", anchor: "start", size: 12 },
+        { type: "text", x: 1.05, y: 4.15, tex: "y=f(x)", cls: "a-curve", anchor: "start" },
+      ];
+      return { layout: "single", panels: [{ svg: buildPlot({
+        w: 440, h: 300, xmin: -0.3, xmax: 6, ymin: -0.3, ymax: 5,
+        xlabel: "x", ylabel: "y",
+        xticks: [{ x: a, tex: "a" }, { x: b, tex: "a+h" }],
+        aria: "A curve y equals f of x with a secant line from P at (a, f of a) to Q at (a plus h, f of a plus h); a horizontal leg labeled h and a vertical leg labeled f of a plus h minus f of a form the run and rise whose ratio is the slope of the secant.",
+        items: items,
+      }) }] };
+    },
+
+  };
+
+  /* ---- hydrateFigures: fills every <figure data-fig="id"> ---- */
+  function hydrateFigures(root) {
+    (root || document).querySelectorAll("[data-fig]").forEach(function (el) {
+      var def = FIGS[el.dataset.fig];
+      if (!def || el.dataset.figDone) return;
+      var r = def();
+      var layout = r.layout, panels = r.panels;
+      var html;
+      if (layout === "single" && panels.length === 1 && !panels[0].note) {
+        html = '<div class="figure-art">' + panels[0].svg + '</div>';
+      } else {
+        var cls = { pair: "figure-art--pair", triple: "figure-art--triple", grid: "figure-art--grid" }[layout] || "";
+        html = '<div class="figure-art ' + cls + '">' +
+          panels.map(function (p) {
+            return '<div class="fig-panel">' + p.svg + (p.note ? '<div class="fig-note">' + p.note + '</div>' : '') + '</div>';
+          }).join("") + '</div>';
+      }
+      el.insertAdjacentHTML("afterbegin", html);
+      el.dataset.figDone = "1";
+    });
+  }
+  window.hydrateFigures = hydrateFigures;
+})();
+</script>
+
+<!-- Main build script (paginator + MathJax) -->
+<script>
+(function () {
+  function waitFor(test, tries) {
+    return new Promise(function (res) {
+      var i = 0;
+      (function tick() {
+        if (test()) return res(true);
+        if (++i > tries) return res(false);
+        setTimeout(tick, 150);
+      })();
+    });
+  }
+  function build() {
+    var page = document.getElementById("page");
+    var tpl = document.getElementById("figs-only");
+    page.innerHTML = tpl ? tpl.innerHTML : "";
+    if (window.hydrateFigures) window.hydrateFigures(page);
+    waitFor(function () { return window.MathJax && window.MathJax.typesetPromise; }, 400)
+      .then(function (ok) {
+        if (!ok) { document.getElementById("boot").textContent = "MathJax load timeout"; return; }
+        return MathJax.typesetPromise([page]).catch(function (e) { console.warn("mathjax", e); });
+      })
+      .then(function () {
+        return document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+      })
+      .then(function () {
+        var boot = document.getElementById("boot");
+        if (boot) boot.remove();
+      });
+  }
+  window.addEventListener("DOMContentLoaded", build);
+})();
+</script>
+</body>
+</html>

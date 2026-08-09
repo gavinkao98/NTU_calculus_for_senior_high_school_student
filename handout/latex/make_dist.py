@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
-r"""產「成品夾」：dist/<ch>/ 裡乾乾淨淨兩個檔——<name>.tex（自足、可直接編譯）＋<name>.pdf。
+r"""【已退役 2026-08-09（LaTeX 統一 P1）——留檔供歷史參照，勿再對已升格單元使用】
+
+12 單元已全數首轉並升格：內容源＝latex/src/<ch>/<name>.tex（手改），fragment 樹凍結。
+對升格單元跑本工具會用**凍結的 fragment 覆寫 dist**——日常編譯改用：python build.py <ch>。
+拍板見 KICKOFF-latex-unification.md（U1）。以下為退役前的原說明。
+
+────────────────────────────────────────────────────────────
+
+產「成品夾」：dist/<ch>/ 裡乾乾淨淨兩個檔——<name>.tex（自足、可直接編譯）＋<name>.pdf。
 
     python make_dist.py appB
 
@@ -29,7 +37,10 @@ HERE = Path(__file__).resolve().parent
 
 # 單元 id → 成品檔名（與 chapters/<ch>/ driver 同名；rollout 逐章加）
 NAMES = {
+    "appA": "appendixA",
     "appB": "appendixB",
+    "appC": "appendixC",
+    "appD": "appendixD",
     "ch01": "chapter1",
     "ch02": "chapter2",
     "ch03": "chapter3",
@@ -37,6 +48,7 @@ NAMES = {
     "ch05": "chapter5",
     "ch06": "chapter6",
     "ch07": "chapter7",
+    "ch08": "chapter8",
 }
 
 HEADER = """% !TeX program = lualatex
