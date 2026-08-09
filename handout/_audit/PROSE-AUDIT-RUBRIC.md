@@ -2,7 +2,7 @@
 
 > 本檔是「散文稽核」兩道閘——**Claude subagent（gate 1）**與 **Codex 獨立（gate 2）**——共用的契約與**單一真相來源（single source of truth）**。兩道閘都讀本檔判斷；維度／擋稿線**只在這裡改一次**。
 >
-> 語域與結構的**權威規範**見 [`CONTENT_SPEC.md`](../../../CONTENT_SPEC.md) §3（語域與語聲）、§15（最終一致性檢查）。本檔只定「審哪些維度、哪些擋稿、哪些不算 finding、怎麼回報」，**不重述** §3 的規範本身。
+> 語域與結構的**權威規範**見 [`CONTENT_SPEC.md`](../../CONTENT_SPEC.md) §3（語域與語聲）、§15（最終一致性檢查）。本檔只定「審哪些維度、哪些擋稿、哪些不算 finding、怎麼回報」，**不重述** §3 的規範本身。
 
 ## 審查對象與邊界
 
@@ -23,7 +23,7 @@
 - **U3 未解釋的邏輯跳躍** — 自學讀者無法自行重建的一步，缺 *because*／*therefore*／*since* 等橋接（§3 明文禁止「未解釋的邏輯跳躍」）。
 - **U4 術語／記號先用後定義** — 術語或 notation 在被引入前就使用，把讀者晾住（forward dependency）。
   - **blocking 限於「讀者被晾住、無法從使用處的散文重建其義」。** 若記號在使用處當場以散文 gloss、讀者可重建其義 → 降為 advisory（建議調整順序，但不擋稿）。
-  - **結構性排序（需 reorder）優先往上游：** 若修法是「**把一個定義／介紹段搬到它首次被用之前**」（非在使用處補一句 gloss）——例如新記號在 example 用掉後才正式定義（ch01 §1.4 `=∞` 即此型）——這是**結構**問題，最便宜的修點在 Mode A 方向層（[`CONTENT_DIRECTION.md`](../../../CONTENT_DIRECTION.md) §2「範圍與深度」之 introduce-before-use），**編號鎖定後才搬會 cascade 編號與 cross-ref**。散文閘照報此 U4，但**標明「需 reorder＝結構，宜上游處理」**，別在定稿期硬搬。
+  - **結構性排序（需 reorder）優先往上游：** 若修法是「**把一個定義／介紹段搬到它首次被用之前**」（非在使用處補一句 gloss）——例如新記號在 example 用掉後才正式定義（ch01 §1.4 `=∞` 即此型）——這是**結構**問題，最便宜的修點在 Mode A 方向層（[`CONTENT_DIRECTION.md`](../../CONTENT_DIRECTION.md) §2「範圍與深度」之 introduce-before-use），**編號鎖定後才搬會 cascade 編號與 cross-ref**。散文閘照報此 U4，但**標明「需 reorder＝結構，宜上游處理」**，別在定稿期硬搬。
 - **U5 定義後未拆解** — 重定義之後沒有散文解拆「這條件排除了什麼／該怎麼讀」（§3：definition 後的散文解拆）。
 
 ### B. 流暢性 Fluency（copyedit；全 ADVISORY）
@@ -37,13 +37,13 @@
   - **黏接句判準（2026-07-25 新增，同日經 Codex 覆核修訂；CONTENT_SPEC §3 平實英文條款連動）：** 對 EFL 讀者，殘餘難度的主要來源是「一句內塞兩個可獨立成立的推論或教學動作」。**判準是論述動作數，不是長度也不是子句數**——定義、條件＋結果、公式說明、平行列舉各自都算**一個**動作，這類長句**不算 finding**（不得因長度報 F4）。觸發器（≥30 詞＋黏接訊號：冒號接子句／分號／破折號／and-while-which 串接）只是**要人工看一眼**，不是拆句命令。
   - **不得報為 finding**：正式定義與定理陳述、平行列舉、路線圖句、引文；冒號後引清單／公式／標籤者不算「冒號接子句」。
   - **反向護欄**：改寫 MUST NOT 拆散量詞 scope、條件—結論、代名詞與先行詞；MUST NOT 造出連續三句長度相近的連續散文（以朗讀聽感判，排除列表與刻意平行）；MUST NOT 為維持句數而用任何標點把兩個獨立推論黏回一句。符號密集段落優先改 display／分行 skeleton／先立記號，而非按詞數切句。
-  - **成對破折號不歸本維度逐句判（2026-07-25 合併）：** em-dash 是**節級密度指標**（canonical 量測與目標見 CONTENT_SPEC §3「成對破折號與標點負載」、腳本 [`tools/prose_metrics.py`](../../../tools/prose_metrics.py)），**不得**當成 case-by-case finding 報。成對破折號依 §3 的四步仲裁決策序判；單破折號尾巴進 CUT palette。已有先例：`— far more often —` KEEP、`— only then —` 預設 KEEP。
+  - **成對破折號不歸本維度逐句判（2026-07-25 合併）：** em-dash 是**節級密度指標**（canonical 量測與目標見 CONTENT_SPEC §3「成對破折號與標點負載」、腳本 [`tools/prose_metrics.py`](../../tools/prose_metrics.py)），**不得**當成 case-by-case finding 報。成對破折號依 §3 的四步仲裁決策序判；單破折號尾巴進 CUT palette。已有先例：`— far more often —` KEEP、`— only then —` 預設 KEEP。
   - **原因標籤（合併 sweep 必附）：** 每個改點標 `DASH-CUT`／`DASH-KEEP`／`PLAIN-SPLIT`／`TIC-REBALANCE`／`R1-LEXICAL`，並在報告並列 em-dash／冒號接子句／分號／左括號／成對逗號的前後值（顯著＝raw ≥+3 且密度 ≥+0.5/1000 才須填理由）。
 - **F5 語域** — hedge、過度口語（*super easy*、*you guys*）、黑板縮寫（*iff*、*w.r.t.*、*s.t.*）、代名詞策略（*we* 預設；*you* 僅用於溫和提醒或 forward reference）。
 
 ### C. 語意／聲音 Substance／Altitude／Voice（S/A/V 語意層 critic；部分 BLOCKING）
 
-讀者「會不會覺得這是機器寫的」——但**不是數 tell／密度，是讀意思**。**中性 ≠ AI；中性＋空才是 AI**（[`PLAN-deai-semantic-critic.md`](../../../authoring/_archive/deai/PLAN-deai-semantic-critic.md) §0）。對每個候選句/段跑下面三組診斷，**每條 finding 強制附證據**。
+讀者「會不會覺得這是機器寫的」——但**不是數 tell／密度，是讀意思**。**中性 ≠ AI；中性＋空才是 AI**（[`PLAN-deai-semantic-critic.md`](../../authoring/_archive/deai/PLAN-deai-semantic-critic.md) §0）。對每個候選句/段跑下面三組診斷，**每條 finding 強制附證據**。
 
 **S — Substance（這句掙得它的位置嗎？）**
 - **S1 資訊** — 相對前句、相對數學式本身，有沒有加**新洞見**？（只把算式翻成英文卻沒加東西＝空）
@@ -110,11 +110,11 @@ EFL 讀者「查不查得出這句在說什麼」。據 CONTENT_SPEC §3〈平�
 
 ## 可選：跨模型 first-read 第二讀者（每章定稿前一次）
 
-易懂性 A 的 reader-persona 校準，可由**一個外部模型**（DeepSeek／Codex／Gemini 等，不同訓練分布＝fresh eyes）跑一輪 first-read 補強——這是 [`CONTENT_DIRECTION.md`](../../../CONTENT_DIRECTION.md) §5 floated 的「偶爾請第三模型抽查」的具體落地。定位：**選用、每章定稿前一次**（非每次編輯都跑），且**外部 raw 輸出一律過本檔 U／F 維度＋四級 triage 後才交裁決**——不直接吃。
+易懂性 A 的 reader-persona 校準，可由**一個外部模型**（DeepSeek／Codex／Gemini 等，不同訓練分布＝fresh eyes）跑一輪 first-read 補強——這是 [`CONTENT_DIRECTION.md`](../../CONTENT_DIRECTION.md) §5 floated 的「偶爾請第三模型抽查」的具體落地。定位：**選用、每章定稿前一次**（非每次編輯都跑），且**外部 raw 輸出一律過本檔 U／F 維度＋四級 triage 後才交裁決**——不直接吃。
 
 兩條硬紀律（2026-06-28 實證，ch01 校準）：
 
-1. **餵乾淨 inline 文字，別讓模型自己讀檔。** Codex 在本機用 `-C <repo>` 自讀源檔會把 UTF-8 解成亂碼（`—`→`??`、`§`→`禮`、彎引號→`?`），整批「編碼 bug」全是假陽性、甚至誤判 worst stall。把源文字預先以 UTF-8 解好、**inline 進 prompt**（DeepSeek 路線）即免疫。（與 [`CONTENT_DIRECTION.md`](../../../CONTENT_DIRECTION.md) §5 工程坑「prompt 餵入 CJK 重編碼」是**兩個相關但不同**的坑：一個在輸入端、一個在模型自讀端。）
+1. **餵乾淨 inline 文字，別讓模型自己讀檔。** Codex 在本機用 `-C <repo>` 自讀源檔會把 UTF-8 解成亂碼（`—`→`??`、`§`→`禮`、彎引號→`?`），整批「編碼 bug」全是假陽性、甚至誤判 worst stall。把源文字預先以 UTF-8 解好、**inline 進 prompt**（DeepSeek 路線）即免疫。（與 [`CONTENT_DIRECTION.md`](../../CONTENT_DIRECTION.md) §5 工程坑「prompt 餵入 CJK 重編碼」是**兩個相關但不同**的坑：一個在輸入端、一個在模型自讀端。）
 2. **reasoning 模型 run-to-run 會飄、且偏 over-report**（實測 severity 灌水成 Lost、夾帶吹毛求疵的詞彙替換）→ raw 不可直接吃，必接四級 triage（核 no-dumbing、重評嚴重度、砍 non-finding）。（2026-07-25 起的界線：帶 R1／R2 證據的詞彙 finding 屬正常 R 維度 finding、不算吹毛求疵；無證據的純同義詞美化才砍。）**多跑取聯集、優先採兩模型交集**（交集＝最低後悔）。
 
 ## 回報規格

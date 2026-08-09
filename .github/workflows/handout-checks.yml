@@ -22,20 +22,14 @@ jobs:
       # default targets are the live LaTeX sources (handout/latex/src/**/*.tex)
       # plus the frozen HTML fragments. A failure means prose has an ASCII " or '.
       - name: Lint prose quotes (CONTENT_SPEC §8, tex + frozen fragments)
-        run: python handout/html/quote_lint.py
+        run: python tools/quote_lint.py
 
       # doc_lint.py is stdlib-only; verifies relative markdown links in active
       # guidance docs resolve to existing files (archives / legacy excluded).
       - name: Lint doc links (broken relative links)
         run: python tools/doc_lint.py
 
-      # Freeze enforcement (LaTeX unification P1): the HTML authoring line is
-      # frozen — fragments and standalones must stay byte-identical to the last
-      # built state. A diff here means someone edited a frozen fragment (edit
-      # handout/latex/src/<ch>/*.tex instead) or hand-edited a standalone.
-      # LaTeX compile/glyph gates run locally (python handout/latex/build.py);
-      # CI has no TeX distribution by design.
-      - name: Enforce frozen HTML line (fragments -> standalone reproducible)
-        run: |
-          python handout/html/build.py
-          git diff --exit-code -- 'handout/html/standalone/chapter*-print-standalone.html'
+      # The frozen HTML line moved to legacy/html_handout/ (2026-08-09 restructure);
+      # legacy/ is reference-only and not CI-enforced, so the old freeze-enforcement
+      # build step is retired. LaTeX compile/glyph gates run locally
+      # (python handout/latex/build.py); CI has no TeX distribution by design.

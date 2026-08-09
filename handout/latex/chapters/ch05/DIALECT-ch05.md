@@ -2,7 +2,7 @@
 
 > 比照 [`../ch04/DIALECT-ch04.md`](../ch04/DIALECT-ch04.md)：**這是 `convert.py` 的權威 mapping 表**，
 > 轉換器只認這裡列的節點，其餘一律硬錯（[`../../KICKOFF-latex-pilot.md`](../../KICKOFF-latex-pilot.md) §4.2 fail-loud）。
-> 盤點對象＝`../../../html/fragments/ch05/sec-5-{1..9}.html`。
+> 盤點對象＝`../../../../legacy/html_handout/fragments/ch05/sec-5-{1..9}.html`。
 > 盤點日：2026-07-26。重跑：`python handout/latex/dialect_inventory.py ch05`。
 
 ## 1. 摘要
@@ -20,7 +20,7 @@
 
 `num` 維持純 `esc`：`env-num` 是編號（`5.5`），帶數學即屬體例錯誤，應由不變式擋下而非放行。
 
-測試（[`../../test_convert.py`](../../test_convert.py)，90 tests）：
+測試（[`../../../../legacy/html2latex/test_convert.py`](../../../../legacy/html2latex/test_convert.py)，90 tests）：
 `test_env_kicker_math_is_restored`（kicker 數學須還原）＋
 `test_env_kicker_math_ordering_before_env_name`（kicker → name → body 的還原順序）。
 
@@ -61,7 +61,7 @@ committed 版零內容差異（ch03 另跑完整四閘：612 段數學、22 頁�
 
 ## 5. 圖
 
-11 張圖以 `node export_figs.mjs ../html/standalone/chapter5-print-standalone.html chapters/ch05/figs`
+11 張圖以 `node export_figs.mjs ../../legacy/html_handout/standalone/chapter5-print-standalone.html chapters/ch05/figs`
 匯出成 12 個向量 PDF panel（`figs/` 是 gitignored 中間物，隨時可由 standalone 重生）。
 面板寬度 64–85 mm，皆單欄內。`concavity-tangents` 是本章唯一的雙 panel 圖，兩條 panel note
 的上畫面文字經圖內文字閘確認抵達 PDF。

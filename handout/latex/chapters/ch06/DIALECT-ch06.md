@@ -25,7 +25,7 @@
 
 ## 3. 圖資產（12 panel）
 
-`node export_figs.mjs ../html/standalone/chapter6-print-standalone.html chapters/ch06/figs` → `figs/*.pdf` ＋ `figs/figures.json`（皆 gitignored）。版心實測 566.94px、`liveWidthMm` 150。
+`node export_figs.mjs ../../legacy/html_handout/standalone/chapter6-print-standalone.html chapters/ch06/figs` → `figs/*.pdf` ＋ `figs/figures.json`（皆 gitignored）。版心實測 566.94px、`liveWidthMm` 150。
 
 - 9 個 `<figure>`；多 panel 者：`riemann-lr-x2`×2（HTML `pair`）、`refinement-rn-x2`×3（HTML `triple`）。
 - mm 寬區間 53.80–85.64（最寬 `ftc-trap`、最窄 `semicircle-area`）。
@@ -78,4 +78,4 @@
 
 - 第 3 頁 Figure 6.1（pair，2×66.67mm 併排）、第 4 頁 Figure 6.2（triple → 2＋1，見 §3.1）、第 7 頁 Figure 6.3（含 `\text{}` 標籤）皆正常。
 - Figure 6.3 的 `v (m/s)` 標籤與 y 軸箭頭僅相鄰不重疊（600 dpi 放大確認）。
-- 本輪散文改動（[`../../../html/_audit/REVIEW-ch06-plain-applied.html`](../../../html/_audit/REVIEW-ch06-plain-applied.html)）在 PDF 上落地正確，例如 §6.1 收尾的 “The next section names this common limit the *definite integral* and introduces its symbol.” 與 §6.2 開場的 “Here we name the common limit the *definite integral* and introduce its symbol.”
+- 本輪散文改動（[`../../../_audit/REVIEW-ch06-plain-applied.html`](../../../_audit/REVIEW-ch06-plain-applied.html)）在 PDF 上落地正確，例如 §6.1 收尾的 “The next section names this common limit the *definite integral* and introduces its symbol.” 與 §6.2 開場的 “Here we name the common limit the *definite integral* and introduce its symbol.”

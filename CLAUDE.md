@@ -7,7 +7,7 @@
 | 產線 | 路徑 | 說明 |
 |------|------|------|
 | LaTeX 講義（唯一源＋出版線） | `handout/latex/` | **2026-08-09 拍板：講義線＋影片線統一走 LaTeX**——`src/<ch>/*.tex` 升格唯一內容源（ch03 pilot 已收），memoir 模板 → 出版級 A4 PDF。遷移計畫＝[`handout/latex/KICKOFF-latex-unification.md`](handout/latex/KICKOFF-latex-unification.md)（supersede 2026-07-17「先 HTML 後轉換」拍板） |
-| HTML 講義（已凍結） | `handout/html/` | fragment／standalone／`build.py` 為歷史快照；`_audit`／`_dev-archive`／`_render/shot.mjs` 仍服役；圖繪製住 `handout/figkit/`（JS kit 縮編為畫圖工具，U2） |
+| HTML 講義（已封存） | `legacy/html_handout/` | fragment／standalone／`build.py`／舊契約的歷史快照（2026-08-09 佈局重構移入；轉換產線工具在 `legacy/html2latex/`）。活資產已升層：rubric＋REVIEW 在 `handout/_audit/`、章 PLAN 在 `handout/_dev-archive/`、圖繪製與 `shot.mjs` 在 `handout/figkit/` |
 | Manim 影片 | `video/` | 旁白＋動畫＋TTS；`make.py` 建置（詳見 [`video/README.md`](video/README.md)） |
 | 舊 LaTeX 講義 | `legacy/tex_handout/` | 已凍結，僅供參照（與 `handout/latex/` 無關） |
 
@@ -61,7 +61,7 @@ tts.py --backend mock             # 離線 TTS mock（不計費，可逕行）
 - **三-mode 撰寫流程（[`CONTENT_AUTHORING_WORKFLOW.md`](CONTENT_AUTHORING_WORKFLOW.md) §Mode B）下，Mode B 的稽核裁決與發現寫進該次修正 commit 的 message body**（subject ≤70 字、body 逐條：原本是什麼、為何不妥、改了什麼、引用證據），好讓未來對話用 `git log --grep="Mode B"` 撈回。參考 commit：`112aa5c`、`0ef06ee`。純 Mode A 或例行 bugfix 不適用。
   - **commit-grep 分流（2026-06-15）：** 上述 `Mode B` 是**講義**線。**video 旁白的忠實稽核已改名 NFA**（旁白忠實稽核，原 video「Mode B」；契約 [`video/content_scripts/_audit/NARRATION-FAITHFULNESS-RUBRIC.md`](video/content_scripts/_audit/NARRATION-FAITHFULNESS-RUBRIC.md)），其裁決同樣寫進修正 commit body，但用 `git log --grep="NFA"` 撈回（與講義 `Mode B` 分流，免兩條線混在同一 grep）。
 - **給使用者審核的交付物要用「打開就能讀」的形式（2026-06-12 使用者要求）：** 含數學式的審核文件**不要**交塞滿生 LaTeX 的 `.md`，改產出 standalone HTML（MathJax/KaTeX CDN，雙擊即開、數學即渲染）或其他可直接閱讀的形式。版控紀錄性質的文檔不在此限；凡「等使用者過目裁決」的東西一律照此辦理。**報告的框架／說明文字一律繁體中文（2026-07-11 使用者提醒）**——比照上方「與使用者對話一律用繁體中文」規則，僅**引文原句、數學式（LaTeX）、識別碼（finding ID／維度碼 D1–D8 等）、檔名／路徑、shell、技術術語**保留英文原樣；書中被審的英文課文引文照登不譯。
-- **每完成一輪撰寫後也要產 HTML 報告（2026-06-15 使用者要求）：** 不只「待裁決」的候選／findings 要 HTML——**凡完成一輪內容撰寫（Mode A／C 等），都要對實際寫入的內容另產一份 standalone HTML 報告**（MathJax/KaTeX CDN、雙擊即開、數學即渲染），逐條呈現所寫段落＋locus＋`[source:]`＋該輪 Mode B 結果，供使用者過目，不要只在對話裡給文字摘要。比照 [`handout/html/_audit/REVIEW-ch01-modec-candidates.html`](handout/html/_audit/REVIEW-ch01-modec-candidates.html) 的形式，檔名用 `REVIEW-…-applied.html` 之類，與「候選／裁決稿」分開。
+- **每完成一輪撰寫後也要產 HTML 報告（2026-06-15 使用者要求）：** 不只「待裁決」的候選／findings 要 HTML——**凡完成一輪內容撰寫（Mode A／C 等），都要對實際寫入的內容另產一份 standalone HTML 報告**（MathJax/KaTeX CDN、雙擊即開、數學即渲染），逐條呈現所寫段落＋locus＋`[source:]`＋該輪 Mode B 結果，供使用者過目，不要只在對話裡給文字摘要。比照 [`handout/_audit/REVIEW-ch01-modec-candidates.html`](handout/_audit/REVIEW-ch01-modec-candidates.html) 的形式，檔名用 `REVIEW-…-applied.html` 之類，與「候選／裁決稿」分開。
 - **審核 finding 修完後必須回歸審核（2026-06-12 使用者要求）：** 修完 blocking／advisory finding 後，不可直接宣告完成——必須對修改過的項目重新跑一輪審核（Codex 或手動比對均可），確認修改本身沒有引入新問題。回歸審核的結果附在原稽核文檔中記錄。
 
 ## 程式／工程任務的行為準則（Karpathy guidelines）

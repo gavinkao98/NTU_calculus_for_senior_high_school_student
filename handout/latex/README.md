@@ -2,7 +2,7 @@
 
 > **2026-08-09 LaTeX 統一（U1）**：本線＝**唯一內容源＋唯一工作線**。內容住
 > `src/<ch>/<name>.tex`（手改／LLM 改；升格自原 dist 自足 tex），HTML 撰稿線已凍結
-> （[`../html/README.md`](../html/README.md)）。權威計畫與拍板＝
+> （[`../../legacy/html_handout/README.md`](../../legacy/html_handout/README.md)）。權威計畫與拍板＝
 > [`KICKOFF-latex-unification.md`](KICKOFF-latex-unification.md)；模板沿革（D1–D10）＝
 > [`KICKOFF-latex-pilot.md`](KICKOFF-latex-pilot.md)。
 

@@ -28,7 +28,7 @@
 
 ## 3. 圖資產（33 panel，`export_figs.mjs` 全數匯出）
 
-`node export_figs.mjs ../html/standalone/chapter1-print-standalone.html chapters/ch01/figs` → `figs/*.pdf` ＋ `figs/figures.json`（皆 gitignored，`*.pdf`）。版心實測 566.94px、`liveWidthMm` 150。
+`node export_figs.mjs ../../legacy/html_handout/standalone/chapter1-print-standalone.html chapters/ch01/figs` → `figs/*.pdf` ＋ `figs/figures.json`（皆 gitignored，`*.pdf`）。版心實測 566.94px、`liveWidthMm` 150。
 
 - 25 個 `<figure>`；多 panel 者：`hlt`×2、`limit-same-near-a`×3、`recip-x-vs-x2`×2、`one-sided-infinite`×4、`epsilon-delta-dynamic`×2。
 - mm 寬區間 42.86–132.82（最寬 `sine-not-1to1`、最窄 `limit-same-near-a-*`）。
@@ -59,7 +59,7 @@
 ### 5.1 為了收這兩道閘修掉的兩個真缺陷
 
 1. **panel 內的 `.fig-note` 被裁掉（閘 3c 抓到）。** 症狀：`recip-x-vs-x2` 兩格的 `y = 1/x²`／`y = 1/x` 沒抵達 PDF，該 panel 的 PDF 文字層只有 1 個字元。**真因不是墨水框**——墨水框（202×188px＝svg ∪ note）其實正確；問題在 wrapper 只把 **panel** 重申為實測尺寸，**沒重申 svg 自己的尺寸**。活頁面用 per-figure 自訂屬性（`hydrateFigures` 把 `--fig-N-M` 寫成 `<figure>` 的 **inline style**）把該 svg 壓到 `max-width:200px`（inline 卻寫 `width:244px`、viewBox 244×196）；wrapper 複製祖先鏈時**只保留 class／data-fig**，那個變數不在，於是 svg 以 244px 寬重繪、高約多 35px，把 note 推到 page box 之外。**修法**：clone 的 svg 加 `.fx-svg`，並以實測 `width`／`height` 釘死（與既有「panel 重申實測尺寸」同一原則）。修後兩格文字層 8／6 字元、視覺確認 note 回來且圖形回到 1:1。
-2. **`fig-map` 嵌入無法驗的 Times New Roman（閘 4 抓到）。** 字形閘只驗 CFF 輪廓，`DAAAAA+TimesNewRomanPSMT`（CID TrueType）判「無法驗」而擋稿。**真因**：Figure 1.2 的標籤 `f⁻¹` 用了 **U+207B／U+00B9**（全書活散文各僅此一處），而圖內標籤實際走的是 `--ui`＝**Inter**，Inter 沒有這兩個字 → Chrome 逐字 fallback 到系統 Times。**注意這代表 HTML 預覽本來也是用系統字型在畫這兩個字**。**修法（改源頭）**：`f⁻¹` → `f<tspan dy="-5" font-size="0.72em">-1</tspan>`（`handout/html/fragments/ch01/sec-1-1.html:224`），視覺等價、字元全在 Inter 字集內。修後 `fig-map.pdf` 只含 Inter 子集，全 33 panel 無任何 Times。
+2. **`fig-map` 嵌入無法驗的 Times New Roman（閘 4 抓到）。** 字形閘只驗 CFF 輪廓，`DAAAAA+TimesNewRomanPSMT`（CID TrueType）判「無法驗」而擋稿。**真因**：Figure 1.2 的標籤 `f⁻¹` 用了 **U+207B／U+00B9**（全書活散文各僅此一處），而圖內標籤實際走的是 `--ui`＝**Inter**，Inter 沒有這兩個字 → Chrome 逐字 fallback 到系統 Times。**注意這代表 HTML 預覽本來也是用系統字型在畫這兩個字**。**修法（改源頭）**：`f⁻¹` → `f<tspan dy="-5" font-size="0.72em">-1</tspan>`（`legacy/html_handout/fragments/ch01/sec-1-1.html:224`），視覺等價、字元全在 Inter 字集內。修後 `fig-map.pdf` 只含 Inter 子集，全 33 panel 無任何 Times。
    - 途中試過、**已撤除**的做法（留紀錄免得再走）：用 `kpsewhich` 找模板的 NewCM OTF、注入 `@font-face` 給 wrapper。(a) `file://` 的字型抓取被 Chrome 當跨 opaque origin 擋掉（加 `--allow-file-access-from-files` 仍 `document.fonts.check==false`）；(b) 改 data: URI 後 face 狀態仍 `error`；(c) 而且方向本來就錯——那些標籤是 Inter、不是 serif。三次實測後改回源頭修。
 
 ### 5.2 多 panel 圖的 grid 版面（2026-07-26 已修）

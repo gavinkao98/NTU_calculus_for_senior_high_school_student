@@ -1,7 +1,7 @@
 # LaTeX writing contract — 講義章節源（`src/<ch>/<name>.tex`）
 
 > **權威撰稿標記契約（2026-08-09 LaTeX 統一起）**，取代 HTML 時代的
-> [`../html/CONTRACT-html-writing.md`](../html/CONTRACT-html-writing.md)（後者隨 fragment 凍結，
+> [`../../legacy/html_handout/CONTRACT-html-writing.md`](../../legacy/html_handout/CONTRACT-html-writing.md)（後者隨 fragment 凍結，
 > 留檔供讀歷史源）。Register 與 correctness 規則與舊契約**逐字等義**（它們與格式無關）；
 > 變的只有表層標記——以及編號：**手寫編號時代結束，一律語意化**（見 §Numbering）。
 > 內容撰寫規則（用語、密度、§16 難度、圖規範）仍以 [`../../CONTENT_SPEC.md`](../../CONTENT_SPEC.md)
@@ -115,7 +115,7 @@ refstep 該 kicker 的 counter（每型獨立、章內連續、`\cbchapter` 供�
 ```
 
 **存量 provenance 的家＝凍結 fragment**（12 單元的 `<!-- expansion:… -->` 與
-`<!-- section-source: -->` header 在 `../html/fragments/`，轉換時未帶進 `.tex`——查歷史
+`<!-- section-source: -->` header 在 `../../legacy/html_handout/fragments/`，轉換時未帶進 `.tex`——查歷史
 標記去那裡 grep）；**增量從本規則起在 `.tex` 註解**。
 
 ## Prose typography

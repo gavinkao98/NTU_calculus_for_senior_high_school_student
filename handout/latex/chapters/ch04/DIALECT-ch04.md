@@ -2,7 +2,7 @@
 
 > 比照 [`../ch03/DIALECT-ch03.md`](../ch03/DIALECT-ch03.md)：**這是 `convert.py` 的權威 mapping 表**，
 > 轉換器只認這裡列的節點，其餘一律硬錯（[`../../KICKOFF-latex-pilot.md`](../../KICKOFF-latex-pilot.md) §4.2 fail-loud）。
-> 盤點對象＝`../../../html/fragments/ch04/sec-4-{1..5}.html`。
+> 盤點對象＝`../../../../legacy/html_handout/fragments/ch04/sec-4-{1..5}.html`。
 > 盤點日：2026-07-26。重跑：`python handout/latex/dialect_inventory.py ch04`。
 
 ## 1. 摘要

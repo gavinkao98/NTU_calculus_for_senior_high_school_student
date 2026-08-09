@@ -3,7 +3,7 @@
 <!-- 原檔名 REVIEW_REDESIGN.md，2026-06-16 更名為 REVIEW_MODEL_DECISIONS.md（與產線格式契約 DESIGN.md 區隔，免「design/redesign」混淆）。 -->
 
 
-> **狀態：已採用（收尾於 2026-06-16）。** 本檔原為「參考講義審核模式、重構 video mode／審核」的設計提案；**minimal-unify 全主體＋當初延後的 code 回報層 normalize 皆已落地**——本檔自此轉為**決策紀錄**（不再有待續工程），活的流程地圖以 [REVIEW_GATES.md](REVIEW_GATES.md) 為準、進度錨以 [REBUILD_STATUS.md](REBUILD_STATUS.md) 為準。落地清單見 §八（含 2026-06-16 code 收尾）。講義審核的權威契約見 [`../handout/html/_audit/PROSE-AUDIT-RUBRIC.md`](../handout/html/_audit/PROSE-AUDIT-RUBRIC.md)、[`../handout/html/_audit/FIGURE-AUDIT-RUBRIC.md`](../handout/html/_audit/FIGURE-AUDIT-RUBRIC.md)；三-mode 狀態機在根 [`../README.md`](../README.md) §撰稿工作流程。
+> **狀態：已採用（收尾於 2026-06-16）。** 本檔原為「參考講義審核模式、重構 video mode／審核」的設計提案；**minimal-unify 全主體＋當初延後的 code 回報層 normalize 皆已落地**——本檔自此轉為**決策紀錄**（不再有待續工程），活的流程地圖以 [REVIEW_GATES.md](REVIEW_GATES.md) 為準、進度錨以 [REBUILD_STATUS.md](REBUILD_STATUS.md) 為準。落地清單見 §八（含 2026-06-16 code 收尾）。講義審核的權威契約見 [`../handout/_audit/PROSE-AUDIT-RUBRIC.md`](../handout/_audit/PROSE-AUDIT-RUBRIC.md)、[`../handout/_audit/FIGURE-AUDIT-RUBRIC.md`](../handout/_audit/FIGURE-AUDIT-RUBRIC.md)；三-mode 狀態機在根 [`../README.md`](../README.md) §撰稿工作流程。
 >
 > **已拍板的決定（2026-06-15）：**
 > 1. 走 **minimal-unify**（統一回報 + 抽 rubric + 解命名衝突），**不重寫、不造狀態機**。✅ 已落地。
@@ -132,7 +132,7 @@ video 今天唯一**客觀**的缺口是:五個判斷閘**沒有任何一個寫�
 
 **已裁決（2026-06-15）：**
 
-- **rubric 檔案位置 → 平鋪在 `_audit/`**（比照 `handout/html/_audit/`），不開 `RUBRICS/` 子目錄。理由：本輪只 4 份 rubric（其中 2 份已寫），不足以撐子目錄；平鋪降低「比照講義」的認知成本；子目錄是投機性結構，等檔案真多再抽。
+- **rubric 檔案位置 → 平鋪在 `_audit/`**（比照 `handout/_audit/`），不開 `RUBRICS/` 子目錄。理由：本輪只 4 份 rubric（其中 2 份已寫），不足以撐子目錄；平鋪降低「比照講義」的認知成本；子目錄是投機性結構，等檔案真多再抽。
 - **code-rubric 抽取深度 → `critic.py` runtime 載入、且 verbatim-inject**：把整份 `VISUAL-FRAME-RUBRIC.md` body 原文塞進 prompt（不解析 section），既是真 SSOT 又幾乎零增量 code，消掉「多 code」缺點。header 註解指標出局（就是要殺的 drift 陷阱）。工程鏡在 `.tex` parser 修好前**整個不抽**。
 - **採用時機 → 重新框定**：rubric 是**全域契約、非 per-section 狀態**，抽出即所有未來節共用，沒有「試點一節再 roll」這回事。NFA 改名全域立即；真正 per-section 的只有**回歸驗證**（拿已收斂節證明抽 rubric 沒漂移）。又因講義已修、舊片全屬練習要整批重跑，原 §五 step 7（拿 §1.3 `cb98ebf` 回歸驗證）**降級為選用**：可在刪練習稿前花十分鐘做一次靜態維度等價檢查（驗 rubric≡原內嵌維度），或直接拿第一個真正重跑的節當驗證。
 

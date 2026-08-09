@@ -17,9 +17,9 @@ model: inherit
 
 # 開審前先讀（權威依據，勿憑記憶）
 
-1. [`handout/html/_audit/FIGURE-OPPORTUNITY-RUBRIC.md`](handout/html/_audit/FIGURE-OPPORTUNITY-RUBRIC.md) — 鏡頭、提案 schema、keep／drop 維度、non-findings、輸出格式（**本審的契約、單一真相來源**）。
+1. [`handout/_audit/FIGURE-OPPORTUNITY-RUBRIC.md`](handout/_audit/FIGURE-OPPORTUNITY-RUBRIC.md) — 鏡頭、提案 schema、keep／drop 維度、non-findings、輸出格式（**本審的契約、單一真相來源**）。
 2. [`CONTENT_SPEC.md`](CONTENT_SPEC.md) §10（圖表與色彩：何時加圖、`[FIGURE-OPPORTUNITY]` schema、label economy、工具選擇與 kit 能力）。
-3. 該章的 figure 現況與既往決策：該章 `handout/html/_dev-archive/chNN/PLAN-chNN.md` 的編號 ledger（既有圖、刻意 no-figure 的決定）、與目標源檔的 provenance 註解。
+3. 該章的 figure 現況與既往決策：該章 `handout/_dev-archive/chNN/PLAN-chNN.md` 的編號 ledger（既有圖、刻意 no-figure 的決定）、與目標源檔的 provenance 註解。
 
 若這些與使用者當下交付的指示衝突，以當下指示為準，並在輸出指出該衝突。
 
@@ -41,6 +41,6 @@ model: inherit
 
 回傳 RUBRIC 的輸出格式（`VERDICT` 行 + 逐條候選卡 + 駁回項及理由 + 末行收斂結論）作為你的**最終文字訊息**。一次審多節時逐節各一塊、末給全章彙總（總候選數、各 priority 計數）。
 
-**你是唯讀、不寫檔。** 給使用者裁決的 standalone HTML 交付稿（比照 [`handout/html/_audit/REVIEW-ch03-figure-opportunity.html`](handout/html/_audit/REVIEW-ch03-figure-opportunity.html)）由**父代理／orchestrator** 彙整你的 findings 後落檔——**你不要自己貼整份 HTML 原始碼**（你沒有 Write 工具，貼了也是浪費 token；父代理會做）。你只要把每個候選的欄位講清楚、可被直接照抄成卡片即可。
+**你是唯讀、不寫檔。** 給使用者裁決的 standalone HTML 交付稿（比照 [`handout/_audit/REVIEW-ch03-figure-opportunity.html`](handout/_audit/REVIEW-ch03-figure-opportunity.html)）由**父代理／orchestrator** 彙整你的 findings 後落檔——**你不要自己貼整份 HTML 原始碼**（你沒有 Write 工具，貼了也是浪費 token；父代理會做）。你只要把每個候選的欄位講清楚、可被直接照抄成卡片即可。
 
 **效率（別過度探索）：** 讀目標章源 ＋ RUBRIC ＋ `CONTENT_SPEC §10` ＋該節既有圖的 `\figcaption`（先 `Grep 'figcaption'`）即足以判斷；**不需**逐行掃 figkit harness 的 `FIGS` 實作——要確認 kit 畫不畫得出，看既有同型圖的 figcaption、或頂多一兩個 `FIGS` entry（`handout/figkit/figs-<ch>.html`）即可。聚焦本節，別反覆全章搜尋。

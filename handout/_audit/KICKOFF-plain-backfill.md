@@ -1,6 +1,6 @@
 # Kickoff：散文平實化回填（合併 sweep）——每單元的關卡序
 
-> **新對話直接用：** 對新對話說「讀 `handout/html/_audit/KICKOFF-plain-backfill.md` 並對 ch07 執行」即可開跑。本檔是**流程權威**（跑哪些關卡、擋稿線、要不要徵同意、產物命名）；**判準權威**在 [`CONTENT_SPEC.md`](../../../CONTENT_SPEC.md) §3〈平實英文條款〉（狀態：RC，2026-07-25 凍結）。
+> **新對話直接用：** 對新對話說「讀 `handout/_audit/KICKOFF-plain-backfill.md` 並對 ch07 執行」即可開跑。本檔是**流程權威**（跑哪些關卡、擋稿線、要不要徵同意、產物命名）；**判準權威**在 [`CONTENT_SPEC.md`](../../CONTENT_SPEC.md) §3〈平實英文條款〉（狀態：RC，2026-07-25 凍結）。
 
 ## 這條線在做什麼（一段背景）
 
@@ -14,8 +14,8 @@
 
 1. `CLAUDE.md`（根）＋ `handout/CLAUDE.md` — 專案紀律：Codex 唯讀調用**逐次徵同意**、繁中對話、commit body 逐條記 Mode B、fragment 是唯一內容源。
 2. `CONTENT_SPEC.md` §3〈平實英文條款〉— **判準**：MUST／SHOULD／FLAG 三層、暖句四條件、**成對破折號與標點負載**（量測、`T_can`、CUT palette、四步仲裁決策序、先例、不換 tic 護欄、原因標籤、固定執行序、兩閘不可互相豁免）、段落層數值。
-3. `handout/html/_audit/PROSE-AUDIT-RUBRIC.md` — 四維度（U 易懂／F 流暢＋黏接判準／S·A·V 語意聲音／**R 語域平實**）、擋稿線、non-findings。
-4. `handout/html/_audit/REPORT-emdash-baseline-and-rollout.md` — 基準與 rollout 帳本（canonical 現況表、超額件數排序、每輪完成後回來打勾）。
+3. `handout/_audit/PROSE-AUDIT-RUBRIC.md` — 四維度（U 易懂／F 流暢＋黏接判準／S·A·V 語意聲音／**R 語域平實**）、擋稿線、non-findings。
+4. `handout/_audit/REPORT-emdash-baseline-and-rollout.md` — 基準與 rollout 帳本（canonical 現況表、超額件數排序、每輪完成後回來打勾）。
 5. 前例報告（照這個形狀產出）：`REVIEW-mainline-plain-walk.html`（走查）、`REVIEW-ch06-sec-6-2-plain-applied.html`（執行＋math gate）、`REVIEW-ch06-sec-6-3-plain-applied.html`（含段落標準）、`REVIEW-merge-dedash-plain-proposal.html`（合併設計）。
 
 ## 關卡序（每單元一輪；⛳＝停下來交付／徵詢）
@@ -49,7 +49,7 @@
 
 ### Gate 4 — build ＋ 量測回歸（blocking）
 
-- `python handout/html/build.py <unit>`。
+- `python legacy/html_handout/build.py <unit>`。
 - `python tools/prose_metrics.py --unit <unit>` → 對照 Gate 0 前值：
   - em-dash 密度須達 **`T_can` ≤ 3.0/1000**（canonical）；`N < 1000` 的單元報 raw `n/N`、與鄰近單元合併判定。
   - **不換 tic**：四項標點任一「raw ≥ +3 **且** 密度 ≥ +0.5/1000」→ MUST 填理由。
@@ -80,7 +80,7 @@
 
 ### Gate 8 — 版面目檢
 
-開 `handout/html/standalone/<unit>-print-standalone.html`，看分頁：孤行、溢頁、圖文相鄰。**拆句與拆段會增加行數**，這關不能省。
+開 `legacy/html_handout/standalone/<unit>-print-standalone.html`，看分頁：孤行、溢頁、圖文相鄰。**拆句與拆段會增加行數**，這關不能省。
 
 ### Gate 9 — 紀錄與提交
 

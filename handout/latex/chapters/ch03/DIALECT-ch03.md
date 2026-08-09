@@ -2,12 +2,12 @@
 
 > LaTeX pilot（[`../../KICKOFF-latex-pilot.md`](../../KICKOFF-latex-pilot.md)）M-P0 的落檔產物。
 > **這是 `convert.py` 的權威 mapping 表**：轉換器只認這裡列的節點，其餘一律硬錯（kickoff §4.2 fail-loud）。
-> 盤點對象＝`../../../html/fragments/ch03/sec-3-{1,2,3}.html`（880 行）＋ `../../../html/standalone/chapter3-print-standalone.html` 的 `FIGS`。
+> 盤點對象＝`../../../../legacy/html_handout/fragments/ch03/sec-3-{1,2,3}.html`（880 行）＋ `../../../../legacy/html_handout/standalone/chapter3-print-standalone.html` 的 `FIGS`。
 > 盤點日：2026-07-15。重跑：`python handout/latex/dialect_inventory.py ch03`。
 
 ## 1. 摘要
 
-- **34 種 tag＋class 組合**，全部落在 [`../../../html/CONTRACT-html-writing.md`](../../../html/CONTRACT-html-writing.md) 的封閉方言內，**零意外標記**。
+- **34 種 tag＋class 組合**，全部落在 [`../../../../legacy/html_handout/CONTRACT-html-writing.md`](../../../../legacy/html_handout/CONTRACT-html-writing.md) 的封閉方言內，**零意外標記**。
 - **數學：inline `\(…\)` ×544、display `\[…\]` ×61**（皆為註解外的活數學）。數學區段內**零非 ASCII 字元**。
 - **圖：7 個 `<figure data-fig>` ／ 8 個 SVG panel**（`remainder-tangent` 是 pair，兩格）。
 - **活散文只用 6 個非 ASCII 字元**（見 §4），NCM 全數有字。
@@ -72,7 +72,7 @@
 | `code`／`kbd`／`strong` | ch03 未使用（散文只用 `<em>`，符合 CONTRACT） |
 | `ol[start]` → `\setcounter` | ch03 的 `ol` 只有 `ol.steps`，無 `start` |
 | `env-corollary` | ch03 未使用 |
-| `p em`「First reading:／Proof track:」 | ch03 無 reading-track 段落（只在 `../../../html/fragments/ch01/sec-1-6.html`） |
+| `p em`「First reading:／Proof track:」 | ch03 無 reading-track 段落（只在 `../../../../legacy/html_handout/fragments/ch01/sec-1-6.html`） |
 | `figure-art--triple`／`--grid` → minipage | ch03 只有 `--pair` ×1 |
 
 ## 4. 字元盤點（「log 0 missing character」DoD 的依據）

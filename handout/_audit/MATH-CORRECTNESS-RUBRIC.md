@@ -2,11 +2,11 @@
 
 > **本審契約（單一真相來源）。** 審「**教什麼、對不對**」——課文散文／定義／定理／推導裡的數學是否成立。這正是散文稽核（怎麼寫、讀者跟不跟得上）與圖稽核（畫得對不對）都**明文排除**的那一塊。
 >
-> **目前的消費者：** Mode B 主審（Claude 主流程直接走查，見 [`../../../CONTENT_AUTHORING_WORKFLOW.md`](../../../CONTENT_AUTHORING_WORKFLOW.md) §Mode B「其他 Mode B 發現 §數學正確性」）＋ 定稿前的 **Codex 獨立複核**（吃配額、先徵同意）。**本檔刻意先於 subagent 落地**：維度／擋稿線在這裡定一次，未來若要把 gate 1 包成 `handout-math-audit` 唯讀 subagent，直接引本檔即可，不必另立規則（比照 `handout-prose-audit`／`handout-figure-audit` 與其 rubric 的關係）。
+> **目前的消費者：** Mode B 主審（Claude 主流程直接走查，見 [`../../CONTENT_AUTHORING_WORKFLOW.md`](../../CONTENT_AUTHORING_WORKFLOW.md) §Mode B「其他 Mode B 發現 §數學正確性」）＋ 定稿前的 **Codex 獨立複核**（吃配額、先徵同意）。**本檔刻意先於 subagent 落地**：維度／擋稿線在這裡定一次，未來若要把 gate 1 包成 `handout-math-audit` 唯讀 subagent，直接引本檔即可，不必另立規則（比照 `handout-prose-audit`／`handout-figure-audit` 與其 rubric 的關係）。
 >
 > **被審物：** 講義章節源（`handout/latex/src/<ch>/<name>.tex`，2026-08-09 LaTeX 統一起）的數學內容；手稿章（Ch1–4）並對照該節的**手稿**、canon 章對照 brief／canon 藍本。
 >
-> **依據：** [`../../../CONTENT_AUTHORING_WORKFLOW.md`](../../../CONTENT_AUTHORING_WORKFLOW.md) §Mode B（「數學正確性」發現用 *「請查核 X」* 框架；§238 數學內容**以手稿為準**）＋ [`../../../CONTENT_SPEC.md`](../../../CONTENT_SPEC.md) §5（proof 為選用、預設省略）／§7（公式呈現）／§9（記號）／§15（最終一致性檢查）。本檔只定「審哪些維度、哪些擋稿、哪些不算 finding、怎麼回報」，**不重述**那些規範本身。
+> **依據：** [`../../CONTENT_AUTHORING_WORKFLOW.md`](../../CONTENT_AUTHORING_WORKFLOW.md) §Mode B（「數學正確性」發現用 *「請查核 X」* 框架；§238 數學內容**以手稿為準**）＋ [`../../CONTENT_SPEC.md`](../../CONTENT_SPEC.md) §5（proof 為選用、預設省略）／§7（公式呈現）／§9（記號）／§15（最終一致性檢查）。本檔只定「審哪些維度、哪些擋稿、哪些不算 finding、怎麼回報」，**不重述**那些規範本身。
 >
 > **性質：** 唯讀、blocking＋advisory 分流、**一律提議不行動**——findings 用 *「請查核 X」* 框架交使用者裁決，**不自行改、不自行刪**。
 
@@ -35,7 +35,7 @@
 
 - **M6 記號一致性（§9／手稿）** — 同一物件在節內與跨節記號一致、符合 §9 canonical list；某符號定義後不被悄悄改義。**與手稿的記號差異一律當 *「請查核：是有意升級還是該對齊回手稿」* 的問題提出，不自行判錯**（README §203／§238）。**造成真歧義／誤讀 → Blocking；單純風格 drift、不致誤解 → Advisory**。
 - **M7 跨陳述／跨節一致** — 同一結果在兩處陳述是否相符、後節引用前節結果是否落在其陳述的假設內、同一數值／公式兩處是否一致。**真矛盾 → Blocking**。
-- **M8 隱性假設未揭示** — 某主張倚賴一個**未陳明、且在書中此處尚不可用**的前提（如尚未引入連續性就拿來用、默默假設可微）。與 prose `U4`（術語先用後定義，**讀者**跟不上）區別：M8 是**數學健全性**——前提缺位使主張不成立，而非可讀性。**使主張不健全 → Blocking；前提為真但該明說 → Advisory**。（純排序／可讀性版歸 prose `U4`；若其修法是**搬動定義／介紹段**的結構性 reorder，最便宜在 Mode A 方向層攔、別等晚期 cascade 編號——見 [`../../CONTENT_DIRECTION.md`](../../../CONTENT_DIRECTION.md) §2。）
+- **M8 隱性假設未揭示** — 某主張倚賴一個**未陳明、且在書中此處尚不可用**的前提（如尚未引入連續性就拿來用、默默假設可微）。與 prose `U4`（術語先用後定義，**讀者**跟不上）區別：M8 是**數學健全性**——前提缺位使主張不成立，而非可讀性。**使主張不健全 → Blocking；前提為真但該明說 → Advisory**。（純排序／可讀性版歸 prose `U4`；若其修法是**搬動定義／介紹段**的結構性 reorder，最便宜在 Mode A 方向層攔、別等晚期 cascade 編號——見 [`../../CONTENT_DIRECTION.md`](../../CONTENT_DIRECTION.md) §2。）
 
 ## 擋稿線（blocking vs advisory）
 

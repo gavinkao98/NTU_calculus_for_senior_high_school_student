@@ -2,7 +2,7 @@
 
 > **目的：** 記錄 gate 1（Claude prose-audit subagent）的驗證，作為「為何信任這道閘」的版控憑據。
 > **日期：** 2026-06-14。
-> **相關檔：** [`PROSE-AUDIT-RUBRIC.md`](PROSE-AUDIT-RUBRIC.md)（契約）、[`PROSE-AUDIT-PROMPT.template.md`](PROSE-AUDIT-PROMPT.template.md)（gate 2 Codex）、[`../../.claude/agents/handout-prose-audit.md`](../../../.claude/agents/handout-prose-audit.md)（gate 1 subagent）、[`REVIEW-ch01-prose-audit-gate1.html`](REVIEW-ch01-prose-audit-gate1.html)／[`REVIEW-ch01-prose-audit-gate2.html`](REVIEW-ch01-prose-audit-gate2.html)（兩道閘各一份審核稿，可雙擊開、數學即渲染）。
+> **相關檔：** [`PROSE-AUDIT-RUBRIC.md`](PROSE-AUDIT-RUBRIC.md)（契約）、[`PROSE-AUDIT-PROMPT.template.md`](PROSE-AUDIT-PROMPT.template.md)（gate 2 Codex）、[`../../.claude/agents/handout-prose-audit.md`](../../.claude/agents/handout-prose-audit.md)（gate 1 subagent）、[`REVIEW-ch01-prose-audit-gate1.html`](REVIEW-ch01-prose-audit-gate1.html)／[`REVIEW-ch01-prose-audit-gate2.html`](REVIEW-ch01-prose-audit-gate2.html)（兩道閘各一份審核稿，可雙擊開、數學即渲染）。
 
 ## 驗證了兩條路徑
 
@@ -59,11 +59,11 @@ gate 2（Codex 獨立複核）已於 2026-06-15 對 ch01 整章執行，**亦 0 
 
 ## Mode C 第一輪（ch01 軟深度充實，2026-06-15）
 
-第一章主軸於 2026-06-15 凍結（見 [`../../CONTENT_ROADMAP.md`](../../../CONTENT_ROADMAP.md) Ch 1 entry）後，執行首次 Mode C 充實回合，範圍限定軟深度（intuition／application／caution／strategy）。
+第一章主軸於 2026-06-15 凍結（見 [`../../CONTENT_ROADMAP.md`](../../CONTENT_ROADMAP.md) Ch 1 entry）後，執行首次 Mode C 充實回合，範圍限定軟深度（intuition／application／caution／strategy）。
 
 - **偵察：** 7 節並行 gap-walk，產 38 條候選；裁決稿 [`REVIEW-ch01-modec-candidates.html`](REVIEW-ch01-modec-candidates.html)。使用者裁定「13 條 high-confidence 動手，其餘待研究」。
 - **已寫入（13 條，皆帶 `[pass: enrichment]` 標記）：** §1.1 Caution 1.1（\(f^{-1}\)≠倒數）＋ role-swap intuition；§1.2 arccos \([0,\pi]\)／arctan \(\mathbb{R}\) 兩條 why-intuition ＋ Caution 1.4（arccos/arctan 域限）；§1.3 Caution 1.5（表格陷阱 \(\sin(\pi/x)\)）＋ velocity application（\(v(2)=-24\)）；§1.4 Caution 1.6（\(\lim=\infty\)≠存在）＋ Strategy 1.2（找垂直漸近線）；§1.5 limit-laws intuition ＋ Caution 1.7（商定律須分母非零）；§1.6 ε-δ tolerance application ＋ challenge-response intuition。
 - **連號維護：** Caution 全章重排為 1.1–1.7、Strategy 新增 1.2（原 1.2／1.3 → 1.3／1.4）。build.py 不自動編號；grep 確認無散文以編號交叉引用這些環境，重排安全。
 - **Mode B 收尾（gate-1，範圍限定新 `[pass: enrichment]`）：** 6 節並行盲審，**整輪 0 blocking** → Mode C 通過。advisory 裁決：§1.4「suspect factor」用詞不一致 → 改為「the denominator's zero … cancelled by the numerator」；§1.6 容差長句 → 拆兩句；其餘 optional（§1.2 principal-range 順序、§1.4 step-1 子句、§1.6 輕度回響）裁定保留。修正後 `python build.py ch01` 重組。
-- **figure 閘（新基建，與 prose 閘對稱）：** [`FIGURE-AUDIT-RUBRIC.md`](FIGURE-AUDIT-RUBRIC.md)（維度 D1–D8）＋ gate-1 subagent `.claude/agents/handout-figure-audit.md`（看 render 後 PNG、唯讀，`git add -f` 納版控）＋ render harness [`../_render/shot.mjs`](../_render/shot.mjs)（Node CDP 截圖；本機已裝 Node v24）。gate-2＝Codex `-i` 看圖、定稿前複核（計費、徵同意）。視覺審 run-to-run drift 為先前誤判已撤（見 `authoring/seed_converge/SYNTHESIS.md`）。
+- **figure 閘（新基建，與 prose 閘對稱）：** [`FIGURE-AUDIT-RUBRIC.md`](FIGURE-AUDIT-RUBRIC.md)（維度 D1–D8）＋ gate-1 subagent `.claude/agents/handout-figure-audit.md`（看 render 後 PNG、唯讀，`git add -f` 納版控）＋ render harness [`../figkit/shot.mjs`](../figkit/shot.mjs)（Node CDP 截圖；本機已裝 Node v24）。gate-2＝Codex `-i` 看圖、定稿前複核（計費、徵同意）。視覺審 run-to-run drift 為先前誤判已撤（見 `authoring/seed_converge/SYNTHESIS.md`）。
 - **下一步：** ① gate-2（Codex）對這 13 條新散文獨立複核（計費、需同意）；② 其餘 25 條候選（figure-notes、medium、history 待驗源等）待使用者研究後再議。

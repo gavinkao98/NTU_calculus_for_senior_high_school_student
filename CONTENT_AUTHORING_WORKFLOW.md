@@ -17,13 +17,13 @@
 | 章層收尾 | 使用者簽核 | 章層 Codex review ＋ `REVIEW-ch{NN}-applied.html` 交使用者過目 |
 | 反幻覺 | 轉錄忠實度（①-verify）＋Mode B | hypothesis ledger＋Codex 對抗審＋章末 sympy 全例重算 |
 | provenance | 主軸不標；非翻譯增添標 `expansion:` | 各節開頭 `% section-source:` 註解；教學增添標 `% expansion:`（2026-08-09 起在 `.tex` 源；歷史章的 `<!-- … -->` 在凍結 fragment） |
-| 先例 | Ch1–4 | **Ch5**（[`handout/html/_dev-archive/ch05/PLAN-ch05.md`](handout/html/_dev-archive/ch05/PLAN-ch05.md)）＋附錄 A–D |
+| 先例 | Ch1–4 | **Ch5**（[`handout/_dev-archive/ch05/PLAN-ch05.md`](handout/_dev-archive/ch05/PLAN-ch05.md)）＋附錄 A–D |
 
 **閱讀對照規則：** 在 canon 變體中，下文 Mode A／Mode B 各節出現的「手稿」一律讀作「canon 藍本」；「忠實度」的審查對象由「手稿轉錄」換成「canon 覆蓋義務＋hypothesis ledger」。其餘機制（expansion 標記與類別、具名內容政策、密度校準、不重複規則、擴增稽核九項）**兩變體完全共用**。
 
 ## 無手稿章節（canon-as-spine）——Ch5 起的預設變體
 
-比照附錄 A／B／C 無手稿先例放大到 mainline：**以 canon 為數學主軸、全閘把關**。首個實證＝Ch5（9 節全數 Mode A 完成、逐節 Codex ⑤ 收斂 0 blocking、sympy 數學閘 33/33、章層 Codex review；as-built 見 [`handout/html/_dev-archive/ch05/PLAN-ch05.md`](handout/html/_dev-archive/ch05/PLAN-ch05.md)）。
+比照附錄 A／B／C 無手稿先例放大到 mainline：**以 canon 為數學主軸、全閘把關**。首個實證＝Ch5（9 節全數 Mode A 完成、逐節 Codex ⑤ 收斂 0 blocking、sympy 數學閘 33/33、章層 Codex review；as-built 見 [`handout/_dev-archive/ch05/PLAN-ch05.md`](handout/_dev-archive/ch05/PLAN-ch05.md)）。
 
 - **Spine＝canon 藍本。** 各章 roster、深度基調（深理論核心／標準嚴謹／嚴謹陳述＋fence）照 [`CONTENT_ROADMAP.md`](CONTENT_ROADMAP.md)「Ch5–16 弧線骨架」與 [`CONTENT_SPEC.md`](CONTENT_SPEC.md) §16.3 逐章深度決策；跨章 export/import 契約（非 provisional）照全局 seam ledger。
 - **Provenance 兩件套（2026-08-09 起以 `.tex` 註解形式；歷史章的 HTML 註解在凍結 fragment）：**
@@ -104,7 +104,7 @@ Claude 可在未事先授權的情況下圍繞 spine 擴充，條件是 HTML 片
 
 ```powershell
 grep "% expansion:" handout/latex/src/chNN/*.tex      # 2026-08-09 起的增添
-grep "<!-- expansion:" handout/html/fragments/chNN/*.html   # 歷史章（凍結 fragment）
+grep "<!-- expansion:" legacy/html_handout/fragments/chNN/*.html   # 歷史章（凍結 fragment）
 ```
 
 ——使用者一眼看盡每一處非 spine 的增添，逐一標記決定*保留*、*改寫*或*移除*，無須將整章與 spine 全文比對。
@@ -153,7 +153,7 @@ grep "<!-- expansion:" handout/html/fragments/chNN/*.html   # 歷史章（凍結
    - **Caution**（`caution`）：一個特定陷阱或微妙限制。**不**重述它所附著的定義或定理；讀者就近仍有那些內容。
    - **總結**（`summary`，章末）：每個項目一行提醒（定義以其一句精要、定理以其條件與結論、公式以其裸恆等式）。**不**重新證明、重新推導或重新鋪陳動機。
 
-2. **指向，不重述。** 當較早引入的概念再度出現時，使用明確的交叉參照（指向手寫編號的散文引用，例如 *「由定理 4.2」*、*「如 §1.3 所介紹，……的極限」*；HTML 片段中為指向手寫編號的純散文引用，無 `\cref`、無超連結，見 [`handout/html/CONTRACT-html-writing.md`](handout/html/CONTRACT-html-writing.md)）而非重述內容。交叉參照是誠實的：它表明「我們有這個，它在這裡」。重述是不誠實的：它假裝該概念是新的。
+2. **指向，不重述。** 當較早引入的概念再度出現時，使用明確的交叉參照（指向手寫編號的散文引用，例如 *「由定理 4.2」*、*「如 §1.3 所介紹，……的極限」*；HTML 片段中為指向手寫編號的純散文引用，無 `\cref`、無超連結，見 [`legacy/html_handout/CONTRACT-html-writing.md`](legacy/html_handout/CONTRACT-html-writing.md)）而非重述內容。交叉參照是誠實的：它表明「我們有這個，它在這裡」。重述是不誠實的：它假裝該概念是新的。
 
 3. **深度分層的再現。** 同一概念可出現三次（章首、節首、總結），條件是每次出現處於不同深度：
    - 章首：一句話將概念安置於脈絡之中；
@@ -177,9 +177,9 @@ Mode A 回合並非在 spine 轉成 HTML 片段後就算完成。在把章節交
 4. **邊界情況或反例。** 該節是否包含至少一個邊界情況、反例，或顯示技巧何時失效的非範例？（`example` 或 `caution`）
 5. **Caution 方塊。** 常見錯誤、正負號陷阱或記號陷阱是否被捕捉為 `caution` 方塊？（`caution`）
 6. **Strategy 提煉。** 當該節有兩個以上範例共用一個方法時，該方法是否被提煉為 `strategy` 方塊？（`strategy`）
-7. **視覺推理。** 受益於圖像的概念，是否都由 `figure` 構想承載？此項以**圖機會稽核 gate** 系統化執行，而非只憑印象標一兩張 ROADMAP key figure：跑 `handout-figure-opportunity-audit` subagent（依 [`handout/html/_audit/FIGURE-OPPORTUNITY-RUBRIC.md`](handout/html/_audit/FIGURE-OPPORTUNITY-RUBRIC.md)），雙鏡頭（幾何直觀／函數行為＋密度）掃出 vetted 建議插圖清單，逐條交使用者裁決；核可者才落地（素材本身可延後至媒體工作再做）。此為「該不該加圖」（opportunity）的閘——圖落地、render 後另跑「畫出來對不對」（D1–D8 correctness）的視覺 gate。canon 變體中，圖機會亦於 brief 的 `figure_opportunities` 欄前置規劃（見 [`CONTENT_DIRECTION.md`](CONTENT_DIRECTION.md) §2），本項改為收尾覆核。（`figure`）
+7. **視覺推理。** 受益於圖像的概念，是否都由 `figure` 構想承載？此項以**圖機會稽核 gate** 系統化執行，而非只憑印象標一兩張 ROADMAP key figure：跑 `handout-figure-opportunity-audit` subagent（依 [`handout/_audit/FIGURE-OPPORTUNITY-RUBRIC.md`](handout/_audit/FIGURE-OPPORTUNITY-RUBRIC.md)），雙鏡頭（幾何直觀／函數行為＋密度）掃出 vetted 建議插圖清單，逐條交使用者裁決；核可者才落地（素材本身可延後至媒體工作再做）。此為「該不該加圖」（opportunity）的閘——圖落地、render 後另跑「畫出來對不對」（D1–D8 correctness）的視覺 gate。canon 變體中，圖機會亦於 brief 的 `figure_opportunities` 欄前置規劃（見 [`CONTENT_DIRECTION.md`](CONTENT_DIRECTION.md) §2），本項改為收尾覆核。（`figure`）
 8. **收尾綜合。** 該節是否以綜合性散文作結，將範例與定理收束回該節的標題結果？（`summary`）
-9. **AI-texture sweep。** 對每個 `expansion:` marker 緊接的散文，跑 banned-list 與密度檢查（可用 `vale <源檔>` 取預標，對照 [`handout/html/_audit/PROSE-AUDIT-RUBRIC.md`](handout/html/_audit/PROSE-AUDIT-RUBRIC.md) Dimension C）；對每個 flag：**補上**（改寫成更具體、變句長、砍空心 signposting）**或記錄**為刻意保留（roadmap *Open questions*）。比照其餘 8 項「補上或記錄」的處置。
+9. **AI-texture sweep。** 對每個 `expansion:` marker 緊接的散文，跑 banned-list 與密度檢查（可用 `vale <源檔>` 取預標，對照 [`handout/_audit/PROSE-AUDIT-RUBRIC.md`](handout/_audit/PROSE-AUDIT-RUBRIC.md) Dimension C）；對每個 flag：**補上**（改寫成更具體、變句長、砍空心 signposting）**或記錄**為刻意保留（roadmap *Open questions*）。比照其餘 8 項「補上或記錄」的處置。
 
 任何一項給出*否*都是可接受的，前提是該刻意省略有被記錄——規則是**補上或記錄**，而非「每一節都必須拿 9/9」。在 roadmap 的 *Open questions* 中記錄省略，讓使用者能於簽核時同意、反駁，或補上缺失的部分；悄悄略過該項則會產生教科書密度目標所要防止的「翻譯講義」感。
 
@@ -222,8 +222,8 @@ Mode A 回合並非在 spine 轉成 HTML 片段後就算完成。在把章節交
 
 獨立於逐標記裁決之外，Claude 另行標示：
 
-- **規格合規**——對照 [`CONTENT_SPEC.md`](CONTENT_SPEC.md) 的規則違反：不允許的結構或元件、散文中以 `<b>`／`<strong>` 代替 `<em>` 做強調、ASCII 直引號、未指向手寫編號的交叉參照、缺少章節開頭結構等（HTML 標記細節見 [`handout/html/CONTRACT-html-writing.md`](handout/html/CONTRACT-html-writing.md) 與 [`handout/html/TYPESETTING_GUIDE.md`](handout/html/TYPESETTING_GUIDE.md)）。這些是明確的缺陷；提出修正。規格合規也包含**需要章內交叉比對的模式層級規則**——例如，章內所有定義是否一致遵循 §3 的注解決策規則、所有圖是否遵循 §10 的擺放規則、平行結構（份量相近的定義、形式相近的命題）是否格式一致。單行 lint 掃描是必要但不充分的；模式層級的稽核需要明確走查每一條帶有決策準則的 SPEC 規則，並就整章加以檢查。
-- **散文易懂性與流暢性**——走查整節主線散文（不限 `<!-- expansion:` 標記行）的可讀性，依 [`handout/html/_audit/PROSE-AUDIT-RUBRIC.md`](handout/html/_audit/PROSE-AUDIT-RUBRIC.md)：易懂性缺陷（動機缺位、重型形式無白話重述、未解釋的邏輯跳躍、術語先用後定義且讀者被晾住）為 **blocking**，流暢性 polish 為 advisory。此為兩道閘的第一道（gate 1：Claude `handout-prose-audit` subagent，唯讀、免費）；定稿前再經 gate 2（Codex 獨立複核，吃配額、先徵同意）。裁決沿用 `Rewrite`——其既有準則（措辭笨拙、語域滑落）即適用，唯範圍擴及整節主線散文，而非僅帶 `<!-- expansion:` 標記者。
+- **規格合規**——對照 [`CONTENT_SPEC.md`](CONTENT_SPEC.md) 的規則違反：不允許的結構或元件、散文中以 `<b>`／`<strong>` 代替 `<em>` 做強調、ASCII 直引號、未指向手寫編號的交叉參照、缺少章節開頭結構等（HTML 標記細節見 [`legacy/html_handout/CONTRACT-html-writing.md`](legacy/html_handout/CONTRACT-html-writing.md) 與 [`legacy/html_handout/TYPESETTING_GUIDE.md`](legacy/html_handout/TYPESETTING_GUIDE.md)）。這些是明確的缺陷；提出修正。規格合規也包含**需要章內交叉比對的模式層級規則**——例如，章內所有定義是否一致遵循 §3 的注解決策規則、所有圖是否遵循 §10 的擺放規則、平行結構（份量相近的定義、形式相近的命題）是否格式一致。單行 lint 掃描是必要但不充分的；模式層級的稽核需要明確走查每一條帶有決策準則的 SPEC 規則，並就整章加以檢查。
+- **散文易懂性與流暢性**——走查整節主線散文（不限 `<!-- expansion:` 標記行）的可讀性，依 [`handout/_audit/PROSE-AUDIT-RUBRIC.md`](handout/_audit/PROSE-AUDIT-RUBRIC.md)：易懂性缺陷（動機缺位、重型形式無白話重述、未解釋的邏輯跳躍、術語先用後定義且讀者被晾住）為 **blocking**，流暢性 polish 為 advisory。此為兩道閘的第一道（gate 1：Claude `handout-prose-audit` subagent，唯讀、免費）；定稿前再經 gate 2（Codex 獨立複核，吃配額、先徵同意）。裁決沿用 `Rewrite`——其既有準則（措辭笨拙、語域滑落）即適用，唯範圍擴及整節主線散文，而非僅帶 `<!-- expansion:` 標記者。
 - 相對於 spine 的**記號飄移**——例如手稿用 `[x]` 而 HTML 片段悄悄用了 `\lfloor x \rfloor`。將此作為一個問題提給使用者，而非作為幻覺。使用者可能是有意升級了記號，或可能想重新對齊回 spine。
 - **數學正確性**——若某陳述看似有誤，將其作為*「請查核 X」*提出，而非*「我因為 X 不在 spine 中而移除它」*。
 - **spine 中缺漏的內容**——若 spine 涵蓋了某主題而 HTML 片段跳過了，標示這個缺口，讓使用者能決定該省略是否為有意。

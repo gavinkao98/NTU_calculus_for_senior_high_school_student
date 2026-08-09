@@ -3,7 +3,7 @@
 """canonical prose stream 量測器——散文密度指標的單一真實來源。
 
 為什麼存在：本專案有兩條規則線共用「每千詞密度」這把尺——(a) 散文 em-dash
-密度（`handout/html/_audit/REPORT-emdash-baseline-and-rollout.md`）、(b) 平實
+密度（`handout/_audit/REPORT-emdash-baseline-and-rollout.md`）、(b) 平實
 英文條款的家族命中密度（`CONTENT_SPEC.md` §3）。2026-07-25 實測發現兩線各有
 一支腳本、分母定義不同（同一單元 ch07 的 em-dash 數相同、散文詞卻差 3172），
 且舊腳本只數字面 `—`、漏掉 appD 的 20 個 `&mdash;` entity，把 appD 誤標為
@@ -213,7 +213,7 @@ def read(p: str) -> str:
 
 def unit_metrics(unit: str) -> tuple[dict, dict]:
     main_parts, sub_parts = [], []
-    for f in sorted(glob(f"handout/html/fragments/{unit}/sec-*.html")):
+    for f in sorted(glob(f"legacy/html_handout/fragments/{unit}/sec-*.html")):
         a, b = html_streams(read(f))
         main_parts.append(a)
         sub_parts.append(b)
@@ -275,7 +275,7 @@ def main() -> int:
         run_units([args.unit])
         return 0
     units = sorted({os.path.basename(os.path.dirname(p))
-                    for p in glob("handout/html/fragments/*/sec-*.html")})
+                    for p in glob("legacy/html_handout/fragments/*/sec-*.html")})
     run_units(units)
     return 0
 

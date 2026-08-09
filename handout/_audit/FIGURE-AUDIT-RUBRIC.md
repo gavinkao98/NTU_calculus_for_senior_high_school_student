@@ -1,9 +1,9 @@
 # 講義圖稽核 — RUBRIC（figure audit）
 
 > **本審契約（單一真相來源）。** gate 1 = Claude `handout-figure-audit` subagent；視覺層的 Codex 第二讀者退為**定稿前的信心複核**（非每輪必跑，計費需同意）。
-> **被審物：** 一張 **render 後的 PNG**（由 [`../_render/shot.mjs`](../_render/shot.mjs) 的 **`figures` 模式**逐 `<figure>` 截 2× PNG：`node shot.mjs <file-url> <out/prefix> figures` → `prefix-<data-fig>.png`；**render 載體＝figkit harness `handout/figkit/figs-<ch>.html`**（2026-08-09 起；readiness 同樣等 `#boot` 遮罩移除），對照語境讀該圖的繪圖原始碼：FIGS 圖讀 harness 的 `const FIGS`、inline-SVG 圖讀 harness 內該 `<figure>` 的 `<svg>`，並參照課文源（`latex/src/<ch>/*.tex`）的 `\figcaption`。
+> **被審物：** 一張 **render 後的 PNG**（由 [`../figkit/shot.mjs`](../figkit/shot.mjs) 的 **`figures` 模式**逐 `<figure>` 截 2× PNG：`node shot.mjs <file-url> <out/prefix> figures` → `prefix-<data-fig>.png`；**render 載體＝figkit harness `handout/figkit/figs-<ch>.html`**（2026-08-09 起；readiness 同樣等 `#boot` 遮罩移除），對照語境讀該圖的繪圖原始碼：FIGS 圖讀 harness 的 `const FIGS`、inline-SVG 圖讀 harness 內該 `<figure>` 的 `<svg>`，並參照課文源（`latex/src/<ch>/*.tex`）的 `\figcaption`。
 > **枚舉（母體）：** 稽核母體 = 該章 figkit harness 內**全部 `<figure>` 元素**，含 inline-SVG（有 `id=` 無 `data-fig`、甚至無 figcaption 編號者）；**不可只取 `FIGS`／`data-fig` 定義的圖**。每章開審前以 `Grep '<figure'` 掃 `figkit/figs-<ch>.html` 對齊圖清單，漏的補進去並指派審查者（harness 生成器已把 `data-fig` 與 `id=` 兩型都收進母體——2026-08-09 inline-SVG 漏抓 bug 已修，勿再倒退）。
-> **依據：** [`../../CONTENT_SPEC.md`](../../../CONTENT_SPEC.md) §10（圖規則）＋本檔維度（從 ch01 圖稽核實證蒸餾，見 `../_dev-archive/ch01/ch01_figure-audit.md`）。
+> **依據：** [`../../CONTENT_SPEC.md`](../../CONTENT_SPEC.md) §10（圖規則）＋本檔維度（從 ch01 圖稽核實證蒸餾，見 `../_dev-archive/ch01/ch01_figure-audit.md`）。
 > **性質：** 唯讀、advisory＋blocking 分流、不改檔。審「**畫出來**對不對、讀不讀得懂」，不是 copyedit。
 > **別跟「圖機會稽核」混為一談：** 本檔審「**已畫的圖對不對**」（correctness，render 後）；上游「**該不該加圖**」（opportunity，出圖前、Mode A／C）是另一道閘——`handout-figure-opportunity-audit` subagent ＋ [`FIGURE-OPPORTUNITY-RUBRIC.md`](FIGURE-OPPORTUNITY-RUBRIC.md)。兩者是同一張圖生命週期的兩端。
 

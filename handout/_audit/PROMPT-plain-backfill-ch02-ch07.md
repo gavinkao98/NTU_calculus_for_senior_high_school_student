@@ -1,7 +1,7 @@
 # Kickoff prompts：ch02–ch07 散文平實化回填（合併 sweep）
 
 > 每章一段，各自貼進**不同的新對話**。ch01 見 [`PROMPT-plain-backfill-ch01.md`](PROMPT-plain-backfill-ch01.md)。
-> 流程權威＝[`KICKOFF-plain-backfill.md`](KICKOFF-plain-backfill.md)；判準權威＝[`CONTENT_SPEC.md`](../../../CONTENT_SPEC.md) §3〈平實英文條款〉（RC，2026-07-25 凍結）。本檔只給**各章的 delta**：專屬前提＋起跑基線。
+> 流程權威＝[`KICKOFF-plain-backfill.md`](KICKOFF-plain-backfill.md)；判準權威＝[`CONTENT_SPEC.md`](../../CONTENT_SPEC.md) §3〈平實英文條款〉（RC，2026-07-25 凍結）。本檔只給**各章的 delta**：專屬前提＋起跑基線。
 
 > ## ⚠️ 2026-07-26 前提修正：ch02／ch03／ch04 的 fragment **不是**手稿逐字
 >
@@ -38,8 +38,8 @@
    另注意：以自己的分支為基底提交前，先確認該分支**不落後 `main`**——ch03 那輪第一次提交時
    `plain-ch03` 的基底比 main 舊，於是把別條線對 `check_prose.py`／`test_convert.py` 的修改
    一起夾帶進了自己的 commit，事後得重建整條鏈才修好。
-2. **不動共用檔**：**MUST NOT** 編輯 `handout/html/_audit/REPORT-emdash-baseline-and-rollout.md`（rollout 帳本）與 `handout/latex/make_dist.py` 的 `NAMES` 表——這兩處平行寫必衝突。把新的密度與 tic guard 數字**寫進自己的 applied 報告**，並在報告末尾留一行「待併：rollout 帳本 §2 的 chNN 列」。
-3. **build 一定帶參數**：`python handout/html/build.py chNN`。無參數版會重建全部 standalone、蓋掉別章成果。
+2. **不動共用檔**：**MUST NOT** 編輯 `handout/_audit/REPORT-emdash-baseline-and-rollout.md`（rollout 帳本）與 `handout/latex/make_dist.py` 的 `NAMES` 表——這兩處平行寫必衝突。把新的密度與 tic guard 數字**寫進自己的 applied 報告**，並在報告末尾留一行「待併：rollout 帳本 §2 的 chNN 列」。
+3. **build 一定帶參數**：`python legacy/html_handout/build.py chNN`。無參數版會重建全部 standalone、蓋掉別章成果。
 
 `tools/prose_metrics.py`／`tools/verify_edits.py` 是唯讀工具，平行呼叫安全。
 
@@ -71,9 +71,9 @@ ch01 已完成：em-dash 9.3 → **2.1**/1000、執行 41 條（走查 42 − Co
 ```text
 你在一個 fresh session。任務：對 ch02 執行一輪「散文平實化回填（合併 sweep）」。
 
-先讀（依序）：CLAUDE.md（根）＋handout/CLAUDE.md → handout/html/_audit/KICKOFF-plain-backfill.md
+先讀（依序）：CLAUDE.md（根）＋handout/CLAUDE.md → handout/_audit/KICKOFF-plain-backfill.md
 （本輪流程權威，Gate 0–9，照它跑）→ CONTENT_SPEC.md §3〈平實英文條款〉（判準，狀態 RC）
-→ handout/html/_audit/PROSE-AUDIT-RUBRIC.md → 前例形狀 REVIEW-ch06-sec-6-2-plain-applied.html。
+→ handout/_audit/PROSE-AUDIT-RUBRIC.md → 前例形狀 REVIEW-ch06-sec-6-2-plain-applied.html。
 
 ch02 專屬前提：
 - ch02／ch03／ch04 是手稿章：**Gate 0 必須比對手稿把每個 dash 分類為「手稿逐字」或「LLM 增補」**
@@ -98,7 +98,7 @@ tic guard 冒號 58／分號 43／括號 66／雙逗號 21。
 
 平行紀律：commit 到新分支 handout/plain-ch02；MUST NOT 編輯 rollout 帳本
 （REPORT-emdash-baseline-and-rollout.md）與 make_dist.py 的 NAMES；build 一定帶參數
-（python handout/html/build.py ch02）。
+（python legacy/html_handout/build.py ch02）。
 
 先做 Gate 0（基線＋grep fragment 註解裡的 CONSTRAINT／WORDING CONSTRAINT），
 再進 Gate 1 走查；走查產出後停下來給我過目。
@@ -109,9 +109,9 @@ tic guard 冒號 58／分號 43／括號 66／雙逗號 21。
 ```text
 你在一個 fresh session。任務：對 ch03 執行一輪「散文平實化回填（合併 sweep）」。
 
-先讀（依序）：CLAUDE.md（根）＋handout/CLAUDE.md → handout/html/_audit/KICKOFF-plain-backfill.md
+先讀（依序）：CLAUDE.md（根）＋handout/CLAUDE.md → handout/_audit/KICKOFF-plain-backfill.md
 （本輪流程權威，Gate 0–9，照它跑）→ CONTENT_SPEC.md §3〈平實英文條款〉（判準，狀態 RC）
-→ handout/html/_audit/PROSE-AUDIT-RUBRIC.md → 前例形狀 REVIEW-ch06-sec-6-2-plain-applied.html。
+→ handout/_audit/PROSE-AUDIT-RUBRIC.md → 前例形狀 REVIEW-ch06-sec-6-2-plain-applied.html。
 
 ch03 專屬前提：
 - ch02／ch03／ch04 是手稿章：**Gate 0 必須比對手稿把每個 dash 分類為「手稿逐字」或「LLM 增補」**
@@ -133,7 +133,7 @@ tic guard 冒號 36／分號 20／括號 60／雙逗號 28。
 注意括號 60／N 3855＝全書相對最高，去 dash 時 MUST NOT 再往括號堆（會踩不換 tic 護欄）。
 
 平行紀律：commit 到新分支 handout/plain-ch03；MUST NOT 編輯 rollout 帳本；
-build 一定帶參數（python handout/html/build.py ch03）。NAMES 表已有 ch03，不需改。
+build 一定帶參數（python legacy/html_handout/build.py ch03）。NAMES 表已有 ch03，不需改。
 
 先做 Gate 0，再進 Gate 1 走查；走查產出後停下來給我過目。
 ```
@@ -143,9 +143,9 @@ build 一定帶參數（python handout/html/build.py ch03）。NAMES 表已有 c
 ```text
 你在一個 fresh session。任務：對 ch04 執行一輪「散文平實化回填（合併 sweep）」。
 
-先讀（依序）：CLAUDE.md（根）＋handout/CLAUDE.md → handout/html/_audit/KICKOFF-plain-backfill.md
+先讀（依序）：CLAUDE.md（根）＋handout/CLAUDE.md → handout/_audit/KICKOFF-plain-backfill.md
 （本輪流程權威，Gate 0–9，照它跑）→ CONTENT_SPEC.md §3〈平實英文條款〉（判準，狀態 RC）
-→ handout/html/_audit/PROSE-AUDIT-RUBRIC.md → 前例形狀 REVIEW-ch06-sec-6-3-plain-applied.html
+→ handout/_audit/PROSE-AUDIT-RUBRIC.md → 前例形狀 REVIEW-ch06-sec-6-3-plain-applied.html
 （ch04 是證明重的章，§6.3 那份的處置方式最接近）。
 
 ch04 專屬前提：
@@ -171,7 +171,7 @@ tic guard 冒號 68／分號 45／括號 82／雙逗號 26（**括號 82 為全�
 逐節：§4.2 23 個（12.3）、§4.4 21（11.7）、§4.5 19（15.2）、§4.1 17（12.1）、§4.3 12（21.1，密度最高）。
 
 平行紀律：commit 到新分支 handout/plain-ch04；MUST NOT 編輯 rollout 帳本與 NAMES；
-build 一定帶參數（python handout/html/build.py ch04）。
+build 一定帶參數（python legacy/html_handout/build.py ch04）。
 
 先做 Gate 0，再進 Gate 1 走查；走查產出後停下來給我過目。
 ```
@@ -181,9 +181,9 @@ build 一定帶參數（python handout/html/build.py ch04）。
 ```text
 你在一個 fresh session。任務：對 ch05 執行一輪「散文平實化回填（合併 sweep）」。
 
-先讀（依序）：CLAUDE.md（根）＋handout/CLAUDE.md → handout/html/_audit/KICKOFF-plain-backfill.md
+先讀（依序）：CLAUDE.md（根）＋handout/CLAUDE.md → handout/_audit/KICKOFF-plain-backfill.md
 （本輪流程權威，Gate 0–9，照它跑）→ CONTENT_SPEC.md §3〈平實英文條款〉（判準，狀態 RC）
-→ handout/html/_audit/PROSE-AUDIT-RUBRIC.md → 前例形狀 REVIEW-ch06-sec-6-2-plain-applied.html。
+→ handout/_audit/PROSE-AUDIT-RUBRIC.md → 前例形狀 REVIEW-ch06-sec-6-2-plain-applied.html。
 
 ch05 專屬前提：
 - ch05 是**第一個 canon 章**（無手稿、100% LLM 自產，Ch5 起皆為此變體）。實測 canon 章的
@@ -199,7 +199,7 @@ tic guard 冒號 77／分號 47／括號 43／雙逗號 28。
 §5.8 11（13.3）、§5.9 10（16.9）、§5.5 10（13.7）、§5.2 6（8.5）。無段落離群。
 
 平行紀律：commit 到新分支 handout/plain-ch05；MUST NOT 編輯 rollout 帳本與 NAMES；
-build 一定帶參數（python handout/html/build.py ch05）。
+build 一定帶參數（python legacy/html_handout/build.py ch05）。
 
 先做 Gate 0，再進 Gate 1 走查；走查產出後停下來給我過目。
 ```
@@ -210,9 +210,9 @@ build 一定帶參數（python handout/html/build.py ch05）。
 你在一個 fresh session。任務：對 ch06 執行一輪「散文平實化回填（合併 sweep）」。
 注意：ch06 有兩節已做過平實化，本輪範圍與其他章不同，先讀清楚。
 
-先讀（依序）：CLAUDE.md（根）＋handout/CLAUDE.md → handout/html/_audit/KICKOFF-plain-backfill.md
+先讀（依序）：CLAUDE.md（根）＋handout/CLAUDE.md → handout/_audit/KICKOFF-plain-backfill.md
 （本輪流程權威，Gate 0–9）→ CONTENT_SPEC.md §3〈平實英文條款〉（判準，狀態 RC）
-→ handout/html/_audit/PROSE-AUDIT-RUBRIC.md
+→ handout/_audit/PROSE-AUDIT-RUBRIC.md
 → **必讀既有成果**：REVIEW-ch06-sec-6-2-plain-applied.html 與
   REVIEW-ch06-sec-6-3-plain-applied.html（§6.2／§6.3 的完整處置紀錄與保留清單）。
 
@@ -235,7 +235,7 @@ tic guard 冒號 41／分號 37／括號 52／雙逗號 32。
 逐節：§6.1 24 個（16.7）、§6.4 15（17.9）、§6.5 13（12.6）、§6.3 10（9.1）、§6.2 10（7.3）。
 
 平行紀律：commit 到新分支 handout/plain-ch06；MUST NOT 編輯 rollout 帳本與 NAMES；
-build 一定帶參數（python handout/html/build.py ch06）。
+build 一定帶參數（python legacy/html_handout/build.py ch06）。
 
 先做 Gate 0，再進 Gate 1 走查；走查產出後停下來給我過目。
 ```
@@ -246,9 +246,9 @@ build 一定帶參數（python handout/html/build.py ch06）。
 你在一個 fresh session。任務：對 ch07 執行一輪「散文平實化回填（合併 sweep）」。
 ch07 是全書超額件數最多的單元（128 件），也是最新章——改完可當「新章標準流程」的樣板。
 
-先讀（依序）：CLAUDE.md（根）＋handout/CLAUDE.md → handout/html/_audit/KICKOFF-plain-backfill.md
+先讀（依序）：CLAUDE.md（根）＋handout/CLAUDE.md → handout/_audit/KICKOFF-plain-backfill.md
 （本輪流程權威，Gate 0–9，照它跑）→ CONTENT_SPEC.md §3〈平實英文條款〉（判準，狀態 RC）
-→ handout/html/_audit/PROSE-AUDIT-RUBRIC.md → 前例形狀 REVIEW-ch06-sec-6-2-plain-applied.html
+→ handout/_audit/PROSE-AUDIT-RUBRIC.md → 前例形狀 REVIEW-ch06-sec-6-2-plain-applied.html
 ＋ REVIEW-ch06-sec-6-3-plain-applied.html。
 
 ch07 專屬前提：
@@ -268,7 +268,7 @@ tic guard 冒號 102／分號 37／括號 56／雙逗號 32。
 §7.4 18（14.6）、§7.5 16（17.5）、§7.3 16（15.0）。
 
 平行紀律：commit 到新分支 handout/plain-ch07；MUST NOT 編輯 rollout 帳本與 NAMES；
-build 一定帶參數（python handout/html/build.py ch07）。
+build 一定帶參數（python legacy/html_handout/build.py ch07）。
 
 先做 Gate 0，再進 Gate 1 走查；走查產出後停下來給我過目。
 ```
@@ -289,7 +289,7 @@ build 一定帶參數（python handout/html/build.py ch07）。
    fail-loud 的地方硬錯，等於留一個假的「已支援」訊號。ch04 的 rollout 正由另一個 session 進行中
    （其 worktree 有未提交的 `convert.py`／`make_dist.py`／`test_convert.py` 與 `dist/ch04/`），
    由該輪自己補 `NAMES` 才不會兩邊搶同一行。現況＝`appB`／`ch01`／`ch02`／`ch03`／**`ch04`**。
-   **（2026-07-26 更新）ch04 的 rollout 已完成並併入**：`NAMES` 補了 `"ch04": "chapter4"`，四閘全綠、`dist/ch04/` 兩檔已產出。該輪另外逼出三個轉換器方言差集與一個字形閘缺口，逐條紀錄見 [`../../latex/chapters/ch04/DIALECT-ch04.md`](../../latex/chapters/ch04/DIALECT-ch04.md)。
+   **（2026-07-26 更新）ch04 的 rollout 已完成並併入**：`NAMES` 補了 `"ch04": "chapter4"`，四閘全綠、`dist/ch04/` 兩檔已產出。該輪另外逼出三個轉換器方言差集與一個字形閘缺口，逐條紀錄見 [`../latex/chapters/ch04/DIALECT-ch04.md`](../latex/chapters/ch04/DIALECT-ch04.md)。
 4. **全書複測**：`python tools/prose_metrics.py` — **無任何單元回退**，已達標七個單元落在 0.8–2.3。
    LaTeX 線整合回歸同時跑過：轉換器 83/83、字形閘（appB 362／ch01 489／ch02 467+8）全 PASS、
    完整性閘三單元 0 處真落差。

@@ -67,7 +67,7 @@ Stewart / Rogawski 語調：讓一位自學的高中生能讀懂，完整句子�
 
 ## 公式呈現：5 種模式
 
-數學以 MathJax/KaTeX 渲染，五種模式的具體 HTML/MathJax 標記見 [`handout/html/TYPESETTING_GUIDE.md`](handout/html/TYPESETTING_GUIDE.md)。
+數學以 MathJax/KaTeX 渲染，五種模式的具體 HTML/MathJax 標記見 [`legacy/html_handout/TYPESETTING_GUIDE.md`](legacy/html_handout/TYPESETTING_GUIDE.md)。
 
 | 模式 | 何時使用 |
 |---|---|
@@ -85,7 +85,7 @@ Stewart / Rogawski 語調：讓一位自學的高中生能讀懂，完整句子�
 
 ## 圖表規則
 
-- 色盤僅三種角色：blue = primary、red = caution/counterexample、gray = auxiliary。色彩定義見 HTML 講義的 CSS／typesetting 規範（[`handout/html/TYPESETTING_GUIDE.md`](handout/html/TYPESETTING_GUIDE.md)）。
+- 色盤僅三種角色：blue = primary、red = caution/counterexample、gray = auxiliary。色彩定義見 HTML 講義的 CSS／typesetting 規範（[`legacy/html_handout/TYPESETTING_GUIDE.md`](legacy/html_handout/TYPESETTING_GUIDE.md)）。
 - **不要僅靠顏色編碼意義。** 至少用以下一種方式做冗餘編碼：line style、label、marker。線型慣例：solid = 主要曲線；`dashed` = 漸近線與參考線（包括 `$y = x$`）；`dotted` = 輔助／鷹架。圖表 **must** 在灰階列印與影印後仍然可讀。詳見 SPEC §10 完整的冗餘編碼規則。
 - 圖以 `figureblock` 就地放置（non-float，D8 拍板）；圖形內容畫在 figkit harness 的 `FIGS`（見 [`handout/figkit/README.md`](handout/figkit/README.md)）。
 - caption：sentence case，以句號結尾，描述數學目的。
@@ -112,7 +112,7 @@ HTML 講義目前沒有自動 back-of-book index 機制（原 LaTeX `\index{...}
 
 ## Cross-reference 與編號
 
-HTML 講義沒有 `\cref`/`\label`/`\eqref` 自動交叉參照機制；改用散文直接引用手寫編號（例：*"by Theorem 4.2"*、*"as in §1.3"*）。標記方式見 [`handout/html/CONTRACT-html-writing.md`](handout/html/CONTRACT-html-writing.md)。
+HTML 講義沒有 `\cref`/`\label`/`\eqref` 自動交叉參照機制；改用散文直接引用手寫編號（例：*"by Theorem 4.2"*、*"as in §1.3"*）。標記方式見 [`legacy/html_handout/CONTRACT-html-writing.md`](legacy/html_handout/CONTRACT-html-writing.md)。
 
 - 引用定理／圖／節時，直接寫出手寫編號（*"by Theorem 4.2"*、*"see Figure 2.5"*），不要重述其內容。
 - 方程式編號僅用於後續會被引用或屬於 formal statement 的方程式。
@@ -121,7 +121,7 @@ HTML 講義沒有 `\cref`/`\label`/`\eqref` 自動交叉參照機制；改用散
 
 ## 散文排版
 
-HTML 標點與強調的具體寫法見 [`handout/html/TYPESETTING_GUIDE.md`](handout/html/TYPESETTING_GUIDE.md)；以下為原則。
+HTML 標點與強調的具體寫法見 [`legacy/html_handout/TYPESETTING_GUIDE.md`](legacy/html_handout/TYPESETTING_GUIDE.md)；以下為原則。
 
 - 強調：散文中僅用 `<em>`，且僅用於新術語的首次出現或極少數承載關鍵意義的片語。**不用** `<b>` / `<strong>` 做強調。
 - 引號：使用 Unicode 彎引號（“…”）。**不用** ASCII `"..."`。

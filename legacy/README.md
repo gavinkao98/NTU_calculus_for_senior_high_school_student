@@ -1,12 +1,15 @@
-# legacy/ — 已封存的媒體產線（凍結，僅供參考）
+# legacy/ — 已封存的產線（凍結，僅供參考）
 
-本資料夾封存了「講義 → 影片」的**前兩代產線**及其間的一次橋接實驗。它們都已被
-`../video/`（第二代，gen-2）取代並凍結；保留於此僅作為歷史與實作參考，**不再
-維護、不保證可執行**。
+本資料夾封存了**前兩代媒體產線**（gen-0／gen-1，被 `../video/` gen-2 取代；封存
+2026-05-31）、**舊 LaTeX 講義樹**（`tex_handout/`，2026-06-13 凍結）、以及 **HTML 講義
+時代的兩件套**（2026-08-09 LaTeX 統一後移入）：
 
-目前活躍的影片產線請見 [`../video/README.md`](../video/README.md)。
+- [`html_handout/`](html_handout/README.md) — HTML 撰稿線快照（fragments／standalone／
+  `build.py`／舊契約；**存量 provenance 的 grep 地**）。
+- [`html2latex/`](html2latex/README.md) — HTML→LaTeX 轉換產線工具（12 單元首轉完畢後退役）。
 
-封存日期：2026-05-31。
+一律**不再維護、不保證可執行**。活躍產線：講義＝[`../handout/latex/`](../handout/latex/README.md)、
+影片＝[`../video/README.md`](../video/README.md)。
 
 ## 各世代
 

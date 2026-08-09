@@ -3,19 +3,19 @@
 > LaTeX pilot v2（[`../../KICKOFF-latex-pilot.md`](../../KICKOFF-latex-pilot.md)）M-B0 的落檔產物。
 > **與 [`../ch03/DIALECT-ch03.md`](../ch03/DIALECT-ch03.md) 並讀**：ch03 表已凍結的 mapping 不重列細節，本檔權威範圍＝appB 實況＋與 ch03 的差集。
 > M-B2 補 mapping 以本檔 §3 差集為準；語意指令的**正式名稱在 M-B1 與模板一起凍結**（D9），本檔 §4 只列需求＋暫名提案。
-> 盤點對象＝`../../../html/fragments/appB/sec-b-{1,2,3,4,5}.html`（415 行）。**0 圖、0 表**（D5′ 的「最乾淨模板畫布」前提成立，無 FIGS、無 `export_figs` 需求）。
+> 盤點對象＝`../../../../legacy/html_handout/fragments/appB/sec-b-{1,2,3,4,5}.html`（415 行）。**0 圖、0 表**（D5′ 的「最乾淨模板畫布」前提成立，無 FIGS、無 `export_figs` 需求）。
 > 盤點日：2026-07-16。重跑：`python handout/latex/dialect_inventory.py appB`。
 
 > ## 2026-07-17 重新凍結（§B.6 新增後，pilot 四閘已重跑全綠）
 >
 > **變更**：appB 新增 §B.6「Writing a Proof」（`sec-b-6.html`）並改動 sec-b-1..5；附錄改名
 > 「Reading Theorems and Proofs」→「**Reading and Writing Proofs**」。撰稿側閘鏈紀錄見
-> [`../../../html/_audit/REVIEW-appendixB-b6-applied.html`](../../../html/_audit/REVIEW-appendixB-b6-applied.html)。
+> [`../../../_audit/REVIEW-appendixB-b6-applied.html`](../../../_audit/REVIEW-appendixB-b6-applied.html)。
 > **同日稍晚（r3，附錄定案）**：第三份第三方意見逐條裁決後落地兩項——① §B.2 的 contraposition
 > 歸類對齊 §B.6（純散文改寫：Strategy B.2 條目 2 的親緣子句改為 look-alike 消歧、Prop B.1 後的
 > 過渡句改口；**roster 仍 5 形狀、回馬槍不動**）② §B.6 新增 **Example B.11**（歸納法斷鏈：步驟有效、
 > 無 base case）＋其框架段落由「two／both … perfectly true」改為三分流。裁決稿見
-> [`../../../html/_audit/REVIEW-appendixB-r3-adjudication.html`](../../../html/_audit/REVIEW-appendixB-r3-adjudication.html)。
+> [`../../../_audit/REVIEW-appendixB-r3-adjudication.html`](../../../_audit/REVIEW-appendixB-r3-adjudication.html)。
 > **r3 第二輪（同日，使用者裁決「四件事你自己判斷全部做完，一頁式總表就不做了」）**再落地三項純散文改動：
 > ③ **§B.3 Strategy B.3 步驟 2 加指路子句**（只指路、不搬規則——`sec-b-6.html` 的 implication-kernel
 > 分工 CONSTRAINT 未動）④ §B.2 分案段「a **shrewd** split…」修飾語誤掛（改用刪除而非搬移）
@@ -262,7 +262,7 @@ kickoff §1 那段是 2026-07-16 討論時的**初步**盤點，本節為正式�
 
 ## 7. CONTRACT 對照（既存偏差，凍結為現況；依 D3 收編、不改 fragment）
 
-[`../../../html/CONTRACT-html-writing.md`](../../../html/CONTRACT-html-writing.md) 與 appB 樹上實況的出入。**pilot 立場＝轉換器收編現況**；fragment 端要不要回頭整併是內容線的事，不在 pilot 範圍（記錄於此供未來裁決）：
+[`../../../../legacy/html_handout/CONTRACT-html-writing.md`](../../../../legacy/html_handout/CONTRACT-html-writing.md) 與 appB 樹上實況的出入。**pilot 立場＝轉換器收編現況**；fragment 端要不要回頭整併是內容線的事，不在 pilot 範圍（記錄於此供未來裁決）：
 
 1. **`strong` ×30** — CONTRACT「Emphasis: `<em>` only — no `<b>`/`<strong>` in prose」。appB 系統性用作 run-in 標籤（清單項首、段首 lead-in），非散文強調——語意上自成一格，收編為 run-in 槽位。
 2. **inline `style` ×5** — CONTRACT「never write inline `style=`」。收編為置中陳述指令；白名單只認 `text-align:center;` 這個字面值。

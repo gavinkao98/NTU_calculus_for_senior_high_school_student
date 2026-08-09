@@ -75,7 +75,7 @@ class Loci:
 
     @staticmethod
     def _handout_anchors(meta: dict, repo_root: Path) -> "set[str]":
-        # chapter "Chapter 3" -> handout/html/standalone/chapter3-print-standalone.html
+        # chapter "Chapter 3" -> legacy/html_handout/standalone/chapter3-print-standalone.html
         m = re.search(r"(\d+)", str(meta.get("chapter", "")))
         if not m:
             return set()

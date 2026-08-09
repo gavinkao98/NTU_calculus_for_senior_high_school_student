@@ -26,7 +26,7 @@ python tools\doctor.py
 | **② 系統 binary** | `ffmpeg`、`ffprobe` | 每台 `winget install --id Gyan.FFmpeg -e`（**含 ffprobe**） |
 | **③ LaTeX** | MiKTeX：`latex`、`dvisvgm` + `plex-sans`/`plex-mono`/`lmodern`/`microtype`（Route A：video 文字＋數學皆走 LaTeX；MiKTeX 首編自動補裝） | 每台裝 MiKTeX（manim 的 Tex/MathTex 沒有它就編不出來；無 code 繞法） |
 | **①b 影片字型** | **全走 LaTeX**：文字 IBM Plex Sans/Mono、數學 Latin Modern（套件見 ③）。**不再用 Pango 系統字型**（Times/Courier 已棄） | 無需安裝系統字型；只要 ③ 的 MiKTeX 套件在即可（`doctor.py` 以 kpsewhich 驗）。video 不 vendored 任何字型 |
-| **④ Node + 瀏覽器** | Node ≥21、Google Chrome（給 `handout/html/_render/shot.mjs` 截圖） | 每台裝 Node LTS + Chrome |
+| **④ Node + 瀏覽器** | Node ≥21、Google Chrome（給 `handout/figkit/shot.mjs` 截圖） | 每台裝 Node LTS + Chrome |
 | **⑤ codex（審核工具，選用）** | Mode B 講義審核／video gate2 用的 `codex` CLI | 部署版控的 [`tools/codex.cmd`](tools/codex.cmd) shim（解 PATH＋stale-launcher 兩坑）；見下方 ⑤ |
 | **⑤b Vale（去 AI 味 lint，選用）** | 散文 AI-tell flag 引擎（markup-aware，自動排除 `$...$`／LaTeX／code）；handout prose 與 video narration 去 AI 味用（[`PLAN-deai-flavor.md`](authoring/_archive/deai/PLAN-deai-flavor.md)） | 每台 `winget install errata-ai.Vale`；**flag-only／advisory**，缺它不擋核心產線（同 codex，WARN 不 FAIL）。見下方 ⑤b |
 | **⑤c forced alignment（narrated 成片正式依賴）** | scene-level TTS 的計時源＝[`video/pipeline/scene_align.py`](video/pipeline/scene_align.py) 的 `stable-ts`（transcript-constrained，**計時來源**）＋`whisper_timestamped`（自由 ASR，**QA 探針**）。`--unit auto` 全 content template 走此路。（`experiments/forced_alignment_dean/`＝歷史起源、非現役。） | 每台全局安裝一次：`python -m pip install --upgrade whisper-timestamped stable-ts`；第一次跑 `base.en` 下載 model cache。**mock 迭代不需要**（缺它 `doctor.py` 只 WARN），但**產 narrated 真旁白成片時必需** |
@@ -135,8 +135,8 @@ python -m pip install --upgrade whisper-timestamped stable-ts
   `pipeline/assets/_outline_text.py` 用）。
 
 ### ④ Node + Chrome — 只給 handout 圖 render 用
-- [`handout/html/build.py`](handout/html/build.py) 組裝 HTML 是**純 Python stdlib**，任何 python 都能跑、無額外需求。
-- [`handout/html/_render/shot.mjs`](handout/html/_render/shot.mjs)（render `.sheet` 成 PNG 餵 figure 稽核）需要
+- [`legacy/html_handout/build.py`](legacy/html_handout/build.py) 組裝 HTML 是**純 Python stdlib**，任何 python 都能跑、無額外需求。
+- [`handout/figkit/shot.mjs`](handout/figkit/shot.mjs)（render `.sheet` 成 PNG 餵 figure 稽核）需要
   **Node ≥21**（global WebSocket/fetch）＋ **Google Chrome**。Chrome 路徑現在會先讀 `CHROME` 環境變數、
   再退回常見安裝位置（不再寫死單一路徑）。
 - standalone HTML **檢視時需連網**載 MathJax/KaTeX CDN（非安裝需求）。

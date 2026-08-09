@@ -24,7 +24,7 @@
 >
 > **⚠️ 上段是 pilot 收案當時（5 節 appB）的數字，已被內容變更取代。**
 > **2026-07-17 稍晚**：appB 新增 §B.6「Writing a Proof」、附錄改名 **Reading and Writing Proofs**
-> （內容側閘鏈見 [`../html/_audit/REVIEW-appendixB-b6-applied.html`](../html/_audit/REVIEW-appendixB-b6-applied.html)），
+> （內容側閘鏈見 [`../_audit/REVIEW-appendixB-b6-applied.html`](../_audit/REVIEW-appendixB-b6-applied.html)），
 > 轉換線隨之重跑並**重新凍結**：**24 頁**、四閘仍全綠（0 error／0 missing char／0 overfull／
 > 0 underfull／散文 0 真落差／數學 **545/545** 逐位元組、tests **81/81**）；
 > 成品 `dist/appB/`（pdf＋自足 tex）已更新；方言凍結表見 `chapters/appB/DIALECT-appB.md`
@@ -65,8 +65,8 @@
 > `sec-b-6.html` 帶 1 條同類撇號違規，已由該 session 自行於 **`5eac672`** 修訖（非本 session 處理）。
 >
 > **給新 session 的開場**：本檔是 2026-07-15/16 兩輪討論的完整交接（v2）。接手流程——
-> ① 先讀本檔全文；② 再讀 [`../html/CONTRACT-html-writing.md`](../html/CONTRACT-html-writing.md)（輸入方言契約）、
-> [`../html/TYPESETTING_GUIDE.md`](../html/TYPESETTING_GUIDE.md) §9（版心／字體拍板）、[`../../CLAUDE.md`](../../CLAUDE.md)（行為準則，尤其「缺套件先問」「commit 需授權」）、
+> ① 先讀本檔全文；② 再讀 [`../../legacy/html_handout/CONTRACT-html-writing.md`](../../legacy/html_handout/CONTRACT-html-writing.md)（輸入方言契約）、
+> [`../../legacy/html_handout/TYPESETTING_GUIDE.md`](../../legacy/html_handout/TYPESETTING_GUIDE.md) §9（版心／字體拍板）、[`../../CLAUDE.md`](../../CLAUDE.md)（行為準則，尤其「缺套件先問」「commit 需授權」）、
 > `chapters/ch03/DIALECT-ch03.md`（v1 盤點格式範例）；③ 從 **M-B0** 開始按 §5 推進。
 > **不要重新辯論已拍板決策（§2）**；發現本檔與 repo 現況矛盾時，停下來向使用者回報。
 > 分支：**已在 `handout/latex-pilot`**（v1 執行 session 所開）；繼續用它。

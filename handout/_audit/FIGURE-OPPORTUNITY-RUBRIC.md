@@ -2,7 +2,7 @@
 
 > 本檔是「**圖機會稽核**」的契約與**單一真相來源**。`handout-figure-opportunity-audit` subagent 讀本檔判斷；鏡頭／維度／輸出格式**只在這裡改一次**。從 ch03 圖機會稽核（2026-06-21）的實證蒸餾，產物見 [`REVIEW-ch03-figure-opportunity.html`](REVIEW-ch03-figure-opportunity.html)（提案）／[`REVIEW-ch03-figure-opportunity-applied.html`](REVIEW-ch03-figure-opportunity-applied.html)（成品）。
 >
-> **權威規範**見 [`CONTENT_SPEC.md`](../../../CONTENT_SPEC.md) §10（何時加圖、`[FIGURE-OPPORTUNITY]` 佔位符 schema、label economy、工具選擇與 kit 能力）。本檔只定「用哪些鏡頭掃、怎麼裁決一個候選、哪些不算機會、怎麼回報」，**不重述** §10 的規範本身。
+> **權威規範**見 [`CONTENT_SPEC.md`](../../CONTENT_SPEC.md) §10（何時加圖、`[FIGURE-OPPORTUNITY]` 佔位符 schema、label economy、工具選擇與 kit 能力）。本檔只定「用哪些鏡頭掃、怎麼裁決一個候選、哪些不算機會、怎麼回報」，**不重述** §10 的規範本身。
 >
 > **本審 vs correctness 審（別混為一談）：** 本檔審「**該不該加圖**」（opportunity，出圖**之前**、Mode A／C 擴增稽核）；[`FIGURE-AUDIT-RUBRIC.md`](FIGURE-AUDIT-RUBRIC.md) 審「**畫出來對不對、讀不讀得懂**」（D1–D8 correctness，render 成 PNG **之後**）。兩者互補，是同一張圖生命週期的兩端。
 
@@ -50,7 +50,7 @@
 ## 護欄
 
 - 稽核員**唯讀**：只回報候選清單，**不畫圖、不改任何檔**。
-- 提「加圖」是**提議，不是行動**——一律交回使用者裁決；核可後才進落地（`.tex` 的 `figureblock`＋figkit harness 的 `FIGS`＋`export_figs.mjs` 匯 PDF，見 [`handout/CLAUDE.md`](../../CLAUDE.md)「圖表系統」），落地後 render 自驗再跑 correctness 審。
+- 提「加圖」是**提議，不是行動**——一律交回使用者裁決；核可後才進落地（`.tex` 的 `figureblock`＋figkit harness 的 `FIGS`＋`export_figs.mjs` 匯 PDF，見 [`handout/CLAUDE.md`](../CLAUDE.md)「圖表系統」），落地後 render 自驗再跑 correctness 審。
 - **不 over-report**：硬湊裝飾圖會稀釋真正的機會。寧缺勿濫。
 
 ## 回報規格

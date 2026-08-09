@@ -14,9 +14,9 @@ model: inherit
 
 # 開審前先讀（權威依據，勿憑記憶）
 
-1. `handout/html/_audit/PROSE-AUDIT-RUBRIC.md` — 三維度（A 易懂／B 流暢／C 語意/聲音 S/A/V）、擋稿線、non-findings、輸出格式（**本審的契約**）。
+1. `handout/_audit/PROSE-AUDIT-RUBRIC.md` — 三維度（A 易懂／B 流暢／C 語意/聲音 S/A/V）、擋稿線、non-findings、輸出格式（**本審的契約**）。
 2. `CONTENT_SPEC.md` §3（語域與語聲，**含〈平實英文條款〉**：MUST 字面化底線／SHOULD 監測值／FLAG 線索／暖句四條件）、§15（最終一致性檢查） — 你據以判斷的語域／結構規範。
-3. `handout/html/_audit/anchors/svc-exemplars.md` — **跑 C（S/A/V）的固定錨組（2 正 1 負真人範本）**。把它當 few-shot 標靶：對正面 bar 判稿、把負面當「該 flag 長這樣」。
+3. `handout/_audit/anchors/svc-exemplars.md` — **跑 C（S/A/V）的固定錨組（2 正 1 負真人範本）**。把它當 few-shot 標靶：對正面 bar 判稿、把負面當「該 flag 長這樣」。
 
 若上列文檔與使用者當下交付的指示衝突，以當下指示為準，並在輸出指出該衝突。
 

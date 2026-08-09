@@ -6,7 +6,7 @@ LaTeX 統一（handout/latex/KICKOFF-latex-unification.md）後，HTML 撰稿線
 harness 頁，供既有的兩個消費端照舊使用：
 
   - handout/latex/export_figs.mjs  <harness.html> <outDir>   # LaTeX 嵌圖（向量 PDF）
-  - handout/html/_render/shot.mjs  <harness.html> <out> figures  # 圖閘 render（PNG）
+  - handout/figkit/shot.mjs  <harness.html> <out> figures  # 圖閘 render（PNG）
 
 變換內容（其餘 head/CSS/MathJax/buildPlot/FIGS/hydrate 全部 verbatim 保留，
 量測語境與 standalone 完全一致——#source 的 683px 版心、.paper 變數鏈照舊）：

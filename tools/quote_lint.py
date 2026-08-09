@@ -19,13 +19,14 @@ so CI needs no pip install.
 
 2026-08-09 (LaTeX unification): also lints the LaTeX sources. For `.tex` the
 excluded spans are `%` line comments (escaped percents stay prose) and math
-(`\\(..\\)` / `\\[..\\]`); everything else is prose. Default targets =
-latex/src/**/*.tex (the live sources) + html/fragments/**/*.html (frozen).
+(`\\(..\\)` / `\\[..\\]`); everything else is prose. Default target =
+handout/latex/src/**/*.tex (the live sources; the frozen HTML line moved to
+legacy/html_handout/ and, like all of legacy/, is no longer linted).
 
 Usage:
-    python handout/html/quote_lint.py         # lint latex/src + frozen fragments
-    python handout/html/quote_lint.py --fix   # rewrite prose ASCII quotes -> curly
-    python handout/html/quote_lint.py PATH ...  # lint/fix specific files or dirs
+    python tools/quote_lint.py         # lint latex/src + frozen fragments
+    python tools/quote_lint.py --fix   # rewrite prose ASCII quotes -> curly
+    python tools/quote_lint.py PATH ...  # lint/fix specific files or dirs
 
 Conversion (--fix):
     prose '  ->  ’  (U+2019)        apostrophe / closing single — unambiguous
@@ -33,7 +34,7 @@ Conversion (--fix):
                                     (handout prose uses flat, non-nested pairs;
                                     an odd count per file is refused so a stray
                                     quote is never mis-paired — fix it by hand).
-After --fix, review the diff and re-run `python handout/html/build.py`.
+After --fix, review the diff and re-run `python legacy/html_handout/build.py`.
 
 Exit code (lint mode) 0 = clean, 1 = violations found.
 """
@@ -146,8 +147,8 @@ def main(argv: list[str]) -> int:
     if args:
         targets = [Path(a) for a in args]
     else:
-        here = Path(__file__).resolve().parent
-        targets = [here.parent / "latex" / "src", here / "fragments"]
+        root = Path(__file__).resolve().parent.parent  # tools/ -> repo root
+        targets = [root / "handout" / "latex" / "src"]
 
     files = list(_iter_sources(targets))
 
@@ -168,7 +169,7 @@ def main(argv: list[str]) -> int:
             print(
                 f"\nquote_lint --fix: rewrote {total} prose quote(s) across "
                 f"{len(files)} file(s). Review the diff and re-run "
-                f"`python handout/html/build.py`."
+                f"`python legacy/html_handout/build.py`."
             )
         else:
             print(f"quote_lint --fix: nothing to fix — {len(files)} file(s) already clean.")
@@ -187,8 +188,8 @@ def main(argv: list[str]) -> int:
     if total:
         print(
             f"\nquote_lint: {total} prose ASCII-quote violation(s) in "
-            f"{len(files)} file(s). Run `python handout/html/quote_lint.py --fix` "
-            f"to auto-convert, then re-run `python handout/html/build.py`.",
+            f"{len(files)} file(s). Run `python tools/quote_lint.py --fix` "
+            f"to auto-convert, then re-run `python legacy/html_handout/build.py`.",
             file=sys.stderr,
         )
         return 1

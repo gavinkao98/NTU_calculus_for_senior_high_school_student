@@ -1,6 +1,6 @@
 # 微積分講義：排版總規範
 
-**Version 3.5-RC**——§3「平實英文條款」（plain register，2026-07-25 與使用者議定、Codex 三輪審核）**標記為 RC（凍結可用）**，並把原獨立的「去 em-dash 線」併入該條款（成對破折號與標點負載）；量尺定版為 [`tools/prose_metrics.py`](tools/prose_metrics.py)，回填流程見 [`handout/html/_audit/KICKOFF-plain-backfill.md`](handout/html/_audit/KICKOFF-plain-backfill.md)。條款內容——MUST 字面化底線／SHOULD 監測值／FLAG 人工候選三層＋暖句四條件測試，服務 §16.2 的 EFL 基線讀者；不改目標語域：「邏輯內容平實；教學導航可溫暖」。其餘承襲 v3.4／v3.3（§16 難度定位與先備知識基線——雙軸難度定位、108 課綱數A A／B／C 三類先備清單、B 類首次使用必須就地建立違者 blocking）、v3.2（習題移出講義本體）與 v3.1／v3.0——v3.0 是從零重寫取代 v1.x 和 v2.x，圍繞一個明確的產品定義重新組織規則書：一份 single-sided A4 英文講義，對象為準備自修大學微積分的高中生，搭配影片，以 Stewart / Rogawski 語域撰寫。Changelog（§17）列出具體差異。
+**Version 3.5-RC**——§3「平實英文條款」（plain register，2026-07-25 與使用者議定、Codex 三輪審核）**標記為 RC（凍結可用）**，並把原獨立的「去 em-dash 線」併入該條款（成對破折號與標點負載）；量尺定版為 [`tools/prose_metrics.py`](tools/prose_metrics.py)，回填流程見 [`handout/_audit/KICKOFF-plain-backfill.md`](handout/_audit/KICKOFF-plain-backfill.md)。條款內容——MUST 字面化底線／SHOULD 監測值／FLAG 人工候選三層＋暖句四條件測試，服務 §16.2 的 EFL 基線讀者；不改目標語域：「邏輯內容平實；教學導航可溫暖」。其餘承襲 v3.4／v3.3（§16 難度定位與先備知識基線——雙軸難度定位、108 課綱數A A／B／C 三類先備清單、B 類首次使用必須就地建立違者 blocking）、v3.2（習題移出講義本體）與 v3.1／v3.0——v3.0 是從零重寫取代 v1.x 和 v2.x，圍繞一個明確的產品定義重新組織規則書：一份 single-sided A4 英文講義，對象為準備自修大學微積分的高中生，搭配影片，以 Stewart / Rogawski 語域撰寫。Changelog（§17）列出具體差異。
 
 ---
 
@@ -47,7 +47,7 @@
 - [`CONTENT_QUICKSTART.md`](CONTENT_QUICKSTART.md)——本檔的精簡日常參考伴侶。
 - [`CONTENT_ROADMAP.md`](CONTENT_ROADMAP.md)——課程弧線、章節順序、prerequisites、per-chapter core skills。
 - [`CONTENT_SOURCING.md`](CONTENT_SOURCING.md)——課文範例的題源與選題流程（開放題庫、provenance、授權）。
-- [`handout/latex/CONTRACT-latex-writing.md`](handout/latex/CONTRACT-latex-writing.md)——章節源（`.tex`）的權威撰寫契約，編碼了本檔的規則。新章節撰寫於 `handout/latex/src/<ch>/<name>.tex`（一章一檔）。（HTML 時代契約 [`handout/html/CONTRACT-html-writing.md`](handout/html/CONTRACT-html-writing.md) 隨 fragment 凍結，供讀歷史源；legacy LaTeX 骨架在 `legacy/tex_handout/chapters/`。）
+- [`handout/latex/CONTRACT-latex-writing.md`](handout/latex/CONTRACT-latex-writing.md)——章節源（`.tex`）的權威撰寫契約，編碼了本檔的規則。新章節撰寫於 `handout/latex/src/<ch>/<name>.tex`（一章一檔）。（HTML 時代契約 [`legacy/html_handout/CONTRACT-html-writing.md`](legacy/html_handout/CONTRACT-html-writing.md) 隨 fragment 凍結，供讀歷史源；legacy LaTeX 骨架在 `legacy/tex_handout/chapters/`。）
 
 當 repository layout 或 preamble 決策變更時，`README.md` 為權威。當撰寫或排版規則變更時，**本檔**為權威。
 
@@ -124,9 +124,9 @@ Rationale：Stewart 語域加上自足的 handout 意味著讀者無法依賴老
 >
 > **凍結的意思：** 回填期間**判準不再逐節重議**——照本條款執行即可。單一節的個案爭議屬 finding 層逐條裁決，**不動條款**；只有「**同一條規則在三節以上反覆誤判或誤傷**」才夠格修訂。
 >
-> **待升 v1.0 的缺口：** 目前所有證據都來自「已定稿章回填」，測的是稽核＋改寫。條款真正的目標是讓 LLM **一開始就寫對**，須在下一個新節的 Mode A 跑 style card 兩臂對照（一臂只給範文、一臂掛完整條款）驗證生成端；另有 C 層離線 linter 與真人 EFL 盲讀（選配）。回填流程見 [`handout/html/_audit/KICKOFF-plain-backfill.md`](handout/html/_audit/KICKOFF-plain-backfill.md)。
+> **待升 v1.0 的缺口：** 目前所有證據都來自「已定稿章回填」，測的是稽核＋改寫。條款真正的目標是讓 LLM **一開始就寫對**，須在下一個新節的 Mode A 跑 style card 兩臂對照（一臂只給範文、一臂掛完整條款）驗證生成端；另有 C 層離線 linter 與真人 EFL 盲讀（選配）。回填流程見 [`handout/_audit/KICKOFF-plain-backfill.md`](handout/_audit/KICKOFF-plain-backfill.md)。
 
-（2026-07-25 新增，Codex gate-2 覆核整合。緣起：LLM 撰稿的英文散文持續向文學腔漂移——擬人、隱喻、cleft 強調、警句收尾、不透明慣用搭配——對本書 EFL 基線讀者（§16.2）是額外負荷。研究證據與覆核全文：[`handout/html/_audit/REVIEW-plain-register-research.html`](handout/html/_audit/REVIEW-plain-register-research.html)、[`handout/html/_audit/REPORT-plain-register-codex-gate2-raw.md`](handout/html/_audit/REPORT-plain-register-codex-gate2-raw.md)。本條款**不改**本節目標語域：Stewart 的暖是**教學導航**的暖，不是文學修辭——「**邏輯內容平實；教學導航可溫暖**」。優先序：數學正確與字面可理解 > 流暢／聲音／暖。）
+（2026-07-25 新增，Codex gate-2 覆核整合。緣起：LLM 撰稿的英文散文持續向文學腔漂移——擬人、隱喻、cleft 強調、警句收尾、不透明慣用搭配——對本書 EFL 基線讀者（§16.2）是額外負荷。研究證據與覆核全文：[`handout/_audit/REVIEW-plain-register-research.html`](handout/_audit/REVIEW-plain-register-research.html)、[`handout/_audit/REPORT-plain-register-codex-gate2-raw.md`](handout/_audit/REPORT-plain-register-codex-gate2-raw.md)。本條款**不改**本節目標語域：Stewart 的暖是**教學導航**的暖，不是文學修辭——「**邏輯內容平實；教學導航可溫暖**」。優先序：數學正確與字面可理解 > 流暢／聲音／暖。）
 
 **MUST（字面化底線）：**
 
@@ -149,7 +149,7 @@ Rationale：Stewart 語域加上自足的 handout 意味著讀者無法依賴老
   - **段落層的校準數值（2026-07-25 以五節語料實測定：ch01 §1.4 手稿章、ch06 §6.1／§6.2／§6.3／§6.4 canon 章）**：實測每節最長段落 88–117 詞（僅 §6.1 有兩段 ≥150、最長 169）、每段行內數學式最多 10–19 個（§6.3 的 19 出現在 FTC-1 證明段——證明體天然最高）。據此：
     - **SHOULD**：散文段落 ≤120 詞；每段行內數學式 ≤20 個。
     - **MUST 人工判定（觸發器，非拆段命令）**：段落 ≥150 詞、或行內式 >20 個、或**一段承載兩個以上可各自獨立成立的論證**——三者任一成立即須逐段判讀。判準與句層同源：**看論述動作數，不看詞數**。
-    - 校準來源與離群案例：改寫前的 §6.2 性質證明段為 **294 詞／34 式／四個獨立論證**，是全書唯一嚴重離群（已於同日拆為五段，見 [`handout/html/_audit/REVIEW-ch06-sec-6-2-plain-applied.html`](handout/html/_audit/REVIEW-ch06-sec-6-2-plain-applied.html)）；§6.3 的 114 詞／19 式段落經判定為**單一論證，保留不拆**——這組數值的用處正是能區分兩者。
+    - 校準來源與離群案例：改寫前的 §6.2 性質證明段為 **294 詞／34 式／四個獨立論證**，是全書唯一嚴重離群（已於同日拆為五段，見 [`handout/_audit/REVIEW-ch06-sec-6-2-plain-applied.html`](handout/_audit/REVIEW-ch06-sec-6-2-plain-applied.html)）；§6.3 的 114 詞／19 式段落經判定為**單一論證，保留不拆**——這組數值的用處正是能區分兩者。
 - 黏接訊號宜節制，但真正該禁的是**為維持句數而把兩個獨立推論重新黏回同一句**——不論用分號、冒號、破折號或堆疊連接詞（2026-07-25 實測教訓：appB 首輪去慣用語時淨增 4 個分號）。單一對稱對比、正式定義中的並列子句仍 MAY 合法使用分號。
 - 用常見、字面、可預測的搭配；主動語態優先（被動不是錯誤——受事者是主題時被動合法）。
 - 一句承載一個主要教學動作（可攜帶必要條件；不是「一句只能一個子句」）。
@@ -158,11 +158,11 @@ Rationale：Stewart 語域加上自足的 handout 意味著讀者無法依賴老
 
 **FLAG（人工候選線索；形式本身不是缺陷）：**
 
-以下句式假陽性高，**MUST NOT** 僅因形式判為缺陷——它們只是散文閘 R 維度（[`handout/html/_audit/PROSE-AUDIT-RUBRIC.md`](handout/html/_audit/PROSE-AUDIT-RUBRIC.md)）的掃描線索，判定一律回到上方 MUST 的語義測試：cleft 強調句（*What matters here is the sign of \(f'(x)\).* 是好句）、尾掛 *-ing* 子句、被動語態、數學物件作主詞（*The definition requires …* 正常）、*not just X, but Y*。
+以下句式假陽性高，**MUST NOT** 僅因形式判為缺陷——它們只是散文閘 R 維度（[`handout/_audit/PROSE-AUDIT-RUBRIC.md`](handout/_audit/PROSE-AUDIT-RUBRIC.md)）的掃描線索，判定一律回到上方 MUST 的語義測試：cleft 強調句（*What matters here is the sign of \(f'(x)\).* 是好句）、尾掛 *-ing* 子句、被動語態、數學物件作主詞（*The definition requires …* 正常）、*not just X, but Y*。
 
 **成對破折號與標點負載（2026-07-25 併入；原為獨立的「去 em-dash 線」，2026-07-20 立）**
 
-過量的散文 em-dash（`—`）是可量測的 LLM 撰稿指紋。此政策原為獨立規則線，因實測發現兩線互相抵銷而併入本條款——appB 的 de-dash 輪把 150 個破折號轉掉，代價是冒號接子句 +37、左括號 +37，隨後的平實輪又得清這些尾巴（證據與合併設計見 [`handout/html/_audit/REVIEW-merge-dedash-plain-proposal.html`](handout/html/_audit/REVIEW-merge-dedash-plain-proposal.html)，經 Codex 設計審查）。
+過量的散文 em-dash（`—`）是可量測的 LLM 撰稿指紋。此政策原為獨立規則線，因實測發現兩線互相抵銷而併入本條款——appB 的 de-dash 輪把 150 個破折號轉掉，代價是冒號接子句 +37、左括號 +37，隨後的平實輪又得清這些尾巴（證據與合併設計見 [`handout/_audit/REVIEW-merge-dedash-plain-proposal.html`](handout/_audit/REVIEW-merge-dedash-plain-proposal.html)，經 Codex 設計審查）。
 
 - **量測**：唯一真實來源為 [`tools/prose_metrics.py`](tools/prose_metrics.py) 的 canonical prose stream（納入段落與 environment 正文的連續自然語言；排除數學／標題／env-head／註解／屬性與 URL；清單、表格、figcaption 入副表不入主分母；entity 只解碼一次，逸出寫法不計）。**兩個 `/1000` 指標（em-dash 密度、家族命中密度）MUST 共用同一分母。**
 - **目標 `T_can` ≤ 3.0/1000（canonical stream）**。canonical 重測的真實教材基準：mooculus 0.0、APEX V5 0.5、CLP1 3.1（CLP 為五本中最口語者，即目標貼的上緣）。appB 定稿後 2.2，為現行唯一達標單元。**N < 1000 詞的單元 MUST 報 raw `n/N`，不單獨判定通過**（與鄰近單元合併後才判）。
@@ -191,7 +191,7 @@ Rationale：現症病灶不是句長或音節（Flesch 類公式對病句全部�
 
 ### 語聲參考範文
 
-以下範文示範目標語聲，涵蓋講義四種主要散文型別：① 動機鋪陳、② worked solution（全書大宗）、③ 歷史／應用旁註、④ 直覺 gloss。對語域有疑問時，把草稿與**對應型別**的範文對照。**所有範文逐字取自開放授權的真人微積分教材**（OpenStax Calculus Volume 1、CLP-1 Calculus，皆 **CC BY-NC-SA**，各標出處）——刻意用真人範本、不取本書 Chapter 1，以免「拿 Ch1 對 Ch1」的循環標靶（見 [`PLAN-deai-semantic-critic.md`](authoring/_archive/deai/PLAN-deai-semantic-critic.md) §0／§3）。數學內容未改，僅把來源的純文字行內數學依本節 Markdown 慣例正規化為 `$...$`／`$$...$$`／`*…*`。型① 的兩段同時是語意/聲音 critic 的正面錨（[`handout/html/_audit/anchors/svc-exemplars.md`](handout/html/_audit/anchors/svc-exemplars.md)）。
+以下範文示範目標語聲，涵蓋講義四種主要散文型別：① 動機鋪陳、② worked solution（全書大宗）、③ 歷史／應用旁註、④ 直覺 gloss。對語域有疑問時，把草稿與**對應型別**的範文對照。**所有範文逐字取自開放授權的真人微積分教材**（OpenStax Calculus Volume 1、CLP-1 Calculus，皆 **CC BY-NC-SA**，各標出處）——刻意用真人範本、不取本書 Chapter 1，以免「拿 Ch1 對 Ch1」的循環標靶（見 [`PLAN-deai-semantic-critic.md`](authoring/_archive/deai/PLAN-deai-semantic-critic.md) §0／§3）。數學內容未改，僅把來源的純文字行內數學依本節 Markdown 慣例正規化為 `$...$`／`$$...$$`／`*…*`。型① 的兩段同時是語意/聲音 critic 的正面錨（[`handout/_audit/anchors/svc-exemplars.md`](handout/_audit/anchors/svc-exemplars.md)）。
 
 #### 型① 動機鋪陳
 
@@ -318,7 +318,7 @@ calculus. The first is ... (1-2 paragraphs of prose)</p>
   <li>state and apply the precise \(\varepsilon\)-\(\delta\) definition of a limit.</li>
 </ul>
 
-<!-- 第一節 fragment 接於 handout/html/fragments/ch01/sec-1-1.html，header 為 <h2 class="sec-title"> -->
+<!-- 第一節 fragment 接於 legacy/html_handout/fragments/ch01/sec-1-1.html，header 為 <h2 class="sec-title"> -->
 ```
 
 Rationale：自學讀者打開一章時會問*「我將學到什麼？」* Bullet list 在五秒內回答這個問題。概述在半分鐘內回答*「這和我已知的東西如何連結？」* 兩者都必須存在。
@@ -341,7 +341,7 @@ Rationale：自學讀者在投入閱讀精力之前需要一個在乎的理由�
 
 最重要的 3–8 個公式 **SHOULD** 以行內或 display 數學嵌進敘事，讓讀者一眼可取。Chapter summary 不引入新內容、不重述完整證明，也不出現在編號 section 序列中（不編號）。
 
-Rationale：這是讀者的永久參考頁。一個月前讀過本章的學生想要複習時，應能在五分鐘內只用這段敘事重新吸收骨架——不只是「有哪些結果」，更是「這些結果如何串成一章」。參考實作：Ch1 [`sec-1-6.html`](handout/html/fragments/ch01/sec-1-6.html)、Ch2 [`sec-2-5.html`](handout/html/fragments/ch02/sec-2-5.html)、Ch3 [`sec-3-3.html`](handout/html/fragments/ch03/sec-3-3.html)、Ch4 [`sec-4-5.html`](handout/html/fragments/ch04/sec-4-5.html) 的 *Chapter summary* 段落。
+Rationale：這是讀者的永久參考頁。一個月前讀過本章的學生想要複習時，應能在五分鐘內只用這段敘事重新吸收骨架——不只是「有哪些結果」，更是「這些結果如何串成一章」。參考實作：Ch1 [`sec-1-6.html`](legacy/html_handout/fragments/ch01/sec-1-6.html)、Ch2 [`sec-2-5.html`](legacy/html_handout/fragments/ch02/sec-2-5.html)、Ch3 [`sec-3-3.html`](legacy/html_handout/fragments/ch03/sec-3-3.html)、Ch4 [`sec-4-5.html`](legacy/html_handout/fragments/ch04/sec-4-5.html) 的 *Chapter summary* 段落。
 
 ### Build toggle（legacy）
 
@@ -353,7 +353,7 @@ Rationale：這是讀者的永久參考頁。一個月前讀過本章的學生�
 
 ## 5. Environment 集
 
-本專案使用恰好 **11 個 semantic block（HTML `<section class="env env-…">` 元件；在 legacy LaTeX 中為 environment）**。新的章節內容 **MUST** 使用其中之一；**MUST NOT** 引入新的 semantic block 而不更新本文件。下文沿用「environment」一詞指稱這些語義角色，HTML 中對應到 `env-*` class（見 [`handout/html/CONTRACT-html-writing.md`](handout/html/CONTRACT-html-writing.md)）。
+本專案使用恰好 **11 個 semantic block（HTML `<section class="env env-…">` 元件；在 legacy LaTeX 中為 environment）**。新的章節內容 **MUST** 使用其中之一；**MUST NOT** 引入新的 semantic block 而不更新本文件。下文沿用「environment」一詞指稱這些語義角色，HTML 中對應到 `env-*` class（見 [`legacy/html_handout/CONTRACT-html-writing.md`](legacy/html_handout/CONTRACT-html-writing.md)）。
 
 ### 11 個 environment
 
@@ -553,7 +553,7 @@ Figure、table 和 numbered equation 也 per chapter reset：Figure 1.1、(1.1)�
 
 Rationale：高中自學讀者翻回去查時會問*「Definition 1.3 在哪裡？」*，期望 "Definition 1.3" 是 Chapter 1 中的**第三個 definition**。Shared counter（本專案早期版本使用）會打破這個期望——"Definition 1.3" 可能前面穿插了 theorem 和 proposition，使編號在查找時 less informative。Per-env chapter-scoped counter 匹配讀者對 formal statement 和 aside environment 的心智模型。
 
-Implementation note：HTML kit 沒有 auto-counter——所有編號都是 `env-num` 的**手寫文字**，per-type、chapter-scoped，由作者指派並手動維持一致（見 [`handout/html/CONTRACT-html-writing.md`](handout/html/CONTRACT-html-writing.md) 的 "Numbering and cross-references"）。（legacy 註記：凍結的 LaTeX book 以 `legacy/tex_handout/preamble/theorem_setup.tex` 中個別的 `\newtheorem{...}{Label}[chapter]` 宣告每個 environment；先前基於 `aliascnt` 的 shared-counter pattern 在 v3.0 中移除。）
+Implementation note：HTML kit 沒有 auto-counter——所有編號都是 `env-num` 的**手寫文字**，per-type、chapter-scoped，由作者指派並手動維持一致（見 [`legacy/html_handout/CONTRACT-html-writing.md`](legacy/html_handout/CONTRACT-html-writing.md) 的 "Numbering and cross-references"）。（legacy 註記：凍結的 LaTeX book 以 `legacy/tex_handout/preamble/theorem_setup.tex` 中個別的 `\newtheorem{...}{Label}[chapter]` 宣告每個 environment；先前基於 `aliascnt` 的 shared-counter pattern 在 v3.0 中移除。）
 
 ### 手動編號
 
@@ -579,7 +579,7 @@ HTML kit 沒有 `\label`／`\cref`／`\eqref` auto-reference 機制。所有 cro
 - 句首比照（*Theorem 4.2 shows that …*）；
 - 方程式引用：以 `\tag{*}` render 出 tag，在散文中以 plain "(\*)" 引用。
 
-**MUST NOT** 仰賴任何 auto-prefix／hyperlink 機制；編號的指派與引用一致性由作者手動維持（見 [`handout/html/CONTRACT-html-writing.md`](handout/html/CONTRACT-html-writing.md)）。
+**MUST NOT** 仰賴任何 auto-prefix／hyperlink 機制；編號的指派與引用一致性由作者手動維持（見 [`legacy/html_handout/CONTRACT-html-writing.md`](legacy/html_handout/CONTRACT-html-writing.md)）。
 
 **手寫編號慣例**：per-type counter，在同一章跨節連續（Theorem 4.1, 4.2, …；Proposition 4.1, …；Definition 4.1, …），寫在 `env-num`、`fig-no`、`sec-no` 中。當在草稿中以助記 key 標示某項目以便日後對齊引用時，沿用 `type:short-description`（連字號）形式的描述性 key——`type` 前綴來自：
 
@@ -680,7 +680,7 @@ TeX 不會自動斷顯示式——超過欄寬直接 overfull（由 `build.py` �
 
 並列短公式（如 arcsin／arccos／arctan 三條導數）對齊在 `=` 最整齊；只有當左式長到對齊 `=` 會把右式擠出欄寬時，才改成左式獨立一行＋`=` 貼左。
 
-**驗收：** 重建後跑 `node handout/html/_render/linebreak-gate.mjs`，它會列出仍被 MathJax 自動斷的式子（理想為 0）。原理與用法見 [`handout/PIPELINE.md`](handout/PIPELINE.md) 的「版面閘」。
+**驗收：** 重建後跑 `node legacy/html_handout/linebreak-gate.mjs`，它會列出仍被 MathJax 自動斷的式子（理想為 0）。原理與用法見 [`handout/PIPELINE.md`](handout/PIPELINE.md) 的「版面閘」。
 
 ### Inline fraction：`\frac` vs `\dfrac`
 
@@ -735,7 +735,7 @@ Display math 中的所有 `\frac` 自動以 full size render；display math 中�
 
 - Hyphen（`-`）：連字詞如 *one-to-one*、*left-hand*、*real-valued*。
 - En dash（Unicode `–`）：數值和頁碼範圍如 *pages 12–15*。
-- Em dash（Unicode `—`）：散文中的插入語。**謹慎使用；comma 或一對括號通常更好。** **政策（密度目標、cut／keep palette、成對插入語仲裁、不換 tic 護欄）已於 2026-07-25 併入 §3〈平實英文條款〉的「成對破折號與標點負載」小節**——本處只保留字元排印區辨，量化與判準一律以 §3 為準。基準實測與全書 rollout 狀態見 [`handout/html/_audit/REPORT-emdash-baseline-and-rollout.md`](handout/html/_audit/REPORT-emdash-baseline-and-rollout.md)。
+- Em dash（Unicode `—`）：散文中的插入語。**謹慎使用；comma 或一對括號通常更好。** **政策（密度目標、cut／keep palette、成對插入語仲裁、不換 tic 護欄）已於 2026-07-25 併入 §3〈平實英文條款〉的「成對破折號與標點負載」小節**——本處只保留字元排印區辨，量化與判準一律以 §3 為準。基準實測與全書 rollout 狀態見 [`handout/_audit/REPORT-emdash-baseline-and-rollout.md`](handout/_audit/REPORT-emdash-baseline-and-rollout.md)。
 
 ### 省略號
 
@@ -751,7 +751,7 @@ Display math 中的所有 `\frac` 自動以 full size render；display math 中�
 - **撇號（possessive／contraction，如 *Rolle’s*、*don’t*）：用 Unicode 右單引號 `’`（U+2019），不要用 ASCII `'`。** 排版通則上撇號與右單引號同字。
 - **MUST NOT** 在散文中使用 straight ASCII `"..."` 或 `'`。（HTML kit 中改用真正的 Unicode 標點。）
 - **例外（MUST 保持 ASCII）：** 數學內的 prime `f'`、`f''`（在 `\(...\)`／`\[...\]` 內，由 MathJax 渲染）與 HTML 屬性的 `"..."`——這些不是散文標點，lint 只檢查散文，不會碰它們。
-- 一致性由 [`handout/html/quote_lint.py`](handout/html/quote_lint.py) 強制（CI [`handout-checks.yml`](.github/workflows/handout-checks.yml) 會跑）：它以結構分類器排除 comment／math／code／屬性，只攔 rendered 散文中的 ASCII 引號。
+- 一致性由 [`tools/quote_lint.py`](tools/quote_lint.py) 強制（CI [`handout-checks.yml`](.github/workflows/handout-checks.yml) 會跑）：它以結構分類器排除 comment／math／code／屬性，只攔 rendered 散文中的 ASCII 引號。
 
 ### 強調
 
@@ -780,7 +780,7 @@ Rationale：色彩編碼承載教學意義，文字 label 確保語義不只靠�
 
 英文散文統一使用美式拼法：`-ize`/`-ization`（非 `-ise`/`-isation`）、`-or`（非 `-our`）、`-er`（非 `-re`）等。
 
-> **〔已知 drift，待全書一次過 sweep — 2026-07-11 記錄〕** 語料稽核發現本規則**尚未全面落實**：`-ize` 已一致美式，但 `-re`／`-ll`／部分 `-our` 仍為英式且**跨章一致**——`metres`（全書 8 次、美式 `meters` 0）、`travelled`（2 次、`traveled` 0）、`behaviour`／`behavior` 混用。因此**單章不逕改**（如 Ch6 §6.1 的 `metres`／`travelled`／`manoeuvre` 與全書 house usage 對齊，M3 的 P-6.1-e 判為非 finding）；逐章改反而製造新不一致，且 Ch7–16 未撰、現在正規化會再漂移。**處置：** ①先裁決最終 house spelling（預設＝依本規則走**美式**，把 `metres→meters`／`travelled→traveled`／`manoeuvre→maneuver`／`behaviour→behavior` 全書正規化；或改採英式則本條規則要放寬 `-re`/`-ll`）；②在**書近完成／出版前的排版-copyedit pass** 以 grep+replace 一次過掃全部 `handout/html/fragments`（含 appendices）＋rebuild＋linebreak/render 驗。這是**書本層級編輯事、不掛任一章的 5-milestone 閘**。
+> **〔已知 drift，待全書一次過 sweep — 2026-07-11 記錄〕** 語料稽核發現本規則**尚未全面落實**：`-ize` 已一致美式，但 `-re`／`-ll`／部分 `-our` 仍為英式且**跨章一致**——`metres`（全書 8 次、美式 `meters` 0）、`travelled`（2 次、`traveled` 0）、`behaviour`／`behavior` 混用。因此**單章不逕改**（如 Ch6 §6.1 的 `metres`／`travelled`／`manoeuvre` 與全書 house usage 對齊，M3 的 P-6.1-e 判為非 finding）；逐章改反而製造新不一致，且 Ch7–16 未撰、現在正規化會再漂移。**處置：** ①先裁決最終 house spelling（預設＝依本規則走**美式**，把 `metres→meters`／`travelled→traveled`／`manoeuvre→maneuver`／`behaviour→behavior` 全書正規化；或改採英式則本條規則要放寬 `-re`/`-ll`）；②在**書近完成／出版前的排版-copyedit pass** 以 grep+replace 一次過掃全部 `legacy/html_handout/fragments`（含 appendices）＋rebuild＋linebreak/render 驗。這是**書本層級編輯事、不掛任一章的 5-milestone 閘**。
 
 ### 數學間距
 
@@ -853,11 +853,11 @@ Rationale：自學讀者嚴重依賴視覺直覺。一章每五頁一張圖對�
 
 Rationale：教師手稿通常不含圖，AI 生成內容時亦不會主動產圖。佔位符讓「應該有圖但沒有」的缺口在寫作階段就被捕捉，而非等到排版或學生回饋後才發現。
 
-> **操作化（gate）：** 上述「主動標記圖機會」在 Mode A／C 擴增稽核（root [`README.md`](README.md) 檢查表第 7 項「視覺推理」）以**圖機會稽核 gate** 系統化執行——`handout-figure-opportunity-audit` subagent 依 [`handout/html/_audit/FIGURE-OPPORTUNITY-RUBRIC.md`](handout/html/_audit/FIGURE-OPPORTUNITY-RUBRIC.md) 雙鏡頭掃出 vetted 建議插圖清單供裁決，避免只憑印象標一兩張 ROADMAP key figure 而漏掉密度／幾何直觀缺口。此閘審「**該不該加圖**」（opportunity，出圖之前）；圖落地、render 後另跑「**畫出來對不對**」（D1–D8 correctness）的 [`handout/html/_audit/FIGURE-AUDIT-RUBRIC.md`](handout/html/_audit/FIGURE-AUDIT-RUBRIC.md) 視覺 gate（即下節「繪圖落地前自檢」的事後對稱物）。
+> **操作化（gate）：** 上述「主動標記圖機會」在 Mode A／C 擴增稽核（root [`README.md`](README.md) 檢查表第 7 項「視覺推理」）以**圖機會稽核 gate** 系統化執行——`handout-figure-opportunity-audit` subagent 依 [`handout/_audit/FIGURE-OPPORTUNITY-RUBRIC.md`](handout/_audit/FIGURE-OPPORTUNITY-RUBRIC.md) 雙鏡頭掃出 vetted 建議插圖清單供裁決，避免只憑印象標一兩張 ROADMAP key figure 而漏掉密度／幾何直觀缺口。此閘審「**該不該加圖**」（opportunity，出圖之前）；圖落地、render 後另跑「**畫出來對不對**」（D1–D8 correctness）的 [`handout/_audit/FIGURE-AUDIT-RUBRIC.md`](handout/_audit/FIGURE-AUDIT-RUBRIC.md) 視覺 gate（即下節「繪圖落地前自檢」的事後對稱物）。
 
 ### 繪圖落地前自檢（write-time figure checklist）
 
-上一節「主動標記圖機會」確保 Mode A 在寫稿時捕捉「該有圖」的位置；本節是其對稱物——當圖**真正落到** `buildPlot(cfg)` 繪圖函數（fragment 的 `<figure data-fig>` 對應的繪圖實作，機制見 [`handout/CLAUDE.md`](handout/CLAUDE.md) 的「圖表系統」）時，作者 **MUST** 在宣告該圖完成前逐項自檢下列各點。每項標注其對應的事後稽核維度（見 [`handout/html/_audit/FIGURE-AUDIT-RUBRIC.md`](handout/html/_audit/FIGURE-AUDIT-RUBRIC.md) 的 D1–D8），使「寫稿預防」與「事後稽核」共用同一錨點。
+上一節「主動標記圖機會」確保 Mode A 在寫稿時捕捉「該有圖」的位置；本節是其對稱物——當圖**真正落到** `buildPlot(cfg)` 繪圖函數（fragment 的 `<figure data-fig>` 對應的繪圖實作，機制見 [`handout/CLAUDE.md`](handout/CLAUDE.md) 的「圖表系統」）時，作者 **MUST** 在宣告該圖完成前逐項自檢下列各點。每項標注其對應的事後稽核維度（見 [`handout/_audit/FIGURE-AUDIT-RUBRIC.md`](handout/_audit/FIGURE-AUDIT-RUBRIC.md) 的 D1–D8），使「寫稿預防」與「事後稽核」共用同一錨點。
 
 - **承載軸刻度可讀（D4）**：讀圖題或任何需讀出座標的軸，凡刻度值**非整數且非 \(\pi\) 倍數**（如 \(\tfrac{1}{2}\)、具名刻度 \(a\)）**MUST** 在 tick 物件顯式給 `tex`。整數與 \(0,\pm\tfrac{\pi}{2},\pm\pi,\pm 2\pi\) 由 `buildPlot` 的 `piTex` 自動補；**不要**假設它會自動補非整數小數——那會靜默地只畫刻度線、不出數字。
 - **點記號對齊定義域（D6／D5）**：每顆 `dot` 都 **MUST** 對照散文宣告的定義域與 \(f(a)\) 是否定義——有定義且值即此點 → 實心（預設）；未定義／開區間端點／僅為某一支的極限值（非 \(f(a)\)）→ **MUST** 設 `hollow:true`；函數在該點根本不存在 → **不放** `dot`。`dot` 預設實心，未定義處漏設 `hollow` 會誤暗示該點有定義（ch01 squeeze \(x^{2}\sin(1/x)\) 圖即因在 \(x = 0\) 放實心點被判 blocking）。
@@ -872,7 +872,7 @@ Rationale：D7（no-spoiler）與 D8（冗餘編碼）原已有寫稿規範，�
 
 ### 工具選擇
 
-HTML kit 的圖以 standalone HTML 的 `FIGS` 物件中註冊的繪圖函數（`buildPlot(cfg)` 產出 SVG，由 `hydrateFigures()` 依 fragment 的 `<figure data-fig>` 注入；機制見 [`handout/CLAUDE.md`](handout/CLAUDE.md) 的「圖表系統」）呈現，schematic diagram 也可用 inline SVG（見 [`handout/html/CONTRACT-html-writing.md`](handout/html/CONTRACT-html-writing.md) 的 "Figures"）。依教學功能選擇圖型：
+HTML kit 的圖以 standalone HTML 的 `FIGS` 物件中註冊的繪圖函數（`buildPlot(cfg)` 產出 SVG，由 `hydrateFigures()` 依 fragment 的 `<figure data-fig>` 注入；機制見 [`handout/CLAUDE.md`](handout/CLAUDE.md) 的「圖表系統」）呈現，schematic diagram 也可用 inline SVG（見 [`legacy/html_handout/CONTRACT-html-writing.md`](legacy/html_handout/CONTRACT-html-writing.md) 的 "Figures"）。依教學功能選擇圖型：
 
 - **graph**——coordinate graph、plotted function、asymptote、analytic behavior（`FIGS` 的 `buildPlot` 繪圖 helper）。
 - **diagram**——conceptual diagram、mapping diagram、interval、arrow、geometric sketch（inline SVG 或繪圖 helper）。
@@ -1042,7 +1042,7 @@ No-custom-macro 規則的 rationale：這是多作者專案。Per-section 自訂
 講義的 live 驗證路徑：
 
 1. **Build**——`python handout/latex/build.py <ch>` 編譯（0 error／0 missing char）＋overfull 列表＋字形閘，成品進 `dist/`；malformed 數學直接編譯錯，即為要修的信號。
-2. **散文內容過閘**——章節由 `handout-prose-audit` subagent（gate 1）稽核易懂性，契約見 [`handout/html/_audit/PROSE-AUDIT-RUBRIC.md`](handout/html/_audit/PROSE-AUDIT-RUBRIC.md)；定稿前再經 Codex 獨立複核（gate 2）。
+2. **散文內容過閘**——章節由 `handout-prose-audit` subagent（gate 1）稽核易懂性，契約見 [`handout/_audit/PROSE-AUDIT-RUBRIC.md`](handout/_audit/PROSE-AUDIT-RUBRIC.md)；定稿前再經 Codex 獨立複核（gate 2）。
 3. **編號／引用一致性**——編號語意化（auto-counter＋`\label`/`\ref`，2026-08-09 起）後由編譯器保證：log 無 undefined reference 即全解析；跨章引用維持字面、書層 sweep 管理。
 
 通過 build（KaTeX 無誤）並過 gate 1／gate 2 後，章節才被視為 ready for review。
@@ -1104,7 +1104,7 @@ Rationale：規則會演進。明確的 exception record 將偏離從 noise 變�
 - [ ] 本章讀起來是自足的——沒有影片的學生也能完成。
 - [ ] Pronoun 遵循 §3："we" 為預設；"you" 僅用於溫和提醒或 forward reference。
 - [ ] 直覺段落先於 formal environment；*"Informally, ..."* gloss 在有幫助處使用。
-- [ ] **散文易懂性過閘（HTML 線）**：本章已過散文稽核 gate 1（`handout-prose-audit` subagent），**易懂性 blocking = 0**；契約見 [`handout/html/_audit/PROSE-AUDIT-RUBRIC.md`](handout/html/_audit/PROSE-AUDIT-RUBRIC.md)。定稿前再經 gate 2（Codex 獨立複核）。
+- [ ] **散文易懂性過閘（HTML 線）**：本章已過散文稽核 gate 1（`handout-prose-audit` subagent），**易懂性 blocking = 0**；契約見 [`handout/_audit/PROSE-AUDIT-RUBRIC.md`](handout/_audit/PROSE-AUDIT-RUBRIC.md)。定稿前再經 gate 2（Codex 獨立複核）。
 
 **結構**
 - [ ] 章節以 1–2 段概述和 *"By the end of this chapter, you will be able to:"* bullet list（3–5 項）開頭。
@@ -1162,13 +1162,13 @@ Rationale：規則會演進。明確的 exception record 將偏離從 noise 變�
 **Build 與過閘**
 - [ ] `python handout/latex/build.py <ch>` 三閘綠（0 error／0 missing char／字形閘）且 log 無 undefined reference。
 - [ ] 已過散文稽核 gate 1（`handout-prose-audit`，易懂性 blocking = 0）與 gate 2（Codex 複核）。
-- [ ] **已過數學稽核（math gate），數學 blocking = 0**；契約見 [`handout/html/_audit/MATH-CORRECTNESS-RUBRIC.md`](handout/html/_audit/MATH-CORRECTNESS-RUBRIC.md)。目前由 Mode B 主審走查＋定稿前 Codex 獨立複核（`handout-math-audit` subagent 化規劃中）。
+- [ ] **已過數學稽核（math gate），數學 blocking = 0**；契約見 [`handout/_audit/MATH-CORRECTNESS-RUBRIC.md`](handout/_audit/MATH-CORRECTNESS-RUBRIC.md)。目前由 Mode B 主審走查＋定稿前 Codex 獨立複核（`handout-math-audit` subagent 化規劃中）。
 
 ---
 
 ## 16. 難度定位與先備知識基線
 
-（2026-07-03 新增。緣起：前四章難度評估發現難度落差源於多作者手稿在「深度軸」上各帶預設——本 spec 原僅定義語域（§3）、未定義深度，兩位作者遂各自填入了 Stewart 深度與分析深度。全程紀錄：`handout/html/_audit/REVIEW-ch01-ch04-difficulty-mitigation-applied.html`。）
+（2026-07-03 新增。緣起：前四章難度評估發現難度落差源於多作者手稿在「深度軸」上各帶預設——本 spec 原僅定義語域（§3）、未定義深度，兩位作者遂各自填入了 Stewart 深度與分析深度。全程紀錄：`handout/_audit/REVIEW-ch01-ch04-difficulty-mitigation-applied.html`。）
 
 ### 16.1 雙軸難度定位
 
@@ -1176,7 +1176,7 @@ Rationale：規則會演進。明確的 exception record 將偏離從 noise 變�
 
 - **深度軸——允許並預期向數學分析靠攏的「誠實構造」。** 重要結果要嘛當場證明、要嘛明文掛帳（on-credit fence 到補證處，比照 §2.4 的不編號 Caution box 前例）；MUST NOT 假證或含糊帶過。Ch4（\(e^x\) 級數構造、Bolzano–Weierstrass、MVT）為深度上限的既有範例。
 - **語域軸——講解一律維持 §3 的 Stewart / Rogawski 語域**：動機先行、由深入淺、informal gloss、分級 worked example。深度的提升 MUST NOT 以語域緊縮支付——內容再難，講法仍是溫暖的教科書，不是分析講義。
-- **難度預算**：mainline 節以「§16.2 基線讀者 effortful 但可自行走完」為上限；超出者 MUST 標為 foundation 章／Proof track（機制見 `handout/html/TYPESETTING_GUIDE.md` §10）並提供初讀路徑。
+- **難度預算**：mainline 節以「§16.2 基線讀者 effortful 但可自行走完」為上限；超出者 MUST 標為 foundation 章／Proof track（機制見 `legacy/html_handout/TYPESETTING_GUIDE.md` §10）並提供初讀路徑。
 - **護欄**：(1) foundation／Proof-track 標示；(2) §16.2 先備基線（違反 B 類＝blocking finding）；(3) 初學者模擬複驗（persona＝§16.2 基線讀者；納入正式章完成閘序另議，現行慣例見上述 audit 紀錄）。
 
 ### 16.2 先備知識基線（108 課綱數A、不含選修數甲）
@@ -1189,7 +1189,7 @@ Rationale：規則會演進。明確的 exception record 將偏離從 noise 變�
 
 **C 類——灰色帶。可假設「見過」，承重使用時 SHOULD 就地給一行提醒**：絕對值不等式 \(|x-a|<\delta\) ↔ 區間 \((a-\delta,\,a+\delta)\) 的流利拆解（**承重情境升 B**：Ch11 收斂半徑 \(|x-a|<R\)、\(\varepsilon\)-\(\delta\) 反覆使用時 MUST 就地建立，完整鋪開見附錄）；\(x^n-a^n\) 一般因式分解；重手的有理化／繁分數化簡。
 
-**處置慣例**：B 類的就地補寫為一至數行 bridge（既有範例：§1.2 倒數三角定義、§3.1 和差化積推導、§2.4 無窮和 on-ramp、§4.1 無窮等比級數推導）。值得完整鋪開者集中到 **附錄**（2026-07-03 使用者裁示；立項規劃見 `CONTENT_ROADMAP.md`）——課文就地保留最短 bridge 並 cross-ref 附錄，不因附錄存在而省去就地 bridge。（**2026-07-04：附錄已擴為一個家族**——precalculus 工具箱／線性代數／讀證明／補證處（Proof-track）；各 B 類項歸對應附錄，全 arc 設計見 [`handout/html/_audit/REVIEW-appendix-clean-slate-design.html`](handout/html/_audit/REVIEW-appendix-clean-slate-design.html)。）
+**處置慣例**：B 類的就地補寫為一至數行 bridge（既有範例：§1.2 倒數三角定義、§3.1 和差化積推導、§2.4 無窮和 on-ramp、§4.1 無窮等比級數推導）。值得完整鋪開者集中到 **附錄**（2026-07-03 使用者裁示；立項規劃見 `CONTENT_ROADMAP.md`）——課文就地保留最短 bridge 並 cross-ref 附錄，不因附錄存在而省去就地 bridge。（**2026-07-04：附錄已擴為一個家族**——precalculus 工具箱／線性代數／讀證明／補證處（Proof-track）；各 B 類項歸對應附錄，全 arc 設計見 [`handout/_audit/REVIEW-appendix-clean-slate-design.html`](handout/_audit/REVIEW-appendix-clean-slate-design.html)。）
 
 ### 16.3 新章節（含無手稿自產內容）的深度決策
 
@@ -1199,15 +1199,15 @@ Rationale：規則會演進。明確的 exception record 將偏離從 noise 變�
 
 ## 17. Changelog
 
-- **v3.5-RC（2026-07-25）**——§3〈平實英文條款〉標記為 **RC（凍結可用）**；同批把原獨立的「去 em-dash 線」併入本條款（新增「成對破折號與標點負載」小節：canonical 量測、目標 T_can ≤3.0/1000、CUT palette、四步仲裁決策序與具約束力先例、不換 tic 護欄、原因標籤、固定執行序、兩閘不可互相豁免），§8「破折號」降為字元排印區辨並指向 §3。量尺定版為 tools/prose_metrics.py（22 項 entity／格式 fixture 全綠，修正舊腳本漏數 &mdash; entity 導致 appD 被誤標「無需處理」的 bug）；新增 tools/verify_edits.py（交易式改動的 reverse-apply == HEAD 證明）。回填流程權威見 handout/html/_audit/KICKOFF-plain-backfill.md。經 Codex 設計審查（有條件通過），A10 依其裁決 REVERT。
+- **v3.5-RC（2026-07-25）**——§3〈平實英文條款〉標記為 **RC（凍結可用）**；同批把原獨立的「去 em-dash 線」併入本條款（新增「成對破折號與標點負載」小節：canonical 量測、目標 T_can ≤3.0/1000、CUT palette、四步仲裁決策序與具約束力先例、不換 tic 護欄、原因標籤、固定執行序、兩閘不可互相豁免），§8「破折號」降為字元排印區辨並指向 §3。量尺定版為 tools/prose_metrics.py（22 項 entity／格式 fixture 全綠，修正舊腳本漏數 &mdash; entity 導致 appD 被誤標「無需處理」的 bug）；新增 tools/verify_edits.py（交易式改動的 reverse-apply == HEAD 證明）。回填流程權威見 handout/_audit/KICKOFF-plain-backfill.md。經 Codex 設計審查（有條件通過），A10 依其裁決 REVERT。
 
-- **v3.5（2026-07-25）**——§3 新增「平實英文條款」（plain register）：MUST（數學內容字面化、關鍵位置直白詞、同概念同措辭、≥35 詞句人工判定拆留）／SHOULD（平均句長 18–22 監測值、P90 32–35 審查區、中性動詞對數學物件、EFL 高風險功能詞就地釋義）／FLAG（cleft、尾掛 -ing、被動、數學物件作主詞、not just X but Y——僅為人工候選線索，形式本身非缺陷）＋暖句四條件測試與合法暖句模板。同批：[`handout/html/_audit/PROSE-AUDIT-RUBRIC.md`](handout/html/_audit/PROSE-AUDIT-RUBRIC.md) 新增 R 維度（R1 可推測性／R2 字面傳達與明確指涉／R3 指稱一致性；部分 blocking＋頁級累積規則）與 V1 邊界修訂（暖＝導航清晰，非 lexical 修辭）。緣起：使用者反映 LLM 課文英文「太文學、不利非母語讀者」（2026-07-25）；網路研究三線＋現症診斷（ch06 §6.2 五句）＋ Codex gate-2 覆核（GO-with-changes）——全文見 [`handout/html/_audit/REVIEW-plain-register-research.html`](handout/html/_audit/REVIEW-plain-register-research.html)＋[`handout/html/_audit/REPORT-plain-register-codex-gate2-raw.md`](handout/html/_audit/REPORT-plain-register-codex-gate2-raw.md)。pilot＝Appendix B。（註：v3.4 條目當時未同步版本頭，本次版本頭自 3.3 直接跳 3.5。）
+- **v3.5（2026-07-25）**——§3 新增「平實英文條款」（plain register）：MUST（數學內容字面化、關鍵位置直白詞、同概念同措辭、≥35 詞句人工判定拆留）／SHOULD（平均句長 18–22 監測值、P90 32–35 審查區、中性動詞對數學物件、EFL 高風險功能詞就地釋義）／FLAG（cleft、尾掛 -ing、被動、數學物件作主詞、not just X but Y——僅為人工候選線索，形式本身非缺陷）＋暖句四條件測試與合法暖句模板。同批：[`handout/_audit/PROSE-AUDIT-RUBRIC.md`](handout/_audit/PROSE-AUDIT-RUBRIC.md) 新增 R 維度（R1 可推測性／R2 字面傳達與明確指涉／R3 指稱一致性；部分 blocking＋頁級累積規則）與 V1 邊界修訂（暖＝導航清晰，非 lexical 修辭）。緣起：使用者反映 LLM 課文英文「太文學、不利非母語讀者」（2026-07-25）；網路研究三線＋現症診斷（ch06 §6.2 五句）＋ Codex gate-2 覆核（GO-with-changes）——全文見 [`handout/_audit/REVIEW-plain-register-research.html`](handout/_audit/REVIEW-plain-register-research.html)＋[`handout/_audit/REPORT-plain-register-codex-gate2-raw.md`](handout/_audit/REPORT-plain-register-codex-gate2-raw.md)。pilot＝Appendix B。（註：v3.4 條目當時未同步版本頭，本次版本頭自 3.3 直接跳 3.5。）
 
-- **v3.4（2026-07-04）**——§16.2 B 類新增三項（全 arc 章脊椎定案＋附錄從頭 clean-slate 設計後，使用者裁定）：冪次和 \(\sum k^2,\sum k^3\)（→ 附錄 §A.3，Ch6 黎曼和先備）、行列式 \(2\times2\)/\(3\times3\)（→ 新「線性代數」附錄，Calc III 叉積/Jacobian/旋度承重）、複數（→ Ch11 Euler 時鋪開）；C 類絕對值不等式加註「承重升 B」（Ch11 收斂半徑）。§16.1 新增「一句話定位」headline（分析骨架＋Stewart 血肉）；§16.3 加註全 arc 深度政策 (B) 分章校準。緣起與證據：章脊椎提案（[`handout/html/_audit/REVIEW-chapter-arc-proposal.html`](handout/html/_audit/REVIEW-chapter-arc-proposal.html)）＋附錄 clean-slate 設計（[`handout/html/_audit/REVIEW-appendix-clean-slate-design.html`](handout/html/_audit/REVIEW-appendix-clean-slate-design.html)），均經 Codex 覆核。同批在 `CONTENT_ROADMAP.md` 立項「線性代數」與「補證處（Proof-track，含定理假設表）」兩附錄。
+- **v3.4（2026-07-04）**——§16.2 B 類新增三項（全 arc 章脊椎定案＋附錄從頭 clean-slate 設計後，使用者裁定）：冪次和 \(\sum k^2,\sum k^3\)（→ 附錄 §A.3，Ch6 黎曼和先備）、行列式 \(2\times2\)/\(3\times3\)（→ 新「線性代數」附錄，Calc III 叉積/Jacobian/旋度承重）、複數（→ Ch11 Euler 時鋪開）；C 類絕對值不等式加註「承重升 B」（Ch11 收斂半徑）。§16.1 新增「一句話定位」headline（分析骨架＋Stewart 血肉）；§16.3 加註全 arc 深度政策 (B) 分章校準。緣起與證據：章脊椎提案（[`handout/_audit/REVIEW-chapter-arc-proposal.html`](handout/_audit/REVIEW-chapter-arc-proposal.html)）＋附錄 clean-slate 設計（[`handout/_audit/REVIEW-appendix-clean-slate-design.html`](handout/_audit/REVIEW-appendix-clean-slate-design.html)），均經 Codex 覆核。同批在 `CONTENT_ROADMAP.md` 立項「線性代數」與「補證處（Proof-track，含定理假設表）」兩附錄。
 
 - **v3.3（2026-07-04 addendum）**——§16.2 B 類清單新增「部分分式分解」（rational function 拆解，積分技巧先備；precalculus 附錄 A.4 完整鋪開；forward-stock，Ch1–4 無 inbound 引用）。緣起：Appendix A 第二批 roster（使用者 2026-07-04 裁決）。
 
-- **v3.3**——新增 §16「難度定位與先備知識基線」（2026-07-03 與使用者議定）：雙軸難度定位（深度軸允許分析式誠實構造；語域軸維持 Stewart/Rogawski 由深入淺）；108 課綱數A（不含選修數甲）A／B／C 三類先備清單（B 類首次使用必須就地建立，違者 blocking——sec/csc/cot、和差化積、e 與 ln、極限、無窮等比級數等均屬 B 類）；precalculus 附錄收納政策；新章（含無手稿自產）深度決策程序。原 §16 Changelog 順延為 §17（版本頭與 §13 內的兩處參照已同步）。緣起與證據：前四章難度評估、多作者深度落差討論與兩輪修補（`handout/html/_audit/REVIEW-ch01-ch04-difficulty-mitigation-applied.html`）。
+- **v3.3**——新增 §16「難度定位與先備知識基線」（2026-07-03 與使用者議定）：雙軸難度定位（深度軸允許分析式誠實構造；語域軸維持 Stewart/Rogawski 由深入淺）；108 課綱數A（不含選修數甲）A／B／C 三類先備清單（B 類首次使用必須就地建立，違者 blocking——sec/csc/cot、和差化積、e 與 ln、極限、無窮等比級數等均屬 B 類）；precalculus 附錄收納政策；新章（含無手稿自產）深度決策程序。原 §16 Changelog 順延為 §17（版本頭與 §13 內的兩處參照已同步）。緣起與證據：前四章難度評估、多作者深度落差討論與兩輪修補（`handout/_audit/REVIEW-ch01-ch04-difficulty-mitigation-applied.html`）。
 
 - **v3.2**——習題退出講義本體（使用者 2026-06-12 定案：講義不收習題，習題以獨立習題本呈現）。`exercise` environment 自 §5 移除（12 → 11 個），手稿 Homework / Practice 標籤改歸習題本，§6 的 exercise 編號例外移除，§14 改寫為定案紀錄，§15 移除習題檢查項，各章源檔的 Exercises placeholder 與佔位句移除。文件家族中 `CONTENT_EXERCISES.md`（最低習題骨架）刪除；課文範例的題源工作流程（開放題庫、provenance、授權——2026-06-11／12 兩日定案）移至新檔 `CONTENT_SOURCING.md`。
 

@@ -1,7 +1,7 @@
 # Kickoff prompt：ch01 散文平實化回填（合併 sweep）
 
 > 整段貼進**新對話**即可開跑。本檔同時是該輪的版控紀錄。
-> 流程權威＝[`KICKOFF-plain-backfill.md`](KICKOFF-plain-backfill.md)；判準權威＝[`CONTENT_SPEC.md`](../../../CONTENT_SPEC.md) §3〈平實英文條款〉（RC，2026-07-25 凍結）。
+> 流程權威＝[`KICKOFF-plain-backfill.md`](KICKOFF-plain-backfill.md)；判準權威＝[`CONTENT_SPEC.md`](../../CONTENT_SPEC.md) §3〈平實英文條款〉（RC，2026-07-25 凍結）。
 
 ---
 
@@ -11,10 +11,10 @@
 
 ### 先讀（權威來源，依序）
 
-1. `CLAUDE.md`（根）＋ `handout/CLAUDE.md` — 專案紀律：**Codex 唯讀調用需逐次徵得使用者同意**、與使用者一律繁體中文、commit body 逐條記 Mode B 裁決、fragment 是唯一內容源（改完跑 `python handout/html/build.py ch01`）。
-2. `handout/html/_audit/KICKOFF-plain-backfill.md` — **本輪的流程權威**：Gate 0–9 關卡序、擋稿線、硬護欄、產物命名。照它跑，不要自創流程。
+1. `CLAUDE.md`（根）＋ `handout/CLAUDE.md` — 專案紀律：**Codex 唯讀調用需逐次徵得使用者同意**、與使用者一律繁體中文、commit body 逐條記 Mode B 裁決、fragment 是唯一內容源（改完跑 `python legacy/html_handout/build.py ch01`）。
+2. `handout/_audit/KICKOFF-plain-backfill.md` — **本輪的流程權威**：Gate 0–9 關卡序、擋稿線、硬護欄、產物命名。照它跑，不要自創流程。
 3. `CONTENT_SPEC.md` §3〈平實英文條款〉— **判準**（狀態 RC，凍結）：MUST／SHOULD／FLAG 三層、暖句四條件、**成對破折號與標點負載**（canonical 量測、目標 `T_can` ≤3.0/1000、CUT palette、四步仲裁決策序、具約束力先例、不換 tic 護欄、原因標籤、固定執行序、兩閘不可互相豁免）、段落層數值（≤120 詞／≤20 式為 SHOULD；≥150 詞或 >20 式或一段多論證 → 人工判定）。
-4. `handout/html/_audit/PROSE-AUDIT-RUBRIC.md` — 四維度（U 易懂／F 流暢＋黏接判準／S·A·V／**R 語域平實**）、擋稿線、**§3-protected non-findings**（別誤砍連接詞、動機段、*Informally* gloss、教學重複）。
+4. `handout/_audit/PROSE-AUDIT-RUBRIC.md` — 四維度（U 易懂／F 流暢＋黏接判準／S·A·V／**R 語域平實**）、擋稿線、**§3-protected non-findings**（別誤砍連接詞、動機段、*Informally* gloss、教學重複）。
 5. 前例（照這個形狀產出報告）：`REVIEW-ch06-sec-6-2-plain-applied.html`、`REVIEW-ch06-sec-6-3-plain-applied.html`、`REVIEW-mainline-plain-walk.html`。
 
 ### ch01 的三個專屬前提（**先看再動手**）
@@ -42,7 +42,7 @@
 
 - 量測：`python tools/prose_metrics.py --unit ch01`（canonical prose stream；兩個 `/1000` 指標共用同一分母）。
 - 改動驗證：`python tools/verify_edits.py <file> <edits.txt>` — 套用後必須 **PASS**（工作樹 == HEAD ＋恰好這些替換、reverse-apply byte-for-byte、未涵蓋差異 0 處）。
-- build：`python handout/html/build.py ch01`（**一定帶 `ch01` 參數**；無參數會重建全部 standalone）。
+- build：`python legacy/html_handout/build.py ch01`（**一定帶 `ch01` 參數**；無參數會重建全部 standalone）。
 
 ### 硬護欄
 
@@ -56,10 +56,10 @@
 
 ### 產物
 
-- `handout/html/_audit/REVIEW-ch01-plain-walk.html`（Gate 1 走查，逐條含 candidate ID ＋原因標籤 `DASH-CUT`／`DASH-KEEP`／`PLAIN-SPLIT`／`TIC-REBALANCE`／`R1-LEXICAL`）
-- `handout/html/_audit/REPORT-ch01-plain-codex-raw.md`（Gate 2 raw 照登）
-- `handout/html/_audit/REVIEW-ch01-plain-applied.html`（前後全句對照＋Gate 4–8 驗收表＋保留清單＋未完成項）
-- 回 `handout/html/_audit/REPORT-emdash-baseline-and-rollout.md` §2 更新 ch01 的密度與 tic guard 四項並打勾。
+- `handout/_audit/REVIEW-ch01-plain-walk.html`（Gate 1 走查，逐條含 candidate ID ＋原因標籤 `DASH-CUT`／`DASH-KEEP`／`PLAIN-SPLIT`／`TIC-REBALANCE`／`R1-LEXICAL`）
+- `handout/_audit/REPORT-ch01-plain-codex-raw.md`（Gate 2 raw 照登）
+- `handout/_audit/REVIEW-ch01-plain-applied.html`（前後全句對照＋Gate 4–8 驗收表＋保留清單＋未完成項）
+- 回 `handout/_audit/REPORT-emdash-baseline-and-rollout.md` §2 更新 ch01 的密度與 tic guard 四項並打勾。
 - commit：在**新分支**（如 `handout/plain-ch01`），subject ≤70 字，body 逐條記 Mode B。
 
 ### 完成定義

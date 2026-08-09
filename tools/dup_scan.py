@@ -19,7 +19,7 @@ def text(src):
 
 unit = sys.argv[1] if len(sys.argv) > 1 else "ch07"
 hits = 0
-for f in sorted(glob.glob(f"handout/html/fragments/{unit}/sec-*.html")):
+for f in sorted(glob.glob(f"legacy/html_handout/fragments/{unit}/sec-*.html")):
     k = os.path.basename(f)[4:-5]
     w = TOKEN_RE.findall(text(open(f, encoding="utf-8").read()))
     seen = {}

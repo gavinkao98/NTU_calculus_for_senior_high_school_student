@@ -7,7 +7,7 @@
 ## 為什麼需要
 
 圖是由 [`../../../export_figs.mjs`](../../../export_figs.mjs) 用 headless Chrome 把
-`handout/html/standalone/` 的面板重繪成向量 PDF。面板上的襯線／數學標籤用的是 standalone
+`legacy/html_handout/standalone/` 的面板重繪成向量 PDF。面板上的襯線／數學標籤用的是 standalone
 `@font-face` 宣告的 web 版 New Computer Modern（CDN `web-computer-modern` 套件），
 Chrome 於是把**那份 web 字型的子集**嵌進圖 PDF，最後隨圖進到出版 PDF。
 

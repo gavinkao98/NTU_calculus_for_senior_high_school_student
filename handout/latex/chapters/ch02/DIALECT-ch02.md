@@ -24,7 +24,7 @@ ch02 的兩個 inline SVG 帶了 ch01 沒有的子元素（`rect`／`line`／`ts
 
 ## 3. 圖資產（12 panel，`export_figs.mjs` 全數匯出）
 
-`node export_figs.mjs ../html/standalone/chapter2-print-standalone.html chapters/ch02/figs` → `figs/*.pdf` ＋ `figs/figures.json`（皆 gitignored）。版心實測 566.94px。
+`node export_figs.mjs ../../legacy/html_handout/standalone/chapter2-print-standalone.html chapters/ch02/figs` → `figs/*.pdf` ＋ `figs/figures.json`（皆 gitignored）。版心實測 566.94px。
 
 - 10 個 `<figure>`；多 panel 者：`f-and-fprime`×2、`quotient-example-graph`×2。
 - **inline SVG 兩個**（全書第二、三個，前一個是 ch01 Figure 1.2）：`fig-diff-cont`（Figure 2.7 可微⊂連續的包含關係圖）、`fig-product-area`（Figure 2.9 乘法法則的矩形面積模型）。兩者都靠 exporter 的 `figure.figure[id]` 選擇器（ch01 那輪擴充的）匯出。
@@ -85,7 +85,7 @@ ch02 的兩個 inline SVG 帶了 ch01 沒有的子元素（`rect`／`line`／`ts
 | **負向**：把 §4 的 `--serif` 修正退掉、重匯 Figure 2.7 | **FAIL 並指名 `CAAAAA+MicrosoftJhengHeiUIRegular：FontFile2（非 CFF），且不在 FIG_IMPORTED_OK 白名單內`，exit code 1**——證明新判準不是放行，真的抓得到今天這個缺陷 |
 
 ---
-*2026-07-26 建立。本輪的 HTML 內容側改動見 [`../../../html/_audit/REVIEW-ch02-plain-applied.html`](../../../html/_audit/REVIEW-ch02-plain-applied.html)（散文平實化回填 109 條）；§4 的圖字型修正與 §5.2 的閘 4 判準調整都是本 rollout 獨立發現、與平實化無關。*
+*2026-07-26 建立。本輪的 HTML 內容側改動見 [`../../../_audit/REVIEW-ch02-plain-applied.html`](../../../_audit/REVIEW-ch02-plain-applied.html)（散文平實化回填 109 條）；§4 的圖字型修正與 §5.2 的閘 4 判準調整都是本 rollout 獨立發現、與平實化無關。*
 
 ## 6. 收尾輪：兩項數學待辦結案（2026-07-26）
 

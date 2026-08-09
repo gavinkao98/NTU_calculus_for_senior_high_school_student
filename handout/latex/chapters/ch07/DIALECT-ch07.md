@@ -2,7 +2,7 @@
 
 > 比照 [`../ch06/DIALECT-ch06.md`](../ch06/DIALECT-ch06.md)：**這是 `convert.py` 的權威 mapping 表**，
 > 轉換器只認這裡列的節點，其餘一律硬錯（[`../../KICKOFF-latex-pilot.md`](../../KICKOFF-latex-pilot.md) §4.2 fail-loud）。
-> 盤點對象＝`../../../html/fragments/ch07/sec-7-{1..7}.html`。
+> 盤點對象＝`../../../../legacy/html_handout/fragments/ch07/sec-7-{1..7}.html`。
 > 盤點日：2026-07-26。重跑：`python handout/latex/dialect_inventory.py ch07`。
 
 ## 1. 摘要
@@ -106,7 +106,7 @@ HTML 側的分頁閘只數頁數與溢頁。是排成書頁、用眼睛讀才現
 23 張圖以
 
 ```
-node export_figs.mjs ../html/standalone/chapter7-print-standalone.html chapters/ch07/figs
+node export_figs.mjs ../../legacy/html_handout/standalone/chapter7-print-standalone.html chapters/ch07/figs
 ```
 
 匯出成 27 個向量 PDF panel（`figs/` 是 gitignored 中間物，隨時可由 standalone 重生）。
