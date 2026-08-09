@@ -359,7 +359,7 @@ It remains to see that the trailing sum is at most \(1\). Since \(\lvert h \rver
 
 \[ \sum_{n=2}^{\infty} \frac{1}{n!} \le \sum_{n=2}^{\infty} \frac{1}{2^{n - 1}} = \frac{1}{2} + \frac{1}{4} + \frac{1}{8} + \cdots = 1. \]
 
-Therefore \(\sum_{n=2}^{\infty} \lvert h \rvert^{n - 2}/n! \le 1\), and the displayed inequality gives \(\left\lvert (e^{h} - 1)/h - 1 \right\rvert \le \lvert h \rvert\). \qedmark
+Thus \(\sum_{n=2}^{\infty} \lvert h \rvert^{n - 2}/n! \le 1\), so the displayed inequality gives \(\left\lvert (e^{h} - 1)/h - 1 \right\rvert \le \lvert h \rvert\), as claimed. \qedmark
 \end{envproof}
 \begin{envremark}{Remark}{rem:4.3}{}
 Proposition \ref{prop:4.2} is precisely the quantitative content the Chapter 2 derivation left unstated. There the higher-order terms were said to “vanish as \(h \to 0\),” with no measure of how fast; here the deviation of \(\frac{e^{h} - 1}{h}\) from \(1\) is at most \(\lvert h \rvert\), a rate of convergence at least linear in \(h\). For ordinary differentiation, the qualitative statement suffices, but later arguments that must track the size of a derivative error — Taylor remainders and numerical estimates — use the explicit bound rather than the limit statement alone.
