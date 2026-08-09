@@ -100,7 +100,7 @@ video/                      # 流程不動；講義輸入錨改 latex/src（U5�
 | **P2 編號語意化**（U3） | 轉換腳本＋模板 counter 層；逐單元轉＋驗證 | 12 單元輸出編號與 as-built ledger 逐一相同 | ⬜ |
 | **P3 閘鏈＋契約＋CI＋文檔** | CONTRACT-latex-writing.md 立檔；6 個 handout subagent rubric 改輸入；quote_lint 改掃 .tex；CI 改（lint＋src 存在性；編譯閘維持本地）；README／PIPELINE／CONTENT_SPEC／WORKFLOW／CLAUDE.md 全面改寫 | doc_lint 綠；新 rubric 對任一章實跑一輪 | ⬜ |
 | **P4 影片線**（U5） | video/README golden path＋CONTENT_METHODOLOGY `source:` 錨格式改 latex/src；各文檔權威輸入指向更新 | video 文檔 doc_lint 綠、引用格式範例更新 | ⬜ |
-| **P5 Ch8 gate-2**（U4） | 三閘 gate-2（數學／散文 S·A·V／圖視覺）在 LaTeX 源上跑到 0 blocking → Ch8 定版 | Ch8 定版；新閘鏈首戰紀錄回填本表 | ⬜ |
+| **P5 Ch8 gate-2**（U4） | 三閘 gate-2（數學／散文 S·A·V／圖視覺）在 LaTeX 源上跑到 0 blocking → Ch8 定版 | Ch8 定版；新閘鏈首戰紀錄回填本表 | ✅ 2026-08-09（新閘鏈首戰通過：`.tex` inline＋harness PNG 餵 Codex 全程順跑；數學 1B+1A／散文 0／圖 13 clean，9 處措辭修補〔含 ch06 EF1〕，回歸全綠，Ch8 定版。紀錄＝`html/_dev-archive/ch08/ch08_gate2-audit.md`） |
 
 > P2 與 P3 可部分並行；P5 需 P1（ch08 有 src）＋P3（rubric 改完）。每 Phase 完成即回填
 > 本表＋PIPELINE dashboard，commit 授權照 CLAUDE.md。

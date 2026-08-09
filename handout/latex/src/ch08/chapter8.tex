@@ -575,12 +575,12 @@ A rational function, a ratio of polynomials, matches nothing in the chapter so f
 
 \[ \frac{1}{x(x + 1)} = \frac{1}{x} - \frac{1}{x + 1}, \]
 
-and each piece on the right integrates on sight, to \(\ln\lvert x\rvert - \ln\lvert x + 1\rvert + C\) by §6.4. Appendix A.4 built the whole algebra of such splittings and remarked that its real payoff would come in integration. This section collects that payoff. Every proper rational function is a sum of fragments of a few standard shapes (Proposition A.7), the constants are found by the routine of Strategy A.2, and each fragment shape has a standard antiderivative. For rational integrands, unlike most others, the method always succeeds.
+and each piece on the right integrates on sight, to \(\ln\lvert x\rvert - \ln\lvert x + 1\rvert + C\) by §6.4. Appendix A.4 built the whole algebra of such splittings and remarked that its real payoff would come in integration. This section collects that payoff. Every proper rational function is a sum of fragments of a few standard shapes (Proposition A.7), the constants are found by the routine of Strategy A.2, and each fragment shape has a standard antiderivative. For rational integrands, unlike most others, the method always succeeds in producing the decomposition, and every fragment it produces—except one, flagged where it arises—is then integrated in full.
 
 The claim “every proper rational function” rests on one algebraic fact that this book states but does not prove.
 
 \begin{envcaution}{Caution}{}{}
-Proposition A.7 begins by factoring the denominator completely into linear and irreducible quadratic factors. That such a factorization always exists is a consequence of the Fundamental Theorem of Algebra, whose proof lies outside this book. We take the factorization fact on credit; it is the first of two results this chapter borrows without proof, and everything else in the section is proved or computed in full.
+Proposition A.7 begins by factoring the denominator completely into linear and irreducible quadratic factors. That such a factorization always exists is a consequence of the Fundamental Theorem of Algebra, whose proof lies outside this book. We take the factorization fact on credit; it is the first of two results this chapter borrows without proof, and apart from the one fragment integral left as stated below (repeated irreducible quadratic factors), everything else in the section is proved or computed in full.
 \end{envcaution}
 Existence is not the same as a method for finding one. The credit above, and the promise that the method always succeeds, guarantee that a factorization exists; neither says how to produce it. The first tool is the factor theorem: \(r\) is a root of a polynomial exactly when \(x - r\) divides it. When the coefficients are integers this narrows the search, because an integer root must divide the constant term, so the divisors of that term form a short list of candidates to test. Every denominator in this section factors by hand, sometimes by that test and sometimes by a shortcut: the quadratic formula, which supplies the roots of the quadratic factor in Example \ref{ex:8.18} below, or grouping, as in Example \ref{ex:8.19}. When no factorization can be found, the method stops at step 2 of Strategy \ref{strat:8.5}, and no integration technique can supply the missing factorization. From here on we take the factoring as done.
 
@@ -692,7 +692,7 @@ on any interval avoiding \(0\). \qedmark
 \end{envsolution}
 \end{workedexample}
 \begin{envcaution}{Caution}{}{}
-Check irreducibility before assigning the \(Bx + C\) template: \(x^{2} + px + q\) is irreducible exactly when \(p^{2} < 4q\). A quadratic that looks unfactorable often factors after all. The factor \(x^{2} - x - 6\) splits as \((x - 3)(x + 2)\), and treating it as irreducible puts the whole decomposition on the wrong template. When in doubt, compute the discriminant first.
+Check irreducibility before assigning the \(Bx + C\) template: \(x^{2} + px + q\) is irreducible exactly when \(p^{2} < 4q\). A quadratic that looks unfactorable often factors after all. The factor \(x^{2} - x - 6\) splits as \((x - 3)(x + 2)\), and treating it as irreducible puts the whole decomposition on the wrong template. When in doubt, compute the discriminant first—\(p^{2} - 4q\) for the monic form above; for a general \(ax^{2} + bx + c\), factor out \(a\) first or use \(b^{2} - 4ac\), as Example \ref{ex:8.21} does.
 \end{envcaution}
 A repeated irreducible quadratic, the last case of Proposition A.7, adds no new integration idea: each power \(\frac{Bx + C}{(x^{2} + px + q)^{k}}\) again splits into a derivative-of-the-quadratic piece and a constant piece, and the constant pieces are handled by completing the square and a short reduction. The bookkeeping is longer, the shapes are the same, and this book leaves that case as stated.
 
@@ -747,7 +747,7 @@ and returning to \(x\),
 Differentiating confirms the formula, and the same check shows it also serves on the other component, \(-4 < x < 0\). The solution chained three techniques in order: a substitution to remove the radical, a division to make the fraction proper, and partial fractions to finish. That chaining is how integration usually proceeds in practice, and the next section is about choosing such chains deliberately. \qedmark
 \end{envsolution}
 \end{workedexample}
-Rational functions are the best-behaved integrands in this chapter: Strategy \ref{strat:8.5}’s four steps (divide, factor, decompose, integrate) always terminate, and the only borrowed ingredient is the factorization fact taken on credit above. Linear factors end in logarithms, their powers in power-rule terms, and irreducible quadratics in a logarithm plus an arctangent through (8.A). With parts, trigonometric methods, substitution, and partial fractions all in hand, the toolkit is complete. What remains is judgment: given an unfamiliar integral, which tool comes first? That question has a strategy of its own.
+Rational functions are the best-behaved integrands in this chapter: Strategy \ref{strat:8.5}’s four steps (divide, factor, decompose, integrate) always terminate in every case this section carries out, and the only borrowed ingredients are the factorization fact taken on credit above and the single fragment integral left as stated for repeated irreducible quadratic factors. Linear factors end in logarithms, their powers in power-rule terms, and irreducible quadratics in a logarithm plus an arctangent through (8.A). With parts, trigonometric methods, substitution, and partial fractions all in hand, the toolkit is complete. What remains is judgment: given an unfamiliar integral, which tool comes first? That question has a strategy of its own.
 
 
 \sechead{8.5}{Strategy for Integration}
@@ -761,7 +761,7 @@ look like near relatives: each is a small expression with one awkward feature. T
 \begin{steps}
   \item \emph{Simplify the integrand first.} Algebra and identities can change the problem’s class entirely: expand or split fractions, rationalize, apply a trigonometric identity. Only then judge what kind of integral it is.
   \item \emph{Look for an obvious substitution.} If some inner function \(g(x)\) appears together with its derivative, up to a constant factor, take \(u = g(x)\) (Strategy 6.2) and finish before reaching for anything heavier.
-  \item \emph{Classify by form and dispatch.} Powers or products of trigonometric functions go to Strategies \ref{strat:8.2} and \ref{strat:8.3}. A radical over a quadratic goes to Strategy \ref{strat:8.4}, completing the square first when the quadratic is not centered. A rational function goes to Strategy \ref{strat:8.5}. A product of unrelated factors, or a lone logarithm or inverse function, goes to parts by Strategy \ref{strat:8.1}.
+  \item \emph{Classify by form and dispatch.} Powers or products of trigonometric functions go to Strategies \ref{strat:8.2} and \ref{strat:8.3} (both in §8.2). A radical over a quadratic goes to Strategy \ref{strat:8.4} (§8.3), completing the square first when the quadratic is not centered. A rational function goes to Strategy \ref{strat:8.5}. A product of unrelated factors, or a lone logarithm or inverse function, goes to parts by Strategy \ref{strat:8.1}.
   \item \emph{If nothing has worked, try again from another angle.} Manipulate the integrand into a relative of a known integral, substitute to expose hidden structure, or chain techniques in sequence, as Examples \ref{ex:8.22} and \ref{ex:8.24} do. Several routes may succeed on the same integral; a dead end costs only the time it took.
 \end{steps}
 \end{envstrategy}
@@ -989,7 +989,7 @@ If \(p < 1\), then \(t^{1-p} \to 0\) as \(t \to 0^{+}\), and the integral conver
 What is wrong with the computation \(\displaystyle\int_{-1}^{3} \frac{dx}{x^{2}} = \Bigl[-\frac{1}{x}\Bigr]_{-1}^{3} = -\frac{1}{3} - 1 = -\frac{4}{3}\)?
 \end{envexample}
 \begin{envsolution}{Solution}{}{}
-The answer refutes itself: the integrand is positive, and a definite integral of a positive function cannot be negative (Theorem 6.2, part 4). The error is upstream. The Fundamental Theorem applies to integrands continuous on the whole interval, and \(1/x^{2}\) is unbounded near the interior point \(0\). The integral is improper, and Definition \ref{def:8.2}(c) requires splitting there:
+The answer refutes itself: the integrand is positive, and an integral that adds up positive values can never come out negative. The error is upstream. The Fundamental Theorem applies to integrands continuous on the whole interval, and \(1/x^{2}\) is unbounded near the interior point \(0\). The integral is improper, and Definition \ref{def:8.2}(c) requires splitting there:
 
 \[ \int_{-1}^{3} \frac{dx}{x^{2}} = \int_{-1}^{0} \frac{dx}{x^{2}} + \int_{0}^{3} \frac{dx}{x^{2}}, \]
 
@@ -1148,7 +1148,7 @@ The true value is \(\int_{1}^{2}\tfrac{dx}{x} = \ln 2 \approx 0.693147\), so the
 
 \[ E_{T} \approx -0.002488, \qquad E_{M} \approx +0.001239. \]
 
-Two patterns are worth noticing, and both persist beyond this example. The midpoint error is about half the trapezoidal error in size, and the two have opposite signs: the chords of a curve that bends upward lie above it, so \(T_{5}\) overshoots, while the midpoint rectangles compensate through the tilt of the tangent, as Figure \ref{fig:8.12} shows. The error bounds below make the sizes unsurprising, since the midpoint bound has \(24\) in its denominator where the trapezoidal bound has \(12\), which makes the midpoint bound half the size. The bounds control only the errors’ magnitudes, not their signs or their exact ratio. \qedmark
+Two patterns are worth noticing, and both persist beyond this example. The midpoint error is about half the trapezoidal error in size, and the two have opposite signs: the chords of a curve that bends upward lie above it, so \(T_{5}\) overshoots, while the midpoint rectangles compensate through the tilt of the tangent, as Figure \ref{fig:8.12} shows. The error bounds of Theorem \ref{thm:8.4} below make the sizes unsurprising, since the midpoint bound has \(24\) in its denominator where the trapezoidal bound has \(12\), which makes the midpoint bound half the size. The bounds control only the errors’ magnitudes, not their signs or their exact ratio. \qedmark
 \end{envsolution}
 \end{workedexample}
 \begin{figureblock}
@@ -1188,7 +1188,7 @@ Here \(h = 0.1\) and the nodes run \(1, 1.1, 1.2, \dots, 2\). Applying (S) with 
             &+ \frac{2}{1.6} + \frac{4}{1.7} + \frac{2}{1.8} + \frac{4}{1.9} + \frac{1}{2}\Bigr] \approx 0.693150.
         \end{aligned} \]
 
-Against \(\ln 2 \approx 0.693147\), the error is about \(-3 \times 10^{-6}\). Example \ref{ex:8.34}’s rules, using half as many nodes, erred in the third decimal place; Simpson’s Rule with these ten slices is already correct to five. The jump matches the scales recorded in the bounds below: the trapezoidal bound shrinks like \(1/n^{2}\), the Simpson bound like \(1/n^{4}\), and the errors observed here behave accordingly. \qedmark
+Against \(\ln 2 \approx 0.693147\), the error is about \(-3 \times 10^{-6}\). Example \ref{ex:8.34}’s rules, using half as many nodes, erred in the third decimal place; Simpson’s Rule with these ten slices is already correct to five. The jump matches the scales recorded in the bounds of Theorem \ref{thm:8.4} below: the trapezoidal bound shrinks like \(1/n^{2}\), the Simpson bound like \(1/n^{4}\), and the errors observed here behave accordingly. \qedmark
 \end{envsolution}
 \end{workedexample}
 The size of that jump has a reason the lemma above already contains. Add a cubic term \(Dx^{3}\) to the quadratic \(g\). Over \([-h, h]\) it integrates to \(0\), because \(x^{3}\) is odd (Theorem 6.8), and in the weighted combination it contributes \(D(-h)^{3} + 4 \cdot 0 + Dh^{3} = 0\) as well. Neither side of the lemma changes, so the identity holds for cubics as it stands. Simpson’s Rule is therefore exact on every cubic polynomial, one degree beyond the parabolas it was built from, and that extra degree is what the \emph{fourth} derivative in the next theorem records.

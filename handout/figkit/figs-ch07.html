@@ -1347,6 +1347,10 @@ window.MathJax = {
         return document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
       })
       .then(function () {
+        // #source is off-screen (left:-10000px) in the standalone; shot.mjs skips
+        // off-screen figures, so bring it into view once hydration is done.
+        var src = document.getElementById("source");
+        if (src) { src.style.position = "static"; src.style.left = "auto"; }
         var boot = document.getElementById("boot");
         if (boot) boot.remove();
       });
