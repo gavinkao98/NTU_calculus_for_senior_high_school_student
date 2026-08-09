@@ -1,5 +1,10 @@
 # KICKOFF — HTML→LaTeX 出版排版 pilot v2（appB 端到端・模板先行）
 
+> **⚠️ 2026-08-09 起本檔部分拍板被 LaTeX 統一 supersede**（[`KICKOFF-latex-unification.md`](KICKOFF-latex-unification.md)）：
+> D2 的「HTML＝撰稿預覽＋圖閘 render 載體」定位 → HTML 線退役、`latex/src/` 升格唯一源（U1）；
+> D7 字面編號 → 編號語意化 auto-counter＋`\label`/`\ref`（U3，P2 執行）。其餘決策（D3 確定性轉換、
+> D4 目標語言、D9 語意層分離、D10 互動拍板）照舊有效。讀本檔時以 unification kickoff 為準。
+
 > **📦 2026-07-17 資料夾重整註記**：pilot 收案同日，`handout/` 依兩線分工重整——本線原路徑
 > `handout/tex_export/` 更名為 **`handout/latex/`**（本檔隨之遷入）；fragment／standalone／
 > `_render`／`_audit` 等撰稿資產移至 **`handout/html/`**（standalone 集中進 `html/standalone/`）。

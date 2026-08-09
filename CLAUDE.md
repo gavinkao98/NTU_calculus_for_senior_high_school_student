@@ -6,8 +6,8 @@
 
 | 產線 | 路徑 | 說明 |
 |------|------|------|
-| HTML 講義（撰稿製作線） | `handout/html/` | MathJax/KaTeX＋JS paginator；fragment → `standalone/` 組裝。**整體先做 HTML 講義（2026-07-17 拍板）** |
-| LaTeX 出版排版線 | `handout/latex/` | 定稿時 fragment 確定性轉換 → memoir 模板 → 出版級 A4 PDF（appB pilot GO） |
+| LaTeX 講義（唯一源＋出版線） | `handout/latex/` | **2026-08-09 拍板：講義線＋影片線統一走 LaTeX**——`src/<ch>/*.tex` 升格唯一內容源（ch03 pilot 已收），memoir 模板 → 出版級 A4 PDF。遷移計畫＝[`handout/latex/KICKOFF-latex-unification.md`](handout/latex/KICKOFF-latex-unification.md)（supersede 2026-07-17「先 HTML 後轉換」拍板） |
+| HTML 講義（退役中） | `handout/html/` | fragment 凍結、`build.py`/standalone 遷移期間僅作圖 kit 載體；圖繪製縮編至 `handout/figkit/`（JS kit 保留為畫圖工具，U2） |
 | Manim 影片 | `video/` | 旁白＋動畫＋TTS；`make.py` 建置（詳見 [`video/README.md`](video/README.md)） |
 | 舊 LaTeX 講義 | `legacy/tex_handout/` | 已凍結，僅供參照（與 `handout/latex/` 無關） |
 

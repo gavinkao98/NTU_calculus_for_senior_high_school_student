@@ -4,6 +4,10 @@
 
 內容撰寫規則（用語、密度、數學排版、圖表規範等）以 [`../CONTENT_SPEC.md`](../CONTENT_SPEC.md) 為準。
 
+> **⚠️ 2026-08-09 拍板（LaTeX 統一）supersede 本檔兩線分工**：`latex/src/<ch>/*.tex` 升格唯一內容源
+> （ch03 pilot 已收——**ch03 改課文改 `latex/src/ch03/chapter3.tex`，不再改 fragment**）；其餘章遷移中，
+> 遷移期間未升格章仍照下述規則。權威計畫＝[`latex/KICKOFF-latex-unification.md`](latex/KICKOFF-latex-unification.md)。
+
 ## 兩線結構（2026-07-17 重整）
 
 - [`html/`](html/)＝**HTML 撰稿製作線**（工作線）：fragment 內容源、`build.py` 組裝、`standalone/` 列印版、`_render/` 自驗工具、`_audit/` rubric 與報告、`_dev-archive/` 歷史紀錄。

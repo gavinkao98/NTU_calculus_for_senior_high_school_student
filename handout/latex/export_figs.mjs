@@ -101,7 +101,12 @@ const GF_LINK = /<link[^>]*(?:googleapis|gstatic)[^>]*>/gi;
 const localize = (doc) => doc.replace(GF_LINK, "")
   .replace("</head>", `<style>${LOCAL_FONT_CSS}</style></head>`);
 
-const FILE_PORT = PORT + 250;
+// PORT+250 lands in [9950,10199], which contains 10080 — on Chrome's restricted-port
+// list (ERR_UNSAFE_PORT). Measured 2026-08-09: pid%250=130 gave FILE_PORT=10080, Chrome
+// refused every wrapper navigation, and printToPDF silently produced Letter-size error
+// pages (system-font JhengHei/Segoe subsets in the "figure" PDFs). Skip that port, and
+// see the location.href assertion below for the general guard.
+const FILE_PORT = PORT + 250 === 10080 ? 10081 : PORT + 250;
 const server = createServer((req, res) => {
   const path = decodeURIComponent(req.url.split("?")[0]);
   if (FONT_ROUTES.has(path)) {
@@ -310,6 +315,15 @@ for (const p of wanted) {
   // Served over http (not file://) so the local @font-face URLs above can actually load.
   await cmd("Page.navigate", { url: `http://127.0.0.1:${FILE_PORT}/w/${base}.html` });
   await sleep(250);
+  // Assert the wrapper actually loaded: a refused navigation (e.g. ERR_UNSAFE_PORT) leaves
+  // Chrome on an error page whose print is a full-size blank-ish sheet, and the font check
+  // below has been observed NOT to catch that state. location.href is the ground truth.
+  const loc = await evalJs("location.href");
+  if (!loc || !loc.includes(`/w/${base}.html`)) {
+    console.error(`  FAIL ${base}: wrapper did not load (page is at ${loc}) — ` +
+      `is FILE_PORT ${FILE_PORT} on Chrome's restricted-port list?`);
+    proc.kill(); server.close(); process.exit(1);
+  }
   // Force every declared @font-face to actually load before printing. Awaiting
   // document.fonts.ready alone is NOT enough — measured: with the forced load removed,
   // fonts.check() reports false for both NCM and Inter even after ready resolves, and the

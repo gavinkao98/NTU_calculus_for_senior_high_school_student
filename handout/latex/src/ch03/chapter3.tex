@@ -1,10 +1,10 @@
 % !TeX program = lualatex
 % ============================================================
-% chapter3.tex — ch03 出版成品（自動產生，勿手改）
-% 產生：cd handout/latex && python make_dist.py ch03
-%   內容源＝handout/html/fragments/ch03/（fragment 唯讀；數學逐位元組 pass-through）
-%   樣式源＝../../template/calcbook.sty（M-B1 拍板模板）
-% 直接重編（本資料夾為 CWD；aux 進 build/、資料夾保持兩檔）：
+% chapter3.tex — ch03 唯一內容源（2026-08-09 起；LaTeX 統一 U1）
+% 沿革：升格自 dist/ch03/chapter3.tex（原 make_dist.py 自 fragment 轉換的成品；
+%   fragment 樹已凍結，改課文一律改本檔。拍板見 ../../KICKOFF-latex-unification.md）
+% 樣式源＝../../template/calcbook.sty（M-B1 拍板模板）
+% 編譯（本資料夾為 CWD；aux 進 build/、成品 PDF 移入 ../../dist/ch03/）：
 %   latexmk -lualatex -auxdir=../../build/aux-ch03 chapter3.tex
 % ============================================================
 \documentclass[a4paper,12pt,oneside]{memoir}

@@ -1,5 +1,10 @@
 # 完成一章的閘序（HTML 講義 chapter lifecycle）
 
+> **⚠️ 2026-08-09 拍板（LaTeX 統一）**：`latex/src/<ch>/*.tex` 升格唯一內容源、HTML 撰稿線退役
+> （遷移計畫＝[`latex/KICKOFF-latex-unification.md`](latex/KICKOFF-latex-unification.md)，supersede 本檔
+> 「兩線分工拍板」段與「改課文只改 `html/fragments/`」指示——**ch03 已改為改 `latex/src/ch03/chapter3.tex`**；
+> 其餘章升格前照舊）。閘序本身（M1–M5、gate-2 全跑、雙閘紀律）**不變**，僅輸入載體隨 P3 rubric 改寫換為 `.tex`。
+
 > **本檔是什麼：** 把一章講義從 spine 素材（手稿或 canon 藍本）推到「定稿」要經過的**完整閘序**之**權威總覽**，兼任**各章狀態 dashboard**。
 > 各閘的細節規格不在此重複——本檔給「順序、各閘用什麼、哪裡停下、產出什麼」，細節指向既有 sub-doc。
 > 撰稿模式（Mode A／B／C、兩種變體）以 [`../CONTENT_AUTHORING_WORKFLOW.md`](../CONTENT_AUTHORING_WORKFLOW.md) 為準；內容撰寫規則以 [`../CONTENT_SPEC.md`](../CONTENT_SPEC.md) 為準；改課文只改 `html/fragments/`、再 `python html/build.py ch{NN}`（見 [`README.md`](README.md)）。

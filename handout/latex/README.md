@@ -1,7 +1,12 @@
-# latex —— LaTeX 出版排版線
+# latex —— LaTeX 講義線（唯一內容源＋出版排版）
 
-> **這條線做什麼**：定稿時把 HTML 線的 fragment（唯一內容源）**確定性轉換**成出版級 A4 PDF
-> （2026-07-17 拍板：整體先做 HTML 講義、定稿再轉，見 [`../PIPELINE.md`](../PIPELINE.md) §出版排版線）。
+> **⚠️ 2026-08-09 拍板（LaTeX 統一）**：本線升格為**唯一內容源＋唯一工作線**——`src/<ch>/<name>.tex`
+> 是手改／LLM 改的源（ch03 pilot 已收，升格自 dist 自足 tex），HTML 撰稿線退役、fragment 凍結。
+> 權威計畫＝[`KICKOFF-latex-unification.md`](KICKOFF-latex-unification.md)；未升格章遷移期間仍照下述
+> 「fragment→轉換」流程（ch08＋appA/C/D 首轉即最後一批）。
+>
+> **（以下為 2026-07-17 兩線時代的線導覽，P1 源接管完成後改寫）**：定稿時把 HTML 線的 fragment
+> **確定性轉換**成出版級 A4 PDF（見 [`../PIPELINE.md`](../PIPELINE.md) §出版排版線）。
 > 沿革、D1–D10 拍板、rollout 計畫的權威文檔＝[`KICKOFF-latex-pilot.md`](KICKOFF-latex-pilot.md)。
 
 ## 哪個章節的講義在哪裡：看 `dist/`（成品夾）

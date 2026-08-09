@@ -1,12 +1,12 @@
 # `template/fonts/webcm/` —— 字形閘的比對基準（非排版用）
 
 這裡的字型**不參與 LaTeX 排版**（正文的 New Computer Modern 走 TeX 樹，見
-`template/calcbook.sty`）。它們只是 [`../../check_glyphs.py`](../../check_glyphs.py)
+`template/calcbook.sty`）。它們只是 [`../../../check_glyphs.py`](../../../check_glyphs.py)
 驗證圖裡嵌入字形時的**原始字型基準**。
 
 ## 為什麼需要
 
-圖是由 [`../../export_figs.mjs`](../../export_figs.mjs) 用 headless Chrome 把
+圖是由 [`../../../export_figs.mjs`](../../../export_figs.mjs) 用 headless Chrome 把
 `handout/html/standalone/` 的面板重繪成向量 PDF。面板上的襯線／數學標籤用的是 standalone
 `@font-face` 宣告的 web 版 New Computer Modern（CDN `web-computer-modern` 套件），
 Chrome 於是把**那份 web 字型的子集**嵌進圖 PDF，最後隨圖進到出版 PDF。

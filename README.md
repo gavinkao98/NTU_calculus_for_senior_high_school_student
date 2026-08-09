@@ -4,6 +4,8 @@
 
 本檔案是**儲存庫樞紐（repository hub）**。它對儲存庫結構與建置指令具有權威性——生產用講義在 `handout/` 下分兩線（2026-07-17 拍板＋重整）：**`handout/html/`＝HTML 撰稿製作線**（以 fragment 撰稿、`build.py` 組版，整體先做 HTML 講義），**`handout/latex/`＝LaTeX 出版排版線**（定稿時把 HTML 確定性轉換成出版級 PDF）。下方所載的 LaTeX／preamble／建置描述現為 legacy（已搬至 `legacy/tex_handout/`，與 `handout/latex/` 無關）。內容撰寫規則與媒體產線規則各自獨立成檔，連結列於下方。
 
+> **⚠️ 2026-08-09 拍板（LaTeX 統一）**：講義線＋影片線統一走 LaTeX——`handout/latex/src/<ch>/*.tex` 升格**唯一內容源**（ch03 pilot 已收）、HTML 撰稿線退役（fragment 凍結）、JS 圖 kit 縮編為畫圖工具（`handout/figkit/`）。上段與下方各節的兩線敘述**將分階段改寫**（P3）；現況與遷移計畫以 [`handout/latex/KICKOFF-latex-unification.md`](handout/latex/KICKOFF-latex-unification.md) 為準。
+
 ---
 
 ## 從這裡開始

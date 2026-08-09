@@ -1,0 +1,899 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Chapter 3 — Print build</title>
+
+<!-- ════════════════════════════════════════════════════════════════
+     圖片寬度控制面板 —— 直接改下面的數字即可（px 固定寬 / % 相對頁寬）
+     並排或多格圖（1.1 / 1.7 / 1.9）控制的是「每一格」的寬度。
+     ════════════════════════════════════════════════════════════════ -->
+<style>
+:root {
+  --fig-3-1:  100%;    /* Figure 3.1  Sector inequality */
+  --fig-3-2:  100%;    /* Figure 3.2  Squeeze graph */
+  --fig-3-3:  100%;    /* Figure 3.3  Sine slope vs cosine height */
+  --fig-3-4:  100%;    /* Figure 3.4  Simple harmonic motion */
+  --fig-3-5:  100%;    /* Figure 3.5  Composed mapping */
+  --fig-3-6:  100%;    /* Figure 3.6  Remainder-form tangent fit */
+  --fig-3-7:  100%;    /* Figure 3.7  Arcsin endpoint tangents */
+}
+
+.paper figure[data-fig="sector-inequality"] { --fig-w: var(--fig-3-1); }
+.paper figure[data-fig="squeeze-limit"] { --fig-w: var(--fig-3-2); }
+.paper figure[data-fig="sin-cos-slope"] { --fig-w: var(--fig-3-3); }
+.paper figure[data-fig="shm-triple"] { --fig-w: var(--fig-3-4); }
+.paper figure[data-fig="composed-mapping"] { --fig-w: var(--fig-3-5); }
+.paper figure[data-fig="remainder-tangent"] { --fig-w: var(--fig-3-6); }
+.paper figure[data-fig="arcsin-vertical-tangent"] { --fig-w: var(--fig-3-7); }
+</style>
+
+<!-- Google Fonts: Inter for UI -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<!-- New Computer Modern (prose/text faces) — matches MathJax 4 "mathjax-newcm" math font.
+     Source: npm web-computer-modern@1.1.0-new-cm-7-0-2 via jsDelivr. License: GUST Font License.
+     10pt optical size ("Serif 10"). NOTE: filenames contain %20-encoded spaces — keep them. -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<style>
+@font-face {
+  font-family: "New Computer Modern";
+  font-style: normal; font-weight: 400; font-display: swap;
+  src: url("https://cdn.jsdelivr.net/npm/web-computer-modern@1.1.0-new-cm-7-0-2/woff2/WebCM%20Serif%2010%20Regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "New Computer Modern";
+  font-style: italic; font-weight: 400; font-display: swap;
+  src: url("https://cdn.jsdelivr.net/npm/web-computer-modern@1.1.0-new-cm-7-0-2/woff2/WebCM%20Serif%2010%20Italic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "New Computer Modern";
+  font-style: normal; font-weight: 700; font-display: swap;
+  src: url("https://cdn.jsdelivr.net/npm/web-computer-modern@1.1.0-new-cm-7-0-2/woff2/WebCM%20Serif%2010%20Bold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "New Computer Modern";
+  font-style: italic; font-weight: 700; font-display: swap;
+  src: url("https://cdn.jsdelivr.net/npm/web-computer-modern@1.1.0-new-cm-7-0-2/woff2/WebCM%20Serif%2010%20BoldItalic.woff2") format("woff2");
+}
+</style>
+
+<!-- MathJax 4 (CHTML output with inline line-breaking) -->
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']],
+    macros: {
+      arccsc: '\\operatorname{arccsc}',
+      arcsec: '\\operatorname{arcsec}',
+      arccot: '\\operatorname{arccot}'
+    }
+  },
+  chtml: {
+    mtextInheritFont: true,
+    matchFontHeight: true
+  },
+  output: {
+    displayOverflow: 'linebreak',
+    linebreaks: {
+      inline: true,
+      width: '100%',
+      lineleading: 0.2
+    }
+  },
+  startup: { typeset: false }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js"></script>
+
+<style>
+/* ============================================================
+   skin-hs.css — inlined + modified: Times New Roman + MathJax
+   ============================================================ */
+.paper {
+  --c-primary: oklch(0.50 0.13 245);
+  --c-caution: oklch(0.50 0.155 25);
+  --c-aux: oklch(0.55 0.01 260);
+  --c-axis: #474b54;
+  --ink: #1b1c1f;
+  --ink-soft: #565a63;
+  --ink-faint: #8a8e98;
+  --paper: #ffffff;
+  --rule: #e5e7eb;
+  --fig-w-pair: 250px;     /* 並排(pair)圖每張的預設寬度（整體一次調） */
+  --fig-w-single: 100%;    /* 單張/triple/grid 圖的預設最大寬度（整體一次調） */
+  /* 個別覆寫：在任一 <figure> 標籤加 style="--fig-w: 320px" 即可只改那一張 */
+  --serif: "New Computer Modern", "Latin Modern Roman", "Times New Roman", Times, Georgia, serif;
+  --ui: "Inter", -apple-system, system-ui, sans-serif;
+  --a-concept:  oklch(0.50 0.13 55);
+  --a-result:   oklch(0.50 0.13 245);
+  --a-practice: oklch(0.50 0.13 152);
+  --a-aside:    oklch(0.50 0.02 260);
+  --a-caution:  oklch(0.50 0.155 25);
+  --a-strategy: oklch(0.50 0.13 290);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: var(--fs-base, 17.5px);
+  line-height: var(--lh-base, 1.62);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  box-sizing: border-box;
+}
+.paper *, .paper *::before, .paper *::after { box-sizing: border-box; }
+.paper .page { padding: 52px 58px 64px; max-width: 760px; margin: 0 auto; }
+.skin-hs .page { hyphens: auto; -webkit-hyphens: auto; }
+.skin-hs p, .skin-hs li { text-align: justify; text-justify: inter-word; }
+.paper p { margin: 0 0 .85em; text-wrap: pretty; }
+.paper em { font-style: italic; }
+.paper .informal { font-style: italic; color: var(--ink-soft); }
+.paper ol { margin: .2em 0 .9em; padding-left: 1.5em; }
+.paper li { margin: .35em 0; text-wrap: pretty; }
+.paper .warmup { counter-reset: wu; list-style: none; padding-left: 0; }
+.paper .warmup > li { counter-increment: wu; position: relative; padding-left: 2.1em; }
+.paper .warmup > li::before {
+  content: "(" counter(wu, lower-alpha) ")";
+  position: absolute; left: 0; top: 0;
+  font-family: var(--ui); font-size: .82em; color: var(--ink-faint); line-height: 1.85;
+}
+.paper mjx-container[display="true"] { margin: .55em 0 !important; overflow-x: auto; overflow-y: hidden; }
+.paper mjx-container[display="true"]::-webkit-scrollbar { display: none; }
+.paper .qed { display: block; text-align: right; margin: -1.62em 0 0; height: 1.62em; pointer-events: none; }
+.paper .qed::after {
+  content: ""; display: inline-block; width: .56em; height: .56em;
+  border: 1.3px solid var(--ink-soft);
+}
+.paper .env-body > :has(+ .qed) { margin-bottom: 0; display: flow-root; }
+.paper .env-body::after { content: ""; display: block; clear: both; }
+.paper .sec-head {
+  margin-top: 2.7em; padding-top: 1.35em;
+  border-top: 1px solid var(--rule); margin-bottom: 1.5em;
+}
+.sheet-body > .sec-head:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+.paper .sec-kicker {
+  font-family: var(--ui); font-size: .7rem; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--c-primary); font-weight: 700; margin-bottom: .55em;
+}
+.paper .sec-title { font-weight: 600; font-size: 2rem; line-height: 1.12; letter-spacing: -.012em; margin: 0; }
+.paper .sec-no { color: var(--c-primary); margin-right: .5em; font-weight: 600; }
+.paper .subsec-head {
+  font-family: var(--ui); font-weight: 600; font-size: 1.08rem; margin: 1.9em 0 .65em;
+  display: flex; align-items: center; gap: .55em; color: var(--ink);
+}
+.paper .subsec-head::before { content: ""; width: 18px; height: 3px; background: var(--c-primary); border-radius: 2px; }
+.paper .figure { margin: 1.7em 0; text-align: center; }
+.paper .figure-art { display: flex; justify-content: center; }
+.paper .figure-art--pair { gap: 26px; }
+.paper .fig-svg { width: 100%; max-width: var(--fig-w, var(--fig-w-pair)); height: auto; }
+.paper .figure-art:not(.figure-art--pair) .fig-svg { max-width: var(--fig-w, var(--fig-w-single)); }
+.paper figcaption {
+  font-family: var(--ui); font-size: .8em; line-height: 1.5;
+  color: var(--ink-soft); margin-top: .7em; text-wrap: pretty;
+  max-width: none; text-align: left; display: table; margin-inline: auto;
+}
+.paper .fig-no { font-weight: 600; color: var(--ink); margin-right: .4em; }
+.paper figcaption mjx-container { font-size: .95em; }
+.paper .axis { stroke: var(--c-axis); stroke-width: 1.25; fill: none; stroke-linecap: round; }
+.paper .curve { stroke: var(--c-primary); stroke-width: 2.2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.paper .refline { stroke: var(--c-caution); stroke-width: 1.3; stroke-dasharray: 4.5 3.5; fill: none; stroke-linecap: round; opacity: .85; }
+.paper .dot { fill: var(--ink); }
+.paper .bubble { stroke: var(--c-aux); stroke-width: 1.4; fill: none; }
+.paper .arrow-fwd { stroke: var(--c-primary); stroke-width: 2; fill: none; }
+.paper .arrow-bwd { stroke: var(--c-caution); stroke-width: 2; fill: none; }
+.paper .fig-svg text { font-family: var(--ui); font-size: 13px; }
+.paper .axlab { fill: var(--c-aux); font-style: italic; }
+.paper .lab-curve { fill: var(--c-primary); font-style: italic; }
+.paper .lab-ref, .paper .lab-ref-b { fill: var(--c-caution); }
+.paper .ptlab { fill: var(--ink-soft); font-size: 12px; }
+.paper .setlab { fill: var(--ink); font-weight: 600; font-size: 14.5px; text-anchor: middle; }
+
+/* env blocks */
+.skin-hs .env {
+  --accent: var(--a-aside);
+  margin: 1.2em 0; padding-left: 16px;
+  border-left: 2.5px solid color-mix(in srgb, var(--accent) 38%, var(--paper));
+}
+.skin-hs .env-definition  { --accent: var(--a-concept); }
+.skin-hs .env-theorem, .skin-hs .env-proposition, .skin-hs .env-corollary { --accent: var(--a-result); }
+.skin-hs .env-example, .skin-hs .env-solution, .skin-hs .env-exercise { --accent: var(--a-practice); }
+.skin-hs .env-remark { --accent: var(--a-aside); }
+.skin-hs .env-head {
+  display: flex; align-items: baseline; gap: .5em; flex-wrap: wrap;
+  margin: 0 0 .55em; font-family: var(--ui);
+}
+.skin-hs .env-kicker {
+  font-size: .62rem; letter-spacing: .07em; text-transform: uppercase; font-weight: 700;
+  color: var(--paper); background: var(--accent); padding: 3px 10px; border-radius: 999px; line-height: 1.5;
+}
+.skin-hs .env-num { font-weight: 700; color: var(--accent); font-size: .94em; }
+.skin-hs .env-name { font-style: italic; font-weight: 400; color: var(--ink-soft); font-family: var(--serif); font-size: 1em; }
+.skin-hs .env-body > p:first-child { margin-top: 0; }
+.skin-hs .env-body > :last-child { margin-bottom: 0; }
+.skin-hs .env-theorem .env-body, .skin-hs .env-proposition .env-body { font-style: italic; }
+.skin-hs .env-theorem .env-body mjx-container, .skin-hs .env-proposition .env-body mjx-container { font-style: normal; }
+.skin-hs .env-definition em { font-style: italic; }
+.skin-hs .env-remark { color: var(--ink-soft); font-size: .97em; }
+.skin-hs .env-remark .env-kicker { background: transparent; color: var(--a-aside); border: 1px solid color-mix(in srgb, var(--a-aside) 45%, var(--paper)); }
+.skin-hs .env-proof { --accent: var(--a-result); }
+.skin-hs .env-proof .env-kicker {
+  background: transparent; color: var(--a-result); font-style: italic; letter-spacing: .04em;
+  border: 1px solid color-mix(in srgb, var(--a-result) 45%, var(--paper));
+}
+.skin-hs .qed-proof::after { border-color: var(--ink); }
+.skin-hs .workedexample {
+  margin: 1.6em 0; padding-left: 16px;
+  border-left: 2.5px solid color-mix(in srgb, var(--a-practice) 38%, var(--paper));
+  display: flow-root;
+}
+.skin-hs .workedexample .env { margin: .7em 0; padding-left: 0; border-left: 0; }
+.skin-hs .env-solution .env-kicker { background: transparent; color: var(--a-practice); border: 1px solid color-mix(in srgb, var(--a-practice) 45%, var(--paper)); }
+.skin-hs > .env-cont { margin-top: 0; padding-top: .82em; }
+.skin-hs > .env:has(+ .env-cont) { margin-bottom: 0; display: flow-root; }
+.skin-hs > .env-example:has(+ .env-solution) { margin-bottom: 0; }
+.skin-hs > .env-example + .env-solution { margin-top: 0; padding-top: .72em; }
+.skin-hs > .env-cont, .skin-hs > .env-example, .skin-hs > .env-solution { display: flow-root; }
+.skin-hs .env-exercise .env-kicker { background: transparent; color: var(--a-practice); border: 1px solid var(--a-practice); }
+.skin-hs .env-caution, .skin-hs .env-strategy {
+  padding: 15px 20px; border-radius: 8px; margin: 1.4em 0;
+  border-left-width: 4px; border-left-style: solid;
+}
+.skin-hs .env-caution {
+  --accent: var(--a-caution);
+  background: color-mix(in srgb, var(--a-caution) 7%, var(--paper));
+  border: 1px solid color-mix(in srgb, var(--a-caution) 22%, var(--paper));
+  border-left-color: var(--a-caution);
+}
+.skin-hs .env-strategy {
+  --accent: var(--a-strategy);
+  background: color-mix(in srgb, var(--a-strategy) 7%, var(--paper));
+  border: 1px solid color-mix(in srgb, var(--a-strategy) 22%, var(--paper));
+  border-left-color: var(--a-strategy);
+}
+.skin-hs .env-caution .env-name, .skin-hs .env-strategy .env-name { color: var(--ink-soft); }
+.skin-hs .env-strategy .steps { margin-bottom: 0; }
+.skin-hs.vivid .env { border-left-color: color-mix(in srgb, var(--accent) 70%, var(--paper)); border-left-width: 3px; }
+.skin-hs.vivid .workedexample { border-left-color: color-mix(in srgb, var(--a-practice) 70%, var(--paper)); border-left-width: 3px; }
+.skin-hs.vivid .env-kicker { font-size: .64rem; padding: 3.5px 11px; }
+
+/* ============================================================
+   figs.css — inlined + modified for MathJax
+   ============================================================ */
+.paper .fig-svg { height: auto; max-width: 100%; overflow: visible; }
+.paper .figure-art { display: flex; justify-content: center; align-items: flex-start; gap: 24px; flex-wrap: wrap; }
+.paper .figure-art--pair { gap: 24px; }
+.paper .figure-art--pair .fig-panel { flex: 1 1 220px; max-width: 300px; }
+.paper .figure-art--triple { gap: 18px; }
+.paper .figure-art--triple .fig-panel { flex: 1 1 190px; max-width: 240px; }
+.paper .figure-art--grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; justify-items: center; }
+.paper .figure-art--grid .fig-panel { max-width: 240px; }
+.paper .fig-panel { display: flex; flex-direction: column; align-items: center; }
+.paper .fig-note {
+  font-family: var(--ui); font-size: .8em; line-height: 1.45;
+  color: var(--ink-soft); margin-top: .55em; text-align: center; text-wrap: pretty;
+}
+.paper .fig-note mjx-container { font-size: .98em; }
+.paper .fig-fo { overflow: visible; }
+.paper .fig-lyr { position: relative; width: 100%; height: 100%; font-family: var(--serif); }
+.paper .fig-lbl {
+  position: absolute; white-space: nowrap; line-height: 1; font-size: 15px;
+  text-shadow: 0 0 2px var(--paper), 0 0 2px var(--paper), 0 0 1px var(--paper);
+}
+.paper .fig-lbl mjx-container { font-size: 1em; }
+.paper .fig-lbl.a-curve { color: var(--c-primary); }
+.paper .fig-lbl.a-ref   { color: var(--c-caution); }
+.paper .fig-lbl.a-ax    { color: var(--ink-soft); }
+.paper .fig-lbl.a-pt    { color: var(--ink); }
+.paper .tbl-wrap { overflow-x: auto; overflow-y: hidden; margin: 1em 0; }
+.paper table.tbl {
+  border-collapse: collapse; margin: 0 auto; font-family: var(--ui); font-size: .96em;
+  border-top: 1.7px solid var(--ink); border-bottom: 1.7px solid var(--ink);
+}
+.paper table.tbl th, .paper table.tbl td { padding: .3em .8em; text-align: center; white-space: nowrap; }
+.paper table.tbl thead th { border-bottom: 1.1px solid var(--ink-soft); font-weight: 500; }
+.paper table.tbl .rowlab { text-align: right; padding-right: 1em; color: var(--ink-soft); }
+.paper table.tbl mjx-container { font-size: .98em; }
+.paper .sec + .sec { margin-top: 2.6em; padding-top: 2.2em; border-top: 1px solid var(--rule); }
+.paper .para-head { font-weight: 600; margin: 1.1em 0 .4em; }
+.paper ul { margin: .3em 0 .95em; padding-left: 1.3em; }
+.paper ul li { margin: .35em 0; text-align: justify; }
+.paper ul li::marker { color: var(--a-result); }
+.paper .chapter-head { margin-bottom: 1.6em; }
+.paper .chapter-head .ch-kicker {
+  font-family: var(--ui); font-size: .72rem; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--a-result); font-weight: 700; margin-bottom: .6em;
+}
+.paper .chapter-head .ch-title { font-weight: 600; font-size: 2.5rem; line-height: 1.08; letter-spacing: -.02em; margin: 0; }
+.paper .lead { font-size: 1.05em; }
+
+/* ============================================================
+   print.css — inlined (A4 sheet layout + paginator)
+   ============================================================ */
+@page { size: A4; margin: 0; }
+.sheet {
+  position: relative; box-sizing: border-box;
+  width: 210mm; height: 297mm;
+  padding: 20mm 28mm 20mm 32mm;
+  background: #fff; overflow: hidden;
+}
+.sheet-header {
+  position: absolute; top: 11mm; left: 32mm; right: 28mm;
+  font: 500 8.5pt "Inter", sans-serif; color: #9aa0ac; letter-spacing: .02em;
+}
+.sheet-footer {
+  position: absolute; bottom: 8.5mm; left: 0; right: 0;
+  text-align: center; font: 500 9pt "Inter", sans-serif; color: #82868f;
+}
+.sheet-body { height: 100%; --accent: oklch(0.50 0.13 245); }
+.sheet-body.paper { box-shadow: none; border-radius: 0; max-width: none; background: #fff; }
+.sheet-body .page { padding: 0; max-width: none; margin: 0; }
+.sheet-body.paper { font-size: 12pt; line-height: 1.55; }
+.sheet, .sheet * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.sheet-body > :first-child { margin-top: 0 !important; }
+.sheet-body .sec + .sec { border-top: 0; margin-top: 0; padding-top: 0; }
+.sheet-body .qed { margin-top: -1.55em; height: 1.55em; }
+.sheet-body .env-body::after { display: none; content: none; }
+.sheet-body .env-cont { margin-top: 0; }
+.sheet-body .env-cont > .env-body > :first-child { margin-top: 0; }
+@media screen {
+  body { background: #6f727b; margin: 0; }
+  .sheet { box-shadow: 0 3px 18px rgba(0,0,0,.3); margin: 9mm auto; }
+}
+@media print {
+  body { background: #fff; margin: 0; }
+  .sheet { box-shadow: none; margin: 0; break-after: page; }
+  .sheet:last-child { break-after: auto; }
+  .print-toolbar, #boot { display: none !important; }
+}
+
+/* ============================================================
+   page-level
+   ============================================================ */
+.print-toolbar {
+  position: fixed; top: 14px; right: 16px; z-index: 1000;
+  display: flex; align-items: center; gap: 10px; font-family: "Inter", system-ui, sans-serif;
+}
+.print-toolbar button {
+  font: 600 13px "Inter", sans-serif; color: #fff; background: oklch(0.50 0.13 245);
+  border: 0; padding: 9px 16px; border-radius: 8px; cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0,0,0,.25);
+}
+.print-toolbar button:disabled { opacity: .5; cursor: default; }
+.print-toolbar button:not(:disabled):hover { background: oklch(0.45 0.13 245); }
+.print-toolbar .status {
+  font-size: 12px; color: #e8eaf0; background: rgba(0,0,0,.4);
+  padding: 6px 11px; border-radius: 999px; backdrop-filter: blur(6px);
+}
+#boot {
+  position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: "Inter", system-ui, sans-serif; color: #cdd2dc; background: #6f727b; z-index: 900;
+}
+#source { position: absolute; left: -10000px; top: 0; width: 683px; }
+</style>
+</head>
+<body>
+
+<div id="boot">Preparing …</div>
+
+<div class="print-toolbar">
+  <span class="status" id="status">Preparing …</span>
+  <button id="printBtn" disabled>Print / Save as PDF</button>
+</div>
+
+<div id="source"><div class="paper skin-hs vivid"><div class="page" id="page"></div></div></div>
+<div id="pages"></div>
+
+<!-- Section fragments (inlined) -->
+
+<!-- BEGIN-CONTENT-FRAGMENTS -->
+<template id="figs-only">
+<figure class="figure" data-fig="sector-inequality">
+    <figcaption><span class="fig-no">Figure 3.1</span> The unit-circle area comparison behind \(\sin\theta \le \theta \le \tan\theta\).</figcaption>
+  </figure>
+<figure class="figure" data-fig="squeeze-limit">
+    <figcaption><span class="fig-no">Figure 3.2</span> A graphical reading of the squeeze in Proposition 3.2: \(\dfrac{\sin\theta}{\theta}\) sits between \(\cos\theta\) and \(1\), with an open circle at \(\theta = 0\).</figcaption>
+  </figure>
+<figure class="figure" data-fig="sin-cos-slope">
+    <figcaption><span class="fig-no">Figure 3.3</span> Tangent slopes on \(y = \sin x\) matching the heights of \(y = \cos x\) at the same \(x\)-values.</figcaption>
+  </figure>
+<figure class="figure" data-fig="shm-triple">
+    <figcaption><span class="fig-no">Figure 3.4</span> Simple harmonic motion over one time axis: \(s = \sin t\), \(s' = \cos t\), and \(s'' = -\sin t\).</figcaption>
+  </figure>
+<figure class="figure" data-fig="composed-mapping">
+    <figcaption><span class="fig-no">Figure 3.5</span> The chain rule as a composed mapping: local slope factors accumulate along \(x \mapsto u \mapsto y\).</figcaption>
+  </figure>
+<figure class="figure" data-fig="remainder-tangent">
+    <figcaption><span class="fig-no">Figure 3.6</span> Remainder-form geometry: halving \(h\) makes the vertical error \(R(h)\) much smaller, illustrating \(R(h)/h \to 0\).</figcaption>
+  </figure>
+<figure class="figure" data-fig="arcsin-vertical-tangent">
+    <figcaption><span class="fig-no">Figure 3.7</span> Endpoint behavior of \(\arcsin y\): the tangent becomes vertical at \(y = \pm 1\), so the derivative formula applies only on \((-1, 1)\).</figcaption>
+  </figure>
+</template>
+<!-- END-CONTENT-FRAGMENTS -->
+<!-- plot.js — inlined -->
+<script>
+(function () {
+  var uid = 0;
+  var PI = Math.PI;
+  function piTex(v) {
+    var map = {};
+    map[(-2 * PI).toFixed(4)] = "-2\\pi";
+    map[(-PI).toFixed(4)] = "-\\pi";
+    map[(-PI / 2).toFixed(4)] = "-\\tfrac{\\pi}{2}";
+    map[(PI / 2).toFixed(4)] = "\\tfrac{\\pi}{2}";
+    map[PI.toFixed(4)] = "\\pi";
+    map[(2 * PI).toFixed(4)] = "2\\pi";
+    map[(0).toFixed(4)] = "0";
+    var hit = map[v.toFixed(4)];
+    if (hit != null) return hit;
+    if (Math.abs(v - Math.round(v)) < 1e-9) return String(Math.round(v)); // plain integers
+    return undefined;
+  }
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+  function anchorTransform(anchor, vAnchor) {
+    var tx = anchor === "start" ? "0" : anchor === "end" ? "-100%" : "-50%";
+    var ty = vAnchor === "top" ? "0" : vAnchor === "bottom" ? "-100%" : "-50%";
+    return "translate(" + tx + "," + ty + ")";
+  }
+  function buildPlot(cfg) {
+    var w = cfg.w, h = cfg.h;
+    var pad = Object.assign({ t: 16, r: 18, b: 20, l: 22 }, cfg.pad || {});
+    var xmin = cfg.xmin, xmax = cfg.xmax, ymin = cfg.ymin, ymax = cfg.ymax;
+    var iw = w - pad.l - pad.r, ih = h - pad.t - pad.b;
+    var SX = function(x) { return pad.l + ((x - xmin) / (xmax - xmin)) * iw; };
+    var SY = function(y) { return h - pad.b - ((y - ymin) / (ymax - ymin)) * ih; };
+    var id = "pl" + (++uid);
+    var parts = [], labels = [];
+    function pushLabel(o) { labels.push(o); }
+    parts.push('<svg viewBox="0 0 ' + w + ' ' + h + '" style="width:' + w + 'px" class="fig-svg" role="img" aria-label="' + esc(cfg.aria || "graph") + '" preserveAspectRatio="xMidYMid meet">');
+    parts.push('<defs><marker id="' + id + 'a" markerWidth="8" markerHeight="8" refX="5.4" refY="2.8" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L5.4,2.8 L0,5.6" fill="none" stroke="var(--c-axis)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>');
+    if (cfg.axes !== false) {
+      var x0 = Math.min(Math.max(0, xmin), xmax), y0 = Math.min(Math.max(0, ymin), ymax);
+      var ax0 = SX(xmin), ax1 = SX(xmax), ayBase = SY(y0);
+      parts.push('<path d="M' + ax0.toFixed(1) + ',' + ayBase.toFixed(1) + ' H' + (ax1 - 1).toFixed(1) + '" class="axis" marker-end="url(#' + id + 'a)"/>');
+      var ay0 = SY(ymin), ay1 = SY(ymax), axBase = SX(x0);
+      parts.push('<path d="M' + axBase.toFixed(1) + ',' + ay0.toFixed(1) + ' V' + (ay1 + 1).toFixed(1) + '" class="axis" marker-end="url(#' + id + 'a)"/>');
+      if (cfg.xlabel) pushLabel({ px: ax1 + 1, py: ayBase + 4, tex: cfg.xlabel, anchor: "start", vAnchor: "top", cls: "a-ax", size: 13 });
+      if (cfg.ylabel) pushLabel({ px: axBase - 5, py: ay1 + 1, tex: cfg.ylabel, anchor: "end", vAnchor: "top", cls: "a-ax", size: 13 });
+      (cfg.xticks || []).forEach(function(t) {
+        var px = SX(t.x);
+        parts.push('<line x1="' + px.toFixed(1) + '" y1="' + (ayBase - 3).toFixed(1) + '" x2="' + px.toFixed(1) + '" y2="' + (ayBase + 3).toFixed(1) + '" class="axis"/>');
+        var tex = t.tex != null ? t.tex : (t.label != null ? null : piTex(t.x));
+        if (tex != null) pushLabel({ px: px, py: ayBase + 6, tex: tex, anchor: "middle", vAnchor: "top", cls: "a-pt", size: 12 });
+        else if (t.label != null) pushLabel({ px: px, py: ayBase + 6, text: t.label, anchor: "middle", vAnchor: "top", cls: "a-pt", size: 12 });
+      });
+      (cfg.yticks || []).forEach(function(t) {
+        var py = SY(t.y);
+        parts.push('<line x1="' + (axBase - 3).toFixed(1) + '" y1="' + py.toFixed(1) + '" x2="' + (axBase + 3).toFixed(1) + '" y2="' + py.toFixed(1) + '" class="axis"/>');
+        var tex = t.tex != null ? t.tex : (t.label != null ? null : piTex(t.y));
+        if (tex != null) pushLabel({ px: axBase - 6, py: py, tex: tex, anchor: "end", vAnchor: "middle", cls: "a-pt", size: 12 });
+        else if (t.label != null) pushLabel({ px: axBase - 6, py: py, text: t.label, anchor: "end", vAnchor: "middle", cls: "a-pt", size: 12 });
+      });
+    }
+    (cfg.items || []).forEach(function(it) {
+      if (it.type === "curve") {
+        var cls = it.cls || "curve", n = it.samples || 240, a = it.domain[0], b = it.domain[1];
+        var d = "", pen = false;
+        for (var i = 0; i <= n; i++) {
+          var x = a + (b - a) * (i / n), y = it.fn(x);
+          if (!isFinite(y) || y < ymin - (ymax - ymin) * 0.04 || y > ymax + (ymax - ymin) * 0.04) { pen = false; continue; }
+          var px = SX(x).toFixed(2), py = SY(y).toFixed(2);
+          d += (pen ? "L" : "M") + px + "," + py + " "; pen = true;
+        }
+        if (d) parts.push('<path d="' + d.trim() + '" class="' + cls + '"/>');
+      } else if (it.type === "vline") {
+        parts.push('<line x1="' + SX(it.x).toFixed(1) + '" y1="' + SY(ymin).toFixed(1) + '" x2="' + SX(it.x).toFixed(1) + '" y2="' + SY(ymax).toFixed(1) + '" class="' + (it.cls || "refline") + '"/>');
+      } else if (it.type === "hline") {
+        var ha = it.from != null ? it.from : xmin, hb = it.to != null ? it.to : xmax;
+        parts.push('<line x1="' + SX(ha).toFixed(1) + '" y1="' + SY(it.y).toFixed(1) + '" x2="' + SX(hb).toFixed(1) + '" y2="' + SY(it.y).toFixed(1) + '" class="' + (it.cls || "refline") + '"/>');
+      } else if (it.type === "seg") {
+        parts.push('<line x1="' + SX(it.x1).toFixed(1) + '" y1="' + SY(it.y1).toFixed(1) + '" x2="' + SX(it.x2).toFixed(1) + '" y2="' + SY(it.y2).toFixed(1) + '" class="' + (it.cls || "curve") + '"/>');
+      } else if (it.type === "dot") {
+        var r = it.r || 3.0;
+        if (it.hollow) parts.push('<circle cx="' + SX(it.x).toFixed(1) + '" cy="' + SY(it.y).toFixed(1) + '" r="' + r + '" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.5"/>');
+        else parts.push('<circle cx="' + SX(it.x).toFixed(1) + '" cy="' + SY(it.y).toFixed(1) + '" r="' + r + '" class="dot"/>');
+      } else if (it.type === "arrow") {
+        parts.push('<line x1="' + SX(it.x1).toFixed(1) + '" y1="' + SY(it.y1).toFixed(1) + '" x2="' + SX(it.x2).toFixed(1) + '" y2="' + SY(it.y2).toFixed(1) + '" class="axis" marker-end="url(#' + id + 'a)"/>');
+      } else if (it.type === "text") {
+        pushLabel({ px: SX(it.x), py: SY(it.y), tex: it.tex, text: it.tex == null ? it.text : null, anchor: it.anchor || "middle", vAnchor: it.vAnchor || "middle", dx: it.dx || 0, dy: it.dy || 0, cls: it.cls || "a-pt", size: it.size });
+      }
+    });
+    if (labels.length) {
+      var M = 52;
+      var spans = labels.map(function(L) {
+        var left = (L.px + (L.dx || 0) + M).toFixed(1);
+        var top = (L.py + (L.dy || 0) + M).toFixed(1);
+        var tf = anchorTransform(L.anchor, L.vAnchor);
+        var fs = L.size ? "font-size:" + L.size + "px;" : "";
+        var body = L.tex != null ? "\\(" + L.tex + "\\)" : esc(L.text == null ? "" : L.text);
+        return '<span class="fig-lbl ' + (L.cls || "") + '" style="left:' + left + 'px;top:' + top + 'px;transform:' + tf + ';' + fs + '">' + body + '</span>';
+      }).join("");
+      parts.push('<foreignObject x="' + (-M) + '" y="' + (-M) + '" width="' + (w + 2 * M) + '" height="' + (h + 2 * M) + '" class="fig-fo" requiredExtensions="http://www.w3.org/1999/xhtml"><div xmlns="http://www.w3.org/1999/xhtml" class="fig-lyr">' + spans + '</div></foreignObject>');
+    }
+    parts.push('</svg>');
+    return parts.join("");
+  }
+  window.buildPlot = buildPlot;
+  window.PIVAL = PI;
+})();
+</script>
+
+<!-- ============================================================
+     figures.js — inlined (Chapter 3 figure registry)
+     ============================================================ -->
+<script>
+/* ============================================================
+   figures.js — Chapter 3 figure registry.
+   Each entry returns { layout, panels:[{svg, note}] }.
+   Most chapter figures use buildPlot() (shared/plot.js) for
+   function graphs. buildPlot has NO fill/sector primitive, so
+   region-area schematics (e.g. the §3.1 sector inequality) are
+   hand-built raw SVG here, inheriting the figure vocabulary
+   (.fig-svg, .ptlab, var(--c-primary)/--ink…) from skin-hs.css.
+   Labels are kept to single symbols (O, A, B, C, θ, 1); the
+   areas and the inequality live in the caption and body prose
+   (CONTENT_SPEC §10 "Label economy").
+   Appended across sections — never overwrite.
+   ============================================================ */
+(function () {
+
+  const FIGS = {
+
+    /* §3.1 — Sector inequality on the unit circle.
+       Three nested regions in the first quadrant ground the bound
+       cos θ ≤ (sin θ)/θ ≤ 1:
+         · triangle OAB  (inscribed)         = ½ sin θ
+         · sector  OAB   (pie slice)         = ½ θ
+         · triangle OAC  (out to tangent A)  = ½ tan θ,   C = (1, tan θ)
+       Drawn as three non-overlapping fills (triangle OAB, the
+       circular segment chord→arc, the corner arc→tangent) so the
+       eye reads OAB ⊆ sector ⊆ OAC directly. The manuscript names
+       the corner triangle ABC ( = OAC − OAB ); B lies on segment OC. */
+    "sector-inequality": () => {
+      const T = 40 * Math.PI / 180;            // display angle θ = 40°
+      const R = 120, Ox = 130, Oy = 170;       // circle radius / centre (SVG px, y down)
+      const c = Math.cos(T), s = Math.sin(T), t = Math.tan(T);
+      const Ax = Ox + R,        Ay = Oy;                 // A = (1, 0)
+      const Bx = Ox + R * c,    By = Oy - R * s;         // B = (cos θ, sin θ)
+      const Cx = Ox + R,        Cy = Oy - R * t;         // C = (1, tan θ), on tangent at A
+      const f1 = (n) => n.toFixed(1);
+      const rT = 30;                                     // angle-arc radius near O
+      const aEx = Ox + rT, aEy = Oy;                     // angle arc: start on OA
+      const aBx = Ox + rT * c, aBy = Oy - rT * s;        //            end toward OB
+      const mx = (Ox + Bx) / 2, my = (Oy + By) / 2;      // midpoint of OB (radius "1")
+
+      const svg =
+        `<svg viewBox="0 0 300 300" style="width:300px" class="fig-svg" role="img"` +
+        ` aria-label="First-quadrant wedge of the unit circle centred at O. The inscribed triangle OAB sits inside the sector OAB, which sits inside the larger triangle OAC reaching the tangent line at A, so that one half sine theta is at most one half theta is at most one half tangent theta.">` +
+        // --- region 3: corner outside the circle (arc → tangent), neutral slack ---
+        `<path d="M${f1(Ax)},${f1(Ay)} L${f1(Cx)},${f1(Cy)} L${f1(Bx)},${f1(By)} ` +
+          `A${R},${R} 0 0 1 ${f1(Ax)},${f1(Ay)} Z" fill="var(--ink)" fill-opacity="0.05" stroke="none"/>` +
+        // --- region 2: circular segment (chord AB → arc), lighter primary ---
+        `<path d="M${f1(Ax)},${f1(Ay)} A${R},${R} 0 0 0 ${f1(Bx)},${f1(By)} Z" ` +
+          `fill="var(--c-primary)" fill-opacity="0.09" stroke="none"/>` +
+        // --- region 1: inscribed triangle OAB, primary ---
+        `<polygon points="${f1(Ox)},${f1(Oy)} ${f1(Ax)},${f1(Ay)} ${f1(Bx)},${f1(By)}" ` +
+          `fill="var(--c-primary)" fill-opacity="0.17" stroke="none"/>` +
+        // --- unit circle (context) ---
+        `<circle cx="${Ox}" cy="${Oy}" r="${R}" fill="none" stroke="var(--ink-soft)" stroke-width="1"/>` +
+        // --- tangent segment A→C (vertical tangent at A) ---
+        `<line x1="${f1(Ax)}" y1="${f1(Ay)}" x2="${f1(Cx)}" y2="${f1(Cy)}" stroke="var(--ink)" stroke-width="1.4"/>` +
+        // --- ray O→B→C (radius OB extended to the tangent at C) ---
+        `<line x1="${f1(Ox)}" y1="${f1(Oy)}" x2="${f1(Cx)}" y2="${f1(Cy)}" stroke="var(--ink)" stroke-width="1.4"/>` +
+        // --- radius OA ---
+        `<line x1="${f1(Ox)}" y1="${f1(Oy)}" x2="${f1(Ax)}" y2="${f1(Ay)}" stroke="var(--ink)" stroke-width="1.4"/>` +
+        // --- chord AB (edge of the inscribed triangle) ---
+        `<line x1="${f1(Ax)}" y1="${f1(Ay)}" x2="${f1(Bx)}" y2="${f1(By)}" stroke="var(--ink-soft)" stroke-width="1"/>` +
+        // --- right-angle tick at A (tangent ⊥ radius) ---
+        `<path d="M${f1(Ax - 9)},${f1(Ay)} L${f1(Ax - 9)},${f1(Ay - 9)} L${f1(Ax)},${f1(Ay - 9)}" ` +
+          `fill="none" stroke="var(--ink-soft)" stroke-width="1"/>` +
+        // --- angle θ arc at O ---
+        `<path d="M${f1(aEx)},${f1(aEy)} A${rT},${rT} 0 0 0 ${f1(aBx)},${f1(aBy)}" ` +
+          `fill="none" stroke="var(--ink)" stroke-width="1.1"/>` +
+        // --- dots at O, A, B, C ---
+        `<circle cx="${f1(Ox)}" cy="${f1(Oy)}" r="2.5" class="dot"/>` +
+        `<circle cx="${f1(Ax)}" cy="${f1(Ay)}" r="2.5" class="dot"/>` +
+        `<circle cx="${f1(Bx)}" cy="${f1(By)}" r="2.5" class="dot"/>` +
+        `<circle cx="${f1(Cx)}" cy="${f1(Cy)}" r="2.5" class="dot"/>` +
+        // --- labels (single symbols; areas/inequality in caption + prose) ---
+        `<text x="${f1(Ox - 9)}" y="${f1(Oy + 5)}" text-anchor="end" class="ptlab" font-style="italic">O</text>` +
+        `<text x="${f1(Ax + 8)}" y="${f1(Ay + 16)}" text-anchor="middle" class="ptlab" font-style="italic">A</text>` +
+        `<text x="${f1(Bx - 10)}" y="${f1(By - 6)}" text-anchor="end" class="ptlab" font-style="italic">B</text>` +
+        `<text x="${f1(Cx + 9)}" y="${f1(Cy + 4)}" text-anchor="start" class="ptlab" font-style="italic">C</text>` +
+        `<text x="${f1(Ox + rT + 9)}" y="${f1(Oy - 7)}" text-anchor="start" class="ptlab" font-style="italic">θ</text>` +
+        `<text x="${f1(mx - 11)}" y="${f1(my - 3)}" text-anchor="end" class="ptlab">1</text>` +
+        `</svg>`;
+
+      return { layout: "single", panels: [{ svg }] };
+    },
+
+    /* §3.2 — The chain rule as a composed mapping.
+       Three stacked horizontal axes (input x, intermediate u = g(x),
+       output y = f(u)). A small increment h at the aligned base point is
+       carried by g to a wider increment at u₀, then by f to a wider one
+       still at y₀: the increment widths grow because the two local slopes
+       g'(x₀), f'(g(x₀)) multiply. Single-symbol labels (x, u, y, h, x₀, u₀,
+       y₀) plus the two arrow factors; the algebra (net stretch f'·g'·h)
+       lives in the caption and body prose (CONTENT_SPEC §10). buildPlot has
+       no multi-axis / propagation-arrow primitive, so this is raw SVG. */
+    "composed-mapping": () => {
+      const ax1 = 34, ax2 = 276;                 // axis horizontal extent
+      const yIn = 46, yMid = 140, yOut = 234;    // input / intermediate / output axes (SVG px, y down)
+      const bx = 92;                             // base points x₀, u₀, y₀ (drawn aligned)
+      const inEnd = bx + 26;                     // input increment width = h
+      const midEnd = bx + 42;                    // stretched by g'(x₀)   (display ratio ≈ 1.6)
+      const outEnd = bx + 63;                    // stretched again by f'(g(x₀))  (≈ 1.5)
+      const f1 = (n) => n.toFixed(1);
+
+      const axis = (y) =>                        // axis line with a right arrowhead
+        `<line x1="${ax1}" y1="${y}" x2="${ax2}" y2="${y}" stroke="var(--ink)" stroke-width="1.3"/>` +
+        `<polygon points="${ax2},${y} ${ax2 - 7},${y - 3.5} ${ax2 - 7},${y + 3.5}" fill="var(--ink)"/>`;
+      const inc = (y, xe) =>                      // increment highlight bx → xe
+        `<line x1="${bx}" y1="${y}" x2="${f1(xe)}" y2="${y}" stroke="var(--c-primary)" stroke-width="3.6" stroke-linecap="round"/>`;
+      const arrow = (x1, y1, x2, y2) =>          // downward map arrow with arrowhead
+        `<line x1="${f1(x1)}" y1="${f1(y1)}" x2="${f1(x2)}" y2="${f1(y2)}" stroke="var(--ink-soft)" stroke-width="1.3"/>` +
+        `<polygon points="${f1(x2)},${f1(y2)} ${f1(x2 - 3.4)},${f1(y2 - 6.5)} ${f1(x2 + 3.4)},${f1(y2 - 6.5)}" fill="var(--ink-soft)"/>`;
+
+      const svg =
+        `<svg viewBox="0 0 300 275" style="width:300px" class="fig-svg" role="img"` +
+        ` aria-label="Three stacked horizontal axes: an input axis x, an intermediate axis u equal to g of x, and an output axis y equal to f of u. A small increment h at the base point x-zero is carried by g to a wider increment at u-zero, and by f to a wider increment still at y-zero, so the two slopes multiply.">` +
+        // base-point alignment guide
+        `<line x1="${bx}" y1="${yIn}" x2="${bx}" y2="${yOut}" stroke="var(--ink-soft)" stroke-width="1" stroke-dasharray="3 3" opacity="0.6"/>` +
+        // three axes
+        axis(yIn) + axis(yMid) + axis(yOut) +
+        // increment highlights (growing widths show the magnification)
+        inc(yIn, inEnd) + inc(yMid, midEnd) + inc(yOut, outEnd) +
+        // map arrows: g (x → u) and f (u → y)
+        arrow(inEnd, yIn + 7, midEnd, yMid - 7) +
+        arrow(midEnd, yMid + 7, outEnd, yOut - 7) +
+        // 'h' bracket above the input increment
+        `<path d="M${bx},${yIn - 7} L${bx},${yIn - 11} L${f1(inEnd)},${yIn - 11} L${f1(inEnd)},${yIn - 7}" ` +
+          `fill="none" stroke="var(--ink)" stroke-width="1"/>` +
+        // base-point dots
+        `<circle cx="${bx}" cy="${yIn}" r="2.5" class="dot"/>` +
+        `<circle cx="${bx}" cy="${yMid}" r="2.5" class="dot"/>` +
+        `<circle cx="${bx}" cy="${yOut}" r="2.5" class="dot"/>` +
+        // axis variable labels
+        `<text x="${ax2 - 4}" y="${yIn - 8}" text-anchor="end" class="ptlab" font-style="italic">x</text>` +
+        `<text x="${ax2 - 4}" y="${yMid - 8}" text-anchor="end" class="ptlab" font-style="italic">u</text>` +
+        `<text x="${ax2 - 4}" y="${yOut - 8}" text-anchor="end" class="ptlab" font-style="italic">y</text>` +
+        // 'h' label
+        `<text x="${f1((bx + inEnd) / 2)}" y="${yIn - 15}" text-anchor="middle" class="ptlab" font-style="italic">h</text>` +
+        // base-point labels
+        `<text x="${bx - 7}" y="${yIn + 16}" text-anchor="end" class="ptlab" font-style="italic">x₀</text>` +
+        `<text x="${bx - 7}" y="${yMid + 16}" text-anchor="end" class="ptlab" font-style="italic">u₀</text>` +
+        `<text x="${bx - 7}" y="${yOut + 16}" text-anchor="end" class="ptlab" font-style="italic">y₀</text>` +
+        // magnification factors on the arrows
+        `<text x="${f1(midEnd) + 9}" y="${f1((yIn + yMid) / 2) + 3}" text-anchor="start" class="ptlab">× g′(x₀)</text>` +
+        `<text x="${f1(outEnd) + 9}" y="${f1((yMid + yOut) / 2) + 3}" text-anchor="start" class="ptlab">× f′(g(x₀))</text>` +
+        `</svg>`;
+
+      return { layout: "single", panels: [{ svg }] };
+    },
+
+    /* §3.1 — Function-graph squeeze for the fundamental limit (Figure 3.2).
+       Three curves near θ = 0: the constant upper bound y = 1, the lower
+       bound y = cos θ (dashed), and the trapped quantity y = (sin θ)/θ
+       (solid; undefined at 0 → hollow dot, but → 1). The funnel collapses to
+       (0, 1): the squeeze forces (sin θ)/θ → 1. The inequality
+       cos θ ≤ (sin θ)/θ ≤ 1 lives in the caption (CONTENT_SPEC §10 economy). */
+    "squeeze-limit": () => {
+      const D = 1.05;
+      const cfg = {
+        w: 300, h: 196, xmin: -1.18, xmax: 1.18, ymin: 0.45, ymax: 1.07,
+        pad: { t: 20, r: 16, b: 22, l: 24 },
+        aria: "Near theta equals zero, the constant one on top and cosine theta below both converge to one, squeezing the middle curve sine theta over theta to the value one.",
+        xlabel: "\\theta",
+        xticks: [{ x: 0 }],
+        yticks: [{ y: 1, tex: "1" }],
+        items: [
+          { type: "hline", y: 1, cls: "refline" },
+          { type: "curve", fn: (t) => Math.cos(t), domain: [-D, D], cls: "refline" },
+          { type: "curve", fn: (t) => (Math.abs(t) < 1e-6 ? 1 : Math.sin(t) / t), domain: [-D, D], samples: 220, cls: "curve" },
+          { type: "dot", x: 0, y: 1, hollow: true },
+          { type: "text", x: D, y: Math.sin(D) / D, tex: "\\dfrac{\\sin\\theta}{\\theta}", cls: "a-curve", anchor: "start", dx: 3 },
+          { type: "text", x: D, y: Math.cos(D), tex: "\\cos\\theta", cls: "a-ref", anchor: "start", dx: 3, dy: 2 },
+        ],
+      };
+      return { layout: "single", panels: [{ svg: buildPlot(cfg) }] };
+    },
+
+    /* §3.1 — The slope of sin x is the height of cos x (Figure 3.3).
+       sin x (solid) with short grey tangent segments at x = 0, π/2, π whose
+       slopes +1, 0, −1 equal the heights of cos x (dashed) marked by dots at
+       the same x. Makes sin' = cos a visible "slope = height" fact and
+       anchors the four-step derivative cycle (Remark 3.1). The slope values
+       and the correspondence live in the caption. */
+    "sin-cos-slope": () => {
+      const sin = Math.sin, cos = Math.cos, P = Math.PI;
+      const tanSeg = (x0) => { const m = cos(x0), w = 0.6; return { type: "seg", x1: x0 - w, y1: sin(x0) - m * w, x2: x0 + w, y2: sin(x0) + m * w, cls: "axis" }; };
+      const cfg = {
+        w: 336, h: 198, xmin: -0.5, xmax: 6.75, ymin: -1.4, ymax: 1.45,
+        pad: { t: 14, r: 12, b: 22, l: 22 },
+        aria: "Graphs of sine x (solid) and cosine x (dashed). Where sine is steepest its tangent slope equals the height of cosine; where sine is flat cosine is zero; where sine falls steepest cosine is minus one.",
+        xlabel: "x",
+        xticks: [{ x: P / 2 }, { x: P }, { x: 3 * P / 2 }, { x: 2 * P }],
+        yticks: [{ y: 1, tex: "1" }, { y: -1, tex: "-1" }],
+        items: [
+          { type: "curve", fn: (x) => cos(x), domain: [-0.5, 2 * P + 0.25], samples: 300, cls: "refline" },
+          { type: "curve", fn: (x) => sin(x), domain: [-0.5, 2 * P + 0.25], samples: 300, cls: "curve" },
+          tanSeg(0), tanSeg(P / 2), tanSeg(P),
+          { type: "dot", x: 0, y: 1 }, { type: "dot", x: P / 2, y: 0 }, { type: "dot", x: P, y: -1 },
+          { type: "text", x: 2.3, y: sin(2.3), tex: "\\sin x", cls: "a-curve", anchor: "middle", dy: -9 },
+          { type: "text", x: 4.55, y: cos(4.55), tex: "\\cos x", cls: "a-ref", anchor: "start", dy: 11 },
+        ],
+      };
+      return { layout: "single", panels: [{ svg: buildPlot(cfg) }] };
+    },
+
+    /* §3.1 — Simple harmonic motion: s, s', s'' stacked (Figure 3.4).
+       Three vertically-stacked panels sharing one t-axis: position s = sin t,
+       velocity s' = cos t, acceleration s'' = −sin t. Dashed verticals at
+       t = π/2, 3π/2 show position extrema aligning with velocity zeros; the
+       bottom panel is the vertical mirror of the top (s'' = −s). Raw SVG —
+       buildPlot has no stacked-panel / cross-panel-alignment primitive.
+       Single-symbol labels s, s', s''; the relations live in the caption. */
+    "shm-triple": () => {
+      const L = 50, R = 286, TT = 2 * Math.PI, n = 128, A = 30;
+      const TX = (t) => L + (t / TT) * (R - L);
+      const f1 = (v) => v.toFixed(1);
+      const bands = [
+        { yc: 54, fn: (t) => Math.sin(t), lab: "s" },
+        { yc: 150, fn: (t) => Math.cos(t), lab: "s′" },
+        { yc: 246, fn: (t) => -Math.sin(t), lab: "s″" },
+      ];
+      let svg =
+        '<svg viewBox="0 0 300 300" style="width:300px" class="fig-svg" role="img"' +
+        ' aria-label="Three vertically stacked graphs over a common time axis: position s equals sine t on top, velocity s-prime equals cosine t in the middle, and acceleration s-double-prime equals minus sine t at the bottom. Dashed vertical lines mark where the position reaches its extrema and the velocity is zero; the bottom graph is the upside-down mirror of the top.">';
+      // alignment verticals at t = π/2 and 3π/2 (position extrema ↔ velocity zeros)
+      [Math.PI / 2, 3 * Math.PI / 2].forEach((t) => {
+        const x = TX(t);
+        svg += '<line x1="' + f1(x) + '" y1="30" x2="' + f1(x) + '" y2="282" class="refline"/>';
+      });
+      bands.forEach((b) => {
+        svg += '<line x1="' + L + '" y1="' + b.yc + '" x2="' + R + '" y2="' + b.yc + '" class="axis"/>';
+        let d = "";
+        for (let i = 0; i <= n; i++) { const t = TT * (i / n); d += (i ? "L" : "M") + f1(TX(t)) + "," + f1(b.yc - A * b.fn(t)) + " "; }
+        svg += '<path d="' + d.trim() + '" class="curve"/>';
+        svg += '<text x="14" y="' + (b.yc + 4) + '" text-anchor="middle" class="ptlab" font-style="italic">' + b.lab + '</text>';
+      });
+      // t-axis tick labels under the bottom band
+      [[0, "0"], [Math.PI / 2, "π/2"], [Math.PI, "π"], [3 * Math.PI / 2, "3π/2"], [2 * Math.PI, "2π"]].forEach((p) => {
+        svg += '<text x="' + f1(TX(p[0])) + '" y="294" text-anchor="middle" class="ptlab">' + p[1] + '</text>';
+      });
+      svg += '<text x="' + (R + 6) + '" y="' + (246 + 4) + '" text-anchor="start" class="ptlab" font-style="italic">t</text>';
+      svg += '</svg>';
+      return { layout: "single", panels: [{ svg }] };
+    },
+
+    /* §3.2 — Differentiability as tangent-line approximation (Figure 3.6).
+       For a smooth f and its tangent at x₀, the vertical gap at x₀+h is the
+       remainder R(h) of Definition 3.1. Two panels at the SAME scale show
+       that halving h shrinks the gap far faster than h itself — the visual
+       meaning of R(h)/h → 0. A generic convex arc (not a named function, so
+       no Chapter 2 result is re-proven). */
+    "remainder-tangent": () => {
+      const f = (x) => 0.34 * x * x + 0.25;
+      const x0 = 1.0, m = 0.68;            // f'(x) = 0.68x → 0.68 at x0 = 1
+      const f0 = f(x0), tan = (x) => f0 + m * (x - x0);
+      const panel = (h, note) => {
+        const xe = x0 + h, fe = f(xe), te = tan(xe);
+        const cfg = {
+          w: 246, h: 186, xmin: 0, xmax: 2.85, ymin: 0, ymax: 2.65,
+          pad: { t: 12, r: 12, b: 24, l: 16 },
+          aria: "A smooth curve and its tangent line at x-zero; at x-zero plus h the vertical gap between the curve and the tangent is the remainder R of h, which shrinks faster than h.",
+          xticks: [{ x: x0, tex: "x_0" }, { x: xe, tex: "x_0\\!+\\!h" }],
+          yticks: [],
+          items: [
+            { type: "seg", x1: 0.18, y1: tan(0.18), x2: 2.8, y2: tan(2.8), cls: "refline" },
+            { type: "curve", fn: f, domain: [0.05, 2.82], cls: "curve" },
+            { type: "seg", x1: xe, y1: te, x2: xe, y2: fe, cls: "axis" },
+            { type: "dot", x: x0, y: f0 },
+            { type: "dot", x: xe, y: te, hollow: true },
+            { type: "dot", x: xe, y: fe },
+            { type: "text", x: 0.62, y: f(0.62), tex: "f", cls: "a-curve", anchor: "end", dy: -6 },
+            { type: "text", x: xe, y: (te + fe) / 2, tex: "R(h)", cls: "a-pt", anchor: "start", dx: 4 },
+          ],
+        };
+        return { svg: buildPlot(cfg), note: note };
+      };
+      return { layout: "pair", panels: [panel(1.35, "larger h"), panel(0.675, "smaller h")] };
+    },
+
+    /* §3.3 — arcsin has vertical tangents at y = ±1 (Figure 3.7).
+       The curve y = arcsin y on (−1, 1) steepens toward the endpoints; at
+       y = ±1 the tangent is vertical (dashed indicators) and the derivative
+       1/√(1−y²) blows up, so the endpoints are hollow (derivative does not
+       exist there). A short tangent of slope 1 at the centre (= 1/√(1−0))
+       gives contrast. Visualizes the Caution; the open-interval restriction
+       is in the caption. NOTE: open interval — endpoints hollow, curve does
+       not close on y = ±1. */
+    "arcsin-vertical-tangent": () => {
+      const P = Math.PI, clamp = (y) => Math.max(-0.99999, Math.min(0.99999, y));
+      const cfg = {
+        w: 240, h: 336, xmin: -1.25, xmax: 1.25, ymin: -1.8, ymax: 1.8,  // equal aspect (≈82 px/unit both axes) so slope-1 reads as 45° and endpoints look vertical
+        pad: { t: 16, r: 14, b: 24, l: 20 },
+        aria: "Graph of arcsin y on the open interval from minus one to one. The curve grows steeper toward the endpoints; at y equals plus or minus one its tangent is vertical and the derivative does not exist, so the endpoints are drawn as open circles.",
+        xlabel: "y",
+        xticks: [{ x: -1, tex: "-1" }, { x: 1, tex: "1" }],
+        yticks: [{ y: P / 2 }, { y: -P / 2 }],
+        items: [
+          { type: "seg", x1: -1, y1: -1.74, x2: -1, y2: -1.08, cls: "refline" },
+          { type: "seg", x1: 1, y1: 1.08, x2: 1, y2: 1.74, cls: "refline" },
+          { type: "curve", fn: (y) => Math.asin(clamp(y)), domain: [-0.9997, 0.9997], samples: 320, cls: "curve" },
+          { type: "seg", x1: -0.62, y1: -0.62, x2: 0.62, y2: 0.62, cls: "axis" },
+          { type: "dot", x: 1, y: P / 2, hollow: true },
+          { type: "dot", x: -1, y: -P / 2, hollow: true },
+          { type: "text", x: -0.6, y: 1.2, tex: "\\arcsin y", cls: "a-curve", anchor: "middle" },
+          { type: "text", x: 0.52, y: 1.52, text: "vertical tangent", cls: "a-pt", anchor: "middle", size: 10 },
+        ],
+      };
+      return { layout: "single", panels: [{ svg: buildPlot(cfg) }] };
+    },
+
+  };
+
+  /* ---- hydrateFigures: fills every <figure data-fig="id"> ---- */
+  function hydrateFigures(root) {
+    (root || document).querySelectorAll("[data-fig]").forEach(function (el) {
+      var def = FIGS[el.dataset.fig];
+      if (!def || el.dataset.figDone) return;
+      var r = def();
+      var layout = r.layout, panels = r.panels;
+      var html;
+      if (layout === "single" && panels.length === 1 && !panels[0].note) {
+        html = '<div class="figure-art">' + panels[0].svg + '</div>';
+      } else {
+        var cls = { pair: "figure-art--pair", triple: "figure-art--triple", grid: "figure-art--grid" }[layout] || "";
+        html = '<div class="figure-art ' + cls + '">' +
+          panels.map(function (p) {
+            return '<div class="fig-panel">' + p.svg + (p.note ? '<div class="fig-note">' + p.note + '</div>' : '') + '</div>';
+          }).join("") + '</div>';
+      }
+      el.insertAdjacentHTML("afterbegin", html);
+      el.dataset.figDone = "1";
+    });
+  }
+  window.hydrateFigures = hydrateFigures;
+})();
+</script>
+
+<!-- Main build script (paginator + MathJax) -->
+<script>
+(function () {
+  function waitFor(test, tries) {
+    return new Promise(function (res) {
+      var i = 0;
+      (function tick() {
+        if (test()) return res(true);
+        if (++i > tries) return res(false);
+        setTimeout(tick, 150);
+      })();
+    });
+  }
+  function build() {
+    var page = document.getElementById("page");
+    var tpl = document.getElementById("figs-only");
+    page.innerHTML = tpl ? tpl.innerHTML : "";
+    if (window.hydrateFigures) window.hydrateFigures(page);
+    waitFor(function () { return window.MathJax && window.MathJax.typesetPromise; }, 400)
+      .then(function (ok) {
+        if (!ok) { document.getElementById("boot").textContent = "MathJax load timeout"; return; }
+        return MathJax.typesetPromise([page]).catch(function (e) { console.warn("mathjax", e); });
+      })
+      .then(function () {
+        return document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+      })
+      .then(function () {
+        var boot = document.getElementById("boot");
+        if (boot) boot.remove();
+      });
+  }
+  window.addEventListener("DOMContentLoaded", build);
+})();
+</script>
+</body>
+</html>
