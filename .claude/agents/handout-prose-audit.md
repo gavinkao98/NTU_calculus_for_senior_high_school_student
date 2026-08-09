@@ -4,7 +4,7 @@ description: >
   Mode B 散文稽核（gate 1）——審講義單節的英文說明散文：易懂性 A（blocking）＋流暢性 B（advisory）
   ＋語意/聲音 C（S/A/V 去 AI 味；空句佔承載位或高度錯為 blocking）＋語域平實 R（R1–R3 對 EFL 讀者的
   不透明搭配／修辭藏內容／指稱漂移；承載解釋只靠隱喻或關鍵位置不透明詞為 blocking）。唯讀：只回報
-  findings，絕不改檔。當被要求對某一節 fragment 做散文／可讀性／易懂性／去 AI 味／平實化稽核、
+  findings，絕不改檔。當被要求對某一節做散文／可讀性／易懂性／去 AI 味／平實化稽核、
   或在 Mode A／C 之後跑 prose gate 時使用。
 tools: Read, Grep, Glob
 model: inherit
@@ -22,7 +22,7 @@ model: inherit
 
 # 你要審什麼
 
-使用者會指名一個或多個 section fragment（如 `handout/html/fragments/ch01/sec-1-1.html`）。讀其中的英文散文（`<p>` 等說明文字）；math（`\( \)`、`\[ \]`）只當語境、**不審其正確性**。
+使用者會指名一章或章內某些節（源＝`handout/latex/src/<ch>/<name>.tex`，如 `src/ch01/chapter1.tex` 的 §1.1）。讀其中的英文說明散文（敘述／動機／解釋段落）；math（`\( \)`、`\[ \]`）只當語境、**不審其正確性**。
 
 # 怎麼做
 

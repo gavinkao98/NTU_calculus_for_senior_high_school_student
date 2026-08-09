@@ -19,13 +19,13 @@ model: inherit
 
 1. [`handout/html/_audit/FIGURE-OPPORTUNITY-RUBRIC.md`](handout/html/_audit/FIGURE-OPPORTUNITY-RUBRIC.md) — 鏡頭、提案 schema、keep／drop 維度、non-findings、輸出格式（**本審的契約、單一真相來源**）。
 2. [`CONTENT_SPEC.md`](CONTENT_SPEC.md) §10（圖表與色彩：何時加圖、`[FIGURE-OPPORTUNITY]` schema、label economy、工具選擇與 kit 能力）。
-3. 該章的 figure 現況與既往決策：該章 `handout/html/_dev-archive/chNN/PLAN-chNN.md` 的編號 ledger（既有圖、刻意 no-figure 的決定）、與目標 fragment 的 header 註解。
+3. 該章的 figure 現況與既往決策：該章 `handout/html/_dev-archive/chNN/PLAN-chNN.md` 的編號 ledger（既有圖、刻意 no-figure 的決定）、與目標源檔的 provenance 註解。
 
 若這些與使用者當下交付的指示衝突，以當下指示為準，並在輸出指出該衝突。
 
 # 你要審什麼
 
-使用者指名一個或多個 section fragment（如 `handout/html/fragments/ch04/sec-4-1.html`）。讀其英文散文、`definition`／`theorem`／`example`／`caution` 環境、與既有 `<figure data-fig>`。**開審先 `Grep '<figure'` 對齊該節既有圖**——既有與手稿已有的圖不重複提案，只找「該有圖但目前沒有」的位置。
+使用者指名一章或章內某些節（源＝`handout/latex/src/<ch>/<name>.tex`，如 `src/ch04/chapter4.tex` 的 §4.1）。讀其英文散文、`definition`／`theorem`／`example`／`caution` 環境、與既有 `figureblock`。**開審先 `Grep 'figcaption'` 對齊該節既有圖**——既有與手稿已有的圖不重複提案，只找「該有圖但目前沒有」的位置。
 
 # 怎麼做（單次 run 也要有廣度＋對抗式紀律）
 
@@ -43,4 +43,4 @@ model: inherit
 
 **你是唯讀、不寫檔。** 給使用者裁決的 standalone HTML 交付稿（比照 [`handout/html/_audit/REVIEW-ch03-figure-opportunity.html`](handout/html/_audit/REVIEW-ch03-figure-opportunity.html)）由**父代理／orchestrator** 彙整你的 findings 後落檔——**你不要自己貼整份 HTML 原始碼**（你沒有 Write 工具，貼了也是浪費 token；父代理會做）。你只要把每個候選的欄位講清楚、可被直接照抄成卡片即可。
 
-**效率（別過度探索）：** 讀目標 fragment ＋ RUBRIC ＋ `CONTENT_SPEC §10` ＋該節既有圖的 `figcaption`（先 `Grep '<figure'`）即足以判斷；**不需**逐行掃整份 standalone HTML 或 `FIGS` 實作——要確認 kit 畫不畫得出，看既有同型圖的 figcaption、或頂多一兩個 `FIGS` entry 即可。聚焦本節，別反覆全章搜尋。
+**效率（別過度探索）：** 讀目標章源 ＋ RUBRIC ＋ `CONTENT_SPEC §10` ＋該節既有圖的 `\figcaption`（先 `Grep 'figcaption'`）即足以判斷；**不需**逐行掃 figkit harness 的 `FIGS` 實作——要確認 kit 畫不畫得出，看既有同型圖的 figcaption、或頂多一兩個 `FIGS` entry（`handout/figkit/figs-<ch>.html`）即可。聚焦本節，別反覆全章搜尋。

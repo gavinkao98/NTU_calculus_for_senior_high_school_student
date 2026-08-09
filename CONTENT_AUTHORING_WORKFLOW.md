@@ -16,7 +16,7 @@
 | ③ 方向閘／⑤ advisory | ③ 人定奪；⑤ Codex advisory | **均對 Codex 跑**（使用者 2026-07-06 授權「決策點自行調用 codex 討論到收斂再實行」） |
 | 章層收尾 | 使用者簽核 | 章層 Codex review ＋ `REVIEW-ch{NN}-applied.html` 交使用者過目 |
 | 反幻覺 | 轉錄忠實度（①-verify）＋Mode B | hypothesis ledger＋Codex 對抗審＋章末 sympy 全例重算 |
-| provenance | 主軸不標；非翻譯增添標 `expansion:` | fragment 頂部 `<!-- section-source: -->` header；教學增添標 `expansion:` |
+| provenance | 主軸不標；非翻譯增添標 `expansion:` | 各節開頭 `% section-source:` 註解；教學增添標 `% expansion:`（2026-08-09 起在 `.tex` 源；歷史章的 `<!-- … -->` 在凍結 fragment） |
 | 先例 | Ch1–4 | **Ch5**（[`handout/html/_dev-archive/ch05/PLAN-ch05.md`](handout/html/_dev-archive/ch05/PLAN-ch05.md)）＋附錄 A–D |
 
 **閱讀對照規則：** 在 canon 變體中，下文 Mode A／Mode B 各節出現的「手稿」一律讀作「canon 藍本」；「忠實度」的審查對象由「手稿轉錄」換成「canon 覆蓋義務＋hypothesis ledger」。其餘機制（expansion 標記與類別、具名內容政策、密度校準、不重複規則、擴增稽核九項）**兩變體完全共用**。
@@ -26,9 +26,9 @@
 比照附錄 A／B／C 無手稿先例放大到 mainline：**以 canon 為數學主軸、全閘把關**。首個實證＝Ch5（9 節全數 Mode A 完成、逐節 Codex ⑤ 收斂 0 blocking、sympy 數學閘 33/33、章層 Codex review；as-built 見 [`handout/html/_dev-archive/ch05/PLAN-ch05.md`](handout/html/_dev-archive/ch05/PLAN-ch05.md)）。
 
 - **Spine＝canon 藍本。** 各章 roster、深度基調（深理論核心／標準嚴謹／嚴謹陳述＋fence）照 [`CONTENT_ROADMAP.md`](CONTENT_ROADMAP.md)「Ch5–16 弧線骨架」與 [`CONTENT_SPEC.md`](CONTENT_SPEC.md) §16.3 逐章深度決策；跨章 export/import 契約（非 provisional）照全局 seam ledger。
-- **Provenance 兩件套：**
-  1. 每個 fragment 頂部一個 `<!-- section-source: … -->` header，載明本節所本的 canon 節；
-  2. **教學增添**（canon 沒有、為本書教學而加的 intuition／caution／history／application／補例等）照舊標 `<!-- expansion:<cat> [source: …] -->`；**canon 主軸內容不標**。
+- **Provenance 兩件套（2026-08-09 起以 `.tex` 註解形式；歷史章的 HTML 註解在凍結 fragment）：**
+  1. 每節開頭（`\sechead` 後）一行 `% section-source: …` 註解，載明本節所本的 canon 節；
+  2. **教學增添**（canon 沒有、為本書教學而加的 intuition／caution／history／application／補例等）照舊標 `% expansion:<cat> [source: …] — 描述`；**canon 主軸內容不標**。
   `[source:]` 用於 history、application、外部題源等「正確性繫於特定參考」的增添；標準微積分定理不逐段硬塞 `[source:]`。（2026-07-07 與 Codex 收斂裁決：**不**另建 section manifest——現制語義健在，manifest 是平行第二套簿記。）
 - **反幻覺備援（取代失去的 ①-verify）：** (a) 每節 brief＋**hypothesis ledger**（定義域、連續／可微假設、分母≠0、端點型、export 依賴——sympy 只驗數字不驗定理衛生，故需此帳）；(b) Codex 對抗審（⑤：direction-conformance＋數學正確＋hypothesis hygiene）；(c) 章末 **sympy 全例重算**。
 - **人閘配置：** ③ 方向閘與 ⑤ advisory 對 Codex 跑到收斂（2026-07-06 授權）；⑥ 章層收尾＝章層 Codex review＋applied 報告交使用者過目。付費 gate-2 的頻率規則（三閘每章全跑）見 [`handout/PIPELINE.md`](handout/PIPELINE.md)。
@@ -58,7 +58,7 @@ Claude 以三種不同的模式與 spine 素材（手稿或 canon 藍本）互�
 當使用者轉來一份手稿（手稿變體）、或某章 canon 盤點完成（canon 變體）而要求 Claude 產出章節檔時，使用此模式。Claude 的職責：
 
 1. 接收 spine 素材（手稿；或 canon 盤點＋該章 ROADMAP 條目）。
-2. 依 [`CONTENT_SPEC.md`](CONTENT_SPEC.md) 與 [`CONTENT_QUICKSTART.md`](CONTENT_QUICKSTART.md)，將其轉成符合專案規範的 HTML 片段，置於 `handout/html/fragments/chNN/sec-*.html`（每節一個 fragment）。
+2. 依 [`CONTENT_SPEC.md`](CONTENT_SPEC.md) 與 [`handout/latex/CONTRACT-latex-writing.md`](handout/latex/CONTRACT-latex-writing.md)，將其轉成符合專案規範的 LaTeX 源，寫進 `handout/latex/src/<ch>/<name>.tex`（一章一檔、逐節推進）。
 3. 在完整性或 Stewart／Rogawski 自學語域有助益之處，圍繞 spine 加以擴充。下方的擴充政策說明哪些增添屬於政策範圍內，以及必須如何標記。
 4. 更新 [`CONTENT_ROADMAP.md`](CONTENT_ROADMAP.md) 以反映 spine 實際的決定，取代任何素材到達前的暫定工作假設條目。
 
@@ -103,7 +103,8 @@ Claude 可在未事先授權的情況下圍繞 spine 擴充，條件是 HTML 片
 事後審查於是變成
 
 ```powershell
-grep "<!-- expansion:" handout/html/fragments/chNN/*.html
+grep "% expansion:" handout/latex/src/chNN/*.tex      # 2026-08-09 起的增添
+grep "<!-- expansion:" handout/html/fragments/chNN/*.html   # 歷史章（凍結 fragment）
 ```
 
 ——使用者一眼看盡每一處非 spine 的增添，逐一標記決定*保留*、*改寫*或*移除*，無須將整章與 spine 全文比對。
@@ -178,7 +179,7 @@ Mode A 回合並非在 spine 轉成 HTML 片段後就算完成。在把章節交
 6. **Strategy 提煉。** 當該節有兩個以上範例共用一個方法時，該方法是否被提煉為 `strategy` 方塊？（`strategy`）
 7. **視覺推理。** 受益於圖像的概念，是否都由 `figure` 構想承載？此項以**圖機會稽核 gate** 系統化執行，而非只憑印象標一兩張 ROADMAP key figure：跑 `handout-figure-opportunity-audit` subagent（依 [`handout/html/_audit/FIGURE-OPPORTUNITY-RUBRIC.md`](handout/html/_audit/FIGURE-OPPORTUNITY-RUBRIC.md)），雙鏡頭（幾何直觀／函數行為＋密度）掃出 vetted 建議插圖清單，逐條交使用者裁決；核可者才落地（素材本身可延後至媒體工作再做）。此為「該不該加圖」（opportunity）的閘——圖落地、render 後另跑「畫出來對不對」（D1–D8 correctness）的視覺 gate。canon 變體中，圖機會亦於 brief 的 `figure_opportunities` 欄前置規劃（見 [`CONTENT_DIRECTION.md`](CONTENT_DIRECTION.md) §2），本項改為收尾覆核。（`figure`）
 8. **收尾綜合。** 該節是否以綜合性散文作結，將範例與定理收束回該節的標題結果？（`summary`）
-9. **AI-texture sweep。** 對每個 `<!-- expansion:` marker 緊接的散文，跑 banned-list 與密度檢查（可用 `vale <fragment>` 取預標，對照 [`handout/html/_audit/PROSE-AUDIT-RUBRIC.md`](handout/html/_audit/PROSE-AUDIT-RUBRIC.md) Dimension C）；對每個 flag：**補上**（改寫成更具體、變句長、砍空心 signposting）**或記錄**為刻意保留（roadmap *Open questions*）。比照其餘 8 項「補上或記錄」的處置。
+9. **AI-texture sweep。** 對每個 `expansion:` marker 緊接的散文，跑 banned-list 與密度檢查（可用 `vale <源檔>` 取預標，對照 [`handout/html/_audit/PROSE-AUDIT-RUBRIC.md`](handout/html/_audit/PROSE-AUDIT-RUBRIC.md) Dimension C）；對每個 flag：**補上**（改寫成更具體、變句長、砍空心 signposting）**或記錄**為刻意保留（roadmap *Open questions*）。比照其餘 8 項「補上或記錄」的處置。
 
 任何一項給出*否*都是可接受的，前提是該刻意省略有被記錄——規則是**補上或記錄**，而非「每一節都必須拿 9/9」。在 roadmap 的 *Open questions* 中記錄省略，讓使用者能於簽核時同意、反駁，或補上缺失的部分；悄悄略過該項則會產生教科書密度目標所要防止的「翻譯講義」感。
 

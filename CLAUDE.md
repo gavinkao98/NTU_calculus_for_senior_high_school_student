@@ -7,7 +7,7 @@
 | 產線 | 路徑 | 說明 |
 |------|------|------|
 | LaTeX 講義（唯一源＋出版線） | `handout/latex/` | **2026-08-09 拍板：講義線＋影片線統一走 LaTeX**——`src/<ch>/*.tex` 升格唯一內容源（ch03 pilot 已收），memoir 模板 → 出版級 A4 PDF。遷移計畫＝[`handout/latex/KICKOFF-latex-unification.md`](handout/latex/KICKOFF-latex-unification.md)（supersede 2026-07-17「先 HTML 後轉換」拍板） |
-| HTML 講義（退役中） | `handout/html/` | fragment 凍結、`build.py`/standalone 遷移期間僅作圖 kit 載體；圖繪製縮編至 `handout/figkit/`（JS kit 保留為畫圖工具，U2） |
+| HTML 講義（已凍結） | `handout/html/` | fragment／standalone／`build.py` 為歷史快照；`_audit`／`_dev-archive`／`_render/shot.mjs` 仍服役；圖繪製住 `handout/figkit/`（JS kit 縮編為畫圖工具，U2） |
 | Manim 影片 | `video/` | 旁白＋動畫＋TTS；`make.py` 建置（詳見 [`video/README.md`](video/README.md)） |
 | 舊 LaTeX 講義 | `legacy/tex_handout/` | 已凍結，僅供參照（與 `handout/latex/` 無關） |
 
@@ -16,7 +16,7 @@
 ## 常用指令速查
 
 ```bash
-python handout/html/build.py           # 建置全部講義章節（可接 ch01 只建一章）
+python handout/latex/build.py all      # 建置全部講義單元（可接 ch01 只建一章；編譯＋字形閘→dist PDF）
 python video/make.py --quality high  # 1080p 渲染影片（預設品質）
 python tools/doctor.py            # 環境健康檢查
 tts.py --backend mock             # 離線 TTS mock（不計費，可逕行）

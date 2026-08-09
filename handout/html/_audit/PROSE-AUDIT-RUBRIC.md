@@ -6,7 +6,7 @@
 
 ## 審查對象與邊界
 
-- **審**：講義單節 fragment（`handout/html/fragments/ch{NN}/sec-*.html`）裡的**英文說明散文**——`<p>` 等敘述／動機／解釋文字。
+- **審**：講義章節源（`handout/latex/src/<ch>/<name>.tex`，2026-08-09 LaTeX 統一起；歷史章的 HTML fragment 已凍結）裡的**英文說明散文**——敘述／動機／解釋段落。
 - **不審**：數學正確性、圖、example 選題、編號／排版——這些有各自的 audit（見 [`_dev-archive/general/PROMPT-audit-dimensions.md`](../_dev-archive/general/PROMPT-audit-dimensions.md)）。math 公式只當語境，**不評對錯**。
 
 ## 四個維度
@@ -114,7 +114,7 @@ EFL 讀者「查不查得出這句在說什麼」。據 CONTENT_SPEC §3〈平�
 
 兩條硬紀律（2026-06-28 實證，ch01 校準）：
 
-1. **餵乾淨 inline 文字，別讓模型自己讀檔。** Codex 在本機用 `-C <repo>` 自讀 fragment 會把 UTF-8 解成亂碼（`—`→`??`、`§`→`禮`、彎引號→`?`），整批「編碼 bug」全是假陽性、甚至誤判 worst stall。把 fragment 預先以 UTF-8 解好、**inline 進 prompt**（DeepSeek 路線）即免疫。（與 [`CONTENT_DIRECTION.md`](../../../CONTENT_DIRECTION.md) §5 工程坑「prompt 餵入 CJK 重編碼」是**兩個相關但不同**的坑：一個在輸入端、一個在模型自讀端。）
+1. **餵乾淨 inline 文字，別讓模型自己讀檔。** Codex 在本機用 `-C <repo>` 自讀源檔會把 UTF-8 解成亂碼（`—`→`??`、`§`→`禮`、彎引號→`?`），整批「編碼 bug」全是假陽性、甚至誤判 worst stall。把源文字預先以 UTF-8 解好、**inline 進 prompt**（DeepSeek 路線）即免疫。（與 [`CONTENT_DIRECTION.md`](../../../CONTENT_DIRECTION.md) §5 工程坑「prompt 餵入 CJK 重編碼」是**兩個相關但不同**的坑：一個在輸入端、一個在模型自讀端。）
 2. **reasoning 模型 run-to-run 會飄、且偏 over-report**（實測 severity 灌水成 Lost、夾帶吹毛求疵的詞彙替換）→ raw 不可直接吃，必接四級 triage（核 no-dumbing、重評嚴重度、砍 non-finding）。（2026-07-25 起的界線：帶 R1／R2 證據的詞彙 finding 屬正常 R 維度 finding、不算吹毛求疵；無證據的純同義詞美化才砍。）**多跑取聯集、優先採兩模型交集**（交集＝最低後悔）。
 
 ## 回報規格

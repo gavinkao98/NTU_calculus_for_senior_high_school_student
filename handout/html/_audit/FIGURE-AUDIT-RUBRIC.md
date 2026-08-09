@@ -1,8 +1,8 @@
 # 講義圖稽核 — RUBRIC（figure audit）
 
 > **本審契約（單一真相來源）。** gate 1 = Claude `handout-figure-audit` subagent；視覺層的 Codex 第二讀者退為**定稿前的信心複核**（非每輪必跑，計費需同意）。
-> **被審物：** 一張 **render 後的 PNG**（由 [`../_render/shot.mjs`](../_render/shot.mjs) 的 **`figures` 模式**逐 `<figure>` 截 2× PNG：`node shot.mjs <file-url> <out/prefix> figures` → `prefix-<data-fig>.png`；print-standalone 以 CSS @page 分頁、**無 `.sheet` div**，readiness 預設等 `#boot`「Preparing …」遮罩移除＝build 完成才截），對照語境讀該圖的繪圖原始碼：FIGS 圖讀 standalone 的 `const FIGS`、inline-SVG 圖讀 fragment 內 `<svg>`，並參照該節 `figcaption`。
-> **枚舉（母體）：** 稽核母體 = 該章 fragment 內**全部 `<figure>` 元素**，含 inline-SVG（有 `id=` 無 `data-fig`、甚至無 figcaption 編號者）；**不可只取 `FIGS`／`data-fig` 定義的圖**。每章開審前以 `Grep '<figure'` 掃 fragment 對齊圖清單，漏的補進去並指派審查者。（shot.mjs 截整頁，inline-SVG 本就入鏡——漏的是「沒人被指派去看」，故枚舉須以 `<figure>` 為準。）
+> **被審物：** 一張 **render 後的 PNG**（由 [`../_render/shot.mjs`](../_render/shot.mjs) 的 **`figures` 模式**逐 `<figure>` 截 2× PNG：`node shot.mjs <file-url> <out/prefix> figures` → `prefix-<data-fig>.png`；**render 載體＝figkit harness `handout/figkit/figs-<ch>.html`**（2026-08-09 起；readiness 同樣等 `#boot` 遮罩移除），對照語境讀該圖的繪圖原始碼：FIGS 圖讀 harness 的 `const FIGS`、inline-SVG 圖讀 harness 內該 `<figure>` 的 `<svg>`，並參照課文源（`latex/src/<ch>/*.tex`）的 `\figcaption`。
+> **枚舉（母體）：** 稽核母體 = 該章 figkit harness 內**全部 `<figure>` 元素**，含 inline-SVG（有 `id=` 無 `data-fig`、甚至無 figcaption 編號者）；**不可只取 `FIGS`／`data-fig` 定義的圖**。每章開審前以 `Grep '<figure'` 掃 `figkit/figs-<ch>.html` 對齊圖清單，漏的補進去並指派審查者（harness 生成器已把 `data-fig` 與 `id=` 兩型都收進母體——2026-08-09 inline-SVG 漏抓 bug 已修，勿再倒退）。
 > **依據：** [`../../CONTENT_SPEC.md`](../../../CONTENT_SPEC.md) §10（圖規則）＋本檔維度（從 ch01 圖稽核實證蒸餾，見 `../_dev-archive/ch01/ch01_figure-audit.md`）。
 > **性質：** 唯讀、advisory＋blocking 分流、不改檔。審「**畫出來**對不對、讀不讀得懂」，不是 copyedit。
 > **別跟「圖機會稽核」混為一談：** 本檔審「**已畫的圖對不對**」（correctness，render 後）；上游「**該不該加圖**」（opportunity，出圖前、Mode A／C）是另一道閘——`handout-figure-opportunity-audit` subagent ＋ [`FIGURE-OPPORTUNITY-RUBRIC.md`](FIGURE-OPPORTUNITY-RUBRIC.md)。兩者是同一張圖生命週期的兩端。
@@ -17,7 +17,7 @@
 
 **心智模型（傳達對的觀念嗎）**
 - **D5 Figure ↔ caption／prose 一致**：圖與 figcaption／定義／範例陳述矛盾（如雙側極限題只畫單側、ε-strip 標「對稱」卻畫不對稱）。**→ Blocking**。
-- **D6 Math correctness vs source**（需該圖繪圖原始碼：`data-fig` 圖讀 `const FIGS`；inline-SVG 圖讀 fragment 內 `<svg>` 的 `cx`/`cy`、`<path d>`、`viewBox`、`<text>` 字串）：座標／數值與課文不符 **→ Blocking**；純示意比例（標籤數學正確、形狀近似）**→ advisory**（沿用 ch01 A1 慣例，不修）。
+- **D6 Math correctness vs source**（需該圖繪圖原始碼：`data-fig` 圖讀 harness 的 `const FIGS`；inline-SVG 圖讀 harness 內 `<svg>` 的 `cx`/`cy`、`<path d>`、`viewBox`、`<text>` 字串）：座標／數值與課文不符 **→ Blocking**；純示意比例（標籤數學正確、形狀近似）**→ advisory**（沿用 ch01 A1 慣例，不修）。
 - **D7 No-spoiler**：worked-example 圖洩露要學生算的量。**→ Blocking**。
 
 **編碼穩健（§10）**
@@ -32,7 +32,7 @@
 
 每條 raw finding 交回裁決前 **MUST** 經一輪對抗式複核（預設立場駁回、逐條比對上方 Non-findings）。針對 VLM 視覺誤讀，另有以下硬要求：
 
-- **D5／D6 的「某行／某面板標錯」指控，verifier MUST 回繪圖原始碼逐字核對被指控的那一行**（`FIGS` 圖回 `const FIGS`、inline-SVG 圖回 fragment `<svg>`；核對座標、`<path d>` 控制點、`<text>` 字串、`viewBox`、note），不可只憑 render 後 PNG 的觀察就採信。inline-SVG 的小字級上標（如 `fig-map` 的 \(f^{-1}\)）同樣套此硬要求。
+- **D5／D6 的「某行／某面板標錯」指控，verifier MUST 回繪圖原始碼逐字核對被指控的那一行**（`FIGS` 圖回 harness 的 `const FIGS`、inline-SVG 圖回 harness `<svg>`；核對座標、`<path d>` 控制點、`<text>` 字串、`viewBox`、note），不可只憑 render 後 PNG 的觀察就採信。inline-SVG 的小字級上標（如 `fig-map` 的 \(f^{-1}\)）同樣套此硬要求。
 - **警覺 VLM 對小字級上標／下標的系統性誤讀**（如把 \(a^{+}\) 看成 \(a^{-}\)）：縮放後的 PNG 在此類細節不可靠，一律以原始碼為準。
 - finding 的「建議修法」若會更動圖上某元素，**先確認該元素原本是否真的有誤**——勿據誤讀的指控把缺陷植入一張本來正確的圖。
 

@@ -109,7 +109,7 @@ Ch5 起無老師手稿（權威：[`CONTENT_AUTHORING_WORKFLOW.md`](CONTENT_AUTH
 | ① intake | 掃描→轉錄 seed→**①-verify** 人核對 | **canon 盤點**（該章 ROADMAP entry＋seam ledger＋canon 節對應）＋**hypothesis ledger** 起帳；**無 ①-verify**（沒有轉錄可核） |
 | ② 方向提案 | 手稿＋薄度＋ROADMAP entry | canon 覆蓋義務＋深度政策（[`CONTENT_SPEC.md`](CONTENT_SPEC.md) §16.3）＋ROADMAP entry；brief 增列 `figure_opportunities` 與例題／軟深度計畫 |
 | ③ 方向閘 | 人定奪 | **對 Codex 跑**（使用者 2026-07-06 授權「決策點自行調用 codex 討論到收斂再實行」） |
-| ④ 擴寫 | 手稿＝數學主軸 | canon＝數學主軸；fragment 頂部 `<!-- section-source: -->` header、教學增添標 `expansion:` |
+| ④ 擴寫 | 手稿＝數學主軸 | canon＝數學主軸；節開頭 `% section-source:` 註解、教學增添標 `% expansion:`（2026-08-09 起在 `.tex` 源） |
 | ⑤ advisory 迴圈 | blocking＝數學／忠實度／方向符合度 | blocking＝數學／**canon 覆蓋＋hypothesis hygiene**／方向符合度；對 Codex 跑至 0 blocking |
 | ⑥ 收斂閘 | 人定奪 | 章層 Codex review＋`REVIEW-ch{NN}-applied.html` 交使用者過目 |
 

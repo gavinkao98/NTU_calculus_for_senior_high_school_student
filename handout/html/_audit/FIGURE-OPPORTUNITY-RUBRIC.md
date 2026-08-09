@@ -8,7 +8,7 @@
 
 ## 審查對象與邊界
 
-- **審**：講義單節 fragment（`handout/html/fragments/ch{NN}/sec-*.html`）的散文＋環境＋既有圖——找「目前純文字、用圖會更直覺」的位置。
+- **審**：講義章節源（`handout/latex/src/<ch>/<name>.tex`）的散文＋環境＋既有圖——找「目前純文字、用圖會更直覺」的位置。
 - **不審**：已畫好的圖對不對（→ correctness 審）、散文易懂性（→ `handout-prose-audit`）、數學正確性、example 選題。
 - **枚舉先對齊既有圖**：開審 `Grep '<figure'` 該節＋查該章 PLAN 的 figure ledger；既有圖與手稿已有的圖**不重複提案**，只找缺口。
 
@@ -50,7 +50,7 @@
 ## 護欄
 
 - 稽核員**唯讀**：只回報候選清單，**不畫圖、不改任何檔**。
-- 提「加圖」是**提議，不是行動**——一律交回使用者裁決；核可後才進落地（fragment `<figure data-fig>` ＋ standalone `FIGS`，見 [`handout/CLAUDE.md`](../../CLAUDE.md)「圖表系統」），落地後 render 自驗再跑 correctness 審。
+- 提「加圖」是**提議，不是行動**——一律交回使用者裁決；核可後才進落地（`.tex` 的 `figureblock`＋figkit harness 的 `FIGS`＋`export_figs.mjs` 匯 PDF，見 [`handout/CLAUDE.md`](../../CLAUDE.md)「圖表系統」），落地後 render 自驗再跑 correctness 審。
 - **不 over-report**：硬湊裝飾圖會稀釋真正的機會。寧缺勿濫。
 
 ## 回報規格

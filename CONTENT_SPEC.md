@@ -8,7 +8,8 @@
 
 本專案產出一份給高中生的**微積分講義**，對象為想準備或自修大學微積分的學生。
 
-- **Format**：canonical 列印格式為 print-standalone HTML（由 [`handout/html/build.py`](handout/html/build.py) 組裝出 `handout/html/standalone/chapterN-print-standalone.html`），印刷並作為講義發放（不裝訂成書）。Layout 比照 single-sided A4，12 pt Times、3.3 cm symmetric margins；A4 分頁由 JS paginator（`place()`）處理。排版細節見 [`handout/html/TYPESETTING_GUIDE.md`](handout/html/TYPESETTING_GUIDE.md)。**出版定稿（2026-07-17 拍板）**：HTML 是撰稿製作線的工作格式；最終定稿由 `handout/latex/` 線把 fragment 確定性轉換為出版級 A4 PDF（見 [`handout/PIPELINE.md`](handout/PIPELINE.md) §出版排版線）。
+- **Format**（2026-08-09 LaTeX 統一）：canonical 格式為出版級 A4 PDF——內容以 `handout/latex/src/<ch>/<name>.tex` 撰寫（唯一內容源；標記契約＝[`handout/latex/CONTRACT-latex-writing.md`](handout/latex/CONTRACT-latex-writing.md)），`python handout/latex/build.py <ch>` 以 `latexmk -lualatex`＋`calcbook.sty`（memoir、12pt NewComputerModern、150mm 版心）編譯出 `dist/<ch>/<name>.pdf`，單面 A4、作為講義發放（不裝訂成書）。
+  **術語對照**：本檔既有規則中的 HTML 時代語彙在 LaTeX 源**同構對映**——fragment→`src/*.tex`、`env-*` class→`env*` 環境、skin CSS／chapter template→`calcbook.sty` 語意層、KaTeX→LuaLaTeX 真 TeX、`FIGS`（standalone）→`FIGS`（figkit harness）。**規則本身（語域、密度、色彩角色、label economy、display 模式紀律等）不因格式而變**；字面語彙隨後續編輯滾動改寫，衝突時以 [`handout/latex/CONTRACT-latex-writing.md`](handout/latex/CONTRACT-latex-writing.md) 的表層規定為準。
 - **受眾**：有動機的高中生。他們有紮實的 precalculus 基礎、一些數學推理經驗、且有足夠的成熟度在遇到困惑段落時停下來試著自行釐清，但尚未達到大學數學主修的程度。
 - **Companion medium**：強化講義的影片課程。
 - **讀者與文本的關係**：**講義是自足的**。一個從未看過影片的學生仍應能端到端閱讀講義並吸收材料。影片是 reinforcement，不是主要管道。這是最重要的定位決策，驅動了以下大部分規則。
@@ -46,7 +47,7 @@
 - [`CONTENT_QUICKSTART.md`](CONTENT_QUICKSTART.md)——本檔的精簡日常參考伴侶。
 - [`CONTENT_ROADMAP.md`](CONTENT_ROADMAP.md)——課程弧線、章節順序、prerequisites、per-chapter core skills。
 - [`CONTENT_SOURCING.md`](CONTENT_SOURCING.md)——課文範例的題源與選題流程（開放題庫、provenance、授權）。
-- [`handout/html/CONTRACT-html-writing.md`](handout/html/CONTRACT-html-writing.md)——HTML section fragment 的撰寫契約（authoritative HTML markup），編碼了本檔的規則。新章節以 HTML fragment 撰寫於 `handout/html/fragments/chNN/sec-*.html`。（legacy LaTeX 起始骨架 `_chapter_template.tex` 已移至 `legacy/tex_handout/chapters/`。）
+- [`handout/latex/CONTRACT-latex-writing.md`](handout/latex/CONTRACT-latex-writing.md)——章節源（`.tex`）的權威撰寫契約，編碼了本檔的規則。新章節撰寫於 `handout/latex/src/<ch>/<name>.tex`（一章一檔）。（HTML 時代契約 [`handout/html/CONTRACT-html-writing.md`](handout/html/CONTRACT-html-writing.md) 隨 fragment 凍結，供讀歷史源；legacy LaTeX 骨架在 `legacy/tex_handout/chapters/`。）
 
 當 repository layout 或 preamble 決策變更時，`README.md` 為權威。當撰寫或排版規則變更時，**本檔**為權威。
 
@@ -344,7 +345,7 @@ Rationale：這是讀者的永久參考頁。一個月前讀過本章的學生�
 
 ### Build toggle（legacy）
 
-HTML build（[`handout/html/build.py`](handout/html/build.py)）只組裝 print-standalone 變體（screen 變體已移除），沒有 chapter-level toggle：要納入哪些 section fragment 由 `build.py` 的章節清單決定，work-in-progress fragment 不列入清單即不會出貨。
+建置（[`handout/latex/build.py`](handout/latex/build.py)）以單元為單位：要出貨哪些單元由其 `UNITS` 表決定，work-in-progress 章不列入即不會出貨（章內的節直接住章檔，整章一體編譯）。
 
 （legacy 註記：凍結的 LaTeX book 在 `legacy/tex_handout/main.tex` 中有 `\ifprintbibliography`／`\ifincludescratchchapter` 兩個 top-level toggle，控制 bibliography 輸出與是否 include `_scratch.tex`；這些已不適用於 HTML handout。）
 
@@ -651,11 +652,11 @@ Rationale：五種模式是語義區分停止幫助作者並開始造成決策�
 - 如果短的 follow-up formula 在散文後自然地讀出，保持 inline。
 - 不要把 *"provided that $x \ne 1$"* 這類 condition 作為 extra alignment column 附加到 aligned row 上——如果該 condition 只適用於其中一行；把它移入 display block 前後的散文中。
 
-### 寬顯示式的斷行（手動斷，不靠 MathJax 自動斷）
+### 寬顯示式的斷行（手動斷）
 
-print-standalone 的 MathJax 設了 `output.displayOverflow:'linebreak'`：顯示式一旦超過欄寬，MathJax **會自動硬斷**。但它挑的斷點常很醜——可能斷在運算子中間、甚至把左式 `f(x+\Delta x)g(x) - f(x)g(x+\Delta x)` 劈成兩段。因此：
+TeX 不會自動斷顯示式——超過欄寬直接 overfull（由 `build.py` 的版面閘逐條列出）；HTML 時代的 MathJax 雖會自動硬斷、但斷點常很醜（斷在運算子中間、把左式 `f(x+\Delta x)g(x) - f(x)g(x+\Delta x)` 劈成兩段）。兩個時代結論相同：
 
-**MUST：一條顯示式寬到單行容納不下時，一律在 source 裡手動斷行，不要留給 MathJax 自動斷。** 兩種寫法依結構擇一：
+**MUST：一條顯示式寬到單行容納不下時，一律在 source 裡手動斷行（`aligned` 分行）。** 兩種寫法依結構擇一：
 
 - **等號連鎖、左式緊湊**（如 `\frac{d}{dx}\sec x = \cdots = \cdots`）——用 `aligned` 對齊在 `=`，一個 `=` 一行：
 
@@ -1038,11 +1039,11 @@ No-custom-macro 規則的 rationale：這是多作者專案。Per-section 自訂
 
 ### Build 與內容過閘
 
-HTML handout 的 live 驗證路徑：
+講義的 live 驗證路徑：
 
-1. **Build**——`python handout/html/build.py` 把 fragment 組裝成 `handout/html/standalone/chapterN-print-standalone.html`，並驗證 KaTeX render 無誤（KaTeX 以 `throwOnError:false` 跑，malformed 表達式會 render 成紅色原始碼，即為要修的信號）。
+1. **Build**——`python handout/latex/build.py <ch>` 編譯（0 error／0 missing char）＋overfull 列表＋字形閘，成品進 `dist/`；malformed 數學直接編譯錯，即為要修的信號。
 2. **散文內容過閘**——章節由 `handout-prose-audit` subagent（gate 1）稽核易懂性，契約見 [`handout/html/_audit/PROSE-AUDIT-RUBRIC.md`](handout/html/_audit/PROSE-AUDIT-RUBRIC.md)；定稿前再經 Codex 獨立複核（gate 2）。
-3. **手寫編號／引用一致性**——downstream lint 應驗證每個 "Theorem N.M" 式散文引用都對應到存在的 `env-num`（手寫編號的 authoring tax，見 §6）。
+3. **編號／引用一致性**——編號語意化（auto-counter＋`\label`/`\ref`，2026-08-09 起）後由編譯器保證：log 無 undefined reference 即全解析；跨章引用維持字面、書層 sweep 管理。
 
 通過 build（KaTeX 無誤）並過 gate 1／gate 2 後，章節才被視為 ready for review。
 
@@ -1056,7 +1057,7 @@ HTML handout 的 live 驗證路徑：
 
 ### 宣告 exception
 
-在 section fragment 頂部、`<article class="sec">` 開頭（或章 opener 的 `chapter-head` 之後）緊接著放一則 HTML 註解，格式為：
+在該節開頭（`\sechead` 之後；或章 opener 之後）緊接著放一則源註解（`.tex` 用 `%` 行；凍結 fragment 時代為 HTML 註解），格式為：
 
 ```html
 <!-- Exception: Figure 3.9 forces a page break before it to avoid a near-blank page.
@@ -1156,10 +1157,10 @@ Rationale：規則會演進。明確的 exception record 將偏離從 noise 變�
 **Fragment 衛生**
 - [ ] Fragment 中無 inline `style=`／`<style>`／`<script>`、無 per-section 自訂數學巨集。
 - [ ] 無為 paginator 而手塞的分頁／空白。
-- [ ] 如果偏離本文件中的任何規則，fragment 頂部有 exception comment。
+- [ ] 如果偏離本文件中的任何規則，該節開頭有 exception comment。
 
 **Build 與過閘**
-- [ ] `python handout/html/build.py` 組裝 print-standalone 且 KaTeX 無 render 錯誤。
+- [ ] `python handout/latex/build.py <ch>` 三閘綠（0 error／0 missing char／字形閘）且 log 無 undefined reference。
 - [ ] 已過散文稽核 gate 1（`handout-prose-audit`，易懂性 blocking = 0）與 gate 2（Codex 複核）。
 - [ ] **已過數學稽核（math gate），數學 blocking = 0**；契約見 [`handout/html/_audit/MATH-CORRECTNESS-RUBRIC.md`](handout/html/_audit/MATH-CORRECTNESS-RUBRIC.md)。目前由 Mode B 主審走查＋定稿前 Codex 獨立複核（`handout-math-audit` subagent 化規劃中）。
 

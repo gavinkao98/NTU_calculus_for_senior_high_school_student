@@ -2,9 +2,7 @@
 
 一份單面 A4 的**微積分講義**，供準備銜接大學微積分的高中生自學使用，並搭配輔助教學影片。講義本身自給自足；影片是強化補充。
 
-本檔案是**儲存庫樞紐（repository hub）**。它對儲存庫結構與建置指令具有權威性——生產用講義在 `handout/` 下分兩線（2026-07-17 拍板＋重整）：**`handout/html/`＝HTML 撰稿製作線**（以 fragment 撰稿、`build.py` 組版，整體先做 HTML 講義），**`handout/latex/`＝LaTeX 出版排版線**（定稿時把 HTML 確定性轉換成出版級 PDF）。下方所載的 LaTeX／preamble／建置描述現為 legacy（已搬至 `legacy/tex_handout/`，與 `handout/latex/` 無關）。內容撰寫規則與媒體產線規則各自獨立成檔，連結列於下方。
-
-> **⚠️ 2026-08-09 拍板（LaTeX 統一）**：講義線＋影片線統一走 LaTeX——`handout/latex/src/<ch>/*.tex` 升格**唯一內容源**（ch03 pilot 已收）、HTML 撰稿線退役（fragment 凍結）、JS 圖 kit 縮編為畫圖工具（`handout/figkit/`）。上段與下方各節的兩線敘述**將分階段改寫**（P3）；現況與遷移計畫以 [`handout/latex/KICKOFF-latex-unification.md`](handout/latex/KICKOFF-latex-unification.md) 為準。
+本檔案是**儲存庫樞紐（repository hub）**。它對儲存庫結構與建置指令具有權威性——生產用講義**統一走 LaTeX**（2026-08-09 拍板，supersede 2026-07-17 兩線分工；遷移計畫與 U1–U7 拍板見 [`handout/latex/KICKOFF-latex-unification.md`](handout/latex/KICKOFF-latex-unification.md)）：**`handout/latex/`＝唯一內容源＋唯一工作線**（`src/<ch>/*.tex` 撰稿、`build.py` 編譯出版級 A4 PDF），**`handout/figkit/`＝JS 畫圖 kit**（圖仍由 JS 繪製、匯向量 PDF 嵌入），**`handout/html/`＝已凍結的 HTML 撰稿線**（fragment 為歷史快照；`_audit`／`_dev-archive` 仍服役）。更早的 LaTeX 講義樹（`legacy/tex_handout/`）與本線無關。內容撰寫規則與媒體產線規則各自獨立成檔，連結列於下方。
 
 ---
 
@@ -37,7 +35,7 @@
 目前的影片工作位於 `video/` 下的第二代產線（權威流程與閘地圖見 [`video/README.md`](video/README.md)、[`video/REVIEW_GATES.md`](video/REVIEW_GATES.md)）：
 
 ```text
-handout/html/standalone/chapterN-print-standalone.html（定稿講義的一節）
+handout/latex/src/chNN/chapterN.tex（定稿講義的一節；閱讀版＝dist/chNN/chapterN.pdf）
   --> video/content_scripts/<deck>.md（Stage-1 內容稿）＋ <deck>.spoken.yml（口語單一源）
   --> video/storyboards/<deck>.yml（Stage-2 工程稿；schema/lint/sizecheck render 前把關）
   --> python video/make.py --storyboard …（parse → synth → render → compose）
@@ -76,11 +74,12 @@ handout/html/standalone/chapterN-print-standalone.html（定稿講義的一節�
 
 ## 儲存庫結構
 
-- `handout/` — **生產用講義（兩線：`html/` 撰稿製作＋`latex/` 出版排版）**。內容以 fragment 撰稿，`html/build.py` 組版；定稿轉 LaTeX。
-  - `handout/html/fragments/chNN/sec-*.html` — 章節源檔，每節一個 fragment。
-  - `handout/html/build.py` — 組版器：產出 `handout/html/standalone/chapterN-print-standalone.html`（僅列印版；螢幕版已移除）。
-  - `handout/html/TYPESETTING_GUIDE.md` — HTML 排版指南；`handout/html/CONTRACT-html-writing.md` — 權威性 HTML 標記契約。
-  - `handout/latex/` — **出版排版線（HTML→LaTeX；pilot GO 2026-07-17）**：`convert.py` 確定性轉換 fragment（數學逐位元組 pass-through、表外標記硬錯）→ `template/calcbook.sty`（memoir＋NewComputerModern＋vendored Inter）→ `latexmk -lualatex` 出 A4 PDF。權威文檔＝[`handout/latex/KICKOFF-latex-pilot.md`](handout/latex/KICKOFF-latex-pilot.md)（沿革＋rollout 計畫）、`handout/latex/chapters/<ch>/DIALECT-*.md`（方言凍結表）、`handout/latex/template/M-B1-DECISIONS.md`（模板拍板紀錄）、`handout/latex/README.md`（線導覽＋章節狀態表）。
+- `handout/` — **生產用講義（LaTeX 統一，2026-08-09）**。內容以 `.tex` 撰稿，`latex/build.py` 編譯成品。
+  - `handout/latex/src/<ch>/<name>.tex` — **唯一內容源**（一章一檔；標記契約＝[`handout/latex/CONTRACT-latex-writing.md`](handout/latex/CONTRACT-latex-writing.md)；編號一律語意化 auto-counter＋`\label`/`\ref`）。
+  - `handout/latex/build.py` — 日常編譯入口：latexmk＋log 閘＋字形閘 → `dist/<ch>/<name>.pdf`（出版級 A4 成品）。
+  - `handout/latex/template/calcbook.sty` — 模板（memoir＋NewComputerModern＋vendored Inter；語意＋樣式層分離，拍板紀錄 `template/M-B1-DECISIONS.md`）。線導覽＝[`handout/latex/README.md`](handout/latex/README.md)；沿革＝[`handout/latex/KICKOFF-latex-unification.md`](handout/latex/KICKOFF-latex-unification.md)（U1–U7）＋[`handout/latex/KICKOFF-latex-pilot.md`](handout/latex/KICKOFF-latex-pilot.md)（模板時代 D1–D10）。
+  - `handout/figkit/` — JS 畫圖 kit：`figs-<ch>.html` harness（圖源）＋`export_figs.mjs`（在 `latex/`）匯向量 PDF。
+  - `handout/html/` — 已凍結的 HTML 撰稿線（[`handout/html/README.md`](handout/html/README.md)）：fragment／standalone／`build.py` 為歷史快照；`_audit/`（rubric＋REVIEW 報告）與 `_dev-archive/`（章 PLAN ledger）仍服役。
   - `handout/html/_audit/PROSE-AUDIT-RUBRIC.md` — 散文稽核 rubric（gate 1 契約）；`handout/html/_dev-archive/chNN/` — 各章編排檔（`PLAN-chNN.md`、`PROMPT-sNM-kickoff.md`、`brief_sNM.md`、`seed_chNN.md`）。
 - `authoring/` — 撰稿方法論與機制 R&D。六階方向層流程已畢業為頂層 [`CONTENT_DIRECTION.md`](CONTENT_DIRECTION.md)；`authoring/direction_layer/` 保留其端到端驗證紀錄（`ch01/`、`test/`），`authoring/seed_converge/` 為機制 R&D（`SYNTHESIS.md`、`PLAN_codex_subscription_loop.md`、`run.py`、`figure_critic.py`、`figure_fix.py`、`rules.md`）。
 - `problem_banks/` — 開放授權題庫的本地 clone 區（內容 gitignored，僅 README 進版控）。選題工作流程見 [`CONTENT_SOURCING.md`](CONTENT_SOURCING.md)。
@@ -102,9 +101,9 @@ handout/html/standalone/chapterN-print-standalone.html（定稿講義的一節�
 
 ## 輸出格式
 
-**撰稿製作線**的輸出是 `handout/html/standalone/chapterN-print-standalone.html`——由 `handout/html/build.py` 將各 fragment 組裝而成的列印用 standalone HTML，A4 分頁透過 JS paginator（`place()`）達成；數學以 MathJax／KaTeX CDN 渲染。設計為單張單頁列印、作為講義發送，而非裝訂成冊；**出版定稿的輸出則是下段 LaTeX 線的 A4 PDF（2026-07-17 拍板）**。版面與排版細節見 [`handout/html/TYPESETTING_GUIDE.md`](handout/html/TYPESETTING_GUIDE.md)。
+講義輸出＝`handout/latex/dist/<ch>/<name>.pdf`——`latex/build.py` 對 `src/<ch>/<name>.tex` 以 `latexmk -lualatex` 編譯的出版級 A4 PDF（memoir＋NewComputerModern；單面 A4、單張發送設計）。12 單元（ch01–ch08＋appA–D）全數就位；歷史對比：同內容 HTML 20 頁 → LaTeX 14 頁（appB pilot 實測）。
 
-**出版排版（2026-07-17 pilot GO）**：出版級輸出走 `handout/latex/` 的 LaTeX 線——fragment 仍是唯一內容源（一字不改），`convert.py` 轉為 `template/calcbook.sty` 的語意指令，`latexmk -lualatex` 產 A4 PDF（appB 實測：同內容 HTML 20 頁 → LaTeX 14 頁，四閘全綠）。HTML standalone 自此定位為**撰稿預覽＋圖閘 render 載體**（kickoff 決策 D2／D6）；逐章 rollout 順序見 [`handout/latex/KICKOFF-latex-pilot.md`](handout/latex/KICKOFF-latex-pilot.md) §9。
+> **歷史（HTML 撰稿線，已凍結）**：2026-07-17 至 2026-08-09 間輸出為 `handout/html/standalone/chapterN-print-standalone.html`（fragment 組裝、JS paginator 分頁、MathJax 渲染）。LaTeX 統一後該線凍結——版面細節見 [`handout/html/TYPESETTING_GUIDE.md`](handout/html/TYPESETTING_GUIDE.md)（歷史參照）。
 
 > **Legacy（LaTeX 講義）：** 已凍結的 LaTeX 版（`legacy/tex_handout/`）以 `\documentclass[a4paper,12pt,oneside]{book}` 產出單面 A4 PDF：`margin=3.3cm` 對稱、`\linespread{1.05}`、`\fancyhead`/`\fancyfoot` 單面 header／footer，並由 `main.tex` 以 `\ifprintbibliography` 與 `\ifincludescratchchapter` 開關控制參考書目與暫存章節。此路徑不再用於生產。
 
@@ -115,10 +114,10 @@ handout/html/standalone/chapterN-print-standalone.html（定稿講義的一節�
 本機建置：
 
 ```powershell
-python handout/html/build.py
+python handout/latex/build.py ch08     # 單一單元（或 all＝全部 12 單元）
 ```
 
-產出 `handout/html/standalone/chapterN-print-standalone.html`（列印用 standalone，A4 分頁由 JS paginator 達成）。每次 push 與 PR 由 [`.github/workflows/handout-checks.yml`](.github/workflows/handout-checks.yml) 自動執行此 build，並檢查 committed standalone 與 fragment 同步、散文引號合規（`handout/html/quote_lint.py`）、指引文檔相對連結無斷鏈（[`tools/doc_lint.py`](tools/doc_lint.py)，2026-07-07 加）。
+產出 `handout/latex/dist/<ch>/<name>.pdf`（編譯閘＋overfull 列表＋字形閘內建；LaTeX 環境＝MiKTeX，見 [`ENVIRONMENT.md`](ENVIRONMENT.md)）。每次 push 與 PR 由 [`.github/workflows/handout-checks.yml`](.github/workflows/handout-checks.yml) 跑輕量 CI：散文引號合規（`quote_lint.py`，掃 `latex/src` ＋凍結 fragment）、文檔連結（[`tools/doc_lint.py`](tools/doc_lint.py)）、HTML 線凍結強制（fragment→standalone 可重現）；**編譯閘與字形閘在本地跑**（CI 無 TeX 發行版，by design）。
 
 內容閘採兩道：gate 1 為 Claude `handout-prose-audit` subagent（唯讀、免費，依 [`handout/html/_audit/PROSE-AUDIT-RUBRIC.md`](handout/html/_audit/PROSE-AUDIT-RUBRIC.md)）；gate 2 為 Codex 獨立複核（吃配額、先徵同意）。完整閘序見 [`handout/PIPELINE.md`](handout/PIPELINE.md)。HTML 標記與排版細節見 [`handout/html/CONTRACT-html-writing.md`](handout/html/CONTRACT-html-writing.md) 與 [`handout/html/TYPESETTING_GUIDE.md`](handout/html/TYPESETTING_GUIDE.md)。
 

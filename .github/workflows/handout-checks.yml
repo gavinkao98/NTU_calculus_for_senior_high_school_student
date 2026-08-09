@@ -18,24 +18,24 @@ jobs:
           python-version: "3.11"
 
       # quote_lint.py is stdlib-only; enforces CONTENT_SPEC §8 (curly quotes /
-      # curly apostrophe) on rendered prose, excluding math primes, attributes,
-      # code and comments. A failure means a fragment has an ASCII " or ' in prose.
-      - name: Lint prose quotes (CONTENT_SPEC §8)
+      # curly apostrophe) on prose. Since 2026-08-09 (LaTeX unification) its
+      # default targets are the live LaTeX sources (handout/latex/src/**/*.tex)
+      # plus the frozen HTML fragments. A failure means prose has an ASCII " or '.
+      - name: Lint prose quotes (CONTENT_SPEC §8, tex + frozen fragments)
         run: python handout/html/quote_lint.py
 
       # doc_lint.py is stdlib-only; verifies relative markdown links in active
       # guidance docs resolve to existing files (archives / legacy excluded).
-      # A failure means a doc references a moved/renamed/deleted file.
       - name: Lint doc links (broken relative links)
         run: python tools/doc_lint.py
 
-      # build.py is stdlib-only (pathlib/re); no pip install needed.
-      - name: Assemble handout (fragments -> print standalone)
-        run: python handout/html/build.py
-
-      # The print standalones are committed; a fresh build must reproduce them
-      # byte-for-byte. A diff here means a fragment was edited without re-running
-      # build.py (or build is out of sync). Run `python handout/html/build.py` locally
-      # and commit the regenerated chapterN-print-standalone.html.
-      - name: Verify committed standalones are in sync with fragments
-        run: git diff --exit-code -- 'handout/html/standalone/chapter*-print-standalone.html'
+      # Freeze enforcement (LaTeX unification P1): the HTML authoring line is
+      # frozen — fragments and standalones must stay byte-identical to the last
+      # built state. A diff here means someone edited a frozen fragment (edit
+      # handout/latex/src/<ch>/*.tex instead) or hand-edited a standalone.
+      # LaTeX compile/glyph gates run locally (python handout/latex/build.py);
+      # CI has no TeX distribution by design.
+      - name: Enforce frozen HTML line (fragments -> standalone reproducible)
+        run: |
+          python handout/html/build.py
+          git diff --exit-code -- 'handout/html/standalone/chapter*-print-standalone.html'

@@ -22,13 +22,13 @@ model: inherit
 1. [`CONTENT_SOURCING.md`](CONTENT_SOURCING.md) — 題源與選題流程、缺口分析（Layer 1／2）、選題硬條件與排序偏好、import pass、provenance 標記、授權紅線（**本審的契約、單一真相來源**）。
 2. [`problem_banks/README.md`](problem_banks/README.md) — 已接入題庫的逐源清單與授權紅線（CLP1／APEX／Mooculus 的分類索引與可用範圍）。
 3. [`CONTENT_SPEC.md`](CONTENT_SPEC.md) §5（`example`＋`solution` 結構）、§3／§9（語域與記號）、§14（**講義本體不收習題**——只收附完整解的 worked example，不得自創 bare／your-turn 練習）、§10（若候選需新圖，附圖成本一併揭露）。
-4. 該章的編號 ledger 與既往決策：`handout/html/_dev-archive/chNN/PLAN-chNN.md`（既有 example/figure、刻意省略、章層「刻意不寫」D-邊界）、與目標 fragment 的 header 註解。
+4. 該章的編號 ledger 與既往決策：`handout/html/_dev-archive/chNN/PLAN-chNN.md`（既有 example/figure、刻意省略、章層「刻意不寫」D-邊界）、與目標源檔的 provenance 註解（2026-08-09 起＝`latex/src/<ch>/*.tex` 的 `%` 註解；歷史章的 `<!-- expansion -->` 在凍結 fragment）。
 
 若這些與使用者當下交付的指示衝突，以當下指示為準，並在輸出指出該衝突。
 
 # 你要審什麼
 
-使用者指名一個章或一組 section fragment（如 `handout/html/fragments/ch03/sec-3-1.html`）。讀其英文散文、`definition`／`theorem`／`strategy`／`caution`／`example` 環境、與既有 `<div class="workedexample">`。**開審先 `Grep 'env-example'`／`Grep 'workedexample'` 對齊該節既有 worked example**——既有與手稿已出貨的例不重複提案，只找「該有示範但目前沒有／多樣性不足」的教學點。
+使用者指名一個章或章內某些節（源＝`handout/latex/src/<ch>/<name>.tex`，如 `src/ch03/chapter3.tex` 的 §3.1）。讀其英文散文、`definition`／`theorem`／`strategy`／`caution`／`example` 環境、與既有 `workedexample` 配對。**開審先 `Grep 'envexample'`／`Grep 'workedexample'` 對齊該節既有 worked example**——既有與手稿已出貨的例不重複提案，只找「該有示範但目前沒有／多樣性不足」的教學點。
 
 # 怎麼做（單次 run 也要有廣度＋對抗式紀律）
 
@@ -62,4 +62,4 @@ model: inherit
 
 **你是唯讀、不寫檔。** 給使用者裁決的 standalone HTML 交付稿（`handout/html/_dev-archive/chNN/chNN_example-supplement-review.html`，比照 [`handout/html/_dev-archive/ch02/ch02_example-supplement-review.html`](handout/html/_dev-archive/ch02/ch02_example-supplement-review.html)）由**父代理／orchestrator** 彙整你的 findings 後落檔——**你不要自己貼整份 HTML 原始碼**（你沒有 Write 工具，貼了也是浪費 token）。你只要把每個候選的欄位講清楚、可被直接照抄成卡片即可。
 
-**效率（別過度探索）：** 讀目標 fragment ＋ `CONTENT_SOURCING.md` ＋該節既有 worked example ＋ `problem_banks/README.md` 的索引即足以判斷；題庫搜尋用 `Grep` 針對缺口教學點的關鍵字（如 `\sin.*\theta`、`x\^x`、`logarithmic`）對 `problem_banks/CLP1` 等定向搜，**不需**逐題通讀整個題庫。聚焦本節缺口，別反覆全章漫掃。
+**效率（別過度探索）：** 讀目標章源 ＋ `CONTENT_SOURCING.md` ＋該節既有 worked example ＋ `problem_banks/README.md` 的索引即足以判斷；題庫搜尋用 `Grep` 針對缺口教學點的關鍵字（如 `\sin.*\theta`、`x\^x`、`logarithmic`）對 `problem_banks/CLP1` 等定向搜，**不需**逐題通讀整個題庫。聚焦本節缺口，別反覆全章漫掃。

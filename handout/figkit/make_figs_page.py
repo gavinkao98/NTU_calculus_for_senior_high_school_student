@@ -27,7 +27,10 @@ from pathlib import Path
 CONTENT_RE = re.compile(
     r"<!-- BEGIN-CONTENT-FRAGMENTS -->.*?<!-- END-CONTENT-FRAGMENTS -->", re.DOTALL
 )
-FIGURE_RE = re.compile(r'<figure\b[^>]*\bdata-fig="[^"]+"[^>]*>.*?</figure>', re.DOTALL)
+# data-fig figures hydrate from FIGS; inline-SVG figures (id= without data-fig, e.g.
+# ch01 fig-map) carry their drawing in the markup itself — both must reach the harness,
+# or the figure-audit population and re-export both silently lose the inline ones.
+FIGURE_RE = re.compile(r'<figure\b[^>]*\b(?:data-fig|id)="[^"]+"[^>]*>.*?</figure>', re.DOTALL)
 PAGINATOR_RE = re.compile(
     r"<script>(?:(?!</script>).)*function paginate(?:(?!</script>).)*</script>", re.DOTALL
 )

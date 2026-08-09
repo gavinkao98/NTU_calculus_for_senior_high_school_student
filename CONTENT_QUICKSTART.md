@@ -4,7 +4,7 @@
 
 如果你是新加入的作者，另請瀏覽一次 [`CONTENT_ROADMAP.md`](CONTENT_ROADMAP.md)，了解你負責的章節在整體弧線中的位置。
 
-**內容寫在哪裡。** 講義在 HTML 線撰寫製作（出版定稿另由 `handout/latex/` 轉 LaTeX PDF，2026-07-17 拍板）：內容以每節一個片段撰寫於 `handout/html/fragments/chNN/sec-*.html`，由 `python handout/html/build.py` 組成 `handout/html/standalone/chapterN-print-standalone.html`（print standalone，A4 分頁由 JS paginator 處理）。HTML 標記契約見 [`handout/html/CONTRACT-html-writing.md`](handout/html/CONTRACT-html-writing.md)，排版規範見 [`handout/html/TYPESETTING_GUIDE.md`](handout/html/TYPESETTING_GUIDE.md)。（舊的 LaTeX 講義已移入 `legacy/tex_handout/`。）
+**內容寫在哪裡。** 講義統一走 LaTeX（2026-08-09 拍板）：內容以一章一檔撰寫於 `handout/latex/src/<ch>/<name>.tex`（唯一內容源），`python handout/latex/build.py <ch>` 編譯出 `dist/<ch>/<name>.pdf`（出版級 A4）。標記契約見 [`handout/latex/CONTRACT-latex-writing.md`](handout/latex/CONTRACT-latex-writing.md)——語意環境、**編號一律語意化**（`{thm:key}`＋`\ref`，不手寫編號）。（HTML 撰稿線已凍結、舊 LaTeX 講義在 `legacy/tex_handout/`。）
 
 ---
 
@@ -47,13 +47,13 @@ Stewart / Rogawski 語調：讓一位自學的高中生能讀懂，完整句子�
 
 ## 章節開頭（MUST）
 
-章開場**併入該章第一節的片段**（`handout/html/fragments/chNN/sec-N-1.html`），作為該檔內第一個 `<article>`（在節標題那個 `<article>` 之前）——**不另設獨立的 `sec-intro` 片段**。開場必須有：
+章開場寫在章檔開頭（`\cbchapter{N}` 之後、第一個 `\sechead` 之前）——`\chapteropener`＋`lead`＋`objectives`，**不另設獨立的 intro 檔**。開場必須有：
 
-1. **概覽散文（1–2 段）**：建立本章動機，並說明它如何承接前一章。
-2. **「By the end of this chapter, you will be able to:」技能清單**：每項以動詞開頭（"compute"、"verify"、"recognize"），約 3–5 項。
-3. 緊接著就是第一節本身（同一片段內的第二個 `<article>`，標題為 `sec-title`）。
+1. **概覽散文（`lead` 環境，1–2 段）**：建立本章動機，並說明它如何承接前一章。
+2. **「By the end of this chapter, you will be able to:」技能清單**（`\parahead`＋`objectives` 環境）：每項以動詞開頭（"compute"、"verify"、"recognize"），約 3–5 項。
+3. 緊接著就是第一節本身（`\sechead{N.1}{…}`）。
 
-實際 HTML 標記（雙 `<article>` 開場結構、標題層級、清單、技能區塊）見任一章的第一節片段範例 [`handout/html/fragments/ch04/sec-4-1.html`](handout/html/fragments/ch04/sec-4-1.html) 與 [`handout/html/TYPESETTING_GUIDE.md`](handout/html/TYPESETTING_GUIDE.md)。
+實際標記見任一章源開頭範例 [`handout/latex/src/ch04/chapter4.tex`](handout/latex/src/ch04/chapter4.tex) 與 [`handout/latex/CONTRACT-latex-writing.md`](handout/latex/CONTRACT-latex-writing.md) §Output shape。
 
 章節結尾 **MUST** 有一個不編號的 *Chapter summary* 區段：以連續散文重述本章的論證弧線（點名核心結果＋§號回指、串起主線、收 forward/backward fence），而非三桶條列。見 spec §4。
 
@@ -87,7 +87,7 @@ Stewart / Rogawski 語調：讓一位自學的高中生能讀懂，完整句子�
 
 - 色盤僅三種角色：blue = primary、red = caution/counterexample、gray = auxiliary。色彩定義見 HTML 講義的 CSS／typesetting 規範（[`handout/html/TYPESETTING_GUIDE.md`](handout/html/TYPESETTING_GUIDE.md)）。
 - **不要僅靠顏色編碼意義。** 至少用以下一種方式做冗餘編碼：line style、label、marker。線型慣例：solid = 主要曲線；`dashed` = 漸近線與參考線（包括 `$y = x$`）；`dotted` = 輔助／鷹架。圖表 **must** 在灰階列印與影印後仍然可讀。詳見 SPEC §10 完整的冗餘編碼規則。
-- 圖片在 fragment 中以 `<figure>` 就地放置；分頁由 JS paginator（`place()`）處理，無 LaTeX 浮動體 placement。
+- 圖以 `figureblock` 就地放置（non-float，D8 拍板）；圖形內容畫在 figkit harness 的 `FIGS`（見 [`handout/figkit/README.md`](handout/figkit/README.md)）。
 - caption：sentence case，以句號結尾，描述數學目的。
 - **worked-example 的圖**不可洩露例題要求讀者計算的量。
 - 圖表密度目標：每個重要 definition / theorem 一張圖，計算型的節大約每 2–3 個 example 一張。
@@ -145,11 +145,11 @@ HTML 標點與強調的具體寫法見 [`handout/html/TYPESETTING_GUIDE.md`](han
 在本地執行：
 
 ```powershell
-python handout/html/build.py
+python handout/latex/build.py ch08
 ```
 
-build 成功（產出 `handout/html/standalone/chapterN-print-standalone.html`，print standalone、A4 分頁由 JS paginator 處理）後，內容把關不靠 LaTeX CI，而是 handout-prose-audit subagent（gate 1）＋ Codex（gate 2）。
-（HTML 講義建置由 `.github/workflows/handout-checks.yml` 在 push／PR 把關；舊的 LaTeX 工具鏈——`tools/book_*.py`、`latexmk … main.tex`——已隨 LaTeX 講義移入 `legacy/tex_handout/`，原 `latex-checks.yml` 已移除，皆不再把關 HTML 講義。）
+build 成功（產出 `handout/latex/dist/<ch>/<name>.pdf`；編譯／overfull／字形三閘內建）後，內容把關靠 handout-prose-audit subagent（gate 1）＋ Codex（gate 2）。
+（CI＝`.github/workflows/handout-checks.yml`：quote／doc lint＋HTML 線凍結強制；編譯閘在本地跑。舊 LaTeX 工具鏈在 `legacy/tex_handout/`，與本線無關。）
 
 完整的一致性檢查清單（positioning、register、structure、environments、typography 等），見 [`CONTENT_SPEC.md`](CONTENT_SPEC.md) §15 結尾的 checklist。
 

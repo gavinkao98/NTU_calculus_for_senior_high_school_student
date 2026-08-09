@@ -17,8 +17,13 @@ Only ASCII ' or " that survive that filter — i.e. sit in running prose —
 are reported (or rewritten with --fix). Stdlib-only (matches build.py),
 so CI needs no pip install.
 
+2026-08-09 (LaTeX unification): also lints the LaTeX sources. For `.tex` the
+excluded spans are `%` line comments (escaped percents stay prose) and math
+(`\\(..\\)` / `\\[..\\]`); everything else is prose. Default targets =
+latex/src/**/*.tex (the live sources) + html/fragments/**/*.html (frozen).
+
 Usage:
-    python handout/html/quote_lint.py         # lint handout/html/fragments/**/*.html
+    python handout/html/quote_lint.py         # lint latex/src + frozen fragments
     python handout/html/quote_lint.py --fix   # rewrite prose ASCII quotes -> curly
     python handout/html/quote_lint.py PATH ...  # lint/fix specific files or dirs
 
@@ -48,13 +53,22 @@ SPAN_PATTERNS = [
     ("code", re.compile(r"<kbd[^>]*>.*?</kbd>", re.S)),
     ("tag", re.compile(r"<[^>]+>", re.S)),
 ]
+TEX_SPAN_PATTERNS = [
+    ("comment", re.compile(r"(?<!\\)%[^\n]*")),
+    ("math", re.compile(r"\\\[.*?\\\]", re.S)),
+    ("math", re.compile(r"\\\(.*?\\\)", re.S)),
+]
 _EXCLUDE_KINDS = ("comment", "math", "code", "tag")
 RSQUO, LDQUO, RDQUO = "’", "“", "”"
 
 
-def _build_spans(text: str) -> list[tuple[int, int, str]]:
+def _patterns_for(suffix: str):
+    return TEX_SPAN_PATTERNS if suffix == ".tex" else SPAN_PATTERNS
+
+
+def _build_spans(text: str, suffix: str = ".html") -> list[tuple[int, int, str]]:
     spans = []
-    for kind, pat in SPAN_PATTERNS:
+    for kind, pat in _patterns_for(suffix):
         for m in pat.finditer(text):
             spans.append((m.start(), m.end(), kind))
     return spans
@@ -75,9 +89,9 @@ def _prose_positions(text: str, spans):
             yield m.start(), m.group()
 
 
-def lint_text(text: str) -> list[tuple[int, str, str]]:
+def lint_text(text: str, suffix: str = ".html") -> list[tuple[int, str, str]]:
     """Return [(line_no, char, context), ...] for prose ASCII-quote violations."""
-    spans = _build_spans(text)
+    spans = _build_spans(text, suffix)
     out = []
     for pos, ch in _prose_positions(text, spans):
         line_no = text.count("\n", 0, pos) + 1
@@ -86,13 +100,13 @@ def lint_text(text: str) -> list[tuple[int, str, str]]:
     return out
 
 
-def fix_text(text: str) -> tuple[str, int]:
+def fix_text(text: str, suffix: str = ".html") -> tuple[str, int]:
     """Rewrite prose ASCII quotes to curly. Returns (new_text, n_changed).
 
     Raises ValueError if a file has an odd number of prose double quotes
     (a stray " that cannot be paired) so the author can resolve it by hand.
     """
-    spans = _build_spans(text)
+    spans = _build_spans(text, suffix)
     prose = list(_prose_positions(text, spans))
     dq = [p for p, ch in prose if ch == '"']
     if len(dq) % 2 != 0:
@@ -117,11 +131,12 @@ def fix_text(text: str) -> tuple[str, int]:
     return "".join(buf), len(repl)
 
 
-def _iter_html(paths: list[Path]):
+def _iter_sources(paths: list[Path]):
     for p in paths:
         if p.is_dir():
             yield from sorted(p.rglob("*.html"))
-        elif p.suffix == ".html":
+            yield from sorted(p.rglob("*.tex"))
+        elif p.suffix in (".html", ".tex"):
             yield p
 
 
@@ -131,16 +146,17 @@ def main(argv: list[str]) -> int:
     if args:
         targets = [Path(a) for a in args]
     else:
-        targets = [Path(__file__).resolve().parent / "fragments"]
+        here = Path(__file__).resolve().parent
+        targets = [here.parent / "latex" / "src", here / "fragments"]
 
-    files = list(_iter_html(targets))
+    files = list(_iter_sources(targets))
 
     if do_fix:
         total = 0
         for fp in files:
             text = fp.read_text(encoding="utf-8")
             try:
-                new_text, n = fix_text(text)
+                new_text, n = fix_text(text, fp.suffix)
             except ValueError as exc:
                 print(f"{fp}: {exc}", file=sys.stderr)
                 return 1
@@ -161,7 +177,7 @@ def main(argv: list[str]) -> int:
     total = 0
     for fp in files:
         text = fp.read_text(encoding="utf-8")
-        violations = lint_text(text)
+        violations = lint_text(text, fp.suffix)
         if violations:
             total += len(violations)
             for line_no, ch, ctx in violations:

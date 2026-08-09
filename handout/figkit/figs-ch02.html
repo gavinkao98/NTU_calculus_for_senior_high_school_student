@@ -416,8 +416,52 @@ window.MathJax = {
 <figure class="figure" data-fig="cbrt-vertical-tangent">
           <figcaption><span class="fig-no">Figure 2.6</span> The graph of \(f(x) = \sqrt[3]{x}\) near the origin, with secants steepening toward a vertical tangent.</figcaption>
         </figure>
+<figure class="figure" id="fig-diff-cont">
+    <div class="figure-art">
+      <svg viewBox="0 -20 380 220" style="width:380px" class="fig-svg" role="img"
+           aria-label="Inclusion diagram: differentiable functions form a proper subset of continuous functions. |x| at x=0 is continuous but not differentiable.">
+        <ellipse cx="175" cy="105" rx="170" ry="88" fill="none" stroke="var(--c-primary)" stroke-width="1.5" stroke-dasharray="6 3"/>
+        <ellipse cx="150" cy="108" rx="110" ry="62" fill="var(--c-primary)" fill-opacity="0.08" stroke="var(--c-primary)" stroke-width="1.5"/>
+        <text x="150" y="104" text-anchor="middle" fill="var(--ink)" font-size="14" font-weight="500">Differentiable</text>
+        <!-- 數學例示清單走 --serif（＝正文數學同一套 NCM）：Inter 沒有 U+221A，留在 --ui
+             會被瀏覽器退回系統 CJK 字型（Windows 實測退到 Microsoft JhengHei UI），
+             字面不對且換機器會變。2026-07-26 ch02 LaTeX rollout 的字形閘抓到。 -->
+        <text x="150" y="124" text-anchor="middle" fill="var(--ink-soft)" font-size="12" font-style="italic" style="font-family:var(--serif)">x&#xB2;, &#x221A;x, e&#x02E3;</text>
+        <text x="175" y="4" text-anchor="middle" fill="var(--ink)" font-size="14" font-weight="500">Continuous</text>
+        <text x="300" y="122" text-anchor="middle" fill="var(--c-caution)" font-size="12">|x| at x = 0</text>
+      </svg>
+    </div>
+    <figcaption><span class="fig-no">Figure 2.7</span> Differentiable functions sit inside the continuous functions; \(\lvert x \rvert\) at \(x = 0\) marks the continuous-but-not-differentiable case.</figcaption>
+  </figure>
 <figure class="figure" data-fig="exp-self-derivative">
     <figcaption><span class="fig-no">Figure 2.8</span> The graph of \(y = e^{x}\) with tangent lines at \(x = 0\) and \(x = 1\).</figcaption>
+  </figure>
+<figure class="figure" id="fig-product-area">
+    <div class="figure-art">
+      <svg viewBox="0 0 330 244" style="width:330px" class="fig-svg" role="img"
+           aria-label="A rectangle of width f and height g, with the area increment when the sides grow by Δf and Δg split into a strip g times Δf, a strip f times Δg, and a small corner Δf times Δg.">
+        <!-- four area regions -->
+        <rect x="60" y="100" width="130" height="100" fill="var(--ink)" fill-opacity="0.05" stroke="var(--ink-soft)" stroke-width="1"/>
+        <rect x="190" y="100" width="80" height="100" fill="var(--c-primary)" fill-opacity="0.14" stroke="var(--ink-soft)" stroke-width="1"/>
+        <rect x="60" y="40" width="130" height="60" fill="var(--c-primary)" fill-opacity="0.14" stroke="var(--ink-soft)" stroke-width="1"/>
+        <rect x="190" y="40" width="80" height="60" fill="var(--c-caution)" fill-opacity="0.16" stroke="var(--ink-soft)" stroke-width="1"/>
+        <!-- dimension ticks below (split f | Δf) and at left (split g | Δg) -->
+        <line x1="60" y1="200" x2="60" y2="214" stroke="var(--ink-soft)" stroke-width="1"/>
+        <line x1="190" y1="200" x2="190" y2="214" stroke="var(--ink-soft)" stroke-width="1"/>
+        <line x1="270" y1="200" x2="270" y2="214" stroke="var(--ink-soft)" stroke-width="1"/>
+        <line x1="60" y1="200" x2="46" y2="200" stroke="var(--ink-soft)" stroke-width="1"/>
+        <line x1="60" y1="100" x2="46" y2="100" stroke="var(--ink-soft)" stroke-width="1"/>
+        <line x1="60" y1="40" x2="46" y2="40" stroke="var(--ink-soft)" stroke-width="1"/>
+        <!-- single anchor label in the base region; the strip/corner areas are named in the caption and body prose, keeping the drawing label-light -->
+        <text x="125" y="155" text-anchor="middle" fill="var(--ink)" font-size="15" font-style="italic">fg</text>
+        <!-- dimension labels -->
+        <text x="125" y="230" text-anchor="middle" class="ptlab" font-style="italic">f</text>
+        <text x="230" y="230" text-anchor="middle" class="ptlab">Δ<tspan font-style="italic">f</tspan></text>
+        <text x="38" y="154" text-anchor="end" class="ptlab" font-style="italic">g</text>
+        <text x="38" y="74" text-anchor="end" class="ptlab">Δ<tspan font-style="italic">g</tspan></text>
+      </svg>
+    </div>
+    <figcaption><span class="fig-no">Figure 2.9</span> Area model for the product rule: base \(fg\), two strips, and the corner \(\Delta f\,\Delta g\).</figcaption>
   </figure>
 <figure class="figure" data-fig="quotient-example-graph">
           <figcaption><span class="fig-no">Figure 2.10</span> The function \(f(x) = \dfrac{x}{x^{2}+1}\) (top) and its derivative \(f'(x) = \dfrac{1-x^{2}}{(x^{2}+1)^{2}}\) (bottom), from Example 2.20.</figcaption>

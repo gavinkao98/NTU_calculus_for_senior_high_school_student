@@ -4,7 +4,7 @@
 >
 > **目前的消費者：** Mode B 主審（Claude 主流程直接走查，見 [`../../../CONTENT_AUTHORING_WORKFLOW.md`](../../../CONTENT_AUTHORING_WORKFLOW.md) §Mode B「其他 Mode B 發現 §數學正確性」）＋ 定稿前的 **Codex 獨立複核**（吃配額、先徵同意）。**本檔刻意先於 subagent 落地**：維度／擋稿線在這裡定一次，未來若要把 gate 1 包成 `handout-math-audit` 唯讀 subagent，直接引本檔即可，不必另立規則（比照 `handout-prose-audit`／`handout-figure-audit` 與其 rubric 的關係）。
 >
-> **被審物：** 講義單節 fragment（`handout/html/fragments/ch{NN}/sec-*.html`）的數學內容，並對照該節的**手稿**。
+> **被審物：** 講義章節源（`handout/latex/src/<ch>/<name>.tex`，2026-08-09 LaTeX 統一起）的數學內容；手稿章（Ch1–4）並對照該節的**手稿**、canon 章對照 brief／canon 藍本。
 >
 > **依據：** [`../../../CONTENT_AUTHORING_WORKFLOW.md`](../../../CONTENT_AUTHORING_WORKFLOW.md) §Mode B（「數學正確性」發現用 *「請查核 X」* 框架；§238 數學內容**以手稿為準**）＋ [`../../../CONTENT_SPEC.md`](../../../CONTENT_SPEC.md) §5（proof 為選用、預設省略）／§7（公式呈現）／§9（記號）／§15（最終一致性檢查）。本檔只定「審哪些維度、哪些擋稿、哪些不算 finding、怎麼回報」，**不重述**那些規範本身。
 >
